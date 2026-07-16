@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopping Cart — E-Bazaar</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/cart.css" />
+</head>
+<body data-page="cart">
+
+<header id="site-header">
+  <div class="nav-top">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-text">E-<em>Bazaar</em></span>
+    </a>
+  </div>
+</header>
+
+<main class="cart-page">
+  <h1 class="cart-title">Your Cart (3 items)</h1>
+  
+  <div class="cart-layout">
+    <!-- Items -->
+    <div class="cart-items">
+      
+      <div class="cart-item">
+        <div class="c-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div class="c-details">
+          <div class="c-brand">APPLE</div>
+          <div class="c-name">iPhone 15 Pro Max - Natural Titanium</div>
+          <div class="c-price">₹1,59,900</div>
+          <div class="c-actions">
+            <div class="qty-ctrl">
+              <button class="qty-btn">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn">+</button>
+            </div>
+            <button class="c-remove">Remove</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cart-item">
+        <div class="c-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div class="c-details">
+          <div class="c-brand">ZARA</div>
+          <div class="c-name">Textured Knit Sweater</div>
+          <div class="c-price">₹3,990</div>
+          <div class="c-actions">
+            <div class="qty-ctrl">
+              <button class="qty-btn">−</button>
+              <span class="qty-num">2</span>
+              <button class="qty-btn">+</button>
+            </div>
+            <button class="c-remove">Remove</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Summary -->
+    <aside class="cart-summary">
+      <h3 class="summary-title">Order Summary</h3>
+      
+      <div class="promo-box">
+        <input type="text" id="promo-input" placeholder="Promo code (try LOYALTY)" />
+        <button id="apply-promo">Apply</button>
+      </div>
+      
+      <div class="s-row"><span>Subtotal</span> <span id="s-sub">₹1,67,880</span></div>
+      <div class="s-row"><span>Delivery</span> <span>Free</span></div>
+      <div class="s-row discount" id="discount-row" style="display:none;"><span>Discount (10%)</span> <span id="s-disc">-₹16,788</span></div>
+      
+      <div class="s-total"><span>Total</span> <span id="s-total">₹1,67,880</span></div>
+      
+      <button class="checkout-btn">
+        Proceed to Checkout
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </aside>
+  </div>
+</main>
+
+<script src="js/script.js"></script>
+</body>
+</html>

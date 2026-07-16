@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Your Orders — E-Bazaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/orders.css"/>
+  <style>
+    .logo-bag-body{fill:url(#bagGrad)}
+    html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
+  </style>
+</head>
+<body data-page="orders">
+
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="bagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A88C6D"/><stop offset="100%" stop-color="#856B4D"/>
+    </linearGradient>
+    <linearGradient id="bagGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C9B397"/><stop offset="100%" stop-color="#A38C6D"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<header id="site-header" role="banner">
+  <div class="nav-top">
+    <!-- Logo -->
+    <a href="index.html" class="nav-logo" aria-label="E-Bazaar Home">
+      <svg class="logo-svg-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="E-Bazaar logo">
+        <rect class="logo-bag-body" x="12" y="28" width="56" height="44" rx="7"/>
+        <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/>
+      </svg>
+      <div><div class="logo-wordmark">E-<em>Bazaar</em></div><div class="logo-tagline">Order Dashboard</div></div>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="nav-btn"><span>Store Home</span></a>
+      <a href="auth.html" class="nav-btn"><span>Account</span></a>
+      <a href="cart.html" class="nav-btn cart-wrap"><span class="cart-badge cart-count-el">3</span><span>Cart</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="orders-page">
+  <div class="orders-layout">
+    
+    <!-- SIDEBAR -->
+    <aside class="orders-sidebar">
+      <div class="user-info">
+        <div class="u-avatar">AV</div>
+        <div>
+          <div class="u-name">Aryan Verma</div>
+          <div class="u-email">aryan@example.com</div>
+        </div>
+      </div>
+      <nav class="acc-nav">
+        <a href="#" class="active">My Orders</a>
+        <a href="#">Wishlist</a>
+        <a href="#">Saved Addresses</a>
+        <a href="#">Payment Methods</a>
+        <a href="#">Account Settings</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN ORDERS AREA -->
+    <div class="orders-main">
+      <h1 class="orders-h1">Active Order #EBZ-88392</h1>
+      
+      <!-- ACTIVE TRACKING CARD -->
+      <div class="order-card active-card">
+        <div class="oc-head">
+          <div class="oc-meta">
+            <span>Placed on: 16 Jul 2026</span>
+            <span>Total: ₹26,500</span>
+          </div>
+          <div class="oc-status on-way">Out for Delivery</div>
+        </div>
+        
+        <div class="track-flow">
+          <div class="t-step done">
+            <div class="t-icon">✓</div>
+            <div class="t-text">Order Placed<br><small>16 Jul, 10:00 AM</small></div>
+          </div>
+          <div class="t-line done"></div>
+          <div class="t-step done">
+            <div class="t-icon">✓</div>
+            <div class="t-text">Shipped<br><small>16 Jul, 02:30 PM</small></div>
+          </div>
+          <div class="t-line done"></div>
+          <div class="t-step active">
+            <div class="t-icon">🚚</div>
+            <div class="t-text">Out for Delivery<br><small>Arriving Today by 8 PM</small></div>
+          </div>
+          <div class="t-line"></div>
+          <div class="t-step">
+            <div class="t-icon">🏠</div>
+            <div class="t-text">Delivered<br><small>Pending</small></div>
+          </div>
+        </div>
+        
+        <div class="oc-items">
+          <div class="oc-item">
+            <div class="oc-img"><svg viewBox="0 0 100 100" fill="#A88C6D"><circle cx="50" cy="50" r="30"/></svg></div>
+            <div class="oc-det">
+              <div class="oc-name">Premium Summer Linen Shirt</div>
+              <div class="oc-brand">Zara | Qty: 1</div>
+            </div>
+          </div>
+          <div class="oc-item">
+            <div class="oc-img"><svg viewBox="0 0 100 100" fill="#5C534F"><rect x="20" y="20" width="60" height="60" rx="4"/></svg></div>
+            <div class="oc-det">
+              <div class="oc-name">Noise Cancelling Headphones</div>
+              <div class="oc-brand">Sony | Qty: 1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <h2 class="orders-h2" style="margin-top:48px;margin-bottom:24px">Past Orders</h2>
+
+      <!-- HISTORICAL CARD -->
+      <div class="order-card history-card">
+        <div class="oc-head">
+          <div class="oc-meta">
+            <span>Order #EBZ-44112</span>
+            <span>Placed on: 02 Jun 2026</span>
+          </div>
+          <div class="oc-status delivered">Delivered on 04 Jun 2026</div>
+        </div>
+        <div class="oc-items">
+          <div class="oc-item">
+            <div class="oc-img"><svg viewBox="0 0 100 100" fill="#888"><polygon points="50,20 80,80 20,80"/></svg></div>
+            <div class="oc-det">
+              <div class="oc-name">Running Sneakers Pro</div>
+              <div class="oc-brand">Nike | Qty: 1</div>
+            </div>
+          </div>
+        </div>
+        <div class="oc-actions">
+          <button class="o-btn o-primary">Buy Again</button>
+          <button class="o-btn">Request Return/Exchange</button>
+          <button class="o-btn">Download Invoice</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+<script src="js/script.js"></script>
+</body>
+</html>

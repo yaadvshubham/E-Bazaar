@@ -1,0 +1,47 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   E-BAZAAR — category.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.cat-page {
+  max-width: var(--max-w); margin: 0 auto;
+  padding: 40px 24px 80px;
+  display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start;
+}
+
+.cat-header { grid-column: 1 / -1; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+.cat-title { font-family: var(--font-display); font-size: 32px; color: var(--text-main); text-transform: capitalize; }
+
+/* Filter Sidebar */
+.filter-panel {
+  background: var(--bg-white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px; position: sticky; top: calc(var(--nav-h) + var(--sub-h) + 24px);
+}
+.filter-title { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 24px; }
+.filter-group { margin-bottom: 24px; }
+.filter-group h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px; }
+
+.brand-check { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer; }
+.brand-check input { accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer; }
+.brand-check span { font-size: 14px; color: var(--text-sub); }
+
+/* Price Slider Mock */
+.price-slider-wrap { padding-top: 12px; }
+.price-track { width: 100%; height: 4px; background: var(--border); border-radius: 2px; position: relative; margin-bottom: 16px; }
+.price-fill { position: absolute; left: 20%; right: 30%; height: 100%; background: var(--accent); }
+.price-knob { position: absolute; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background: var(--bg-white); border: 2px solid var(--accent); border-radius: 50%; }
+.price-knob.left { left: 20%; }
+.price-knob.right { right: 30%; }
+.price-vals { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+
+/* Grid */
+.cat-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+
+@media(max-width: 1200px) { .cat-grid { grid-template-columns: repeat(3, 1fr); } }
+@media(max-width: 960px) {
+  .cat-page { grid-template-columns: 1fr; }
+  .filter-panel { display: none; } /* On mobile, usually hidden in a drawer */
+  .cat-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media(max-width: 600px) { .cat-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }

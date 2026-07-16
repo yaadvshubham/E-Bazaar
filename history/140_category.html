@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title id="page-title">Shop Category — E-Bazaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/category.css"/>
+  <style>
+    .logo-bag-body{fill:url(#bagGrad)}
+    html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
+  </style>
+</head>
+<body data-page="category">
+
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="bagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A88C6D"/><stop offset="100%" stop-color="#856B4D"/>
+    </linearGradient>
+    <linearGradient id="bagGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C9B397"/><stop offset="100%" stop-color="#A38C6D"/>
+    </linearGradient>
+    <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E2CDAF"/><stop offset="100%" stop-color="#FAF5E1"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<header id="site-header" role="banner">
+  <div class="nav-top">
+    <!-- Logo -->
+    <a href="index.html" class="nav-logo" aria-label="E-Bazaar Home">
+      <svg class="logo-svg-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="E-Bazaar logo">
+        <rect class="logo-bag-body" x="12" y="28" width="56" height="44" rx="7"/>
+        <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/>
+        <polyline fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/>
+        <path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/>
+        <line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/>
+        <polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/>
+      </svg>
+      <div><div class="logo-wordmark">E-<em>Bazaar</em></div><div class="logo-tagline">Your everyday and everything store.</div></div>
+    </a>
+    <div class="nav-actions">
+      <a href="auth.html" class="nav-btn"><span>Account</span></a>
+      <a href="orders.html" class="nav-btn"><span>Orders</span></a>
+      <a href="cart.html" class="nav-btn cart-wrap"><span class="cart-badge cart-count-el">3</span><span>Cart</span></a>
+    </div>
+  </div>
+
+  <!-- SUBNAV MEGA PANEL -->
+  <nav class="nav-sub">
+    <div class="nav-sub-inner">
+      <div class="all-cats-wrapper" id="mega-trigger">
+        <button class="all-cats-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Show All Categories
+        </button>
+        <div class="mega-panel-wide">
+          <div class="mega-grid">
+            <div><div class="mega-col-title"><a href="category.html?cat=groceries">Groceries</a></div><div class="mega-col-links"><a href="category.html?cat=groceries">Fresh Produce</a><a href="category.html?cat=groceries">Dairy</a></div></div>
+            <div><div class="mega-col-title"><a href="category.html?cat=electronics">Electronics</a></div><div class="mega-col-links"><a href="category.html?cat=electronics">Phones</a><a href="category.html?cat=electronics">Laptops</a></div></div>
+            <div><div class="mega-col-title"><a href="category.html?cat=clothing">Clothing</a></div><div class="mega-col-links"><a href="category.html?cat=clothing">Men</a><a href="category.html?cat=clothing">Women</a></div></div>
+            <div><div class="mega-col-title"><a href="category.html?cat=shoes">Shoes</a></div></div>
+            <div><div class="mega-col-title"><a href="category.html?cat=beauty">Beauty</a></div></div>
+            <div><div class="mega-col-title"><a href="category.html?cat=sports">Sports</a></div></div>
+            <div><div class="mega-col-title"><a href="category.html?cat=home-kitchen">Home & Kitchen</a></div></div>
+            <div><div class="mega-col-title"><a href="category.html?cat=gadgets">Gadgets</a></div></div>
+          </div>
+          <div class="brand-ribbon">
+            <span class="ribbon-label">Popular Partner Brands:</span>
+            <span class="ribbon-brands">Nike <span>•</span> Apple <span>•</span> Samsung <span>•</span> Levis <span>•</span> Zara <span>•</span> L'Oréal <span>•</span> Decathlon <span>•</span> Prestige</span>
+          </div>
+        </div>
+      </div>
+      <div class="cat-links-wrap">
+        <div class="mega-item"><a href="category.html?cat=groceries">Groceries</a></div>
+        <div class="mega-item"><a href="category.html?cat=electronics">Electronics</a></div>
+        <div class="mega-item"><a href="category.html?cat=clothing">Clothing</a></div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="cat-page">
+  <aside class="filter-panel">
+    <div class="filter-head"><span class="filter-title">Filters</span></div>
+    <div class="f-section open">
+      <div class="f-section-body" id="fb-brands">
+        <div class="brand-list" id="filter-brand-list"></div>
+      </div>
+    </div>
+  </aside>
+  <main class="cat-right">
+    <div class="cat-grid" id="main-cat-grid"></div>
+  </main>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

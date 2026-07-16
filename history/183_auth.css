@@ -1,0 +1,74 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   E-BAZAAR — auth.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.auth-page {
+  min-height: calc(100vh - var(--nav-h));
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px; background: var(--bg-canvas);
+}
+
+.auth-container {
+  width: 100%; max-width: 480px;
+  background: var(--bg-white); border: 1px solid var(--border);
+  border-radius: 16px; padding: 40px; box-shadow: var(--shadow-lg);
+  position: relative; overflow: hidden;
+}
+
+.auth-head { text-align: center; margin-bottom: 32px; }
+.auth-title { font-family: var(--font-display); font-size: 28px; color: var(--text-main); margin-bottom: 8px; }
+.auth-sub { font-size: 14px; color: var(--text-sub); }
+
+.auth-form { display: flex; flex-direction: column; gap: 20px; transition: opacity var(--ease), transform var(--ease); }
+.auth-form.hidden { opacity: 0; transform: translateX(-20px); pointer-events: none; position: absolute; }
+
+.input-group { display: flex; flex-direction: column; gap: 8px; }
+.input-group label { font-size: 13px; font-weight: 600; color: var(--text-main); }
+.input-group input {
+  height: 48px; border-radius: 8px; border: 1px solid var(--border);
+  padding: 0 16px; font-size: 14px; background: var(--bg-canvas);
+  transition: border-color var(--ease), background var(--ease);
+  outline: none;
+}
+.input-group input:focus { border-color: var(--accent); background: var(--bg-white); }
+
+.auth-btn {
+  height: 48px; border-radius: 8px; background: var(--accent);
+  color: var(--bg-white); font-size: 14px; font-weight: 700;
+  margin-top: 8px; transition: background var(--ease);
+}
+.auth-btn:hover { background: var(--accent-dim); }
+
+.auth-divider {
+  display: flex; align-items: center; text-align: center; margin: 24px 0;
+  color: var(--text-muted); font-size: 12px;
+}
+.auth-divider::before, .auth-divider::after {
+  content: ''; flex: 1; border-bottom: 1px solid var(--border); margin: 0 16px;
+}
+
+.auth-social {
+  height: 48px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg-white); color: var(--text-main); font-size: 14px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  transition: background var(--ease); cursor: pointer; width: 100%;
+}
+.auth-social:hover { background: var(--bg-canvas); }
+.auth-social svg { width: 18px; height: 18px; }
+
+/* OTP View */
+.otp-view {
+  position: absolute; inset: 40px; display: flex; flex-direction: column;
+  background: var(--bg-white); transform: translateX(100%);
+  opacity: 0; pointer-events: none; transition: transform var(--ease), opacity var(--ease);
+}
+.otp-view.active { transform: translateX(0); opacity: 1; pointer-events: auto; }
+.otp-inputs { display: flex; gap: 12px; justify-content: center; margin: 24px 0; }
+.otp-inputs input {
+  width: 48px; height: 56px; border-radius: 8px; border: 1px solid var(--border);
+  text-align: center; font-size: 24px; font-weight: 700; background: var(--bg-canvas);
+  outline: none; transition: border-color var(--ease);
+}
+.otp-inputs input:focus { border-color: var(--accent); background: var(--bg-white); }
+.otp-timer { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 24px; }
+.otp-timer span { color: var(--accent); font-weight: 600; }

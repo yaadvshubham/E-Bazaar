@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Shop Clothing — E-Bazaar</title>
+  <meta name="description" content="Browse thousands of products across categories on E-Bazaar. Filter by brand, price, size, and more."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/category.css"/>
+  <style>
+    .logo-bag-body{fill:url(#bagGrad)}
+    html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
+  </style>
+</head>
+<body data-page="category">
+
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="bagGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1A6B5C"/><stop offset="100%" stop-color="#0D3D34"/></linearGradient>
+    <linearGradient id="bagGradDark" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22907C"/><stop offset="100%" stop-color="#155248"/></linearGradient>
+    <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#A07828"/><stop offset="100%" stop-color="#E8CC60"/></linearGradient>
+  </defs>
+</svg>
+
+<!-- HEADER (shared) -->
+<header id="site-header" role="banner">
+  <div class="nav-top">
+    <a href="index.html" class="nav-logo" aria-label="E-Bazaar Home">
+      <svg class="logo-svg-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect class="logo-bag-body" x="12" y="28" width="56" height="44" rx="7"/><path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/><polyline fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/><path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/><line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/><polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/></svg>
+      <div><div class="logo-wordmark">E-<em>Bazaar</em></div><div class="logo-tagline">Your everyday and everything store.</div></div>
+    </a>
+    <button class="nav-address" id="addr-trigger" aria-label="Delivery address"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><div><span class="addr-label">Deliver to</span><span class="addr-value">Aryan · New Delhi 110001</span></div></button>
+    <div class="nav-search" role="search"><label for="q" class="sr-only">Search</label><input type="search" id="q" placeholder="Search products, brands…" autocomplete="off"/><button class="search-btn" aria-label="Search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button></div>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"><div class="toggle-track" aria-hidden="true"><div class="toggle-thumb"></div></div><span class="toggle-icon" id="theme-icon" aria-hidden="true">🌙</span></button>
+      <button class="nav-btn" id="acc-btn" aria-label="Account"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Account</span></button>
+      <a href="orders.html" class="nav-btn" aria-label="Orders"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg><span>Orders</span></a>
+      <button class="nav-btn cart-wrap" id="cart-btn" aria-label="Cart"><span class="cart-badge cart-count-el" id="cart-count">3</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span>Cart</span></button>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+  <nav class="nav-sub" aria-label="Categories">
+    <div class="nav-sub-inner" style="gap:0">
+      <div class="mega-item"><a href="category.html?cat=groceries">🛒 Groceries</a></div>
+      <div class="mega-item"><a href="category.html?cat=electronics">📱 Electronics</a></div>
+      <div class="mega-item"><a href="category.html?cat=gadgets">⚡ Gadgets</a></div>
+      <div class="mega-item"><a href="category.html?cat=clothing" style="color:#FFF;border-bottom-color:var(--accent)">👗 Clothing</a></div>
+      <div class="mega-item"><a href="category.html?cat=shoes">👟 Shoes</a></div>
+      <div class="mega-item"><a href="category.html?cat=beauty">✨ Beauty</a></div>
+      <div class="mega-item"><a href="category.html?cat=sports">🏋️ Sports</a></div>
+      <div class="mega-item"><a href="category.html?cat=home">🏠 Home &amp; Kitchen</a></div>
+    </div>
+  </nav>
+</header>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<nav class="mobile-drawer" id="mobile-drawer" aria-label="Mobile navigation">
+  <div class="drawer-head"><a href="index.html" style="font-size:17px;font-weight:800;color:#F0EAE4">E-<em style="font-style:normal;color:#C8A84A">Bazaar</em></a><button class="drawer-close" id="drawer-close" aria-label="Close"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="drawer-cats">
+    <a href="category.html?cat=groceries" class="drawer-cat"><span>🛒 Groceries</span><span>›</span></a>
+    <a href="category.html?cat=electronics" class="drawer-cat"><span>📱 Electronics</span><span>›</span></a>
+    <a href="category.html?cat=clothing" class="drawer-cat" style="background:rgba(255,255,255,.06);color:#FFF"><span>👗 Clothing</span><span>›</span></a>
+    <a href="category.html?cat=shoes" class="drawer-cat"><span>👟 Shoes</span><span>›</span></a>
+    <a href="category.html?cat=beauty" class="drawer-cat"><span>✨ Beauty</span><span>›</span></a>
+    <a href="category.html?cat=sports" class="drawer-cat"><span>🏋️ Sports</span><span>›</span></a>
+    <a href="category.html?cat=home" class="drawer-cat"><span>🏠 Home & Kitchen</span><span>›</span></a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="index.html">Home</a>
+  <span class="bc-sep" aria-hidden="true">›</span>
+  <a href="category.html?cat=clothing">Clothing</a>
+  <span class="bc-sep" aria-hidden="true">›</span>
+  <span class="bc-current">Men's Shirts</span>
+</nav>
+
+<!-- MAIN CATALOG -->
+<div class="cat-page">
+
+  <!-- LEFT FILTER PANEL -->
+  <aside class="filter-panel" aria-label="Filter products">
+    <div class="filter-head">
+      <span class="filter-title">Filters</span>
+      <button class="filter-clear" aria-label="Clear all filters">Clear All</button>
+    </div>
+
+    <!-- Active filter tags -->
+    <div class="active-filters" id="active-filter-tags" aria-label="Active filters">
+      <span class="active-filters-label">Active:</span>
+      <span class="filter-tag" data-brand="Nike">Nike <button class="filter-tag-rm" aria-label="Remove Nike filter">×</button></span>
+    </div>
+
+    <!-- Price Range -->
+    <div class="f-section open" id="fs-price">
+      <button class="f-section-head" aria-expanded="true" aria-controls="fb-price">
+        <span class="f-section-head-text">Price Range</span>
+        <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="f-section-body" id="fb-price">
+        <div class="price-display">
+          <span id="price-min-display">₹500</span>
+          <span id="price-max-display">₹20,000</span>
+        </div>
+        <div class="range-wrap">
+          <div class="range-fill" id="range-fill" style="left:0%;width:100%"></div>
+          <input type="range" class="price-input" id="price-min" min="0" max="50000" value="500" step="100" aria-label="Minimum price"/>
+          <input type="range" class="price-input" id="price-max" min="0" max="50000" value="20000" step="100" aria-label="Maximum price"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brands -->
+    <div class="f-section open" id="fs-brands">
+      <button class="f-section-head" aria-expanded="true" aria-controls="fb-brands">
+        <span class="f-section-head-text">Brand</span>
+        <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="f-section-body" id="fb-brands">
+        <div class="brand-list">
+          <label class="brand-check"><input type="checkbox" value="Nike" checked/><span class="brand-check-name">Nike</span><span class="brand-check-count">(284)</span></label>
+          <label class="brand-check"><input type="checkbox" value="Adidas"/><span class="brand-check-name">Adidas</span><span class="brand-check-count">(213)</span></label>
+          <label class="brand-check"><input type="checkbox" value="Levi's"/><span class="brand-check-name">Levi's</span><span class="brand-check-count">(198)</span></label>
+          <label class="brand-check"><input type="checkbox" value="Puma"/><span class="brand-check-name">Puma</span><span class="brand-check-count">(176)</span></label>
+          <label class="brand-check"><input type="checkbox" value="Zara"/><span class="brand-check-name">Zara</span><span class="brand-check-count">(142)</span></label>
+          <label class="brand-check"><input type="checkbox" value="H&M"/><span class="brand-check-name">H&M</span><span class="brand-check-count">(118)</span></label>
+          <label class="brand-check"><input type="checkbox" value="US Polo"/><span class="brand-check-name">U.S. Polo Assn.</span><span class="brand-check-count">(97)</span></label>
+          <label class="brand-check"><input type="checkbox" value="Tommy"/><span class="brand-check-name">Tommy Hilfiger</span><span class="brand-check-count">(84)</span></label>
+        </div>
+        <button class="brand-show-more">+ Show 12 more</button>
+      </div>
+    </div>
+
+    <!-- Size -->
+    <div class="f-section open" id="fs-size">
+      <button class="f-section-head" aria-expanded="true" aria-controls="fb-size">
+        <span class="f-section-head-text">Size</span>
+        <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="f-section-body" id="fb-size">
+        <div class="size-grid">
+          <button class="size-btn">XS</button><button class="size-btn active">S</button>
+          <button class="size-btn active">M</button><button class="size-btn">L</button>
+          <button class="size-btn">XL</button><button class="size-btn">XXL</button>
+          <button class="size-btn">3XL</button><button class="size-btn">4XL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rating -->
+    <div class="f-section" id="fs-rating">
+      <button class="f-section-head" aria-expanded="false" aria-controls="fb-rating">
+        <span class="f-section-head-text">Customer Rating</span>
+        <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="f-section-body" id="fb-rating">
+        <div class="rating-list">
+          <label class="rating-row"><input type="radio" name="rating"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">4★ &amp; above</span></label>
+          <label class="rating-row"><input type="radio" name="rating"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">3★ &amp; above</span></label>
+          <label class="rating-row"><input type="radio" name="rating"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">2★ &amp; above</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Discount -->
+    <div class="f-section" id="fs-discount">
+      <button class="f-section-head" aria-expanded="false" aria-controls="fb-disc">
+        <span class="f-section-head-text">Discount</span>
+        <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="f-section-body" id="fb-disc">
+        <div class="discount-list">
+          <label class="discount-row"><input type="checkbox"/><span class="discount-label">10% and above</span></label>
+          <label class="discount-row"><input type="checkbox"/><span class="discount-label">20% and above</span></label>
+          <label class="discount-row"><input type="checkbox"/><span class="discount-label">30% and above</span></label>
+          <label class="discount-row"><input type="checkbox"/><span class="discount-label">40% and above</span></label>
+          <label class="discount-row"><input type="checkbox"/><span class="discount-label">50% and above</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Season -->
+    <div class="f-section" id="fs-season">
+      <button class="f-section-head" aria-expanded="false" aria-controls="fb-season">
+        <span class="f-section-head-text">Season</span>
+        <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="f-section-body" id="fb-season">
+        <div class="discount-list">
+          <label class="discount-row"><input type="checkbox"/><span class="discount-label">☀️ Summer Collection</span></label>
+          <label class="discount-row"><input type="checkbox"/><span class="discount-label">❄️ Winter Collection</span></label>
+          <label class="discount-row"><input type="checkbox"/><span class="discount-label">🌧️ Monsoon Essentials</span></label>
+          <label class="discount-row"><input type="checkbox"/><span class="discount-label">🎉 Festive Edition</span></label>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- RIGHT CATALOG GRID -->
+  <main class="cat-right" id="main-content">
+
+    <!-- Sort bar -->
+    <div class="sort-bar">
+      <p class="result-count" id="result-count">Showing <strong>284 products</strong></p>
+      <div class="sort-controls">
+        <button class="filter-toggle-btn" aria-label="Open filters"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg> Filters</button>
+        <label for="sort-select" class="sort-label">Sort:</label>
+        <select class="sort-select" id="sort-select" aria-label="Sort products">
+          <option value="relevance">Most Relevant</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="newest">Newest First</option>
+          <option value="rating">Top Rated</option>
+          <option value="discount">Best Discount</option>
+        </select>
+        <div class="view-toggles" aria-label="View mode">
+          <button class="view-btn active" aria-label="Grid view" title="Grid view"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>
+          <button class="view-btn" aria-label="List view" title="List view"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product grid -->
+    <div class="cat-grid" role="list" aria-label="Products">
+
+      <!-- Card 1 — Loyalty Wave Off -->
+      <article class="cat-card" role="listitem">
+        <div class="cat-img">
+          <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="220" height="200" fill="#1A2040"/><rect x="62" y="55" width="96" height="110" rx="8" fill="#1A2040" opacity=".18"/><rect x="72" y="65" width="76" height="90" rx="6" fill="#1A2040" opacity=".26"/><ellipse cx="77" cy="52" rx="14" ry="10" fill="rgba(255,255,255,.18)" style="filter:blur(3px)"/></svg>
+          <div class="prod-tags"><span class="prod-tag tag-loyalty">Loyalty Wave Off Active</span></div>
+          <button class="cat-wish-btn" aria-label="Add to wishlist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="cat-body">
+          <div class="cat-brand">Nike</div>
+          <div class="cat-name">Air Force 1 '07 Classic Low-Top Sneakers — White/White</div>
+          <div class="cat-prices"><span class="cat-price">₹7,495</span><span class="cat-orig">₹9,995</span><span class="cat-disc">25% off</span></div>
+          <div class="cat-rating"><div class="cat-stars"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030" opacity=".3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="cat-reviews">(4.4k)</span></div>
+          <button class="cat-add-btn" onclick="addToCart('c1','Nike Air Force 1')">+ Add to Cart</button>
+        </div>
+      </article>
+
+      <!-- Card 2 — 20% Discount applied -->
+      <article class="cat-card" role="listitem">
+        <div class="cat-img">
+          <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="220" height="200" fill="#3A1010"/><rect x="50" y="40" width="120" height="140" rx="10" fill="#3A1010" opacity=".2"/><ellipse cx="75" cy="48" rx="18" ry="12" fill="rgba(255,255,255,.18)" style="filter:blur(4px)"/></svg>
+          <div class="prod-tags"><span class="prod-tag tag-discount">20% Discount Applied</span><span class="prod-tag tag-new">New</span></div>
+          <button class="cat-wish-btn" aria-label="Add to wishlist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="cat-body">
+          <div class="cat-brand">Levi's</div>
+          <div class="cat-name">511 Slim Fit Jeans — Dark Wash Indigo, Stretch Denim</div>
+          <div class="cat-prices"><span class="cat-price">₹3,199</span><span class="cat-orig">₹3,999</span><span class="cat-disc">20% off</span></div>
+          <div class="cat-rating"><div class="cat-stars"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030" opacity=".4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="cat-reviews">(3.4k)</span></div>
+          <button class="cat-add-btn" onclick="addToCart('c2','Levis 511')">+ Add to Cart</button>
+        </div>
+      </article>
+
+      <!-- Card 3 — Trending -->
+      <article class="cat-card" role="listitem">
+        <div class="cat-img">
+          <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="220" height="200" fill="#181818"/><rect x="55" y="45" width="110" height="130" rx="8" fill="#181818" opacity=".22"/><ellipse cx="78" cy="50" rx="15" ry="10" fill="rgba(255,255,255,.15)" style="filter:blur(3px)"/></svg>
+          <div class="prod-tags"><span class="prod-tag tag-trending">Trending Now</span></div>
+          <button class="cat-wish-btn" aria-label="Add to wishlist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="cat-body">
+          <div class="cat-brand">Nike</div>
+          <div class="cat-name">Tech Fleece Full-Zip Hoodie — Carbon Heather Grey</div>
+          <div class="cat-prices"><span class="cat-price">₹6,995</span><span class="cat-orig">₹8,995</span><span class="cat-disc">22% off</span></div>
+          <div class="cat-rating"><div class="cat-stars"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030" opacity=".5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="cat-reviews">(2.9k)</span></div>
+          <button class="cat-add-btn" onclick="addToCart('c3','Nike Tech Fleece Hoodie')">+ Add to Cart</button>
+        </div>
+      </article>
+
+      <!-- Card 4 — Exclusive -->
+      <article class="cat-card" role="listitem">
+        <div class="cat-img">
+          <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="220" height="200" fill="#1A3A28"/><polygon points="110,40 170,160 50,160" fill="#1A3A28" opacity=".18"/><ellipse cx="80" cy="48" rx="16" ry="11" fill="rgba(255,255,255,.18)" style="filter:blur(3px)"/></svg>
+          <div class="prod-tags"><span class="prod-tag tag-exclusive">E-Bazaar Exclusive</span></div>
+          <button class="cat-wish-btn" aria-label="Add to wishlist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="cat-body">
+          <div class="cat-brand">Zara</div>
+          <div class="cat-name">Structured Shoulder Midi Dress — Deep Forest Green</div>
+          <div class="cat-prices"><span class="cat-price">₹3,290</span><span class="cat-orig">₹4,290</span><span class="cat-disc">23% off</span></div>
+          <div class="cat-rating"><div class="cat-stars"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030" opacity=".3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="cat-reviews">(561)</span></div>
+          <button class="cat-add-btn" onclick="addToCart('c4','Zara Midi Dress')">+ Add to Cart</button>
+        </div>
+      </article>
+
+      <!-- Cards 5-12 (lightweight, repeated pattern) -->
+      <article class="cat-card" role="listitem"><div class="cat-img"><svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="220" height="200" fill="#0A1A3A"/><circle cx="110" cy="100" r="60" fill="#0A1A3A" opacity=".2"/><ellipse cx="80" cy="52" rx="16" ry="10" fill="rgba(255,255,255,.18)" style="filter:blur(3px)"/></svg><div class="prod-tags"><span class="prod-tag tag-discount">30% Discount Applied</span></div><button class="cat-wish-btn" aria-label="Wishlist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div class="cat-body"><div class="cat-brand">Adidas</div><div class="cat-name">Ultraboost 23 Running Shoes — Core Black</div><div class="cat-prices"><span class="cat-price">₹11,999</span><span class="cat-orig">₹16,999</span><span class="cat-disc">30% off</span></div><div class="cat-rating"><div class="cat-stars"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="cat-reviews">(3.1k)</span></div><button class="cat-add-btn" onclick="addToCart('c5','Adidas Ultraboost')">+ Add to Cart</button></div></article>
+
+      <article class="cat-card" role="listitem"><div class="cat-img"><svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="220" height="200" fill="#2A1A08"/><rect x="55" y="40" width="110" height="130" rx="9" fill="#2A1A08" opacity=".22"/><ellipse cx="78" cy="50" rx="14" ry="9" fill="rgba(255,255,255,.18)" style="filter:blur(3px)"/></svg><div class="prod-tags"><span class="prod-tag tag-loyalty">Loyalty Wave Off Active</span></div><button class="cat-wish-btn" aria-label="Wishlist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div class="cat-body"><div class="cat-brand">Puma</div><div class="cat-name">Essentials Logo Hoodie — Premium Heavyweight Fleece</div><div class="cat-prices"><span class="cat-price">₹2,799</span><span class="cat-orig">₹3,999</span><span class="cat-disc">30% off</span></div><div class="cat-rating"><div class="cat-stars"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030" opacity=".3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="cat-reviews">(672)</span></div><button class="cat-add-btn" onclick="addToCart('c6','Puma Hoodie')">+ Add to Cart</button></div></article>
+
+      <article class="cat-card" role="listitem"><div class="cat-img"><svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="220" height="200" fill="#5C4A2E"/><polygon points="110,45 175,165 45,165" fill="#5C4A2E" opacity=".20"/><ellipse cx="82" cy="52" rx="15" ry="10" fill="rgba(255,255,255,.18)" style="filter:blur(3px)"/></svg><div class="prod-tags"><span class="prod-tag tag-new">New Arrival</span></div><button class="cat-wish-btn" aria-label="Wishlist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div class="cat-body"><div class="cat-brand">Zara</div><div class="cat-name">Premium Linen Oversized Blazer — Sand Beige</div><div class="cat-prices"><span class="cat-price">₹4,490</span><span class="cat-orig">₹5,990</span><span class="cat-disc">25% off</span></div><div class="cat-rating"><div class="cat-stars"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030" opacity=".5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="cat-reviews">(890)</span></div><button class="cat-add-btn" onclick="addToCart('c7','Zara Blazer')">+ Add to Cart</button></div></article>
+
+      <article class="cat-card" role="listitem"><div class="cat-img"><svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="220" height="200" fill="#3A3028"/><rect x="60" y="42" width="100" height="126" rx="8" fill="#3A3028" opacity=".22"/><ellipse cx="79" cy="50" rx="15" ry="10" fill="rgba(255,255,255,.18)" style="filter:blur(3px)"/></svg><div class="prod-tags"><span class="prod-tag tag-discount">35% Discount Applied</span></div><button class="cat-wish-btn" aria-label="Wishlist"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div class="cat-body"><div class="cat-brand">H&M</div><div class="cat-name">Relaxed Fit Linen Shirt — Summer White</div><div class="cat-prices"><span class="cat-price">₹1,499</span><span class="cat-orig">₹2,299</span><span class="cat-disc">35% off</span></div><div class="cat-rating"><div class="cat-stars"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" color="#E8A030" opacity=".3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="cat-reviews">(845)</span></div><button class="cat-add-btn" onclick="addToCart('c8','H&M Linen Shirt')">+ Add to Cart</button></div></article>
+
+    </div><!-- /cat-grid -->
+
+    <div class="load-more-wrap">
+      <button class="load-more-btn" onclick="showToast('⏳ Loading more products…')">Load More Products</button>
+    </div>
+
+  </main>
+
+</div><!-- /cat-page -->
+
+<!-- Mobile filter drawer -->
+<div class="filter-drawer-overlay" id="filter-drawer-overlay"></div>
+<aside class="filter-drawer" id="filter-drawer" aria-label="Filter panel">
+  <div class="filter-drawer-head">
+    <span class="filter-drawer-title">Filters</span>
+    <button class="modal-close" id="filter-drawer-close" aria-label="Close filters"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div style="padding:16px">
+    <p style="font-size:13px;color:var(--text-muted)">Filter options mirror the desktop panel. Use on mobile to refine results.</p>
+    <div style="margin-top:16px;display:flex;gap:10px">
+      <button class="form-submit" style="flex:1" onclick="document.getElementById('filter-drawer').classList.remove('open');document.getElementById('filter-drawer-overlay').classList.remove('open');showToast('✅ Filters applied')">Apply Filters</button>
+      <button class="addr-act-btn secondary" style="height:42px;padding:0 16px;border-radius:var(--r-sm)" onclick="document.getElementById('filter-drawer').classList.remove('open');document.getElementById('filter-drawer-overlay').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+</aside>
+
+<button id="btt" aria-label="Back to top"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg></button>
+<div id="toast" role="alert" aria-live="polite"><div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
