@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title id="page-title">Shop Category — E-Bazaar</title>
+  <title id="page-title">Product-Detail — E-Bazaar</title>
   <meta name="description" content="Browse thousands of products across categories on E-Bazaar. Filter by brand, price, size, and more."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -15,7 +15,7 @@
     html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
   </style>
 </head>
-<body data-page="category">
+<body data-page="product-detail">
 
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
   <defs>
@@ -90,125 +90,10 @@
 </nav>
 
 <!-- MAIN CATALOG -->
-<div class="cat-page">
-
-  <!-- LEFT FILTER PANEL -->
-  <aside class="filter-panel" aria-label="Filter products">
-    <div class="filter-head">
-      <span class="filter-title">Filters</span>
-      <button class="filter-clear" aria-label="Clear all filters">Clear All</button>
-    </div>
-
-    <!-- Active filter tags -->
-    <div class="active-filters" id="active-filter-tags" aria-label="Active filters">
-      <span class="active-filters-label">Active:</span>
-      <!-- Dynamic tags will be injected here -->
-    </div>
-
-    <!-- Price Range -->
-    <div class="f-section open" id="fs-price">
-      <button class="f-section-head" aria-expanded="true" aria-controls="fb-price">
-        <span class="f-section-head-text">Price Range</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-price">
-        <div class="price-display">
-          <span id="price-min-display">₹500</span>
-          <span id="price-max-display">₹20,000</span>
-        </div>
-        <div class="range-wrap">
-          <div class="range-fill" id="range-fill" style="left:0%;width:100%"></div>
-          <input type="range" class="price-input" id="price-min" min="0" max="50000" value="500" step="100" aria-label="Minimum price"/>
-          <input type="range" class="price-input" id="price-max" min="0" max="50000" value="20000" step="100" aria-label="Maximum price"/>
-        </div>
-      </div>
-    </div>
-
-    <!-- Brands -->
-    <div class="f-section open" id="fs-brands">
-      <button class="f-section-head" aria-expanded="true" aria-controls="fb-brands">
-        <span class="f-section-head-text">Brand</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-brands">
-        <div class="brand-list" id="filter-brand-list">
-          <!-- Populated dynamically based on category -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Rating -->
-    <div class="f-section" id="fs-rating">
-      <button class="f-section-head" aria-expanded="false" aria-controls="fb-rating">
-        <span class="f-section-head-text">Customer Rating</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-rating">
-        <div class="rating-list">
-          <label class="rating-row"><input type="radio" name="rating"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">4★ &amp; above</span></label>
-          <label class="rating-row"><input type="radio" name="rating"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">3★ &amp; above</span></label>
-          <label class="rating-row"><input type="radio" name="rating"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">2★ &amp; above</span></label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Discount -->
-    <div class="f-section" id="fs-discount">
-      <button class="f-section-head" aria-expanded="false" aria-controls="fb-disc">
-        <span class="f-section-head-text">Discount</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-disc">
-        <div class="discount-list">
-          <label class="discount-row"><input type="checkbox"/><span class="discount-label">10% and above</span></label>
-          <label class="discount-row"><input type="checkbox"/><span class="discount-label">20% and above</span></label>
-          <label class="discount-row"><input type="checkbox"/><span class="discount-label">30% and above</span></label>
-          <label class="discount-row"><input type="checkbox"/><span class="discount-label">40% and above</span></label>
-          <label class="discount-row"><input type="checkbox"/><span class="discount-label">50% and above</span></label>
-        </div>
-      </div>
-    </div>
-
-  </aside>
-
-  <!-- RIGHT CATALOG GRID -->
-  <main class="cat-right" id="main-content">
-
-    <!-- Sort bar -->
-    <div class="sort-bar">
-      <p class="result-count" id="result-count">Showing <strong>0 products</strong></p>
-      <div class="sort-controls">
-        <button class="filter-toggle-btn" aria-label="Open filters"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg> Filters</button>
-        <label for="sort-select" class="sort-label">Sort:</label>
-        <select class="sort-select" id="sort-select" aria-label="Sort products">
-          <option value="relevance">Most Relevant</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="newest">Newest First</option>
-          <option value="rating">Top Rated</option>
-          <option value="discount">Best Discount</option>
-        </select>
-        <div class="view-toggles" aria-label="View mode">
-          <button class="view-btn active" aria-label="Grid view" title="Grid view"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>
-          <button class="view-btn" aria-label="List view" title="List view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Brand Showcase Row (Dynamically populated) -->
-    <div class="brand-showcase-row" id="brand-showcase-row" aria-label="Featured Brands"></div>
-
-    <!-- Product grid (dynamically populated) -->
-    <div class="cat-grid" id="main-cat-grid" role="list" aria-label="Products">
-      <!-- Injected by script.js -->
-    </div>
-
-    <div class="load-more-wrap">
-      <button class="load-more-btn" onclick="showToast('⏳ Loading more products…')">Load More Products</button>
-    </div>
-
-  </main>
-
+<div class="product-page" style="max-width: var(--max-w); margin: 0 auto; padding: 40px var(--side-pad);">
+  <div class="product-container" id="product-container" style="display:grid; grid-template-columns: 1fr 1fr; gap:64px; align-items:start;">
+    <!-- Generated by JS -->
+  </div>
 </div><!-- /cat-page -->
 
 <!-- Mobile filter drawer -->

@@ -334,22 +334,35 @@ function buildCard(p) {
   const bCls = { new:'b-new', sale:'b-sale', hot:'b-hot' }[p.badge] || '';
   const bLbl = { new:'New', sale:'Sale', hot:'🔥 Hot' }[p.badge] || '';
   return `<article class="cat-card" role="listitem">
-    <div class="cat-img">${makeSVG(p.color,p.shape)}${p.badge?`<span class="card-badge ${bCls}">${bLbl}</span>`:''}
-      <button class="cat-wish-btn" aria-label="Add to wishlist" onclick="toggleWish('w_${p.id}','${p.name}')" id="w_${p.id}">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      </button>
-    </div>
+    <a href="product-detail.html?id=${p.id}" class="cat-img" style="display:block; text-decoration:none;">${makeSVG(p.color,p.shape)}${p.badge?`<span class="card-badge ${bCls}">${bLbl}</span>`:''}</a>
+    <button class="cat-wish-btn" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:var(--bg-white);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;z-index:2;" aria-label="Add to wishlist" onclick="toggleWish('w_${p.id}','${p.name}')" id="w_${p.id}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
     <div class="cat-body">
       <div class="cat-brand">${p.brand}</div>
-      <div class="cat-name">${p.name}</div>
+      <a href="product-detail.html?id=${p.id}" class="cat-name" style="display:block;">${p.name}</a>
       <div class="cat-prices"><span class="cat-price">${p.price}</span><span class="cat-orig">${p.orig}</span><span class="cat-disc">${p.disc} off</span></div>
-      <div class="cat-rating"><div class="cat-stars" aria-label="${p.rating} out of 5">${makeStars(p.rating)}</div><span class="cat-reviews">(${p.reviews})</span></div>
+      <div class="cat-rating"><div class="cat-stars" aria-label="${p.rating} out of 5">${makeStars(p.rating)}</div><span class="cat-reviews">${p.rating} (${p.reviews})</span></div>
+      <div class="cat-transactions" style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${Math.floor(Math.random()*5 + 1)}k+ bought in past month</div>
       <button class="cat-add-btn" onclick="addToCart('${p.id}','${p.name}')">+ Add to Cart</button>
     </div>
   </article>`;
 }
 
 /* Category Page Specific Logic */
+function getBrandLogoSVG(brand) {
+  // Return placeholder SVG for brand logo if specific one is not found
+  const logos = {
+    'Nike': '<svg viewBox="0 0 110 44" aria-hidden="true"><path d="M10 33 Q34 5 100 11 Q65 26 28 36 Q18 38 10 33Z" fill="currentColor"/></svg>',
+    'Apple': '<svg viewBox="0 0 52 62" aria-hidden="true"><path d="M38 6c-3.8 2.8-6.2 7-5.6 11.5 5.4-.5 9.2-4.8 8.6-10-.1-.7-.9-1.8-3-1.5zm-12 14c-5 0-10 5-10 12.5 0 8.8 7 18.5 12.5 18.5 1.8 0 4.5-.9 6.5-.9 2 0 5.2.9 7.2.9 5.5-1.4 10.5-11 10.5-18.5 0-7.5-4.5-12.5-10.5-12.5-2.5 0-4.2 1-6.5 1-2 0-5.2-1-9.7-1z" fill="currentColor"/></svg>',
+    'Zara': '<svg viewBox="0 0 130 32" aria-hidden="true"><text x="4" y="26" font-family="Georgia,serif" font-size="26" font-weight="700" letter-spacing="8" fill="currentColor">ZARA</text></svg>',
+    'Sony': '<svg viewBox="0 0 120 30" aria-hidden="true"><text x="2" y="24" font-family="Arial,sans-serif" font-size="22" font-weight="800" letter-spacing="5" fill="currentColor">SONY</text></svg>',
+    'Puma': '<svg viewBox="0 0 130 34" aria-hidden="true"><text x="2" y="28" font-family="Arial Black,sans-serif" font-size="26" font-weight="900" letter-spacing="3" fill="currentColor">PUMA</text></svg>',
+    'LOreal': '<svg viewBox="0 0 170 38" aria-hidden="true"><text x="2" y="22" font-family="Georgia,serif" font-size="17" font-weight="600" letter-spacing="2" fill="currentColor">L\'ORÉAL</text></svg>',
+  };
+  return logos[brand] || `<svg viewBox="0 0 120 30" aria-hidden="true"><text x="2" y="24" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="currentColor">${brand}</text></svg>`;
+}
+
 function initDynamicCategory() {
   const urlParams = new URLSearchParams(window.location.search);
   let catId = urlParams.get('cat') || 'clothing';
@@ -378,6 +391,16 @@ function initDynamicCategory() {
         <span class="brand-check-name">${brand}</span>
         <span class="brand-check-count">(${Math.floor(Math.random() * 200) + 20})</span>
       </label>
+    `).join('');
+  }
+  
+  // Generate Brand Showcase Row
+  const showcaseRow = document.getElementById('brand-showcase-row');
+  if (showcaseRow) {
+    showcaseRow.innerHTML = categoryData.brands.slice(0, 8).map(brand => `
+      <a href="brand-store.html?brand=${brand}" class="brand-showcase-card" title="Shop ${brand}">
+        ${getBrandLogoSVG(brand)}
+      </a>
     `).join('');
   }
 
@@ -592,6 +615,93 @@ function initNavActions() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
+   BRAND STORE & PRODUCT DETAIL
+   ═══════════════════════════════════════════════════════════════════════ */
+function initBrandStore() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const brand = urlParams.get('brand') || 'Nike';
+  
+  document.title = `${brand} Official Store — E-Bazaar`;
+  
+  const titleEl = document.getElementById('brand-title');
+  if (titleEl) titleEl.textContent = brand;
+  
+  const logoEl = document.getElementById('brand-logo-large');
+  if (logoEl) logoEl.innerHTML = getBrandLogoSVG(brand);
+  
+  const grid = document.getElementById('main-cat-grid');
+  if (grid) {
+    const products = generateMockProductsForCategory('clothing').slice(0, 12);
+    products.forEach(p => p.brand = brand);
+    grid.innerHTML = products.map(buildCard).join('');
+  }
+  
+  const countEl = document.getElementById('result-count');
+  if (countEl) countEl.innerHTML = `Showing <strong>12 products</strong>`;
+}
+
+function initProductDetail() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('id') || 'P01';
+  
+  const p = generateMockProductsForCategory('clothing')[0];
+  p.name = "Premium " + p.name;
+  
+  document.title = `${p.name} — E-Bazaar`;
+  
+  const container = document.getElementById('product-container');
+  if (!container) return;
+  
+  container.innerHTML = `
+    <div class="product-gallery">
+      <div class="product-image-main">
+        ${makeSVG(p.color, p.shape)}
+      </div>
+      <div class="product-thumbnails">
+        <div class="thumb-img active">${makeSVG(p.color, p.shape)}</div>
+        <div class="thumb-img">${makeSVG('#E0E0E0', p.shape)}</div>
+        <div class="thumb-img">${makeSVG('#D0D0D0', p.shape)}</div>
+      </div>
+    </div>
+    <div class="product-info">
+      <div class="pd-brand">${p.brand}</div>
+      <h1 class="pd-title">${p.name}</h1>
+      <div class="pd-rating">
+        <div class="cat-stars">${makeStars(p.rating)}</div>
+        <a href="#reviews" class="pd-reviews">${p.reviews} Reviews</a>
+      </div>
+      <div class="pd-price-row">
+        <span class="pd-price">${p.price}</span>
+        <span class="pd-orig">${p.orig}</span>
+        <span class="pd-disc">${p.disc} off</span>
+      </div>
+      
+      <div class="pd-section-title">Select Size</div>
+      <div class="size-selector">
+        <button class="size-btn">S</button>
+        <button class="size-btn active">M</button>
+        <button class="size-btn">L</button>
+        <button class="size-btn">XL</button>
+      </div>
+      
+      <div class="pd-actions">
+        <button class="btn-add-cart" onclick="addToCart('${p.id}', '${p.name.replace(/'/g, "\\'")}')">Add to Cart</button>
+        <button class="btn-wishlist" onclick="toggleWish('w_pd_${p.id}', '${p.name.replace(/'/g, "\\'")}')" id="w_pd_${p.id}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+      </div>
+      
+      <ul class="pd-details-list">
+        <li><span>Material</span><span>100% Premium Cotton</span></li>
+        <li><span>Fit</span><span>Regular Fit</span></li>
+        <li><span>Care</span><span>Machine Wash Cold</span></li>
+        <li><span>SKU</span><span>${productId}</span></li>
+      </ul>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
    BOOT
    ═══════════════════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -612,5 +722,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Page-specific inits
   if (document.body.dataset.page === 'category') {
     initCategoryFilters();
+  } else if (document.body.dataset.page === 'brand-store') {
+    initBrandStore();
+  } else if (document.body.dataset.page === 'product-detail') {
+    initProductDetail();
   }
 });
