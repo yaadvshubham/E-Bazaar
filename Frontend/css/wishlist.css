@@ -1,0 +1,137 @@
+/* wishlist.css */
+.wl-main {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 40px var(--side-pad);
+}
+
+.wl-header {
+  margin-bottom: 30px;
+}
+.wl-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.wl-subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.wl-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .wl-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .wl-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .wl-grid { grid-template-columns: 1fr; }
+}
+
+.wl-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-line);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  position: relative;
+  transition: transform var(--ease), box-shadow var(--ease);
+}
+.wl-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.wl-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  display: grid;
+  place-items: center;
+  color: #333;
+  z-index: 10;
+  cursor: pointer;
+  transition: background var(--ease);
+}
+.wl-remove:hover {
+  background: #FFF;
+  color: #D63C3C;
+}
+
+.wl-img-wrap {
+  aspect-ratio: 1;
+  background: var(--bg-alt);
+  display: grid;
+  place-items: center;
+}
+
+.wl-info {
+  padding: 16px;
+}
+.wl-brand {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.wl-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wl-price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.wl-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.wl-orig {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.wl-rating {
+  font-size: 12px;
+  color: #F5A623;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.wl-reviews {
+  color: var(--text-muted);
+}
+
+.wl-add-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--accent-caramel);
+  color: #FFF;
+  font-weight: 600;
+  border-radius: var(--r-xs);
+  transition: opacity var(--ease);
+}
+.wl-add-btn:hover {
+  opacity: 0.9;
+}

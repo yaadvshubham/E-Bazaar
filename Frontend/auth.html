@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>E-Bazaar — Your everyday and everything store.</title>
+  <title id="page-title">Sign In / Register — E-Bazaar</title>
   <meta name="description" content="E-Bazaar: Premium groceries, electronics, clothing, shoes, beauty and more. Shop 1000+ top brands with unbeatable prices and fast delivery across India."/>
   <meta name="theme-color" content="#FAF8F5"/>
   <meta property="og:title" content="E-Bazaar — Your everyday and everything store."/>
@@ -12,13 +12,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/auth.css"/>
   <style>
     /* Logo SVG gradient references */
     .logo-bag-body{fill:url(#bagGrad)}
     html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
   </style>
 </head>
-<body>
+<body data-page="auth">
 
 <!-- SVG Gradient Defs -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
@@ -78,7 +79,7 @@
         <span class="toggle-icon" id="theme-icon" aria-hidden="true">🌙</span>
       </button>
       <!-- Account -->
-      <a href="auth.html" class="nav-btn" id="acc-btn" aria-label="My Account">
+      <a href="auth.html" class="nav-btn" id="nav-account" aria-label="My Account">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Account</span>
       </a>
@@ -267,163 +268,79 @@
 </nav>
 
 <!-- ═══════════════════ MAIN ═══════════════════ -->
-<main id="main-content">
+<main id="main-content" class="auth-main">
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login">Login</button>
+        <button class="auth-tab" id="tab-register">Create Account</button>
+      </div>
 
-  <!-- HERO SLIDER -->
-  <section id="hero" aria-label="Promotional banner">
-    <div class="hero-track" id="heroTrack">
-      <div class="hero-slide slide-apparel" data-href="category.html?cat=clothing" role="group" aria-label="Slide 1: Summer Fashion Sale">
-        <div class="slide-decor" aria-hidden="true"><div class="slide-circle" style="width:600px;height:600px;right:-120px;top:-200px"></div><div class="slide-circle" style="width:240px;height:240px;left:40px;bottom:-80px"></div></div>
-        <div class="hero-content">
-          <div class="hero-eyebrow"><div class="hero-eyebrow-dot"></div> Limited Time Offer</div>
-          <h1 class="hero-h">Summer Fashion<br><span class="hl">Sale is Live.</span></h1>
-          <p class="hero-sub">Up to 20% off on all apparel — curated styles, premium brands, next-day delivery.</p>
-          <a href="category.html?cat=clothing" class="hero-cta">Shop Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <!-- Form View A (Password Entry) -->
+      <form class="auth-form active" id="form-login" novalidate>
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <input type="email" id="login-email" placeholder="Enter your email" required/>
         </div>
-        <div class="hero-badge-wrap" aria-hidden="true"><div class="hero-badge"><div class="hero-badge-num">20<sup>%</sup></div><div class="hero-badge-label">Off Apparel</div></div></div>
-      </div>
-      <div class="hero-slide slide-electronics" data-href="category.html?cat=electronics" role="group" aria-label="Slide 2: New Tech Drop">
-        <div class="slide-decor" aria-hidden="true"><div class="slide-circle" style="width:540px;height:540px;right:-60px;bottom:-150px"></div></div>
-        <div class="hero-content">
-          <div class="hero-eyebrow"><div class="hero-eyebrow-dot"></div> New Releases</div>
-          <h2 class="hero-h">Latest Tech &amp;<br><span class="hl">Gadgets Drop.</span></h2>
-          <p class="hero-sub">Smartphones, wearables, audio — the best gear, unbeatable prices. Zero compromise.</p>
-          <a href="category.html?cat=electronics" class="hero-cta">Explore Tech <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter your password" required/>
         </div>
-        <div class="hero-badge-wrap" aria-hidden="true"><div class="hero-badge"><div class="hero-badge-num">50<sup>+</sup></div><div class="hero-badge-label">New Arrivals</div></div></div>
-      </div>
-      <div class="hero-slide slide-groceries" data-href="category.html?cat=groceries" role="group" aria-label="Slide 3: Fresh Groceries">
-        <div class="slide-decor" aria-hidden="true"><div class="slide-circle" style="width:480px;height:480px;right:-40px;top:-90px"></div></div>
-        <div class="hero-content">
-          <div class="hero-eyebrow"><div class="hero-eyebrow-dot"></div> Daily Essentials</div>
-          <h2 class="hero-h">Farm-Fresh<br><span class="hl">Delivered Fast.</span></h2>
-          <p class="hero-sub">Fresh produce and pantry staples — ordered in seconds, at your door in 10 minutes.</p>
-          <a href="category.html?cat=groceries" class="hero-cta">Order Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <div class="form-options">
+          <a href="#" class="forgot-link">Forgot Password?</a>
         </div>
-        <div class="hero-badge-wrap" aria-hidden="true"><div class="hero-badge"><div class="hero-badge-num">10<sup>m</sup></div><div class="hero-badge-label">Delivery</div></div></div>
-      </div>
-      <div class="hero-slide slide-beauty" data-href="category.html?cat=beauty" role="group" aria-label="Slide 4: Beauty Sale">
-        <div class="slide-decor" aria-hidden="true"><div class="slide-circle" style="width:560px;height:560px;right:-100px;bottom:-130px"></div></div>
-        <div class="hero-content">
-          <div class="hero-eyebrow"><div class="hero-eyebrow-dot"></div> Beauty & Skincare</div>
-          <h2 class="hero-h">Glow Season<br><span class="hl">Starts Now.</span></h2>
-          <p class="hero-sub">Top-rated skincare, makeup and wellness from India's best brands — up to 35% off.</p>
-          <a href="category.html?cat=beauty" class="hero-cta">Shop Beauty <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <button type="submit" class="auth-btn">Sign In</button>
+        <div class="auth-alt">
+          <a href="#" id="link-otp" class="alt-link">Login via Secure OTP</a>
         </div>
-        <div class="hero-badge-wrap" aria-hidden="true"><div class="hero-badge"><div class="hero-badge-num">35<sup>%</sup></div><div class="hero-badge-label">Off Beauty</div></div></div>
-      </div>
-      <div class="hero-slide slide-deals" data-href="category.html?cat=deals" role="group" aria-label="Slide 5: Flash Sale">
-        <div class="slide-decor" aria-hidden="true"><div class="slide-circle" style="width:600px;height:600px;right:-140px;top:-180px"></div></div>
-        <div class="hero-content">
-          <div class="hero-eyebrow"><div class="hero-eyebrow-dot"></div> 24-Hour Flash Sale</div>
-          <h2 class="hero-h">Today's Mega<br><span class="hl">Deals Drop.</span></h2>
-          <p class="hero-sub">Thousands slashed — for 24 hours only. Miss this and wait a full month.</p>
-          <a href="category.html?cat=deals" class="hero-cta">Grab Deals <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-        </div>
-        <div class="hero-badge-wrap" aria-hidden="true"><div class="hero-badge"><div class="hero-badge-num">24<sup>h</sup></div><div class="hero-badge-label">Flash Sale</div></div></div>
-      </div>
-    </div>
-    <div class="slider-dots" role="tablist" aria-label="Slides">
-      <button class="s-dot active" role="tab" aria-selected="true"  data-idx="0" aria-label="Slide 1"></button>
-      <button class="s-dot"        role="tab" aria-selected="false" data-idx="1" aria-label="Slide 2"></button>
-      <button class="s-dot"        role="tab" aria-selected="false" data-idx="2" aria-label="Slide 3"></button>
-      <button class="s-dot"        role="tab" aria-selected="false" data-idx="3" aria-label="Slide 4"></button>
-      <button class="s-dot"        role="tab" aria-selected="false" data-idx="4" aria-label="Slide 5"></button>
-    </div>
-    <div class="slider-arrows">
-      <button class="s-arr" id="sPrev" aria-label="Previous slide"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
-      <button class="s-arr" id="sNext" aria-label="Next slide"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
-    </div>
-  </section>
+      </form>
 
-  <!-- TRUST STRIP -->
-  <div class="trust-strip">
-    <div class="trust-inner">
-      <div class="trust-item"><div class="trust-icon-wrap" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="trust-text"><strong>Free Delivery</strong><span>On orders above ₹499</span></div></div>
-      <div class="trust-item"><div class="trust-icon-wrap" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div><div class="trust-text"><strong>Easy Returns</strong><span>10-day hassle-free policy</span></div></div>
-      <div class="trust-item"><div class="trust-icon-wrap" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="trust-text"><strong>100% Secure</strong><span>Encrypted checkout</span></div></div>
-      <div class="trust-item"><div class="trust-icon-wrap" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 15a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 4.2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 11.5a16 16 0 0 0 5.59 5.59l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 18.2z"/></svg></div><div class="trust-text"><strong>24/7 Support</strong><span>Always here for you</span></div></div>
+      <!-- Form View B (OTP Verification View) -->
+      <form class="auth-form hidden" id="form-otp" novalidate>
+        <h3 class="otp-title">Enter Verification Code</h3>
+        <p class="otp-desc">We've sent a 6-digit code to your email.</p>
+        <div class="otp-inputs">
+          <input type="text" maxlength="1" class="otp-box" required/>
+          <input type="text" maxlength="1" class="otp-box" required/>
+          <input type="text" maxlength="1" class="otp-box" required/>
+          <input type="text" maxlength="1" class="otp-box" required/>
+          <input type="text" maxlength="1" class="otp-box" required/>
+          <input type="text" maxlength="1" class="otp-box" required/>
+        </div>
+        <p class="otp-status">Resend OTP in <span id="otp-timer">00:59</span></p>
+        <button type="submit" class="auth-btn">Verify & Proceed</button>
+      </form>
+
+      <!-- Form View C (Sign Up Portal) -->
+      <form class="auth-form hidden" id="form-register" novalidate>
+        <div class="form-group">
+          <label for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" placeholder="John Doe" required/>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email Address</label>
+          <input type="email" id="reg-email" placeholder="john@example.com" required/>
+        </div>
+        <div class="form-group">
+          <label for="reg-phone">Mobile Phone Number</label>
+          <input type="tel" id="reg-phone" placeholder="+91 98765 43210" required/>
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input type="password" id="reg-password" placeholder="Create a strong password" required/>
+        </div>
+        <button type="submit" class="auth-btn">Register Account</button>
+      </form>
+      
+      <!-- Form View D (Authenticated Logout state) -->
+      <div class="auth-form hidden" id="form-profile">
+        <h2 class="profile-welcome">Welcome Back, Aryan!</h2>
+        <button class="auth-btn secondary" id="btn-logout">Logout / Switch Account</button>
+      </div>
+      
     </div>
   </div>
-
-  <!-- NEW RELEASES -->
-  <section class="section" id="new-releases" aria-labelledby="nr-title">
-    <div class="sec-head">
-      <div><h2 class="sec-title" id="nr-title">New Releases</h2><p class="sec-sub">Freshly curated drops — updated daily</p></div>
-      <a href="category.html?cat=new-arrivals" class="see-all">See All &nbsp;&#8594;</a>
-    </div>
-    <div class="track-wrap">
-      <button class="track-arrow left" data-track="tr-new" aria-label="Scroll left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
-      <div class="track" id="tr-new" role="list" aria-label="New releases"></div>
-      <button class="track-arrow right" data-track="tr-new" aria-label="Scroll right"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- PROMO GRID -->
-  <div class="promo-grid" role="region" aria-label="Featured promotions">
-    <a href="category.html?cat=clothing" class="promo-card pc-fashion" id="promo-fashion"><div class="promo-text"><h3>Style Studio</h3><p>Curated wardrobe essentials — from street casual to couture.</p><span class="promo-btn">Explore Fashion &nbsp;&rarr;</span></div><div class="promo-bg-num" aria-hidden="true">STYLE</div></a>
-    <a href="category.html?cat=electronics" class="promo-card pc-tech" id="promo-tech"><div class="promo-text"><h3>Tech Universe</h3><p>Smartphones, laptops, audio gear — best tech at unbeatable prices.</p><span class="promo-btn">Shop Electronics &nbsp;&rarr;</span></div><div class="promo-bg-num" aria-hidden="true">TECH</div></a>
-  </div>
-
-  <!-- TRENDING -->
-  <div class="section-bg-wrap">
-    <section class="section section-bg" id="trending" aria-labelledby="tr-title">
-      <div class="sec-head">
-        <div><h2 class="sec-title" id="tr-title">Trending Products</h2><p class="sec-sub">What everyone's buying right now</p></div>
-        <a href="category.html?cat=trending" class="see-all">See All &nbsp;&#8594;</a>
-      </div>
-      <div class="track-wrap">
-        <button class="track-arrow left" data-track="tr-trend" aria-label="Scroll left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <div class="track" id="tr-trend" role="list" aria-label="Trending products"></div>
-        <button class="track-arrow right" data-track="tr-trend" aria-label="Scroll right"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
-    </section>
-  </div>
-
-  <div class="section-divider"></div>
-
-  <!-- YOU MAY ALSO LIKE -->
-  <section id="discovery" aria-labelledby="disc-title">
-    <div class="discovery-inner">
-      <div class="sec-head" style="padding-top:0">
-        <div><h2 class="sec-title" id="disc-title">You May Also Like</h2><p class="sec-sub">Personalised picks — scroll each row independently</p></div>
-        <a href="category.html?cat=all" class="see-all">See All &nbsp;&#8594;</a>
-      </div>
-      <div class="discovery-row"><div class="row-label">Gadgets &amp; Wearables</div>
-        <div class="track-wrap"><button class="track-arrow left" data-track="disc-row-1" aria-label="Scroll left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button><div class="track" id="disc-row-1" role="list" aria-label="Gadgets and wearables"></div><button class="track-arrow right" data-track="disc-row-1" aria-label="Scroll right"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button></div>
-      </div>
-      <div class="discovery-row"><div class="row-label">Fashion &amp; Footwear</div>
-        <div class="track-wrap"><button class="track-arrow left" data-track="disc-row-2" aria-label="Scroll left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button><div class="track" id="disc-row-2" role="list" aria-label="Fashion and footwear"></div><button class="track-arrow right" data-track="disc-row-2" aria-label="Scroll right"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button></div>
-      </div>
-      <div class="discovery-row"><div class="row-label">Electronics &amp; Phones</div>
-        <div class="track-wrap"><button class="track-arrow left" data-track="disc-row-3" aria-label="Scroll left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button><div class="track" id="disc-row-3" role="list" aria-label="Electronics and phones"></div><button class="track-arrow right" data-track="disc-row-3" aria-label="Scroll right"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button></div>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- EXPLORE BRANDS -->
-  <section class="section" id="brands-section" aria-labelledby="brands-title">
-    <div class="sec-head">
-      <div><h2 class="sec-title" id="brands-title">Explore Brands</h2><p class="sec-sub">Your favourite iconic labels — all in one place</p></div>
-      <a href="brands.html" class="see-all">See All &nbsp;&#8594;</a>
-    </div>
-    <div class="brands-grid" role="list">
-      <a href="category.html?brand=Nike" class="brand-tile" role="listitem" aria-label="Nike"><svg viewBox="0 0 110 44" aria-hidden="true"><path d="M10 33 Q34 5 100 11 Q65 26 28 36 Q18 38 10 33Z" fill="currentColor"/></svg><span class="brand-tile-name">Nike</span></a>
-      <a href="category.html?brand=Apple" class="brand-tile" role="listitem" aria-label="Apple"><svg viewBox="0 0 52 62" aria-hidden="true"><path d="M38 6c-3.8 2.8-6.2 7-5.6 11.5 5.4-.5 9.2-4.8 8.6-10-.1-.7-.9-1.8-3-1.5zm-12 14c-5 0-10 5-10 12.5 0 8.8 7 18.5 12.5 18.5 1.8 0 4.5-.9 6.5-.9 2 0 5.2.9 7.2.9 5.5-1.4 10.5-11 10.5-18.5 0-7.5-4.5-12.5-10.5-12.5-2.5 0-4.2 1-6.5 1-2 0-5.2-1-9.7-1z" fill="currentColor"/></svg><span class="brand-tile-name">Apple</span></a>
-      <a href="category.html?brand=Zara" class="brand-tile" role="listitem" aria-label="Zara"><svg viewBox="0 0 130 32" aria-hidden="true"><text x="4" y="26" font-family="Georgia,serif" font-size="26" font-weight="700" letter-spacing="8" fill="currentColor">ZARA</text></svg><span class="brand-tile-name">Zara</span></a>
-      <a href="category.html?brand=Sony" class="brand-tile" role="listitem" aria-label="Sony"><svg viewBox="0 0 120 30" aria-hidden="true"><text x="2" y="24" font-family="Arial,sans-serif" font-size="22" font-weight="800" letter-spacing="5" fill="currentColor">SONY</text></svg><span class="brand-tile-name">Sony</span></a>
-      <a href="category.html?brand=Puma" class="brand-tile" role="listitem" aria-label="Puma"><svg viewBox="0 0 130 34" aria-hidden="true"><text x="2" y="28" font-family="Arial Black,sans-serif" font-size="26" font-weight="900" letter-spacing="3" fill="currentColor">PUMA</text></svg><span class="brand-tile-name">Puma</span></a>
-      <a href="category.html?brand=LOreal" class="brand-tile" role="listitem" aria-label="L'Oréal Paris"><svg viewBox="0 0 170 38" aria-hidden="true"><text x="2" y="22" font-family="Georgia,serif" font-size="17" font-weight="600" letter-spacing="2" fill="currentColor">L'ORÉAL</text><line x1="2" y1="27" x2="148" y2="27" stroke="var(--accent)" stroke-width="1.5"/><text x="2" y="37" font-family="Georgia,serif" font-size="8" letter-spacing="5" fill="var(--text-muted)">PARIS</text></svg><span class="brand-tile-name">L'Oréal</span></a>
-    </div>
-  </section>
-
 </main>
-
-<!-- FOOTER -->
 <footer role="contentinfo">
   <div class="footer-main">
     <div class="f-brand">

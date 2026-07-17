@@ -726,5 +726,35 @@ document.addEventListener('DOMContentLoaded', () => {
     initBrandStore();
   } else if (document.body.dataset.page === 'product-detail') {
     initProductDetail();
+  } else if (document.body.dataset.page === 'orders') {
+    initOrders();
+  } else if (document.body.dataset.page === 'auth') {
+    initAuth();
   }
 });
+
+// --- ORDERS PAGE LOGIC ---
+function initOrders() {
+  const tabs = document.querySelectorAll('.orders-tab');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  if (!tabs.length || !panels.length) return;
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active from all tabs and panels
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+
+      // Add active to clicked tab
+      tab.classList.add('active');
+
+      // Show target panel
+      const targetId = tab.dataset.target;
+      const targetPanel = document.getElementById(targetId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+    });
+  });
+}
