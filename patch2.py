@@ -1,38 +1,56 @@
 import re
+with open('Frontend/js/script.js', 'r', encoding='utf-8') as f:
+    js = f.read()
 
-with open('Frontend/css/styles.css', 'r', encoding='utf-8') as f:
-    css = f.read()
-
-# Update banner heights to 230px
-css = re.sub(r'max-height:\s*240px', 'max-height: 230px', css)
-css = re.sub(r'height:\s*240px', 'height: 230px', css)
-
-# Update nav button styles to include Caramel underline
-new_nav_css = """
-.nav-item-link, .nav-btn { position: relative; text-decoration: none; }
-.nav-item-link::after, .nav-btn::after { 
-  content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; 
-  background-color: var(--accent-caramel); transform: scaleX(0); transition: transform 0.25s ease; transform-origin: left; 
-}
-.nav-item-link.active::after, .nav-btn.active::after { transform: scaleX(1) !important; }
-"""
-
-# Remove old .nav-item-link underline logic if exists
-css = re.sub(r'\.nav-item-link\s*\{[^}]*\}', '', css)
-css = re.sub(r'\.nav-item-link::after\s*\{[^}]*\}', '', css)
-css = re.sub(r'\.nav-item-link:hover,\s*\.nav-item-link\.active\s*\{[^}]*\}', '', css)
-css = re.sub(r'\.nav-item-link:hover::after,\s*\.nav-item-link\.active::after\s*\{[^}]*\}', '', css)
-
-# Append new nav CSS
-css += new_nav_css
-
-with open('Frontend/css/styles.css', 'w', encoding='utf-8') as f:
-    f.write(css)
-
-# Apply same 230px constraint to brand.css
-with open('Frontend/css/brand.css', 'r', encoding='utf-8') as f:
-    bcss = f.read()
-bcss = re.sub(r'max-height:\s*250px', 'max-height: 230px', bcss)
-bcss = re.sub(r'padding:\s*40px\s*20px', 'padding: 20px 20px', bcss)
-with open('Frontend/css/brand.css', 'w', encoding='utf-8') as f:
-    f.write(bcss)
+match = re.search(r'(function initBrandStore\(\) \{.*?)(?=\s*function initProductDetail)', js, re.DOTALL)
+if match:
+    print('Found initBrandStore block')
+    
+    replacement = '''function initBrandStore() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const brand = urlParams.get('brand') || 'Maybelline';
+    const cat = urlParams.get('cat') || 'Beauty';
+    
+    document.title = `${brand} Official Store \u2014 E-Bazaar`;
+    
+    // Breadcrumbs
+    const bcParentCat = document.getElementById('bc-parent-cat');
+    const bcSep2 = document.getElementById('bc-sep-2');
+    const bcChildCat = document.getElementById('bc-child-cat');
+    
+    if (bcParentCat && bcSep2 && bcChildCat) {
+        // Capitalize category name
+        const catName = cat.charAt(0).toUpperCase() + cat.slice(1);
+        bcParentCat.textContent = catName;
+        bcParentCat.href = `category.html?cat=${cat}`;
+        
+        bcSep2.style.display = 'inline-block';
+        bcChildCat.style.display = 'inline-block';
+        bcChildCat.textContent = brand;
+    }
+    
+    const titleEl = document.getElementById('brand-title');
+    if (titleEl) titleEl.textContent = brand;
+    
+    const logoEl = document.getElementById('brand-logo-large');
+    if (logoEl) {
+        // Real logo fetched from clearbit
+        logoEl.innerHTML = `<img src="https://logo.clearbit.com/${brand.toLowerCase()}.com" onerror="this.style.display='none'" alt="${brand} Logo">`;
+    }
+    
+    const grid = document.getElementById('main-cat-grid');
+    if (grid) {
+      const products = generateMockProductsForCategory('clothing').slice(0, 12);
+      products.forEach(p => p.brand = brand);
+      grid.innerHTML = products.map(buildCard).join('');
+    }
+    
+    const countEl = document.getElementById('result-count');
+    if (countEl) countEl.innerHTML = `Showing <strong>12 products</strong>`;
+}'''
+    js = js.replace(match.group(1), replacement)
+    with open('Frontend/js/script.js', 'w', encoding='utf-8') as f:
+        f.write(js)
+    print('Successfully updated script.js')
+else:
+    print('Could not find initBrandStore')

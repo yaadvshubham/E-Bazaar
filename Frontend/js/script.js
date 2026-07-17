@@ -351,16 +351,12 @@ function buildCard(p) {
 
 /* Category Page Specific Logic */
 function getBrandLogoSVG(brand) {
-  // Return placeholder SVG for brand logo if specific one is not found
-  const logos = {
-    'Nike': '<svg viewBox="0 0 110 44" aria-hidden="true"><path d="M10 33 Q34 5 100 11 Q65 26 28 36 Q18 38 10 33Z" fill="currentColor"/></svg>',
-    'Apple': '<svg viewBox="0 0 52 62" aria-hidden="true"><path d="M38 6c-3.8 2.8-6.2 7-5.6 11.5 5.4-.5 9.2-4.8 8.6-10-.1-.7-.9-1.8-3-1.5zm-12 14c-5 0-10 5-10 12.5 0 8.8 7 18.5 12.5 18.5 1.8 0 4.5-.9 6.5-.9 2 0 5.2.9 7.2.9 5.5-1.4 10.5-11 10.5-18.5 0-7.5-4.5-12.5-10.5-12.5-2.5 0-4.2 1-6.5 1-2 0-5.2-1-9.7-1z" fill="currentColor"/></svg>',
-    'Zara': '<svg viewBox="0 0 130 32" aria-hidden="true"><text x="4" y="26" font-family="Georgia,serif" font-size="26" font-weight="700" letter-spacing="8" fill="currentColor">ZARA</text></svg>',
-    'Sony': '<svg viewBox="0 0 120 30" aria-hidden="true"><text x="2" y="24" font-family="Arial,sans-serif" font-size="22" font-weight="800" letter-spacing="5" fill="currentColor">SONY</text></svg>',
-    'Puma': '<svg viewBox="0 0 130 34" aria-hidden="true"><text x="2" y="28" font-family="Arial Black,sans-serif" font-size="26" font-weight="900" letter-spacing="3" fill="currentColor">PUMA</text></svg>',
-    'LOreal': '<svg viewBox="0 0 170 38" aria-hidden="true"><text x="2" y="22" font-family="Georgia,serif" font-size="17" font-weight="600" letter-spacing="2" fill="currentColor">L\'ORÉAL</text></svg>',
-  };
-  return logos[brand] || `<svg viewBox="0 0 120 30" aria-hidden="true"><text x="2" y="24" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="currentColor">${brand}</text></svg>`;
+    const safeBrand = brand.toLowerCase();
+    return `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; border-radius:12px; overflow:hidden;">
+      <img src="images/logos/${safeBrand}.png" 
+      onerror="this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.com'; this.onerror=function(){this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.coop'; this.onerror=function(){this.onerror=null; this.src='https://ui-avatars.com/api/?name=${brand}&background=0D8ABC&color=fff&size=140&font-size=0.33'};};" 
+      alt="${brand} Logo" style="width:80%; height:80%; object-fit:contain;">
+    </div>`;
 }
 
 function initDynamicCategory() {
@@ -398,7 +394,7 @@ function initDynamicCategory() {
   const showcaseRow = document.getElementById('brand-showcase-row');
   if (showcaseRow) {
     showcaseRow.innerHTML = categoryData.brands.slice(0, 8).map(brand => `
-      <a href="brand-store.html?brand=${brand}" class="brand-showcase-card" title="Shop ${brand}">
+      <a href="brand-store.html?brand=${brand}&cat=${catId}" class="brand-showcase-card" title="Shop ${brand}">
         ${getBrandLogoSVG(brand)}
       </a>
     `).join('');
@@ -618,26 +614,123 @@ function initNavActions() {
    BRAND STORE & PRODUCT DETAIL
    ═══════════════════════════════════════════════════════════════════════ */
 function initBrandStore() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const brand = urlParams.get('brand') || 'Nike';
+    const urlParams = new URLSearchParams(window.location.search);
+    const brand = urlParams.get('brand') || 'Maybelline';
+    const cat = urlParams.get('cat') || 'Beauty';
+    
+    document.title = `${brand} Official Store — E-Bazaar`;
+
+    const brandHero = document.getElementById('brand-hero');
+    if (brandHero) {
+        if (cat) {
+            const safeCat = cat.toLowerCase();
+            if (safeCat === 'groceries') {
+                brandHero.style.backgroundImage = 'none';
+                
+                // Inject custom styling to override the dark hero text/overlay for this bright background
+                let styleTag = document.getElementById('dynamic-hero-style');
+                if (!styleTag) {
+                    styleTag = document.createElement('style');
+                    styleTag.id = 'dynamic-hero-style';
+                    document.head.appendChild(styleTag);
+                }
+                styleTag.innerHTML = `
+                   .brand-hero::before { display: none !important; }
+                   .brand-hero .brand-title { color: #2A2421 !important; z-index: 10; position: relative; text-shadow: none !important; }
+                   .brand-hero .brand-desc { color: #655E5A !important; z-index: 10; position: relative; }
+                   .brand-hero .breadcrumb a { color: #655E5A !important; }
+                   .brand-hero .breadcrumb .bc-current { color: #2A2421 !important; }
+                   .brand-hero .breadcrumb { color: #655E5A !important; }
+                `;
+
+                const groceryHTML = `
+<div class="grocery-hero-graphic" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #FAF8F5 0%, #F3EEE7 100%); overflow: hidden; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid #EBE6DD; z-index: 0;">
   
-  document.title = `${brand} Official Store — E-Bazaar`;
-  
-  const titleEl = document.getElementById('brand-title');
-  if (titleEl) titleEl.textContent = brand;
-  
-  const logoEl = document.getElementById('brand-logo-large');
-  if (logoEl) logoEl.innerHTML = getBrandLogoSVG(brand);
-  
-  const grid = document.getElementById('main-cat-grid');
-  if (grid) {
-    const products = generateMockProductsForCategory('clothing').slice(0, 12);
-    products.forEach(p => p.brand = brand);
-    grid.innerHTML = products.map(buildCard).join('');
-  }
-  
-  const countEl = document.getElementById('result-count');
-  if (countEl) countEl.innerHTML = `Showing <strong>12 products</strong>`;
+  <!-- Left Side Typography -->
+  <div class="hero-text-side" style="max-width: 50%; z-index: 2; padding-top: 50px; text-align: left;">
+    <span style="font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.15em; color: #A88C6D; text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 8px;">Fresh Harvest</span>
+    <h1 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #2A2421; margin: 0 0 12px 0; font-weight: 400; line-height: 1.2;">Organic Produce</h1>
+    <p style="font-family: 'Inter', sans-serif; font-size: 13px; color: #655E5A; margin: 0; line-height: 1.5;">Daily farm-fresh drops, handpicked seasonal fruits, and premium artisanal greens.</p>
+  </div>
+
+  <!-- Right Side: Luxury Fruits & Veggies Vector Artwork -->
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" style="width: 400px; height: 100%; z-index: 1;">
+    <!-- Background Elegant Accent Circle -->
+    <circle cx="280" cy="120" r="85" fill="none" stroke="#E6DFD5" stroke-width="1"/>
+    <circle cx="280" cy="120" r="70" fill="#FFFFFF" opacity="0.6"/>
+    
+    <!-- Botanical Leaf 1 (Background Layer) -->
+    <path d="M220,160 Q245,110 285,100 Q255,140 220,160 Z" fill="#A88C6D" opacity="0.15"/>
+    <path d="M220,160 Q245,110 285,100" fill="none" stroke="#A88C6D" stroke-width="1.5" stroke-linecap="round"/>
+    
+    <!-- Minimalist Premium Pear (Fruit Element) -->
+    <!-- Pear Body -->
+    <path d="M275,85 C260,85 255,105 250,120 C242,140 242,165 265,170 C288,175 308,170 305,145 C302,125 290,105 285,85 Z" fill="#FFFFFF" stroke="#2A2421" stroke-width="1.5" stroke-linejoin="round"/>
+    <!-- Pear Stem -->
+    <path d="M280,85 Q283,73 290,70" fill="none" stroke="#2A2421" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Tiny Pear Leaf -->
+    <path d="M283,78 Q295,76 295,83 Z" fill="#A88C6D" opacity="0.7"/>
+
+    <!-- Elegant Cut Avocado (Vegetable/Fruit Element) -->
+    <!-- Avocado Outer Shell -->
+    <path d="M300,160 C290,160 285,145 285,135 C285,120 295,105 305,105 C315,105 320,115 325,130 C330,145 315,160 300,160 Z" fill="#FAF8F5" stroke="#2A2421" stroke-width="1.5" stroke-linejoin="round"/>
+    <!-- Avocado Core Seed (Caramel Accent) -->
+    <circle cx="303" cy="138" r="12" fill="#A88C6D" stroke="#2A2421" stroke-width="1"/>
+    
+    <!-- Dynamic Accent Dots (Representing organic seed/grains) -->
+    <circle cx="240" cy="110" r="2.5" fill="#A88C6D"/>
+    <circle cx="248" cy="100" r="2" fill="#E6DFD5"/>
+    <circle cx="330" cy="115" r="3" fill="#A88C6D"/>
+  </svg>
+</div>`;
+                brandHero.insertAdjacentHTML('afterbegin', groceryHTML);
+            } else {
+                let bgImg = `images/banners/banner_${safeCat}.png`;
+                brandHero.style.backgroundImage = `url("${bgImg}")`;
+            }
+        } else {
+            brandHero.style.backgroundImage = 'url("images/brand-banner.png")';
+        }
+    }
+
+    
+    // Breadcrumbs
+    const bcParentCat = document.getElementById('bc-parent-cat');
+    const bcSep2 = document.getElementById('bc-sep-2');
+    const bcChildCat = document.getElementById('bc-child-cat');
+    
+    if (bcParentCat && bcSep2 && bcChildCat) {
+        // Capitalize category name
+        const catName = cat.charAt(0).toUpperCase() + cat.slice(1);
+        bcParentCat.textContent = catName;
+        bcParentCat.href = `category.html?cat=${cat}`;
+        
+        bcSep2.style.display = 'inline-block';
+        bcChildCat.style.display = 'inline-block';
+        bcChildCat.textContent = brand;
+    }
+    
+    const titleEl = document.getElementById('brand-title');
+    if (titleEl) titleEl.textContent = brand;
+    
+    const logoEl = document.getElementById('brand-logo-large');
+    if (logoEl) {
+        // Real logo fetched from clearbit
+                const safeBrand = brand.toLowerCase();
+        logoEl.innerHTML = `<img src="images/logos/${safeBrand}.png" 
+        onerror="this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.com'; this.onerror=function(){this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.coop'; this.onerror=function(){this.onerror=null; this.src='https://ui-avatars.com/api/?name=${brand}&background=0D8ABC&color=fff&size=140&font-size=0.33'};};" 
+          alt="${brand} Logo" style="width:100%; height:100%; object-fit:contain; border-radius:50%;">`;
+    }
+    
+    const grid = document.getElementById('main-cat-grid');
+    if (grid) {
+      const products = generateMockProductsForCategory('clothing').slice(0, 12);
+      products.forEach(p => p.brand = brand);
+      grid.innerHTML = products.map(buildCard).join('');
+    }
+    
+    const countEl = document.getElementById('result-count');
+    if (countEl) countEl.innerHTML = `Showing <strong>12 products</strong>`;
 }
 
 function initProductDetail() {

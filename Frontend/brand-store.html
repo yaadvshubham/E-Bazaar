@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/category.css"/>
+  <link rel="stylesheet" href="css/brand.css"/>
   <style>
     .logo-bag-body{fill:url(#bagGrad)}
     html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
@@ -248,18 +249,18 @@
   </div>
 </nav>
 
-<!-- BREADCRUMB -->
-<nav class="breadcrumb" aria-label="Breadcrumb">
-  <a href="index.html">Home</a>
-  <span class="bc-sep" aria-hidden="true">›</span>
-  <a href="#" id="bc-parent-cat">Category</a>
-  <span class="bc-sep" aria-hidden="true" id="bc-sep-2" style="display:none">›</span>
-  <span class="bc-current" id="bc-child-cat" style="display:none">Subcategory</span>
-</nav>
+
 
 <!-- MAIN CATALOG -->
 <div class="brand-store-page">
   <div class="brand-hero" id="brand-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <a href="#" id="bc-parent-cat">Category</a>
+      <span class="bc-sep" aria-hidden="true" id="bc-sep-2" style="display:none">›</span>
+      <span class="bc-current" id="bc-child-cat" style="display:none">Subcategory</span>
+    </nav>
     <div class="brand-logo-large" id="brand-logo-large"></div>
     <h1 class="brand-title" id="brand-title">Brand Name</h1>
     <p class="brand-desc">Official Store — Premium Quality & Assured Authenticity</p>
