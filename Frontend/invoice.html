@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invoice - E-Bazaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --text-main: #2A2421;
+      --text-sub: #555555;
+      --accent: #A88C6D;
+      --border-color: #EBE6DD;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-main);
+      background: #f5f5f5;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Print styling */
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    .invoice-wrapper {
+      background: var(--bg-white);
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 48px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--text-main);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-accent {
+      color: var(--accent);
+    }
+
+    .invoice-meta {
+      text-align: right;
+    }
+    .invoice-meta h1 {
+      font-size: 28px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .invoice-meta p {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    /* Grid sections */
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .box {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .box-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+    .info-label {
+      color: var(--text-sub);
+      font-weight: 500;
+    }
+    .info-val {
+      font-weight: 600;
+      text-align: right;
+      max-width: 60%;
+    }
+    
+    .status-pending {
+      color: #d97706; /* amber */
+      font-weight: 700;
+    }
+    .status-paid {
+      color: #16a34a; /* green */
+      font-weight: 700;
+    }
+
+    /* Product Table */
+    .table-section {
+      margin-bottom: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      background: #fafafa;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-sub);
+      padding: 12px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    th.text-right, td.text-right {
+      text-align: right;
+    }
+    td {
+      padding: 16px 12px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .item-sku {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .totals {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+    .totals-box {
+      width: 300px;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+    .total-row.grand-total {
+      font-size: 18px;
+      font-weight: 700;
+      background: #fafafa;
+      border-top: 2px solid var(--text-main);
+      border-bottom: 2px solid var(--text-main);
+      padding: 12px;
+      color: var(--accent);
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    .signature {
+      text-align: center;
+    }
+    .signature-line {
+      width: 150px;
+      border-bottom: 1px solid var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    @media print {
+      body {
+        background: transparent;
+      }
+      .invoice-wrapper {
+        margin: 0;
+        box-shadow: none;
+        padding: 40px;
+      }
+      /* Hide elements not meant for print */
+      .no-print {
+        display: none !important;
+      }
+    }
+    
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--text-main);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .print-btn:hover {
+      background: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn no-print" onclick="window.print()">Print / Save PDF</button>
+
+  <div class="invoice-wrapper">
+    
+    <div class="header">
+      <div class="logo">
+        E-<span class="logo-accent">Bazaar</span>
+      </div>
+      <div class="invoice-meta">
+        <h1>ORDER INVOICE</h1>
+        <p>Invoice #: EB-2026-908234</p>
+        <p id="invoice-date">Date: 12 July 2026</p>
+      </div>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="section-grid">
+      <!-- Customer Info -->
+      <div class="box">
+        <div class="box-title">Customer Details</div>
+        <div class="info-row">
+          <span class="info-label">Name</span>
+          <span class="info-val">Aryan Kumar</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Gender</span>
+          <span class="info-val">Male</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Phone</span>
+          <span class="info-val">+91 98765 43210</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Address</span>
+          <span class="info-val">12, Green Park, New Delhi, 110001</span>
+        </div>
+      </div>
+
+      <!-- Payment Info -->
+      <div class="box">
+        <div class="box-title">Payment Details</div>
+        <div class="info-row">
+          <span class="info-label">Method</span>
+          <span class="info-val">UPI (Google Pay)</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Transaction ID</span>
+          <span class="info-val">UPI90812374659</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Status</span>
+          <span class="info-val status-paid">Paid</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Order Type</span>
+          <span class="info-val">Prepaid</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delivery Box -->
+    <div class="box" style="margin-bottom: 32px;" id="delivery-box">
+      <div class="box-title">Delivery Details</div>
+      <div id="delivery-content">
+        <div class="info-row">
+          <span class="info-label">Status</span>
+          <span class="info-val status-paid">Delivered</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Received By</span>
+          <span class="info-val">Aryan Kumar (Resident)</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Delivery Date</span>
+          <span class="info-val">08 June 2026</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Delivery Time</span>
+          <span class="info-val">02:45 PM</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items -->
+    <div class="table-section">
+      <table>
+        <thead>
+          <tr>
+            <th>Product Description</th>
+            <th class="text-right">Qty</th>
+            <th class="text-right">Unit Price</th>
+            <th class="text-right">Tax (18%)</th>
+            <th class="text-right">Total</th>
+          </tr>
+        </thead>
+        <tbody id="invoice-items">
+          <!-- Dynamic Items inserted here -->
+        </tbody>
+      </table>
+      
+      <div class="totals">
+        <div class="totals-box">
+          <div class="total-row">
+            <span class="info-label">Subtotal:</span>
+            <span class="info-val">₹59,237.29</span>
+          </div>
+          <div class="total-row">
+            <span class="info-label">GST (18%):</span>
+            <span class="info-val">₹10,662.71</span>
+          </div>
+          <div class="total-row">
+            <span class="info-label">Shipping:</span>
+            <span class="info-val">₹0.00</span>
+          </div>
+          <div class="total-row grand-total">
+            <span>Grand Total:</span>
+            <span>₹69,900.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="company-info">
+        <strong>E-Bazaar Retail Pvt. Ltd.</strong><br>
+        100 Cyber City, Sector 44, Gurugram, 122003<br>
+        GSTIN: 06ABCDE1234F1Z5<br>
+        support@e-bazaar.in | 1800-123-4567
+      </div>
+      <div class="signature">
+        <div class="signature-line"></div>
+        Authorized Signatory
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Logic to handle pending/delivered state dynamically based on URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status') || 'delivered'; // default to delivered
+
+    const deliveryContent = document.getElementById('delivery-content');
+    const itemsTbody = document.getElementById('invoice-items');
+    const invoiceDate = document.getElementById('invoice-date');
+    const dateToday = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    
+    invoiceDate.innerText = `Date: ${dateToday}`;
+
+    if (status === 'pending') {
+      deliveryContent.innerHTML = `
+        <div class="info-row">
+          <span class="info-label">Status</span>
+          <span class="info-val status-pending">Order Not Delivered Yet</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Received By</span>
+          <span class="info-val" style="color: #999;">Pending Delivery</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Expected Delivery</span>
+          <span class="info-val">15 July 2026</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Delivery Time</span>
+          <span class="info-val" style="color: #999;">TBD</span>
+        </div>
+      `;
+      
+      // Inject pending item
+      itemsTbody.innerHTML = `
+        <tr>
+          <td>
+            <div class="item-name">PUMA RS-X Core Sneakers - White/Black</div>
+            <div class="item-sku">SKU: PUMA-RSX-9UK</div>
+          </td>
+          <td class="text-right">1</td>
+          <td class="text-right">₹3,643.22</td>
+          <td class="text-right">₹655.78</td>
+          <td class="text-right">₹4,299.00</td>
+        </tr>
+      `;
+      // Update totals
+      document.querySelector('.totals-box').innerHTML = `
+          <div class="total-row">
+            <span class="info-label">Subtotal:</span>
+            <span class="info-val">₹3,643.22</span>
+          </div>
+          <div class="total-row">
+            <span class="info-label">GST (18%):</span>
+            <span class="info-val">₹655.78</span>
+          </div>
+          <div class="total-row">
+            <span class="info-label">Shipping:</span>
+            <span class="info-val">₹0.00</span>
+          </div>
+          <div class="total-row grand-total">
+            <span>Grand Total:</span>
+            <span>₹4,299.00</span>
+          </div>
+      `;
+    } else {
+      // Default Delivered item (iPhone)
+      itemsTbody.innerHTML = `
+        <tr>
+          <td>
+            <div class="item-name">Apple iPhone 15 - Black, 128GB</div>
+            <div class="item-sku">SKU: AAPL-IP15-128-BLK</div>
+          </td>
+          <td class="text-right">1</td>
+          <td class="text-right">₹59,237.29</td>
+          <td class="text-right">₹10,662.71</td>
+          <td class="text-right">₹69,900.00</td>
+        </tr>
+      `;
+    }
+    
+    // Auto trigger print if parameter is passed
+    if (urlParams.get('print') === 'true') {
+      setTimeout(() => {
+        window.print();
+      }, 500);
+    }
+  </script>
+</body>
+</html>

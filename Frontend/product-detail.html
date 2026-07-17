@@ -33,35 +33,203 @@
 
 <!-- HEADER (shared) -->
 <header id="site-header" role="banner">
+
+  <!-- TOP ROW -->
   <div class="nav-top">
+    <!-- Logo -->
     <a href="index.html" class="nav-logo" aria-label="E-Bazaar Home">
-      <svg class="logo-svg-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect class="logo-bag-body" x="12" y="28" width="56" height="44" rx="7"/><path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/><polyline fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/><path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/><line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/><polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/></svg>
-      <div><div class="logo-wordmark">E-<em>Bazaar</em></div><div class="logo-tagline">Your everyday and everything store.</div></div>
+      <svg class="logo-svg-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="E-Bazaar logo">
+        <rect class="logo-bag-body" x="12" y="28" width="56" height="44" rx="7"/>
+        <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/>
+        <polyline fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/>
+        <path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/>
+        <line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/>
+        <polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/>
+      </svg>
+      <div>
+        <div class="logo-wordmark">E-<em>Bazaar</em></div>
+        <div class="logo-tagline">Your everyday and everything store.</div>
+      </div>
     </a>
-    <button class="nav-address" id="addr-trigger" aria-label="Delivery address"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><div><span class="addr-label">Deliver to</span><span class="addr-value">Aryan · New Delhi 110001</span></div><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
-    <div class="nav-search" role="search"><label for="q" class="sr-only">Search</label><input type="search" id="q" placeholder="Search products, brands…" autocomplete="off"/><button class="search-btn" aria-label="Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button></div>
-    <div class="nav-actions">
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"><div class="toggle-track" aria-hidden="true"><div class="toggle-thumb"></div></div><span class="toggle-icon" id="theme-icon" aria-hidden="true">🌙</span></button>
-      <button class="nav-btn" id="acc-btn" aria-label="Account"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Account</span></button>
-      <a href="orders.html" class="nav-btn" aria-label="Orders"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg><span>Orders</span></a>
-      <button class="nav-btn cart-wrap" id="cart-btn" aria-label="Cart"><span class="cart-badge cart-count-el" id="cart-count">3</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span>Cart</span></button>
+
+    <!-- Address widget -->
+    <button class="nav-address" id="addr-trigger" aria-haspopup="dialog" aria-label="Manage delivery addresses">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <div><span class="addr-label">Deliver to</span><span class="addr-value">Aryan · New Delhi 110001</span></div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <!-- Search -->
+    <div class="nav-search" role="search">
+      <label for="q" class="sr-only">Search E-Bazaar</label>
+      <input type="search" id="q" placeholder="Search products, brands, categories…" autocomplete="off"/>
+      <button class="search-btn" aria-label="Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
-  </div>
-  <nav class="nav-sub" aria-label="Categories">
+
+    <!-- Right actions -->
+    <div class="nav-actions">
+      <!-- Theme toggle -->
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <div class="toggle-track" aria-hidden="true"><div class="toggle-thumb"></div></div>
+        <span class="toggle-icon" id="theme-icon" aria-hidden="true">🌙</span>
+      </button>
+      <!-- Account -->
+      <a href="auth.html" class="nav-btn" id="acc-btn" aria-label="My Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Account</span>
+      </a>
+      <!-- Orders -->
+      <a href="orders.html" class="nav-btn" id="nav-orders" aria-label="My Orders">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        <span>Orders</span>
+      </a>
+      <!-- Wishlist -->
+      <button class="nav-btn" id="wl-nav-btn" aria-label="Wishlist">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Wishlist</span>
+      </button>
+      <!-- Cart -->
+      <button class="nav-btn cart-wrap" id="cart-btn" aria-label="Cart">
+        <span class="cart-badge cart-count-el" id="cart-count" aria-live="polite">3</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span>Cart</span>
+      </button>
+    </div>
+
+    <!-- Hamburger (mobile) -->
+    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div><!-- /nav-top -->
+
+  <!-- SUBNAV — Clean text-based compact dropdowns -->
+  <nav class="nav-sub" aria-label="Main categories">
     <div class="nav-sub-inner">
       <div class="cat-links-wrap">
-        <div class="mega-item"><a href="category.html?cat=groceries">Groceries</a></div>
-        <div class="mega-item"><a href="category.html?cat=electronics">Electronics</a></div>
-        <div class="mega-item"><a href="category.html?cat=gadgets">Gadgets</a></div>
-        <div class="mega-item"><a href="category.html?cat=clothing">Clothing</a></div>
-        <div class="mega-item"><a href="category.html?cat=shoes">Shoes</a></div>
-        <div class="mega-item"><a href="category.html?cat=beauty">Beauty</a></div>
-        <div class="mega-item"><a href="category.html?cat=sports">Sports</a></div>
-        <div class="mega-item"><a href="category.html?cat=home-kitchen">Home & Kitchen</a></div>
+        
+        <!-- 1. Groceries -->
+        <div class="mega-item">
+          <a href="category.html?cat=groceries" aria-haspopup="true" aria-expanded="false">Groceries <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Groceries brands">
+            <a href="category.html?cat=groceries&brand=Amul">Amul</a>
+            <a href="category.html?cat=groceries&brand=Nestle">Nestle</a>
+            <a href="category.html?cat=groceries&brand=Britannia">Britannia</a>
+            <a href="category.html?cat=groceries&brand=Tata">Tata</a>
+            <a href="category.html?cat=groceries&brand=MotherDairy">Mother Dairy</a>
+            <a href="category.html?cat=groceries&brand=ITC">ITC</a>
+            <a href="category.html?cat=groceries&brand=HUL">HUL</a>
+          </div>
+        </div>
+
+        <!-- 2. Electronics -->
+        <div class="mega-item">
+          <a href="category.html?cat=electronics" aria-haspopup="true" aria-expanded="false">Electronics <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Electronics brands">
+            <a href="category.html?cat=electronics&brand=Apple">Apple</a>
+            <a href="category.html?cat=electronics&brand=Samsung">Samsung</a>
+            <a href="category.html?cat=electronics&brand=Sony">Sony</a>
+            <a href="category.html?cat=electronics&brand=OnePlus">OnePlus</a>
+            <a href="category.html?cat=electronics&brand=Xiaomi">Xiaomi</a>
+            <a href="category.html?cat=electronics&brand=Vivo">Vivo</a>
+            <a href="category.html?cat=electronics&brand=Nothing">Nothing</a>
+          </div>
+        </div>
+
+        <!-- 3. Gadgets -->
+        <div class="mega-item">
+          <a href="category.html?cat=gadgets" aria-haspopup="true" aria-expanded="false">Gadgets <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Gadgets brands">
+            <a href="category.html?cat=gadgets&brand=Philips">Philips</a>
+            <a href="category.html?cat=gadgets&brand=LG">LG</a>
+            <a href="category.html?cat=gadgets&brand=Boat">Boat</a>
+            <a href="category.html?cat=gadgets&brand=JBL">JBL</a>
+            <a href="category.html?cat=gadgets&brand=Noise">Noise</a>
+            <a href="category.html?cat=gadgets&brand=Boult">Boult</a>
+            <a href="category.html?cat=gadgets&brand=Logitech">Logitech</a>
+          </div>
+        </div>
+
+        <!-- 4. Clothing -->
+        <div class="mega-item">
+          <a href="category.html?cat=clothing" aria-haspopup="true" aria-expanded="false">Clothing <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Clothing brands">
+            <a href="category.html?cat=clothing&gender=men">Men's Collection</a>
+            <a href="category.html?cat=clothing&gender=women">Women's Collection</a>
+            <a href="category.html?cat=clothing&season=summer">Summer Collection</a>
+            <a href="category.html?cat=clothing&season=winter">Winter Collection</a>
+            <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+            <a href="category.html?cat=clothing&brand=Levis">Levis</a>
+            <a href="category.html?cat=clothing&brand=Zara">Zara</a>
+            <a href="category.html?cat=clothing&brand=HM">H&amp;M</a>
+            <a href="category.html?cat=clothing&brand=Tommy">Tommy Hilfiger</a>
+            <a href="category.html?cat=clothing&brand=USPolo">US Polo</a>
+            <a href="category.html?cat=clothing&brand=AllenSolly">Allen Solly</a>
+          </div>
+        </div>
+
+        <!-- 5. Shoes -->
+        <div class="mega-item">
+          <a href="category.html?cat=shoes" aria-haspopup="true" aria-expanded="false">Shoes <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Shoes brands">
+            <a href="category.html?cat=shoes&brand=Nike">Nike</a>
+            <a href="category.html?cat=shoes&brand=Adidas">Adidas</a>
+            <a href="category.html?cat=shoes&brand=Campus">Campus</a>
+            <a href="category.html?cat=shoes&brand=Puma">Puma</a>
+            <a href="category.html?cat=shoes&brand=Comet">Comet</a>
+            <a href="category.html?cat=shoes&brand=NewBalance">New Balance</a>
+            <a href="category.html?cat=shoes&brand=Reebok">Reebok</a>
+          </div>
+        </div>
+
+        <!-- 6. Beauty -->
+        <div class="mega-item">
+          <a href="category.html?cat=beauty" aria-haspopup="true" aria-expanded="false">Beauty <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Beauty brands">
+            <a href="category.html?cat=beauty&brand=LOreal">L'Oreal</a>
+            <a href="category.html?cat=beauty&brand=Maybelline">Maybelline</a>
+            <a href="category.html?cat=beauty&brand=Nykaa">Nykaa</a>
+            <a href="category.html?cat=beauty&brand=MAC">MAC</a>
+            <a href="category.html?cat=beauty&brand=Cetaphil">Cetaphil</a>
+            <a href="category.html?cat=beauty&brand=Mamaearth">Mamaearth</a>
+          </div>
+        </div>
+
+        <!-- 7. Sports -->
+        <div class="mega-item">
+          <a href="category.html?cat=sports" aria-haspopup="true" aria-expanded="false">Sports <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Sports brands">
+            <a href="category.html?cat=sports&brand=Decathlon">Decathlon</a>
+            <a href="category.html?cat=sports&brand=Yonex">Yonex</a>
+            <a href="category.html?cat=sports&brand=Cosco">Cosco</a>
+            <a href="category.html?cat=sports&brand=Nivia">Nivia</a>
+            <a href="category.html?cat=sports&brand=Speedo">Speedo</a>
+            <a href="category.html?cat=sports&brand=Spalding">Spalding</a>
+          </div>
+        </div>
+
+        <!-- 8. Home & Kitchen -->
+        <div class="mega-item">
+          <a href="category.html?cat=home-kitchen" aria-haspopup="true" aria-expanded="false">Home &amp; Kitchen <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Home and Kitchen brands">
+            <a href="category.html?cat=home-kitchen&brand=Prestige">Prestige</a>
+            <a href="category.html?cat=home-kitchen&brand=Hawkins">Hawkins</a>
+            <a href="category.html?cat=home-kitchen&brand=Pigeon">Pigeon</a>
+            <a href="category.html?cat=home-kitchen&brand=Milton">Milton</a>
+            <a href="category.html?cat=home-kitchen&brand=Borosil">Borosil</a>
+            <a href="category.html?cat=home-kitchen&brand=Bajaj">Bajaj</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;align-items:center;">
+        <div class="subnav-divider" aria-hidden="true"></div>
+        <a href="category.html?cat=deals" style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">Today's Deals <span class="hot-tag">HOT</span></a>
+        <a href="category.html?cat=new-arrivals" style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">New Arrivals <span class="new-tag">NEW</span></a>
       </div>
     </div>
   </nav>
+
 </header>
 
 <!-- MOBILE DRAWER -->

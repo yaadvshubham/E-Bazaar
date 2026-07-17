@@ -738,23 +738,109 @@ function initOrders() {
   const tabs = document.querySelectorAll('.orders-tab');
   const panels = document.querySelectorAll('.tab-panel');
 
-  if (!tabs.length || !panels.length) return;
+  if (tabs.length && panels.length) {
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active from all tabs and panels
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      // Remove active from all tabs and panels
-      tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
+        // Add active to clicked tab
+        tab.classList.add('active');
 
-      // Add active to clicked tab
-      tab.classList.add('active');
+        // Show target panel
+        const targetId = tab.dataset.target;
+        const targetPanel = document.getElementById(targetId);
+        if (targetPanel) {
+          targetPanel.classList.add('active');
+        }
+      });
+    });
+  }
 
-      // Show target panel
-      const targetId = tab.dataset.target;
-      const targetPanel = document.getElementById(targetId);
-      if (targetPanel) {
-        targetPanel.classList.add('active');
+  // Invoice Buttons
+  const invoiceBtns = document.querySelectorAll('.btn-invoice');
+  invoiceBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const card = btn.closest('.order-card-wrapper');
+      let status = 'delivered'; // default
+      if (card) {
+        if (card.querySelector('.status-shipped')) {
+          status = 'pending';
+        }
       }
+      
+      if (typeof showToast === 'function') {
+        showToast('Generating invoice... Please wait.');
+      }
+      
+      setTimeout(() => {
+        window.open('invoice.html?status=' + status + '&print=true', '_blank');
+      }, 600);
     });
   });
+
+  // Return/Replace Modal Logic
+  const returnBtns = document.querySelectorAll('.btn-return');
+  const returnModal = document.getElementById('return-modal');
+  const returnClose = document.getElementById('return-close-btn');
+  const returnCancel = document.getElementById('return-form-cancel');
+  const returnForm = document.getElementById('return-form');
+
+  if (returnModal) {
+    const openReturnModal = (e) => {
+      e.preventDefault();
+      returnModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeReturnModal = () => {
+      returnModal.classList.remove('active');
+      document.body.style.overflow = '';
+      if (returnForm) returnForm.reset();
+    };
+
+    returnBtns.forEach(btn => btn.addEventListener('click', openReturnModal));
+    if (returnClose) returnClose.addEventListener('click', closeReturnModal);
+    if (returnCancel) returnCancel.addEventListener('click', closeReturnModal);
+
+    // Close on overlay click
+    returnModal.addEventListener('click', (e) => {
+      if (e.target === returnModal) closeReturnModal();
+    });
+
+    // Handle Form Submit
+    if (returnForm) {
+      returnForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        closeReturnModal();
+        if (typeof showToast === 'function') {
+          showToast('Return request initiated successfully.');
+        }
+      });
+    }
+  }
 }
+
+// Global Toast System
+window.showToast = function(msg) {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    document.body.appendChild(container);
+  }
+  
+  const toast = document.createElement('div');
+  toast.className = 'eb-toast';
+  toast.innerText = msg;
+  container.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.classList.add('fade-out');
+    toast.addEventListener('animationend', () => {
+      toast.remove();
+    });
+  }, 3000);
+};

@@ -1,42 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title id="page-title">My Orders — E-Bazaar</title>
-  <meta name="description" content="E-Bazaar: Premium groceries, electronics, clothing, shoes, beauty and more. Shop 1000+ top brands with unbeatable prices and fast delivery across India."/>
-  <meta name="theme-color" content="#FAF8F5"/>
-  <meta property="og:title" content="E-Bazaar — Your everyday and everything store."/>
-  <meta property="og:type" content="website"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/orders.css"/>
-  <style>
-    /* Logo SVG gradient references */
-    .logo-bag-body{fill:url(#bagGrad)}
-    html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
-  </style>
 </head>
 <body data-page="orders">
 
-<!-- SVG Gradient Defs -->
-<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
-  <defs>
-    <linearGradient id="bagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#A88C6D"/><stop offset="100%" stop-color="#856B4D"/>
-    </linearGradient>
-    <linearGradient id="bagGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#C9B397"/><stop offset="100%" stop-color="#A38C6D"/>
-    </linearGradient>
-    <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#E2CDAF"/><stop offset="100%" stop-color="#FAF5E1"/>
-    </linearGradient>
-  </defs>
-</svg>
-
-<!-- ═══════════════════ HEADER ═══════════════════ -->
 <header id="site-header" role="banner">
 
   <!-- TOP ROW -->
@@ -79,12 +54,12 @@
         <span class="toggle-icon" id="theme-icon" aria-hidden="true">🌙</span>
       </button>
       <!-- Account -->
-      <a href="auth.html" class="nav-btn" id="nav-account" aria-label="My Account">
+      <a href="auth.html" class="nav-btn" id="acc-btn" aria-label="My Account">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Account</span>
       </a>
       <!-- Orders -->
-      <a href="orders.html" class="nav-btn" aria-label="My Orders">
+      <a href="orders.html" id="nav-orders" class="nav-btn active" aria-label="My Orders">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
         <span>Orders</span>
       </a>
@@ -235,260 +210,253 @@
     </div>
   </nav>
 
-</header><!-- /site-header -->
+</header>
 
-<!-- ═══════════════════ MOBILE DRAWER ═══════════════════ -->
-<div class="drawer-overlay" id="drawer-overlay" role="presentation"></div>
-<nav class="mobile-drawer" id="mobile-drawer" aria-label="Mobile navigation">
-  <div class="drawer-head">
-    <a href="index.html" style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.4px">E-<em style="font-style:normal;color:var(--accent)">Bazaar</em></a>
-    <button class="drawer-close" id="drawer-close" aria-label="Close navigation">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
-  <div class="drawer-search">
-    <input type="search" placeholder="Search E-Bazaar…" aria-label="Search" id="mobile-search"/>
-  </div>
-  <div class="drawer-links">
-    <a href="orders.html" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/></svg> My Orders</a>
-    <a href="#" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Wishlist</a>
-    <a href="#" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> My Account</a>
-  </div>
-  <div class="drawer-cats">
-    <div class="drawer-cat-head">All Categories</div>
-    <a href="category.html?cat=groceries"  class="drawer-cat"><span>Groceries</span><span class="drawer-cat-icon">›</span></a>
-    <a href="category.html?cat=electronics" class="drawer-cat"><span>Electronics</span><span class="drawer-cat-icon">›</span></a>
-    <a href="category.html?cat=gadgets"    class="drawer-cat"><span>Gadgets</span><span class="drawer-cat-icon">›</span></a>
-    <a href="category.html?cat=clothing"   class="drawer-cat"><span>Clothing</span><span class="drawer-cat-icon">›</span></a>
-    <a href="category.html?cat=shoes"      class="drawer-cat"><span>Shoes</span><span class="drawer-cat-icon">›</span></a>
-    <a href="category.html?cat=beauty"     class="drawer-cat"><span>Beauty</span><span class="drawer-cat-icon">›</span></a>
-    <a href="category.html?cat=sports"     class="drawer-cat"><span>Sports</span><span class="drawer-cat-icon">›</span></a>
-    <a href="category.html?cat=home-kitchen" class="drawer-cat"><span>Home & Kitchen</span><span class="drawer-cat-icon">›</span></a>
-  </div>
-</nav>
+<main id="main-content" class="orders-wrapper">
+  <div class="orders-container">
+    <h1 class="page-title">My Orders</h1>
+    <p class="page-sub">Track, manage, and review your recent purchases.</p>
+    
+    <div class="orders-tabs">
+      <button class="orders-tab active" data-target="active-orders">Active Orders <span class="count">(1)</span></button>
+      <button class="orders-tab" data-target="past-orders">Order History</button>
+      <button class="orders-tab" data-target="returns-refunds">Returns & Refunds</button>
+    </div>
 
-<!-- ═══════════════════ MAIN ═══════════════════ -->
-<main id="main-content" class="orders-page">
-  <h1 class="orders-page-title">My Orders</h1>
-  <p class="orders-page-sub">Track, manage and return your recent purchases.</p>
-  
-  <div class="orders-tabs">
-    <button class="orders-tab active" data-target="panel-active">Active Orders (1)</button>
-    <button class="orders-tab" data-target="panel-history">Order History</button>
-    <button class="orders-tab" data-target="panel-returns">Returns & Refunds</button>
-  </div>
-  
-  <!-- ACTIVE ORDERS -->
-  <div class="tab-panel active" id="panel-active">
-    <div class="order-card">
-      <div class="order-card-head">
-        <div class="order-meta">
-          <div class="order-meta-item">
-            <div class="order-meta-label">Order Placed</div>
-            <div class="order-meta-val">12 July 2026</div>
+    <!-- Active Orders Panel -->
+    <div class="tab-panel active" id="active-orders">
+      
+      <div class="order-card-wrapper">
+        <div class="order-card-top">
+          <div class="order-info-grid">
+            <div class="info-block">
+              <span class="info-label">ORDER PLACED</span>
+              <span class="info-val">12 July 2026</span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">TOTAL</span>
+              <span class="info-val">₹4,299</span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">SHIP TO</span>
+              <span class="info-val">Aryan, New Delhi</span>
+            </div>
           </div>
-          <div class="order-meta-item">
-            <div class="order-meta-label">Total</div>
-            <div class="order-meta-val">₹4,299</div>
+          <div class="order-status-badge status-shipped">Shipped</div>
+        </div>
+
+        <div class="order-card-body">
+          <div class="order-split">
+            <div class="order-left">
+              <div class="item-img-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div class="item-details">
+                <div class="item-title">PUMA RS-X Core Sneakers - White/Black</div>
+                <div class="item-meta">Qty: 1</div>
+                <div class="item-meta">Size: 9 UK</div>
+              </div>
+            </div>
+            
+            <div class="order-right actions-stack">
+              <button class="btn-primary-outline">Track Package</button>
+              <button class="btn-text-link btn-invoice">Download Invoice</button>
+              <button class="btn-text-link btn-return">Return or Replace Items</button>
+            </div>
           </div>
-          <div class="order-meta-item">
-            <div class="order-meta-label">Ship To</div>
-            <div class="order-meta-val">Aryan, New Delhi</div>
+          
+          <div class="timeline-container">
+            <div class="timeline-track"></div>
+            
+            <div class="milestone completed">
+              <div class="node-indicator">✓</div>
+              <div class="node-label">Confirmed</div>
+            </div>
+            
+            <div class="milestone active">
+              <div class="node-indicator"></div>
+              <div class="node-label">Shipped</div>
+            </div>
+            
+            <div class="milestone pending">
+              <div class="node-indicator"></div>
+              <div class="node-label">Out for Delivery</div>
+            </div>
+            
+            <div class="milestone pending">
+              <div class="node-indicator"></div>
+              <div class="node-label">Delivered</div>
+            </div>
+            
           </div>
         </div>
-        <div class="order-status-badge status-shipped">Shipped</div>
       </div>
       
-      <div class="order-card-body">
-        <div class="order-product">
-          <div class="order-prod-img">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-          <div class="order-prod-info">
-            <div class="order-prod-brand">Puma</div>
-            <div class="order-prod-name">RS-X Core Sneakers - White/Black</div>
-            <div class="order-prod-meta">Qty: 1 | Size: 9 UK</div>
-          </div>
-          <div class="order-prod-price">₹4,299</div>
-        </div>
-      </div>
+    </div>
+    
+    <!-- Past Orders Panel -->
+    <div class="tab-panel" id="past-orders">
       
-      <!-- Tracker -->
-      <div class="tracker">
-        <div class="tracker-label">Delivery Status</div>
-        <div class="tracker-steps">
-          
-          <div class="tracker-step completed">
-            <div class="tracker-node">✓</div>
-            <div class="tracker-info">
-              <div class="tracker-status">Confirmed</div>
-              <div class="tracker-date">Jul 12, 10:45 AM</div>
+      <div class="order-card-wrapper">
+        <div class="order-card-top" style="background: var(--bg-surface);">
+          <div class="order-info-grid">
+            <div class="info-block">
+              <span class="info-label">ORDER PLACED</span>
+              <span class="info-val">05 June 2026</span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">TOTAL</span>
+              <span class="info-val">₹69,900</span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">SHIP TO</span>
+              <span class="info-val">Aryan, New Delhi</span>
             </div>
           </div>
-          
-          <div class="tracker-step active">
-            <div class="tracker-node"></div>
-            <div class="tracker-info">
-              <div class="tracker-status">Shipped</div>
-              <div class="tracker-date">Jul 13, 08:30 PM</div>
-            </div>
-          </div>
-          
-          <div class="tracker-step pending">
-            <div class="tracker-node"></div>
-            <div class="tracker-info">
-              <div class="tracker-status">Out for Delivery</div>
-              <div class="tracker-date">Expected Jul 15</div>
-            </div>
-          </div>
-          
-          <div class="tracker-step pending">
-            <div class="tracker-node"></div>
-            <div class="tracker-info">
-              <div class="tracker-status">Delivered</div>
-              <div class="tracker-date">Expected Jul 15</div>
-            </div>
-          </div>
-          
+          <div class="order-status-badge status-delivered" style="background: rgba(46,125,50,0.12); color: #2e7d32;">Delivered</div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- ORDER HISTORY -->
-  <div class="tab-panel" id="panel-history">
-    <div class="order-card">
-      <div class="order-card-head">
-        <div class="order-meta">
-          <div class="order-meta-item">
-            <div class="order-meta-label">Order Placed</div>
-            <div class="order-meta-val">05 June 2026</div>
+        <div class="order-card-body">
+          <div class="order-split">
+            <div class="order-left">
+              <div class="item-img-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              </div>
+              <div class="item-details">
+                <div class="item-title">Apple iPhone 15 - Black, 128GB</div>
+                <div class="item-meta">Qty: 1 | Color: Black</div>
+                <div class="item-meta" style="margin-top:4px; font-weight:600; color:var(--text-primary);">₹69,900</div>
+              </div>
+            </div>
+            
+            <div class="order-right actions-stack">
+              <button class="btn-primary-outline" style="border-color:var(--border-line); color:var(--text-primary);">Buy it Again</button>
+              <button class="btn-text-link btn-invoice">Download Invoice</button>
+              <button class="btn-text-link">Write a Product Review</button>
+            </div>
           </div>
-          <div class="order-meta-item">
-            <div class="order-meta-label">Total</div>
-            <div class="order-meta-val">₹69,900</div>
-          </div>
-          <div class="order-meta-item">
-            <div class="order-meta-label">Ship To</div>
-            <div class="order-meta-val">Aryan, New Delhi</div>
-          </div>
-        </div>
-        <div class="order-status-badge status-delivered">Delivered</div>
-      </div>
-      <div class="order-card-body">
-        <div class="order-product">
-          <div class="order-prod-img">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-          </div>
-          <div class="order-prod-info">
-            <div class="order-prod-brand">Apple</div>
-            <div class="order-prod-name">iPhone 15 - Black, 128GB</div>
-            <div class="order-prod-meta">Qty: 1 | Color: Black</div>
-          </div>
-          <div class="order-prod-price">₹69,900</div>
-        </div>
-        <div class="tracker" style="padding:16px;">
-          <div class="tracker-info">
-            <div class="tracker-status" style="color:var(--text-primary);">Delivered on Jun 08, 2026</div>
-            <div class="tracker-date">Handed directly to resident.</div>
+          
+          <div style="padding:16px; background:var(--bg-canvas); border-radius:8px; border:1px solid var(--border-line); display:flex; align-items:center; gap:12px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;color:#2e7d32;border:1px solid rgba(46,125,50,0.2);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:600;color:var(--text-primary);font-size:14px;">Delivered on Jun 08, 2026</div>
+              <div style="color:var(--text-sub);font-size:13px;margin-top:2px;">Handed directly to resident.</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- RETURNS & REFUNDS -->
-  <div class="tab-panel" id="panel-returns">
-    <div class="order-card">
-      <div class="order-card-head">
-        <div class="order-meta">
-          <div class="order-meta-item">
-            <div class="order-meta-label">Returned On</div>
-            <div class="order-meta-val">10 May 2026</div>
-          </div>
-          <div class="order-meta-item">
-            <div class="order-meta-label">Refund Amount</div>
-            <div class="order-meta-val">₹2,199</div>
-          </div>
-          <div class="order-meta-item">
-            <div class="order-meta-label">Refund To</div>
-            <div class="order-meta-val">Original Payment Method (UPI)</div>
-          </div>
-        </div>
-        <div class="order-status-badge status-refunded">Refund Processed</div>
-      </div>
-      <div class="order-card-body">
-        <div class="order-product">
-          <div class="order-prod-img">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <div class="order-prod-info">
-            <div class="order-prod-brand">Zara</div>
-            <div class="order-prod-name">Oversized Cotton Shirt</div>
-            <div class="order-prod-meta">Qty: 1 | Size: L</div>
-          </div>
-          <div class="order-prod-price">₹2,199</div>
-        </div>
-        <div class="tracker" style="padding:16px;">
-          <div class="tracker-info">
-            <div class="tracker-status" style="color:var(--text-primary);">Refund Completed on May 12, 2026</div>
-            <div class="tracker-date">Funds have been credited to your bank account. (Txn ID: UPI982374)</div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+    
+    <!-- Returns Panel -->
+    <div class="tab-panel" id="returns-refunds">
+      
+      <div class="order-card-wrapper">
+        <div class="order-card-top" style="background: var(--bg-surface);">
+          <div class="order-info-grid">
+            <div class="info-block">
+              <span class="info-label">RETURN INITIATED</span>
+              <span class="info-val">10 May 2026</span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">REFUND AMOUNT</span>
+              <span class="info-val">₹2,199</span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">REFUND TO</span>
+              <span class="info-val">Original Payment Method (UPI)</span>
+            </div>
+          </div>
+          <div class="order-status-badge status-refunded" style="background: rgba(198,40,40,0.12); color: #c62828;">Refund Processed</div>
+        </div>
 
+        <div class="order-card-body">
+          <div class="order-split">
+            <div class="order-left">
+              <div class="item-img-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="item-details">
+                <div class="item-title">Zara Oversized Cotton Shirt</div>
+                <div class="item-meta">Qty: 1 | Size: L</div>
+                <div class="item-meta" style="margin-top:4px; font-weight:600; color:var(--text-primary);">₹2,199</div>
+              </div>
+            </div>
+            
+            <div class="order-right actions-stack">
+              <button class="btn-primary-outline" style="border-color:var(--border-line); color:var(--text-primary);">View Return Status</button>
+              <button class="btn-text-link">Download Return Label</button>
+            </div>
+          </div>
+          
+          <div style="padding:16px; background:var(--bg-canvas); border-radius:8px; border:1px solid var(--border-line); display:flex; align-items:center; gap:12px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;color:#c62828;border:1px solid rgba(198,40,40,0.2);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="M9 15l3 3 3-3"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:600;color:var(--text-primary);font-size:14px;">Refund Completed on May 12, 2026</div>
+              <div style="color:var(--text-sub);font-size:13px;margin-top:2px;">Funds have been credited to your bank account. (Txn ID: UPI982374)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 </main>
-<footer role="contentinfo">
-  <div class="footer-main">
-    <div class="f-brand">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-        <svg width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)"/><path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/><polyline fill="none" stroke="rgba(255,255,255,.90)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/><path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/><line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/><polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/></svg>
-        <div class="f-logo">E-<em>Bazaar</em></div>
-      </div>
-      <p>Your everyday and everything store. Premium products, unmatched service, delivered with care across India.</p>
-      <div class="f-socials" aria-label="Social media">
-        <a href="#" class="soc-btn" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-        <a href="#" class="soc-btn" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-        <a href="#" class="soc-btn" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-        <a href="#" class="soc-btn" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="var(--bg-nav)"/></svg></a>
-      </div>
-    </div>
-    <div class="f-col"><h5>Shop</h5><ul><li><a href="category.html?cat=new-arrivals">New Arrivals</a></li><li><a href="category.html?cat=trending">Trending Now</a></li><li><a href="category.html?cat=deals">Today's Deals</a></li><li><a href="category.html?cat=electronics">Electronics</a></li><li><a href="category.html?cat=clothing">Fashion</a></li><li><a href="category.html?cat=groceries">Groceries</a></li></ul></div>
-    <div class="f-col"><h5>Company</h5><ul><li><a href="#">About E-Bazaar</a></li><li><a href="#">Careers</a></li><li><a href="#">Press & Media</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Our Blog</a></li><li><a href="#">Investors</a></li></ul></div>
-    <div class="f-col"><h5>Help</h5><ul><li><a href="#">FAQs</a></li><li><a href="orders.html">Track My Order</a></li><li><a href="#">Returns & Refunds</a></li><li><a href="#">Shipping Info</a></li><li><a href="#">Contact Us</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
-    <div class="f-col"><h5>Stay in the Loop</h5><p class="nl-desc">Deals, drops and news — in your inbox.</p><form class="nl-form" id="nl-form" novalidate><label for="nl-email" class="sr-only">Email</label><input type="email" id="nl-email" placeholder="your@email.com" required autocomplete="email"/><button type="submit">Join</button></form></div>
-  </div>
-  <div class="footer-bottom"><span>&copy; 2026 E-Bazaar Pvt. Ltd. &nbsp;&middot;&nbsp; <a href="#">Terms</a> &nbsp;&middot;&nbsp; <a href="#">Privacy</a></span><div class="pay-row" aria-label="Payment methods"><div class="pay-chip">VISA</div><div class="pay-chip">MC</div><div class="pay-chip">UPI</div><div class="pay-chip">GPay</div><div class="pay-chip">COD</div><div class="pay-chip">EMI</div></div></div>
-</footer>
 
-<!-- ADDRESS MODAL -->
-<div class="modal-overlay" id="addr-modal" role="dialog" aria-modal="true" aria-label="Manage delivery addresses">
+
+<!-- RETURN MODAL -->
+<div class="modal-overlay" id="return-modal" role="dialog" aria-modal="true" aria-label="Initiate Return">
   <div class="modal-card">
-    <div class="modal-head"><h2 class="modal-title">Manage Delivery Addresses</h2><button class="modal-close" id="modal-close-btn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-head">
+      <h2 class="modal-title">Return or Replace Items</h2>
+      <button class="modal-close" id="return-close-btn" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
     <div class="modal-body">
-      <div class="addr-list">
-        <div class="addr-item is-default" data-type="Home"><div class="addr-item-top"><span class="addr-name">Aryan Verma</span><span class="addr-type">Home ✓</span></div><p class="addr-line">47, Sector 18, DLF Phase 3<br>New Delhi, Delhi — 110001</p><p class="addr-phone">+91 98765 43210</p><div class="addr-actions"><button class="addr-act-btn set-default-btn">Set as Default</button><button class="addr-act-btn">&#9998; Edit</button><button class="addr-act-btn secondary">&#128465; Delete</button></div></div>
-        <div class="addr-item" data-type="Work"><div class="addr-item-top"><span class="addr-name">Aryan Verma</span><span class="addr-type">Work</span></div><p class="addr-line">E-Bazaar HQ, Tower B, Cyber City<br>Gurugram, Haryana — 122002</p><p class="addr-phone">+91 98765 43210</p><div class="addr-actions"><button class="addr-act-btn set-default-btn">Set as Default</button><button class="addr-act-btn">&#9998; Edit</button><button class="addr-act-btn secondary">&#128465; Delete</button></div></div>
-        <div class="addr-item" data-type="Family"><div class="addr-item-top"><span class="addr-name">Priya Verma</span><span class="addr-type">Family</span></div><p class="addr-line">12, Rajouri Garden Extension<br>New Delhi, Delhi — 110027</p><p class="addr-phone">+91 91234 56789</p><div class="addr-actions"><button class="addr-act-btn set-default-btn">Set as Default</button><button class="addr-act-btn">&#9998; Edit</button><button class="addr-act-btn secondary">&#128465; Delete</button></div></div>
-      </div>
-      <button class="add-addr-btn" id="add-addr-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add New Address</button>
-      <form class="addr-form" id="new-addr-form" novalidate>
-        <div class="form-row"><div class="form-group"><label for="f-name">First Name</label><input type="text" id="f-name" placeholder="Aryan" required/></div><div class="form-group"><label for="f-lname">Last Name</label><input type="text" id="f-lname" placeholder="Verma" required/></div></div>
-        <div class="form-group full"><label for="f-line1">Address Line 1</label><input type="text" id="f-line1" placeholder="House no., Street, Area" required/></div>
-        <div class="form-group full"><label for="f-line2">Address Line 2 (Optional)</label><input type="text" id="f-line2" placeholder="Landmark, Apartment"/></div>
-        <div class="form-row"><div class="form-group"><label for="f-city">City</label><input type="text" id="f-city" placeholder="New Delhi" required/></div><div class="form-group"><label for="f-pin">PIN Code</label><input type="text" id="f-pin" placeholder="110001" maxlength="6" required/></div></div>
-        <div class="form-row"><div class="form-group"><label for="f-state">State</label><select id="f-state"><option value="">Select State</option><option>Delhi</option><option>Haryana</option><option>UP</option><option>Maharashtra</option><option>Karnataka</option></select></div><div class="form-group"><label for="f-phone">Mobile</label><input type="tel" id="f-phone" placeholder="+91 XXXXX XXXXX" required/></div></div>
-        <div style="display:flex;gap:16px"><button type="submit" class="form-submit" style="flex:1">Save Address</button><button type="button" id="addr-form-cancel" class="addr-act-btn secondary" style="height:48px;padding:0 24px;border-radius:14px">Cancel</button></div>
+      <form class="addr-form" id="return-form" novalidate>
+        <div class="form-group full">
+          <label for="ret-reason">Reason for Return</label>
+          <select id="ret-reason" required style="width:100%; padding:12px; border:1px solid var(--border-line); border-radius:8px; font-family:var(--font-primary); background:var(--bg-canvas); color:var(--text-primary);">
+            <option value="">Select a reason...</option>
+            <option value="defective">Item is defective or doesn't work</option>
+            <option value="damaged">Item or packaging was damaged</option>
+            <option value="wrong">Wrong item sent</option>
+            <option value="no-longer-needed">No longer needed / Better price available</option>
+            <option value="other">Other (Explain below)</option>
+          </select>
+        </div>
+        <div class="form-group full" style="margin-top:16px;">
+          <label for="ret-comments">Comments (Optional)</label>
+          <textarea id="ret-comments" rows="3" placeholder="Please provide any additional details..." style="width:100%; padding:12px; border:1px solid var(--border-line); border-radius:8px; font-family:var(--font-primary); background:var(--bg-canvas); color:var(--text-primary); resize:vertical; margin-top:4px;"></textarea>
+        </div>
+        <div class="form-group full" style="margin-top:16px;">
+          <label>Resolution Action</label>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+              <input type="radio" name="ret-action" value="replace" checked /> Replace with identical item
+            </label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+              <input type="radio" name="ret-action" value="refund-original" /> Refund to Original Payment Method
+            </label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+              <input type="radio" name="ret-action" value="refund-wallet" /> Refund to E-Bazaar Wallet (Instant)
+            </label>
+          </div>
+        </div>
+        <div style="display:flex; gap:16px; margin-top:24px;">
+          <button type="submit" class="form-submit" style="flex:1">Confirm Request</button>
+          <button type="button" id="return-form-cancel" class="addr-act-btn secondary" style="height:48px; padding:0 24px; border-radius:14px; background:var(--bg-canvas); border:1px solid var(--border-line); color:var(--text-primary); cursor:pointer;">Cancel</button>
+        </div>
       </form>
     </div>
   </div>
 </div>
-
-<!-- BACK TO TOP & TOAST -->
-<button id="btt" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg></button>
-<div id="toast" role="alert" aria-live="polite"><div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span></div>
 
 <script src="js/script.js"></script>
 </body>
