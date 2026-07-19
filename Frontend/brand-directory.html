@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>E-Bazaar — Your everyday and everything store.</title>
+  <meta name="description" content="E-Bazaar: Premium groceries, electronics, clothing, shoes, beauty and more. Shop 1000+ top brands with unbeatable prices and fast delivery across India."/>
+  <meta name="theme-color" content="#FAF8F5"/>
+  <meta property="og:title" content="E-Bazaar — Your everyday and everything store."/>
+  <meta property="og:type" content="website"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <style>
+    /* Logo SVG gradient references */
+    .logo-bag-body{fill:url(#bagGrad)}
+    html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
+  </style>
+  <link rel="stylesheet" href="css/brand-directory.css">
+</head>
+<body>
+
+<!-- SVG Gradient Defs -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="bagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A88C6D"/><stop offset="100%" stop-color="#856B4D"/>
+    </linearGradient>
+    <linearGradient id="bagGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C9B397"/><stop offset="100%" stop-color="#A38C6D"/>
+    </linearGradient>
+    <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E2CDAF"/><stop offset="100%" stop-color="#FAF5E1"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header id="site-header" role="banner">
+
+  <!-- TOP ROW -->
+  <div class="nav-top">
+    <!-- Logo -->
+    <a href="index.html" class="nav-logo" aria-label="E-Bazaar Home">
+      <svg class="logo-svg-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="E-Bazaar logo">
+        <rect class="logo-bag-body" x="12" y="28" width="56" height="44" rx="7"/>
+        <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/>
+        <polyline fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/>
+        <path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/>
+        <line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/>
+        <polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/>
+      </svg>
+      <div>
+        <div class="logo-wordmark">E-<em>Bazaar</em></div>
+        <div class="logo-tagline">Your everyday and everything store.</div>
+      </div>
+    </a>
+
+    <!-- Address widget -->
+    <button class="nav-address" id="addr-trigger" aria-haspopup="dialog" aria-label="Manage delivery addresses">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <div><span class="addr-label">Deliver to</span><span class="addr-value">Aryan · New Delhi 110001</span></div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <!-- Search -->
+    <div class="nav-search" role="search">
+      <label for="q" class="sr-only">Search E-Bazaar</label>
+      <input type="search" id="q" placeholder="Search products, brands, categories…" autocomplete="off"/>
+      <button class="search-btn" aria-label="Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    </div>
+
+    <!-- Right actions -->
+    <div class="nav-actions">
+      <!-- Theme toggle -->
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <div class="toggle-track" aria-hidden="true"><div class="toggle-thumb"></div></div>
+        <span class="toggle-icon" id="theme-icon" aria-hidden="true">🌙</span>
+      </button>
+      <!-- Account -->
+      <a href="auth.html" class="nav-btn" id="acc-btn" aria-label="My Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Account</span>
+      </a>
+      <!-- Orders -->
+      <a href="orders.html" class="nav-btn" id="nav-orders" aria-label="My Orders">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        <span>Orders</span>
+      </a>
+      <!-- Wishlist -->
+      <button class="nav-btn" id="wl-nav-btn" aria-label="Wishlist">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Wishlist</span>
+      </button>
+      <!-- Cart -->
+      <button class="nav-btn cart-wrap" id="cart-btn" aria-label="Cart">
+        <span class="cart-badge cart-count-el" id="cart-count" aria-live="polite">3</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span>Cart</span>
+      </button>
+    </div>
+
+    <!-- Hamburger (mobile) -->
+    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div><!-- /nav-top -->
+
+  <!-- SUBNAV — Clean text-based compact dropdowns -->
+  <nav class="nav-sub" aria-label="Main categories">
+    <div class="nav-sub-inner">
+      <div class="cat-links-wrap">
+        
+        <!-- 1. Groceries -->
+        <div class="mega-item">
+          <a href="category.html?cat=groceries" aria-haspopup="true" aria-expanded="false">Groceries <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Groceries brands">
+            <a href="category.html?cat=groceries&brand=Amul">Amul</a>
+            <a href="category.html?cat=groceries&brand=Nestle">Nestle</a>
+            <a href="category.html?cat=groceries&brand=Britannia">Britannia</a>
+            <a href="category.html?cat=groceries&brand=Tata">Tata</a>
+            <a href="category.html?cat=groceries&brand=MotherDairy">Mother Dairy</a>
+            <a href="category.html?cat=groceries&brand=ITC">ITC</a>
+            <a href="category.html?cat=groceries&brand=HUL">HUL</a>
+          </div>
+        </div>
+
+        <!-- 2. Electronics -->
+        <div class="mega-item">
+          <a href="category.html?cat=electronics" aria-haspopup="true" aria-expanded="false">Electronics <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Electronics brands">
+            <a href="category.html?cat=electronics&brand=Apple">Apple</a>
+            <a href="category.html?cat=electronics&brand=Samsung">Samsung</a>
+            <a href="category.html?cat=electronics&brand=Sony">Sony</a>
+            <a href="category.html?cat=electronics&brand=OnePlus">OnePlus</a>
+            <a href="category.html?cat=electronics&brand=Xiaomi">Xiaomi</a>
+            <a href="category.html?cat=electronics&brand=Vivo">Vivo</a>
+            <a href="category.html?cat=electronics&brand=Nothing">Nothing</a>
+          </div>
+        </div>
+
+        <!-- 3. Gadgets -->
+        <div class="mega-item">
+          <a href="category.html?cat=gadgets" aria-haspopup="true" aria-expanded="false">Gadgets <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Gadgets brands">
+            <a href="category.html?cat=gadgets&brand=Philips">Philips</a>
+            <a href="category.html?cat=gadgets&brand=LG">LG</a>
+            <a href="category.html?cat=gadgets&brand=Boat">Boat</a>
+            <a href="category.html?cat=gadgets&brand=JBL">JBL</a>
+            <a href="category.html?cat=gadgets&brand=Noise">Noise</a>
+            <a href="category.html?cat=gadgets&brand=Boult">Boult</a>
+            <a href="category.html?cat=gadgets&brand=Logitech">Logitech</a>
+          </div>
+        </div>
+
+        <!-- 4. Clothing -->
+        <div class="mega-item">
+          <a href="category.html?cat=clothing" aria-haspopup="true" aria-expanded="false">Clothing <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Clothing brands">
+            <a href="category.html?cat=clothing&gender=men">Men's Collection</a>
+            <a href="category.html?cat=clothing&gender=women">Women's Collection</a>
+            <a href="category.html?cat=clothing&season=summer">Summer Collection</a>
+            <a href="category.html?cat=clothing&season=winter">Winter Collection</a>
+            <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+            <a href="category.html?cat=clothing&brand=Levis">Levis</a>
+            <a href="category.html?cat=clothing&brand=Zara">Zara</a>
+            <a href="category.html?cat=clothing&brand=HM">H&amp;M</a>
+            <a href="category.html?cat=clothing&brand=Tommy">Tommy Hilfiger</a>
+            <a href="category.html?cat=clothing&brand=USPolo">US Polo</a>
+            <a href="category.html?cat=clothing&brand=AllenSolly">Allen Solly</a>
+          </div>
+        </div>
+
+        <!-- 5. Shoes -->
+        <div class="mega-item">
+          <a href="category.html?cat=shoes" aria-haspopup="true" aria-expanded="false">Shoes <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Shoes brands">
+            <a href="category.html?cat=shoes&brand=Nike">Nike</a>
+            <a href="category.html?cat=shoes&brand=Adidas">Adidas</a>
+            <a href="category.html?cat=shoes&brand=Campus">Campus</a>
+            <a href="category.html?cat=shoes&brand=Puma">Puma</a>
+            <a href="category.html?cat=shoes&brand=Comet">Comet</a>
+            <a href="category.html?cat=shoes&brand=NewBalance">New Balance</a>
+            <a href="category.html?cat=shoes&brand=Reebok">Reebok</a>
+          </div>
+        </div>
+
+        <!-- 6. Beauty -->
+        <div class="mega-item">
+          <a href="category.html?cat=beauty" aria-haspopup="true" aria-expanded="false">Beauty <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Beauty brands">
+            <a href="category.html?cat=beauty&brand=LOreal">L'Oreal</a>
+            <a href="category.html?cat=beauty&brand=Maybelline">Maybelline</a>
+            <a href="category.html?cat=beauty&brand=Nykaa">Nykaa</a>
+            <a href="category.html?cat=beauty&brand=MAC">MAC</a>
+            <a href="category.html?cat=beauty&brand=Cetaphil">Cetaphil</a>
+            <a href="category.html?cat=beauty&brand=Mamaearth">Mamaearth</a>
+          </div>
+        </div>
+
+        <!-- 7. Sports -->
+        <div class="mega-item">
+          <a href="category.html?cat=sports" aria-haspopup="true" aria-expanded="false">Sports <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Sports brands">
+            <a href="category.html?cat=sports&brand=Decathlon">Decathlon</a>
+            <a href="category.html?cat=sports&brand=Yonex">Yonex</a>
+            <a href="category.html?cat=sports&brand=Cosco">Cosco</a>
+            <a href="category.html?cat=sports&brand=Nivia">Nivia</a>
+            <a href="category.html?cat=sports&brand=Speedo">Speedo</a>
+            <a href="category.html?cat=sports&brand=Spalding">Spalding</a>
+          </div>
+        </div>
+
+        <!-- 8. Home & Kitchen -->
+        <div class="mega-item">
+          <a href="category.html?cat=home-kitchen" aria-haspopup="true" aria-expanded="false">Home &amp; Kitchen <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-drop" role="dialog" aria-label="Home and Kitchen brands">
+            <a href="category.html?cat=home-kitchen&brand=Prestige">Prestige</a>
+            <a href="category.html?cat=home-kitchen&brand=Hawkins">Hawkins</a>
+            <a href="category.html?cat=home-kitchen&brand=Pigeon">Pigeon</a>
+            <a href="category.html?cat=home-kitchen&brand=Milton">Milton</a>
+            <a href="category.html?cat=home-kitchen&brand=Borosil">Borosil</a>
+            <a href="category.html?cat=home-kitchen&brand=Bajaj">Bajaj</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;align-items:center;">
+        <div class="subnav-divider" aria-hidden="true"></div>
+        <a href="category.html?cat=deals" style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">Today's Deals <span class="hot-tag">HOT</span></a>
+        <a href="category.html?cat=new-arrivals" style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">New Arrivals <span class="new-tag">NEW</span></a>
+        <a href="brand-directory.html" class="nav-item-link" id="link-brand-store" style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">Brand Store</a>
+      </div>
+    </div>
+  </nav>
+
+</header><!-- /site-header -->
+
+<!-- ═══════════════════ MOBILE DRAWER ═══════════════════ -->
+<div class="drawer-overlay" id="drawer-overlay" role="presentation"></div>
+<nav class="mobile-drawer" id="mobile-drawer" aria-label="Mobile navigation">
+  <div class="drawer-head">
+    <a href="index.html" style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.4px">E-<em style="font-style:normal;color:var(--accent)">Bazaar</em></a>
+    <button class="drawer-close" id="drawer-close" aria-label="Close navigation">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-search">
+    <input type="search" placeholder="Search E-Bazaar…" aria-label="Search" id="mobile-search"/>
+  </div>
+  <div class="drawer-links">
+    <a href="orders.html" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/></svg> My Orders</a>
+    <a href="#" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Wishlist</a>
+    <a href="#" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> My Account</a>
+  </div>
+  <div class="drawer-cats">
+    <div class="drawer-cat-head">All Categories</div>
+    <a href="category.html?cat=groceries"  class="drawer-cat"><span>Groceries</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=electronics" class="drawer-cat"><span>Electronics</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=gadgets"    class="drawer-cat"><span>Gadgets</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=clothing"   class="drawer-cat"><span>Clothing</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=shoes"      class="drawer-cat"><span>Shoes</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=beauty"     class="drawer-cat"><span>Beauty</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=sports"     class="drawer-cat"><span>Sports</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=home-kitchen" class="drawer-cat"><span>Home & Kitchen</span><span class="drawer-cat-icon">›</span></a>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<main id="main-content">
+  <div class="directory-container">
+    <div class="directory-sidebar">
+      <a href="#groceries">Groceries</a>
+      <a href="#electronics">Electronics</a>
+      <a href="#gadgets">Gadgets</a>
+      <a href="#clothing">Clothing</a>
+      <a href="#shoes">Shoes</a>
+      <a href="#beauty">Beauty</a>
+      <a href="#sports">Sports</a>
+      <a href="#home-kitchen">Home & Kitchen</a>
+    </div>
+    <div class="directory-content">
+      
+      <div class="dir-cat-block" id="groceries">
+        <h2 class="dir-cat-title">Groceries</h2>
+        <div class="dir-grid">
+          <a href="brand-store.html?brand=Amul" class="brand-card"><img src="images/logos/amul.png" onerror="this.onerror=null; this.src='https://logo.clearbit.com/amul.com'; this.onerror=function(){this.src='https://ui-avatars.com/api/?name=Amul&background=0D8ABC&color=fff&size=140'};"></a>
+          <a href="brand-store.html?brand=Nestle" class="brand-card"><img src="https://logo.clearbit.com/nestle.com" onerror="this.src='https://ui-avatars.com/api/?name=Nestle'"></a>
+          <a href="brand-store.html?brand=Britannia" class="brand-card"><img src="https://logo.clearbit.com/britannia.co.in" onerror="this.src='https://ui-avatars.com/api/?name=Britannia'"></a>
+          <a href="brand-store.html?brand=Tata" class="brand-card"><img src="https://logo.clearbit.com/tata.com" onerror="this.src='https://ui-avatars.com/api/?name=Tata'"></a>
+        </div>
+      </div>
+      
+      <div class="dir-cat-block" id="electronics">
+        <h2 class="dir-cat-title">Electronics</h2>
+        <div class="dir-grid">
+          <a href="brand-store.html?brand=Apple" class="brand-card"><img src="https://logo.clearbit.com/apple.com" onerror="this.src='https://ui-avatars.com/api/?name=Apple'"></a>
+          <a href="brand-store.html?brand=Samsung" class="brand-card"><img src="https://logo.clearbit.com/samsung.com" onerror="this.src='https://ui-avatars.com/api/?name=Samsung'"></a>
+          <a href="brand-store.html?brand=Sony" class="brand-card"><img src="https://logo.clearbit.com/sony.com" onerror="this.src='https://ui-avatars.com/api/?name=Sony'"></a>
+          <a href="brand-store.html?brand=OnePlus" class="brand-card"><img src="https://logo.clearbit.com/oneplus.com" onerror="this.src='https://ui-avatars.com/api/?name=OnePlus'"></a>
+        </div>
+      </div>
+
+      <div class="dir-cat-block" id="gadgets">
+        <h2 class="dir-cat-title">Gadgets</h2>
+        <div class="dir-grid">
+          <a href="brand-store.html?brand=Philips" class="brand-card"><img src="https://logo.clearbit.com/philips.com" onerror="this.src='https://ui-avatars.com/api/?name=Philips'"></a>
+          <a href="brand-store.html?brand=LG" class="brand-card"><img src="https://logo.clearbit.com/lg.com" onerror="this.src='https://ui-avatars.com/api/?name=LG'"></a>
+          <a href="brand-store.html?brand=Boat" class="brand-card"><img src="https://logo.clearbit.com/boat-lifestyle.com" onerror="this.src='https://ui-avatars.com/api/?name=Boat'"></a>
+          <a href="brand-store.html?brand=JBL" class="brand-card"><img src="https://logo.clearbit.com/jbl.com" onerror="this.src='https://ui-avatars.com/api/?name=JBL'"></a>
+        </div>
+      </div>
+
+      <div class="dir-cat-block" id="clothing">
+        <h2 class="dir-cat-title">Clothing</h2>
+        <div class="dir-grid">
+          <a href="brand-store.html?brand=Levis" class="brand-card"><img src="https://logo.clearbit.com/levi.com" onerror="this.src='https://ui-avatars.com/api/?name=Levis'"></a>
+          <a href="brand-store.html?brand=Zara" class="brand-card"><img src="https://logo.clearbit.com/zara.com" onerror="this.src='https://ui-avatars.com/api/?name=Zara'"></a>
+          <a href="brand-store.html?brand=HM" class="brand-card"><img src="https://logo.clearbit.com/hm.com" onerror="this.src='https://ui-avatars.com/api/?name=HM'"></a>
+          <a href="brand-store.html?brand=Tommy" class="brand-card"><img src="https://logo.clearbit.com/tommy.com" onerror="this.src='https://ui-avatars.com/api/?name=Tommy'"></a>
+        </div>
+      </div>
+
+      <div class="dir-cat-block" id="shoes">
+        <h2 class="dir-cat-title">Shoes</h2>
+        <div class="dir-grid">
+          <a href="brand-store.html?brand=Nike" class="brand-card"><img src="https://logo.clearbit.com/nike.com" onerror="this.src='https://ui-avatars.com/api/?name=Nike'"></a>
+          <a href="brand-store.html?brand=Adidas" class="brand-card"><img src="https://logo.clearbit.com/adidas.com" onerror="this.src='https://ui-avatars.com/api/?name=Adidas'"></a>
+          <a href="brand-store.html?brand=Puma" class="brand-card"><img src="https://logo.clearbit.com/puma.com" onerror="this.src='https://ui-avatars.com/api/?name=Puma'"></a>
+          <a href="brand-store.html?brand=Reebok" class="brand-card"><img src="https://logo.clearbit.com/reebok.com" onerror="this.src='https://ui-avatars.com/api/?name=Reebok'"></a>
+        </div>
+      </div>
+      
+      <div class="dir-cat-block" id="beauty">
+        <h2 class="dir-cat-title">Beauty</h2>
+        <div class="dir-grid">
+          <a href="brand-store.html?brand=LOreal" class="brand-card"><img src="https://logo.clearbit.com/loreal.com" onerror="this.src='https://ui-avatars.com/api/?name=LOreal'"></a>
+          <a href="brand-store.html?brand=Maybelline" class="brand-card"><img src="https://logo.clearbit.com/maybelline.com" onerror="this.src='https://ui-avatars.com/api/?name=Maybelline'"></a>
+          <a href="brand-store.html?brand=Nykaa" class="brand-card"><img src="https://logo.clearbit.com/nykaa.com" onerror="this.src='https://ui-avatars.com/api/?name=Nykaa'"></a>
+          <a href="brand-store.html?brand=MAC" class="brand-card"><img src="https://logo.clearbit.com/maccosmetics.com" onerror="this.src='https://ui-avatars.com/api/?name=MAC'"></a>
+        </div>
+      </div>
+
+      <div class="dir-cat-block" id="sports">
+        <h2 class="dir-cat-title">Sports</h2>
+        <div class="dir-grid">
+          <a href="brand-store.html?brand=Decathlon" class="brand-card"><img src="https://logo.clearbit.com/decathlon.com" onerror="this.src='https://ui-avatars.com/api/?name=Decathlon'"></a>
+          <a href="brand-store.html?brand=Yonex" class="brand-card"><img src="https://logo.clearbit.com/yonex.com" onerror="this.src='https://ui-avatars.com/api/?name=Yonex'"></a>
+          <a href="brand-store.html?brand=Cosco" class="brand-card"><img src="https://logo.clearbit.com/cosco.in" onerror="this.src='https://ui-avatars.com/api/?name=Cosco'"></a>
+          <a href="brand-store.html?brand=Nivia" class="brand-card"><img src="https://logo.clearbit.com/niviasports.com" onerror="this.src='https://ui-avatars.com/api/?name=Nivia'"></a>
+        </div>
+      </div>
+
+      <div class="dir-cat-block" id="home-kitchen">
+        <h2 class="dir-cat-title">Home & Kitchen</h2>
+        <div class="dir-grid">
+          <a href="brand-store.html?brand=Prestige" class="brand-card"><img src="https://logo.clearbit.com/ttkprestige.com" onerror="this.src='https://ui-avatars.com/api/?name=Prestige'"></a>
+          <a href="brand-store.html?brand=Hawkins" class="brand-card"><img src="https://logo.clearbit.com/hawkinscookers.com" onerror="this.src='https://ui-avatars.com/api/?name=Hawkins'"></a>
+          <a href="brand-store.html?brand=Pigeon" class="brand-card"><img src="https://logo.clearbit.com/pigeon.com" onerror="this.src='https://ui-avatars.com/api/?name=Pigeon'"></a>
+          <a href="brand-store.html?brand=Milton" class="brand-card"><img src="https://logo.clearbit.com/milton.in" onerror="this.src='https://ui-avatars.com/api/?name=Milton'"></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <div class="footer-main">
+    <div class="f-brand">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <svg width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)"/><path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/><polyline fill="none" stroke="rgba(255,255,255,.90)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/><path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/><line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/><polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/></svg>
+        <div class="f-logo">E-<em>Bazaar</em></div>
+      </div>
+      <p>Your everyday and everything store. Premium products, unmatched service, delivered with care across India.</p>
+      <div class="f-socials" aria-label="Social media">
+        <a href="#" class="soc-btn" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="#" class="soc-btn" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="#" class="soc-btn" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="soc-btn" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="var(--bg-nav)"/></svg></a>
+      </div>
+    </div>
+    <div class="f-col"><h5>Shop</h5><ul><li><a href="category.html?cat=new-arrivals">New Arrivals</a></li><li><a href="category.html?cat=trending">Trending Now</a></li><li><a href="category.html?cat=deals">Today's Deals</a></li><li><a href="category.html?cat=electronics">Electronics</a></li><li><a href="category.html?cat=clothing">Fashion</a></li><li><a href="category.html?cat=groceries">Groceries</a></li></ul></div>
+    <div class="f-col"><h5>Company</h5><ul><li><a href="#">About E-Bazaar</a></li><li><a href="#">Careers</a></li><li><a href="#">Press & Media</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Our Blog</a></li><li><a href="#">Investors</a></li></ul></div>
+    <div class="f-col"><h5>Help</h5><ul><li><a href="#">FAQs</a></li><li><a href="orders.html">Track My Order</a></li><li><a href="#">Returns & Refunds</a></li><li><a href="#">Shipping Info</a></li><li><a href="#">Contact Us</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+    <div class="f-col"><h5>Stay in the Loop</h5><p class="nl-desc">Deals, drops and news — in your inbox.</p><form class="nl-form" id="nl-form" novalidate><label for="nl-email" class="sr-only">Email</label><input type="email" id="nl-email" placeholder="your@email.com" required autocomplete="email"/><button type="submit">Join</button></form></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2026 E-Bazaar Pvt. Ltd. &nbsp;&middot;&nbsp; <a href="#">Terms</a> &nbsp;&middot;&nbsp; <a href="#">Privacy</a></span><div class="pay-row" aria-label="Payment methods"><div class="pay-chip">VISA</div><div class="pay-chip">MC</div><div class="pay-chip">UPI</div><div class="pay-chip">GPay</div><div class="pay-chip">COD</div><div class="pay-chip">EMI</div></div></div>
+</footer>
+
+<!-- ADDRESS MODAL -->
+<div class="modal-overlay" id="addr-modal" role="dialog" aria-modal="true" aria-label="Manage delivery addresses">
+  <div class="modal-card">
+    <div class="modal-head"><h2 class="modal-title">Manage Delivery Addresses</h2><button class="modal-close" id="modal-close-btn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="addr-list">
+        <div class="addr-item is-default" data-type="Home"><div class="addr-item-top"><span class="addr-name">Aryan Verma</span><span class="addr-type">Home ✓</span></div><p class="addr-line">47, Sector 18, DLF Phase 3<br>New Delhi, Delhi — 110001</p><p class="addr-phone">+91 98765 43210</p><div class="addr-actions"><button class="addr-act-btn set-default-btn">Set as Default</button><button class="addr-act-btn">&#9998; Edit</button><button class="addr-act-btn secondary">&#128465; Delete</button></div></div>
+        <div class="addr-item" data-type="Work"><div class="addr-item-top"><span class="addr-name">Aryan Verma</span><span class="addr-type">Work</span></div><p class="addr-line">E-Bazaar HQ, Tower B, Cyber City<br>Gurugram, Haryana — 122002</p><p class="addr-phone">+91 98765 43210</p><div class="addr-actions"><button class="addr-act-btn set-default-btn">Set as Default</button><button class="addr-act-btn">&#9998; Edit</button><button class="addr-act-btn secondary">&#128465; Delete</button></div></div>
+        <div class="addr-item" data-type="Family"><div class="addr-item-top"><span class="addr-name">Priya Verma</span><span class="addr-type">Family</span></div><p class="addr-line">12, Rajouri Garden Extension<br>New Delhi, Delhi — 110027</p><p class="addr-phone">+91 91234 56789</p><div class="addr-actions"><button class="addr-act-btn set-default-btn">Set as Default</button><button class="addr-act-btn">&#9998; Edit</button><button class="addr-act-btn secondary">&#128465; Delete</button></div></div>
+      </div>
+      <button class="add-addr-btn" id="add-addr-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add New Address</button>
+      <form class="addr-form" id="new-addr-form" novalidate>
+        <div class="form-row"><div class="form-group"><label for="f-name">First Name</label><input type="text" id="f-name" placeholder="Aryan" required/></div><div class="form-group"><label for="f-lname">Last Name</label><input type="text" id="f-lname" placeholder="Verma" required/></div></div>
+        <div class="form-group full"><label for="f-line1">Address Line 1</label><input type="text" id="f-line1" placeholder="House no., Street, Area" required/></div>
+        <div class="form-group full"><label for="f-line2">Address Line 2 (Optional)</label><input type="text" id="f-line2" placeholder="Landmark, Apartment"/></div>
+        <div class="form-row"><div class="form-group"><label for="f-city">City</label><input type="text" id="f-city" placeholder="New Delhi" required/></div><div class="form-group"><label for="f-pin">PIN Code</label><input type="text" id="f-pin" placeholder="110001" maxlength="6" required/></div></div>
+        <div class="form-row"><div class="form-group"><label for="f-state">State</label><select id="f-state"><option value="">Select State</option><option>Delhi</option><option>Haryana</option><option>UP</option><option>Maharashtra</option><option>Karnataka</option></select></div><div class="form-group"><label for="f-phone">Mobile</label><input type="tel" id="f-phone" placeholder="+91 XXXXX XXXXX" required/></div></div>
+        <div style="display:flex;gap:16px"><button type="submit" class="form-submit" style="flex:1">Save Address</button><button type="button" id="addr-form-cancel" class="addr-act-btn secondary" style="height:48px;padding:0 24px;border-radius:14px">Cancel</button></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- BACK TO TOP & TOAST -->
+<button id="btt" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg></button>
+<div id="toast" role="alert" aria-live="polite"><div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

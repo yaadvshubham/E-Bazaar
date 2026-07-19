@@ -804,6 +804,16 @@ document.addEventListener('DOMContentLoaded', () => {
   HeroSlider.init();
   initHamburger();
   initMegaMenu();
+    // Brand Directory Active State
+    if (window.location.pathname.includes('brand-directory.html')) {
+      const brandLink = document.getElementById('link-brand-store');
+      if (brandLink) {
+        brandLink.classList.add('active');
+        brandLink.style.borderBottom = '2px solid #A88C6D';
+        brandLink.style.paddingBottom = '4px';
+      }
+    }
+
   AddressModal.init();
   initTrackArrows();
   initNavActions();
