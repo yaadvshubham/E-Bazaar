@@ -193,12 +193,52 @@ function initMegaMenu() {
    ADDRESS MODAL
    ═══════════════════════════════════════════════════════════════════════ */
 const AddressModal = (() => {
+  const ADDRESS_MODAL_HTML = `
+  <div class="modal-card">
+    <div class="modal-head"><h2 class="modal-title">Manage Delivery Addresses</h2><button class="modal-close" id="modal-close-btn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="addr-list" id="global-addr-list">
+        <div class="addr-item is-default" data-type="Home"><div class="addr-item-top"><span class="addr-name">Aryan Verma</span><span class="addr-type">Home ✓</span></div><p class="addr-line">47, Sector 18, DLF Phase 3<br>New Delhi, Delhi — 110001</p><p class="addr-phone">+91 98765 43210</p><div class="addr-actions"><button class="addr-act-btn set-default-btn">Set as Default</button><button class="addr-act-btn edit-btn">&#9998; Edit</button><button class="addr-act-btn secondary delete-btn">&#128465; Delete</button></div></div>
+        <div class="addr-item" data-type="Work"><div class="addr-item-top"><span class="addr-name">Aryan Verma</span><span class="addr-type">Work</span></div><p class="addr-line">E-Bazaar HQ, Tower B, Cyber City<br>Gurugram, Haryana — 122002</p><p class="addr-phone">+91 98765 43210</p><div class="addr-actions"><button class="addr-act-btn set-default-btn">Set as Default</button><button class="addr-act-btn edit-btn">&#9998; Edit</button><button class="addr-act-btn secondary delete-btn">&#128465; Delete</button></div></div>
+      </div>
+      <button class="add-addr-btn" id="add-addr-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add New Address</button>
+      <form class="addr-form" id="new-addr-form" novalidate>
+        <div class="form-row"><div class="form-group"><label for="f-name">First Name</label><input type="text" id="f-name" placeholder="Aryan" required/></div><div class="form-group"><label for="f-lname">Last Name</label><input type="text" id="f-lname" placeholder="Verma" required/></div></div>
+        <div class="form-group full"><label for="f-line1">Address Line 1</label><input type="text" id="f-line1" placeholder="House no., Street, Area" required/></div>
+        <div class="form-group full"><label for="f-line2">Address Line 2 (Optional)</label><input type="text" id="f-line2" placeholder="Landmark, Apartment"/></div>
+        <div class="form-row"><div class="form-group"><label for="f-city">City</label><input type="text" id="f-city" placeholder="New Delhi" required/></div><div class="form-group"><label for="f-pin">PIN Code</label><input type="text" id="f-pin" placeholder="110001" maxlength="6" required/></div></div>
+        <div class="form-row"><div class="form-group"><label for="f-state">State</label><select id="f-state" required><option value="">Select State</option><option value="Delhi">Delhi</option><option value="Haryana">Haryana</option><option value="UP">UP</option><option value="Maharashtra">Maharashtra</option><option value="Karnataka">Karnataka</option></select></div><div class="form-group"><label for="f-phone">Mobile</label><input type="tel" id="f-phone" placeholder="+91 XXXXX XXXXX" required/></div></div>
+        <div style="display:flex;gap:16px"><button type="submit" class="form-submit" style="flex:1">Save Address</button><button type="button" id="addr-form-cancel" class="addr-act-btn secondary" style="height:48px;padding:0 24px;border-radius:14px">Cancel</button></div>
+      </form>
+    </div>
+  </div>`;
+
+  function injectModalIfNeeded() {
+    let overlay = document.getElementById('addr-modal');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      overlay.id = 'addr-modal';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('aria-label', 'Manage delivery addresses');
+      overlay.innerHTML = ADDRESS_MODAL_HTML;
+      document.body.appendChild(overlay);
+    }
+    return overlay;
+  }
+
   function open() {
-    const overlay = document.getElementById('addr-modal');
+    const overlay = injectModalIfNeeded();
     if (!overlay) return;
+    
+    // Rebind events just in case it was freshly injected
+    bindModalEvents(overlay);
+    
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
+
   function close() {
     const overlay = document.getElementById('addr-modal');
     if (!overlay) return;
@@ -206,30 +246,65 @@ const AddressModal = (() => {
     document.body.style.overflow = '';
     hideAddForm();
   }
+
   function showAddForm() {
     const form = document.getElementById('new-addr-form');
     const btn  = document.getElementById('add-addr-btn');
     if (form) form.classList.add('visible');
     if (btn)  btn.style.display = 'none';
   }
+
   function hideAddForm() {
     const form = document.getElementById('new-addr-form');
     const btn  = document.getElementById('add-addr-btn');
     if (form) { form.classList.remove('visible'); form.reset?.(); }
     if (btn)  btn.style.display = '';
   }
+  
+  function bindAddressItemEvents(item) {
+    const defaultBtn = item.querySelector('.set-default-btn');
+    if (defaultBtn) {
+      defaultBtn.addEventListener('click', () => {
+        document.querySelectorAll('.addr-item').forEach(el => {
+          el.classList.remove('is-default');
+          const t = el.querySelector('.addr-type');
+          if (t) t.textContent = el.dataset.type || 'Address';
+        });
+        item.classList.add('is-default');
+        const typeEl = item.querySelector('.addr-type');
+        if (typeEl) typeEl.textContent = (item.dataset.type || 'Address') + ' ✓';
+        if (typeof showToast === 'function') showToast('✅ Default address updated');
+      });
+    }
+    
+    const deleteBtn = item.querySelector('.delete-btn');
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', () => {
+        if(confirm('Are you sure you want to delete this address?')) {
+          item.remove();
+          if (typeof showToast === 'function') showToast('🗑️ Address deleted');
+        }
+      });
+    }
+    
+    const editBtn = item.querySelector('.edit-btn');
+    if (editBtn) {
+      editBtn.addEventListener('click', () => {
+         showAddForm();
+         document.getElementById('new-addr-form').scrollIntoView({behavior: 'smooth'});
+      });
+    }
+  }
 
-  function init() {
-    const trigger = document.getElementById('addr-trigger');
-    if (trigger) trigger.addEventListener('click', open);
-
+  let eventsBound = false;
+  function bindModalEvents(overlay) {
+    if (eventsBound) return;
+    
     const closeBtn = document.getElementById('modal-close-btn');
     if (closeBtn) closeBtn.addEventListener('click', close);
 
-    const overlay = document.getElementById('addr-modal');
     if (overlay) overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) close(); });
 
     const addBtn = document.getElementById('add-addr-btn');
     if (addBtn) addBtn.addEventListener('click', showAddForm);
@@ -237,27 +312,61 @@ const AddressModal = (() => {
     const cancelBtn = document.getElementById('addr-form-cancel');
     if (cancelBtn) cancelBtn.addEventListener('click', hideAddForm);
 
-    document.querySelectorAll('.set-default-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const clicked = btn.closest('.addr-item');
-        if (!clicked) return;
-        document.querySelectorAll('.addr-item').forEach(item => {
-          item.classList.remove('is-default');
-          const t = item.querySelector('.addr-type');
-          if (t) t.textContent = item.dataset.type || 'Address';
-        });
-        clicked.classList.add('is-default');
-        const typeEl = clicked.querySelector('.addr-type');
-        if (typeEl) typeEl.textContent = (clicked.dataset.type || 'Address') + ' ✓';
-        showToast('✅ Default address updated');
-      });
-    });
+    document.querySelectorAll('.addr-item').forEach(bindAddressItemEvents);
 
     const form = document.getElementById('new-addr-form');
-    if (form) form.addEventListener('submit', e => {
-      e.preventDefault();
-      showToast('🏠 New address saved!');
-      hideAddForm();
+    if (form) {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        
+        const fname = document.getElementById('f-name').value;
+        const lname = document.getElementById('f-lname').value;
+        const line1 = document.getElementById('f-line1').value;
+        const line2 = document.getElementById('f-line2').value;
+        const city = document.getElementById('f-city').value;
+        const pin = document.getElementById('f-pin').value;
+        const phone = document.getElementById('f-phone').value;
+        
+        const list = document.getElementById('global-addr-list') || document.querySelector('.addr-list');
+        if (list) {
+          const newItem = document.createElement('div');
+          newItem.className = 'addr-item';
+          newItem.dataset.type = 'Custom';
+          newItem.innerHTML = `
+            <div class="addr-item-top">
+              <span class="addr-name">${fname} ${lname}</span>
+              <span class="addr-type">Custom</span>
+            </div>
+            <p class="addr-line">${line1}<br>${line2 ? line2 + ', ' : ''}${city} — ${pin}</p>
+            <p class="addr-phone">${phone}</p>
+            <div class="addr-actions">
+              <button class="addr-act-btn set-default-btn">Set as Default</button>
+              <button class="addr-act-btn edit-btn">&#9998; Edit</button>
+              <button class="addr-act-btn secondary delete-btn">&#128465; Delete</button>
+            </div>
+          `;
+          list.appendChild(newItem);
+          bindAddressItemEvents(newItem);
+        }
+        
+        if (typeof showToast === 'function') showToast('🏠 New address saved!');
+        hideAddForm();
+      });
+    }
+    eventsBound = true;
+  }
+
+  function init() {
+    // Only bind the trigger on init. Modal injection happens lazily on open.
+    // However, if the modal happens to be hardcoded on the page already, we can bind it now.
+    const overlay = document.getElementById('addr-modal');
+    if (overlay) {
+        bindModalEvents(overlay);
+    }
+
+    const triggers = document.querySelectorAll('#addr-trigger, .nav-address');
+    triggers.forEach(trigger => {
+        trigger.addEventListener('click', open);
     });
   }
 
@@ -280,18 +389,95 @@ const CATEGORY_MAP = {
   'all': { title: 'All Products', brands: ['Nike', 'Apple', 'Zara', 'Sony', 'Puma'] }
 };
 
+const BRAND_LOGOS = {
+  'Amul': 'images/logos/grocery_logo/amul.png',
+  'Nestle': 'images/logos/grocery_logo/nestle.jpg',
+  'Britannia': 'images/logos/grocery_logo/britannia.jpg',
+  'Tata': 'images/logos/grocery_logo/tata.jpg',
+  'MotherDairy': 'images/logos/grocery_logo/motherdairy.png',
+  'ITC': 'images/logos/grocery_logo/ITC.jpg',
+  'HUL': 'images/logos/grocery_logo/HUL.jpg',
+  'Apple': 'images/logos/electronics_logo/apple.jpg',
+  'Nothing': 'images/logos/electronics_logo/nothing.jpg',
+  'Samsung': 'images/logos/electronics_logo/samsung.jpg',
+  'Sony': 'images/logos/electronics_logo/sony.jpg',
+  'OnePlus': 'images/logos/electronics_logo/oneplus.jpg',
+  'Xiaomi': 'images/logos/electronics_logo/xiaomi.jpg',
+  'Vivo': 'images/logos/electronics_logo/vivo.jpg',
+  'Philips': 'images/logos/gadgets_logo/philips.jpg',
+  'LG': 'images/logos/gadgets_logo/lg.jpg',
+  'Boat': 'images/logos/gadgets_logo/boat.jpg',
+  'JBL': 'images/logos/gadgets_logo/jbl.jpg',
+  'Noise': 'images/logos/gadgets_logo/noise.jpg',
+  'Boult': 'images/logos/gadgets_logo/boult.png',
+  'Logitech': 'images/logos/gadgets_logo/logitech.jpg',
+  'Levis': "images/logos/clothing_logo/levi's.jpg",
+  'Zara': 'images/logos/clothing_logo/zara.jpg',
+  'HM': 'images/logos/clothing_logo/H&M.jpg',
+  'Tommy': 'images/logos/clothing_logo/tommy hilfiger.jpg',
+  'USPolo': 'images/logos/clothing_logo/us polo assn.jpg',
+  'AllenSolly': 'images/logos/clothing_logo/allen solly.jpg',
+  'Nike': 'images/logos/shoes_logo/nike.jpg',
+  'Adidas': 'images/logos/shoes_logo/adidas.jpg',
+  'Campus': 'images/logos/shoes_logo/campus.jpg',
+  'Puma': 'images/logos/shoes_logo/puma.jpg',
+  'Comet': 'images/logos/shoes_logo/comet.png',
+  'NewBalance': 'images/logos/shoes_logo/new balance.jpg',
+  'Reebok': 'images/logos/shoes_logo/reebok.jpg',
+  'LOreal': 'images/logos/beauty_logo/loreal.jpg',
+  'Maybelline': 'images/logos/beauty_logo/mayberlline.jpg',
+  'Nykaa': 'images/logos/beauty_logo/nykaa.jpg',
+  'MAC': 'images/logos/beauty_logo/mac.png',
+  'Mamaearth': 'images/logos/beauty_logo/mamaearth.jpg',
+  'Cetaphil': 'images/logos/beauty_logo/cetaphil.jpg',
+  'Prestige': 'images/logos/home & kitchen/prestige.jpg',
+  'Hawkins': 'images/logos/home & kitchen/hawkins.jpg',
+  'Pigeon': 'images/logos/home & kitchen/pigeon.png',
+  'Milton': 'images/logos/home & kitchen/milton.png',
+  'Borosil': 'images/logos/home & kitchen/borosil.png',
+  'Bajaj': 'images/logos/home & kitchen/bajaj.jpg',
+  'Decathlon': 'images/logos/sports_logo/decathlon.jpg',
+  'Yonex': 'images/logos/sports_logo/yonex.jpg',
+  'Cosco': 'images/logos/sports_logo/cosco.jpg',
+  'Nivia': 'images/logos/sports_logo/nivia.jpg',
+  'Speedo': 'images/logos/sports_logo/Speedo.jpg',
+  'Spalding': 'images/logos/sports_logo/spalding.jpg'
+};
+
+function getCategoryForBrand(brand) {
+  for (const [cat, data] of Object.entries(CATEGORY_MAP)) {
+    if (cat !== 'all' && data.brands && data.brands.includes(brand)) {
+      return cat;
+    }
+  }
+  return 'beauty'; // default fallback
+}
+
 // Mock product generator based on category parameters
 function generateMockProductsForCategory(catId) {
   const products = [];
   const categoryData = CATEGORY_MAP[catId] || CATEGORY_MAP['all'];
   const brands = categoryData.brands;
   
+  const productNames = {
+    'electronics': ['Smartphone', 'Laptop', 'Tablet', 'Smartwatch', 'Headphones', 'Camera'],
+    'gadgets': ['Wireless Earbuds', 'Smart Speaker', 'Power Bank', 'Fitness Tracker', 'Webcam', 'Gaming Mouse'],
+    'clothing': ['T-Shirt', 'Jeans', 'Jacket', 'Sweater', 'Dress', 'Shorts'],
+    'shoes': ['Sneakers', 'Running Shoes', 'Formal Shoes', 'Sandals', 'Boots', 'Slip-ons'],
+    'beauty': ['Face Wash', 'Moisturizer', 'Lipstick', 'Sunscreen', 'Perfume', 'Serum'],
+    'sports': ['Badminton Racket', 'Football', 'Yoga Mat', 'Dumbbells', 'Tennis Ball', 'Skipping Rope'],
+    'home-kitchen': ['Blender', 'Cookware Set', 'Dinner Set', 'Water Bottle', 'Storage Container', 'Mixer Grinder'],
+    'groceries': ['Premium Atta', 'Basmati Rice', 'Organic Dal', 'Cooking Oil', 'Green Tea', 'Instant Coffee']
+  };
+  const categoryNames = productNames[catId] || ['Premium Item', 'Signature Product', 'Exclusive Collection'];
+  
   for(let i=0; i<12; i++) {
     const brand = brands[i % brands.length];
+    const itemName = categoryNames[i % categoryNames.length];
     products.push({
       id: `prod_${catId}_${i}`,
       brand: brand,
-      name: `Premium ${categoryData.title} Item - Edition ${i+1}`,
+      name: `${brand} ${itemName} - Edition ${i+1}`,
       price: `₹${(Math.floor(Math.random() * 50) + 10) * 100}`,
       orig: `₹${(Math.floor(Math.random() * 70) + 30) * 100}`,
       disc: `${Math.floor(Math.random() * 40) + 10}%`,
@@ -333,10 +519,14 @@ function makeStars(rating) {
 function buildCard(p) {
   const bCls = { new:'b-new', sale:'b-sale', hot:'b-hot' }[p.badge] || '';
   const bLbl = { new:'New', sale:'Sale', hot:'🔥 Hot' }[p.badge] || '';
+  const isWished = ebWishlist.some(item => item.id === p.id);
+  const stroke = isWished ? '#E03E3E' : '#999';
+  const wishCls = isWished ? 'cat-wish-btn wished' : 'cat-wish-btn';
+  const pStr = encodeURIComponent(JSON.stringify(p));
   return `<article class="cat-card" role="listitem">
     <a href="product-detail.html?id=${p.id}" class="cat-img" style="display:block; text-decoration:none;">${makeSVG(p.color,p.shape)}${p.badge?`<span class="card-badge ${bCls}">${bLbl}</span>`:''}</a>
-    <button class="cat-wish-btn" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:var(--bg-white);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;z-index:2;" aria-label="Add to wishlist" onclick="toggleWish('w_${p.id}','${p.name}')" id="w_${p.id}">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <button class="${wishCls}" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:var(--bg-white);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;z-index:2;" aria-label="Add to wishlist" onclick="toggleWish('w_${p.id}', '${p.name.replace(/'/g, "\\'")}', '${pStr}')" id="w_${p.id}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </button>
     <div class="cat-body">
       <div class="cat-brand">${p.brand}</div>
@@ -344,7 +534,7 @@ function buildCard(p) {
       <div class="cat-prices"><span class="cat-price">${p.price}</span><span class="cat-orig">${p.orig}</span><span class="cat-disc">${p.disc} off</span></div>
       <div class="cat-rating"><div class="cat-stars" aria-label="${p.rating} out of 5">${makeStars(p.rating)}</div><span class="cat-reviews">${p.rating} (${p.reviews})</span></div>
       <div class="cat-transactions" style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${Math.floor(Math.random()*5 + 1)}k+ bought in past month</div>
-      <button class="cat-add-btn" onclick="addToCart('${p.id}','${p.name}')">+ Add to Cart</button>
+      <button class="cat-add-btn" onclick="addToCart('${pStr}')">+ Add to Cart</button>
     </div>
   </article>`;
 }
@@ -352,8 +542,9 @@ function buildCard(p) {
 /* Category Page Specific Logic */
 function getBrandLogoSVG(brand) {
     const safeBrand = brand.toLowerCase();
-    return `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; border-radius:12px; overflow:hidden;">
-      <img src="images/logos/${safeBrand}.png" 
+    const imgSrc = BRAND_LOGOS[brand] || `images/logos/${safeBrand}.png`;
+    return `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; border-radius:12px; overflow:hidden; background-color:#ffffff;">
+      <img src="${imgSrc}" 
       onerror="this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.com'; this.onerror=function(){this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.coop'; this.onerror=function(){this.onerror=null; this.src='https://ui-avatars.com/api/?name=${brand}&background=0D8ABC&color=fff&size=140&font-size=0.33'};};" 
       alt="${brand} Logo" style="width:80%; height:80%; object-fit:contain;">
     </div>`;
@@ -515,24 +706,75 @@ function updateFilterTags() {
 /* ═══════════════════════════════════════════════════════════════════════
    CART & WISHLIST
    ═══════════════════════════════════════════════════════════════════════ */
-let cartCount = parseInt(localStorage.getItem('eb-cart') || '3');
+let ebCart = [];
+if (!localStorage.getItem('eb_cart_items')) {
+  ebCart = [];
+} else {
+  try { ebCart = JSON.parse(localStorage.getItem('eb_cart_items')); } catch(e) { ebCart = []; }
+}
+let cartCount = ebCart.length;
+
+let ebWishlist = [];
+if (!localStorage.getItem('eb_wishlist')) {
+  ebWishlist = [
+    { id: 'prod_electronics_0', brand: 'Apple', name: 'Apple iPhone 15 Pro Max', price: '₹1,59,900', orig: '₹1,59,900', disc: '0%', badge: 'hot', color: '#4a4a4a', shape: 'tech', rating: 4.9, reviews: 3421 },
+    { id: 'prod_clothing_2', brand: 'Zara', name: 'Zara Premium Wool Jacket', price: '₹7,990', orig: '₹9,990', disc: '20%', badge: 'sale', color: '#B23A48', shape: 'fashion', rating: 4.5, reviews: 856 },
+    { id: 'prod_shoes_1', brand: 'Nike', name: 'Nike Air Jordan 1 Retro', price: '₹16,995', orig: '₹18,995', disc: '10%', badge: 'new', color: '#005f73', shape: 'home', rating: 4.8, reviews: 2310 }
+  ];
+  localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
+} else {
+  ebWishlist = JSON.parse(localStorage.getItem('eb_wishlist'));
+}
 
 function syncCartBadge() {
+  cartCount = ebCart.reduce((sum, item) => sum + (item.qty || 1), 0);
   document.querySelectorAll('.cart-count-el').forEach(el => el.textContent = cartCount);
-  localStorage.setItem('eb-cart', String(cartCount));
+  localStorage.setItem('eb_cart_items', JSON.stringify(ebCart));
 }
 
-function addToCart(id, title) {
-  cartCount++;
-  syncCartBadge();
-  showToast('🛒 Added to cart!');
+function addToCart(pStrEncoded) {
+  try {
+    const p = JSON.parse(decodeURIComponent(pStrEncoded));
+    const existing = ebCart.find(item => item.id === p.id);
+    if (existing) {
+      existing.qty = (existing.qty || 1) + 1;
+    } else {
+      p.qty = 1;
+      ebCart.push(p);
+    }
+    syncCartBadge();
+    showToast('🛒 Added to cart!');
+  } catch(e) {
+    console.error('Failed to add to cart', e);
+  }
 }
 
-function toggleWish(btnId, title) {
+function toggleWish(btnId, title, pStrEncoded) {
   const btn = document.getElementById(btnId);
   if (!btn) return;
   const on = btn.classList.toggle('wished');
   btn.querySelector('svg')?.setAttribute('stroke', on ? '#E03E3E' : '#999');
+  
+  if (pStrEncoded) {
+    try {
+      const p = JSON.parse(decodeURIComponent(pStrEncoded));
+      if (on) {
+        if (!ebWishlist.some(item => item.id === p.id)) {
+          ebWishlist.push(p);
+          localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
+        }
+      } else {
+        ebWishlist = ebWishlist.filter(item => item.id !== p.id);
+        localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
+        if (document.body.dataset.page === 'wishlist') {
+            initWishlist();
+        }
+      }
+    } catch(e) {
+      console.error("Error parsing product for wishlist", e);
+    }
+  }
+  
   showToast(on ? '❤️ Added to wishlist' : 'Removed from wishlist');
 }
 
@@ -546,6 +788,168 @@ function initTrackArrows() {
       if (track) track.scrollBy({ left: (btn.classList.contains('left') ? -1 : 1) * 640, behavior: 'smooth' });
     });
   });
+}
+
+let currentBrandProducts = [];
+let brandCurrentPage = 1;
+const BRAND_ITEMS_PER_PAGE = 12;
+
+function generateBrandProducts(brand, catId) {
+  const products = [];
+  const productNames = {
+    'electronics': ['Smartphone', 'Laptop', 'Tablet', 'Smartwatch', 'Headphones', 'Camera'],
+    'gadgets': ['Wireless Earbuds', 'Smart Speaker', 'Power Bank', 'Fitness Tracker', 'Webcam', 'Gaming Mouse'],
+    'clothing': ['T-Shirt', 'Jeans', 'Jacket', 'Sweater', 'Dress', 'Shorts'],
+    'shoes': ['Sneakers', 'Running Shoes', 'Formal Shoes', 'Sandals', 'Boots', 'Slip-ons'],
+    'beauty': ['Face Wash', 'Moisturizer', 'Lipstick', 'Sunscreen', 'Perfume', 'Serum'],
+    'sports': ['Badminton Racket', 'Football', 'Yoga Mat', 'Dumbbells', 'Tennis Ball', 'Skipping Rope'],
+    'home-kitchen': ['Blender', 'Cookware Set', 'Dinner Set', 'Water Bottle', 'Storage Container', 'Mixer Grinder'],
+    'groceries': ['Premium Atta', 'Basmati Rice', 'Organic Dal', 'Cooking Oil', 'Green Tea', 'Instant Coffee']
+  };
+  const categoryNames = productNames[catId] || ['Premium Item', 'Signature Product', 'Exclusive Collection'];
+  
+  // Generate 48 items to demo pagination
+  for(let i=0; i<48; i++) {
+    const itemName = categoryNames[i % categoryNames.length];
+    products.push({
+      id: `prod_brand_${catId}_${i}`,
+      brand: brand,
+      name: `${brand} ${itemName} - Edition ${i+1}`,
+      price: `₹${(Math.floor(Math.random() * 50) + 10) * 100}`,
+      orig: `₹${(Math.floor(Math.random() * 70) + 30) * 100}`,
+      disc: `${Math.floor(Math.random() * 40) + 10}%`,
+      rating: (Math.random() * 1.5 + 3.5).toFixed(1),
+      reviews: `${Math.floor(Math.random() * 500) + 50}`,
+      badge: Math.random() > 0.7 ? 'new' : (Math.random() > 0.5 ? 'sale' : ''),
+      color: `hsl(${Math.random() * 360}, 15%, 25%)`,
+      shape: ['circle','oval','diamond','hexagon','rect'][Math.floor(Math.random()*5)]
+    });
+  }
+  return products;
+}
+
+function initBrandStore() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const brand = urlParams.get('brand') || 'Maybelline';
+    let cat = urlParams.get('cat');
+    if (!cat) {
+        cat = getCategoryForBrand(brand);
+    }
+    
+    document.title = `${brand} Official Store — E-Bazaar`;
+
+    const brandHero = document.getElementById('brand-hero');
+    if (brandHero) {
+        if (cat) {
+            const safeCat = cat.toLowerCase();
+            let bgImg = `images/banners/banner_${safeCat}.png`;
+            brandHero.style.backgroundImage = `url("${bgImg}")`;
+        } else {
+            brandHero.style.backgroundImage = 'url("images/brand-banner.png")';
+        }
+    }
+    
+    // Breadcrumbs
+    const bcParentCat = document.getElementById('bc-parent-cat');
+    const bcSep2 = document.getElementById('bc-sep-2');
+    const bcChildCat = document.getElementById('bc-child-cat');
+    
+    if (bcParentCat && bcSep2 && bcChildCat) {
+        const catName = cat.charAt(0).toUpperCase() + cat.slice(1);
+        bcParentCat.textContent = catName;
+        bcParentCat.href = `category.html?cat=${cat}`;
+        bcSep2.style.display = 'inline-block';
+        bcChildCat.style.display = 'inline-block';
+        bcChildCat.textContent = brand;
+    }
+    
+    const titleEl = document.getElementById('brand-title');
+    if (titleEl) titleEl.textContent = brand;
+    
+    const logoEl = document.getElementById('brand-logo-large');
+    if (logoEl) {
+        const safeBrand = brand.toLowerCase();
+        const imgSrc = BRAND_LOGOS[brand] || `images/logos/${safeBrand}.png`;
+        logoEl.innerHTML = `<img src="${imgSrc}" 
+        onerror="this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.com'; this.onerror=function(){this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.coop'; this.onerror=function(){this.onerror=null; this.src='https://ui-avatars.com/api/?name=${brand}&background=0D8ABC&color=fff&size=140&font-size=0.33'};};" 
+          alt="${brand} Logo" style="width:100%; height:100%; object-fit:contain; border-radius:50%; background-color:#ffffff;">`;
+    }
+    
+    currentBrandProducts = generateBrandProducts(brand, cat);
+    brandCurrentPage = 1;
+    renderBrandPage();
+}
+
+function renderBrandPage() {
+    const grid = document.getElementById('main-cat-grid');
+    const countEl = document.getElementById('result-count');
+    
+    if (!grid) return;
+    
+    const startIndex = (brandCurrentPage - 1) * BRAND_ITEMS_PER_PAGE;
+    const endIndex = startIndex + BRAND_ITEMS_PER_PAGE;
+    const paginatedItems = currentBrandProducts.slice(startIndex, endIndex);
+    
+    grid.innerHTML = paginatedItems.map(buildCard).join('');
+    
+    if (countEl) {
+        countEl.innerHTML = `Showing <strong>${startIndex + 1} - ${Math.min(endIndex, currentBrandProducts.length)}</strong> of <strong>${currentBrandProducts.length}</strong> products`;
+    }
+    
+    renderBrandPagination();
+}
+
+function renderBrandPagination() {
+    const container = document.getElementById('brand-pagination');
+    if (!container) return;
+    
+    const totalPages = Math.ceil(currentBrandProducts.length / BRAND_ITEMS_PER_PAGE);
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    let html = '';
+    
+    // Start button
+    html += `<button class="page-btn" onclick="changeBrandPage(1)" ${brandCurrentPage === 1 ? 'disabled' : ''}>Start</button>`;
+    
+    // Prev button
+    html += `<button class="page-btn" onclick="changeBrandPage(${brandCurrentPage - 1})" ${brandCurrentPage === 1 ? 'disabled' : ''}>Prev</button>`;
+    
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        if (totalPages > 5) {
+            if (i === 1 || i === totalPages || (i >= brandCurrentPage - 1 && i <= brandCurrentPage + 1)) {
+                html += `<button class="page-btn ${i === brandCurrentPage ? 'active' : ''}" onclick="changeBrandPage(${i})">${i}</button>`;
+            } else if (i === brandCurrentPage - 2 || i === brandCurrentPage + 2) {
+                html += `<span class="page-dots">...</span>`;
+            }
+        } else {
+            html += `<button class="page-btn ${i === brandCurrentPage ? 'active' : ''}" onclick="changeBrandPage(${i})">${i}</button>`;
+        }
+    }
+    
+    // Next button
+    html += `<button class="page-btn" onclick="changeBrandPage(${brandCurrentPage + 1})" ${brandCurrentPage === totalPages ? 'disabled' : ''}>Next</button>`;
+    
+    // End button
+    html += `<button class="page-btn" onclick="changeBrandPage(${totalPages})" ${brandCurrentPage === totalPages ? 'disabled' : ''}>End</button>`;
+    
+    container.innerHTML = html;
+}
+
+window.changeBrandPage = function(page) {
+    const totalPages = Math.ceil(currentBrandProducts.length / BRAND_ITEMS_PER_PAGE);
+    if (page < 1 || page > totalPages) return;
+    
+    brandCurrentPage = page;
+    renderBrandPage();
+    
+    const hero = document.getElementById('brand-hero');
+    if (hero) {
+        hero.scrollIntoView({ behavior: 'smooth' });
+    }
 }
 
 // Generate simple mock products for home page tracks if on index
@@ -607,131 +1011,12 @@ function initHeaderShadow() {
 function initNavActions() {
   document.getElementById('cart-btn')?.addEventListener('click', () => showToast(`🛒 ${cartCount} items in your cart`));
   document.getElementById('acc-btn')?.addEventListener('click', () => showToast('👤 Please sign in to continue'));
-  document.getElementById('wl-nav-btn')?.addEventListener('click', () => showToast('❤️ View your saved items'));
+  document.getElementById('wl-nav-btn')?.addEventListener('click', () => window.location.href = 'wishlist.html');
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   BRAND STORE & PRODUCT DETAIL
+   PRODUCT DETAIL
    ═══════════════════════════════════════════════════════════════════════ */
-function initBrandStore() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const brand = urlParams.get('brand') || 'Maybelline';
-    const cat = urlParams.get('cat') || 'Beauty';
-    
-    document.title = `${brand} Official Store — E-Bazaar`;
-
-    const brandHero = document.getElementById('brand-hero');
-    if (brandHero) {
-        if (cat) {
-            const safeCat = cat.toLowerCase();
-            if (safeCat === 'groceries') {
-                brandHero.style.backgroundImage = 'none';
-                
-                // Inject custom styling to override the dark hero text/overlay for this bright background
-                let styleTag = document.getElementById('dynamic-hero-style');
-                if (!styleTag) {
-                    styleTag = document.createElement('style');
-                    styleTag.id = 'dynamic-hero-style';
-                    document.head.appendChild(styleTag);
-                }
-                styleTag.innerHTML = `
-                   .brand-hero::before { display: none !important; }
-                   .brand-hero .brand-title { color: #2A2421 !important; z-index: 10; position: relative; text-shadow: none !important; }
-                   .brand-hero .brand-desc { color: #655E5A !important; z-index: 10; position: relative; }
-                   .brand-hero .breadcrumb a { color: #655E5A !important; }
-                   .brand-hero .breadcrumb .bc-current { color: #2A2421 !important; }
-                   .brand-hero .breadcrumb { color: #655E5A !important; }
-                `;
-
-                const groceryHTML = `
-<div class="grocery-hero-graphic" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #FAF8F5 0%, #F3EEE7 100%); overflow: hidden; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid #EBE6DD; z-index: 0;">
-  
-  <!-- Left Side Typography -->
-  <div class="hero-text-side" style="max-width: 50%; z-index: 2; padding-top: 50px; text-align: left;">
-    <span style="font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.15em; color: #A88C6D; text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 8px;">Fresh Harvest</span>
-    <h1 style="font-family: 'Playfair Display', serif; font-size: 36px; color: #2A2421; margin: 0 0 12px 0; font-weight: 400; line-height: 1.2;">Organic Produce</h1>
-    <p style="font-family: 'Inter', sans-serif; font-size: 13px; color: #655E5A; margin: 0; line-height: 1.5;">Daily farm-fresh drops, handpicked seasonal fruits, and premium artisanal greens.</p>
-  </div>
-
-  <!-- Right Side: Luxury Fruits & Veggies Vector Artwork -->
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" style="width: 400px; height: 100%; z-index: 1;">
-    <!-- Background Elegant Accent Circle -->
-    <circle cx="280" cy="120" r="85" fill="none" stroke="#E6DFD5" stroke-width="1"/>
-    <circle cx="280" cy="120" r="70" fill="#FFFFFF" opacity="0.6"/>
-    
-    <!-- Botanical Leaf 1 (Background Layer) -->
-    <path d="M220,160 Q245,110 285,100 Q255,140 220,160 Z" fill="#A88C6D" opacity="0.15"/>
-    <path d="M220,160 Q245,110 285,100" fill="none" stroke="#A88C6D" stroke-width="1.5" stroke-linecap="round"/>
-    
-    <!-- Minimalist Premium Pear (Fruit Element) -->
-    <!-- Pear Body -->
-    <path d="M275,85 C260,85 255,105 250,120 C242,140 242,165 265,170 C288,175 308,170 305,145 C302,125 290,105 285,85 Z" fill="#FFFFFF" stroke="#2A2421" stroke-width="1.5" stroke-linejoin="round"/>
-    <!-- Pear Stem -->
-    <path d="M280,85 Q283,73 290,70" fill="none" stroke="#2A2421" stroke-width="1.5" stroke-linecap="round"/>
-    <!-- Tiny Pear Leaf -->
-    <path d="M283,78 Q295,76 295,83 Z" fill="#A88C6D" opacity="0.7"/>
-
-    <!-- Elegant Cut Avocado (Vegetable/Fruit Element) -->
-    <!-- Avocado Outer Shell -->
-    <path d="M300,160 C290,160 285,145 285,135 C285,120 295,105 305,105 C315,105 320,115 325,130 C330,145 315,160 300,160 Z" fill="#FAF8F5" stroke="#2A2421" stroke-width="1.5" stroke-linejoin="round"/>
-    <!-- Avocado Core Seed (Caramel Accent) -->
-    <circle cx="303" cy="138" r="12" fill="#A88C6D" stroke="#2A2421" stroke-width="1"/>
-    
-    <!-- Dynamic Accent Dots (Representing organic seed/grains) -->
-    <circle cx="240" cy="110" r="2.5" fill="#A88C6D"/>
-    <circle cx="248" cy="100" r="2" fill="#E6DFD5"/>
-    <circle cx="330" cy="115" r="3" fill="#A88C6D"/>
-  </svg>
-</div>`;
-                brandHero.insertAdjacentHTML('afterbegin', groceryHTML);
-            } else {
-                let bgImg = `images/banners/banner_${safeCat}.png`;
-                brandHero.style.backgroundImage = `url("${bgImg}")`;
-            }
-        } else {
-            brandHero.style.backgroundImage = 'url("images/brand-banner.png")';
-        }
-    }
-
-    
-    // Breadcrumbs
-    const bcParentCat = document.getElementById('bc-parent-cat');
-    const bcSep2 = document.getElementById('bc-sep-2');
-    const bcChildCat = document.getElementById('bc-child-cat');
-    
-    if (bcParentCat && bcSep2 && bcChildCat) {
-        // Capitalize category name
-        const catName = cat.charAt(0).toUpperCase() + cat.slice(1);
-        bcParentCat.textContent = catName;
-        bcParentCat.href = `category.html?cat=${cat}`;
-        
-        bcSep2.style.display = 'inline-block';
-        bcChildCat.style.display = 'inline-block';
-        bcChildCat.textContent = brand;
-    }
-    
-    const titleEl = document.getElementById('brand-title');
-    if (titleEl) titleEl.textContent = brand;
-    
-    const logoEl = document.getElementById('brand-logo-large');
-    if (logoEl) {
-        // Real logo fetched from clearbit
-                const safeBrand = brand.toLowerCase();
-        logoEl.innerHTML = `<img src="images/logos/${safeBrand}.png" 
-        onerror="this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.com'; this.onerror=function(){this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.coop'; this.onerror=function(){this.onerror=null; this.src='https://ui-avatars.com/api/?name=${brand}&background=0D8ABC&color=fff&size=140&font-size=0.33'};};" 
-          alt="${brand} Logo" style="width:100%; height:100%; object-fit:contain; border-radius:50%;">`;
-    }
-    
-    const grid = document.getElementById('main-cat-grid');
-    if (grid) {
-      const products = generateMockProductsForCategory('clothing').slice(0, 12);
-      products.forEach(p => p.brand = brand);
-      grid.innerHTML = products.map(buildCard).join('');
-    }
-    
-    const countEl = document.getElementById('result-count');
-    if (countEl) countEl.innerHTML = `Showing <strong>12 products</strong>`;
-}
 
 function initProductDetail() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -778,9 +1063,9 @@ function initProductDetail() {
       </div>
       
       <div class="pd-actions">
-        <button class="btn-add-cart" onclick="addToCart('${p.id}', '${p.name.replace(/'/g, "\\'")}')">Add to Cart</button>
-        <button class="btn-wishlist" onclick="toggleWish('w_pd_${p.id}', '${p.name.replace(/'/g, "\\'")}')" id="w_pd_${p.id}">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <button class="btn-add-cart" onclick="addToCart('${encodeURIComponent(JSON.stringify(p))}')">Add to Cart</button>
+        <button class="btn-wishlist ${ebWishlist.some(item => item.id === p.id) ? 'wished' : ''}" onclick="toggleWish('w_pd_${p.id}', '${p.name.replace(/'/g, "\\'")}', '${encodeURIComponent(JSON.stringify(p))}')" id="w_pd_${p.id}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${ebWishlist.some(item => item.id === p.id) ? '#E03E3E' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
       </div>
       
@@ -804,7 +1089,7 @@ document.addEventListener('DOMContentLoaded', () => {
   HeroSlider.init();
   initHamburger();
   initMegaMenu();
-    // Brand Directory Active State
+    // Brand Directory Active State & Initialization
     if (window.location.pathname.includes('brand-directory.html')) {
       const brandLink = document.getElementById('link-brand-store');
       if (brandLink) {
@@ -812,8 +1097,10 @@ document.addEventListener('DOMContentLoaded', () => {
         brandLink.style.borderBottom = '2px solid #A88C6D';
         brandLink.style.paddingBottom = '4px';
       }
+      if (typeof initBrandDirectory === 'function') {
+        initBrandDirectory();
+      }
     }
-
   AddressModal.init();
   initTrackArrows();
   initNavActions();
@@ -833,8 +1120,53 @@ document.addEventListener('DOMContentLoaded', () => {
     initOrders();
   } else if (document.body.dataset.page === 'auth') {
     initAuth();
+  } else if (document.body.dataset.page === 'wishlist') {
+    initWishlist();
   }
 });
+
+// --- WISHLIST PAGE LOGIC ---
+function initWishlist() {
+  const grid = document.getElementById('wishlist-grid');
+  const countEl = document.getElementById('wishlist-count');
+  const emptyState = document.getElementById('wishlist-empty');
+  const actions = document.getElementById('wishlist-actions');
+  
+  if (!grid || !emptyState) return;
+  
+  if (ebWishlist.length === 0) {
+    grid.style.display = 'none';
+    if (actions) actions.style.display = 'none';
+    emptyState.style.display = 'flex';
+    if (countEl) countEl.innerText = '(0 Items)';
+  } else {
+    emptyState.style.display = 'none';
+    grid.style.display = 'grid';
+    if (actions) actions.style.display = 'flex';
+    if (countEl) countEl.innerText = `(${ebWishlist.length} Item${ebWishlist.length !== 1 ? 's' : ''})`;
+    grid.innerHTML = ebWishlist.map(buildCard).join('');
+  }
+}
+
+window.clearWishlist = function() {
+  ebWishlist = [];
+  localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
+  initWishlist();
+  showToast('Wishlist cleared');
+};
+
+window.addAllToCart = function() {
+  if (ebWishlist.length === 0) return;
+  const count = ebWishlist.length;
+  cartCount += count;
+  syncCartBadge();
+  ebWishlist = [];
+  localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
+  if (document.body.dataset.page === 'wishlist') {
+    initWishlist();
+  }
+  showToast(`🛒 Moved ${count} items to cart!`);
+};
 
 // --- ORDERS PAGE LOGIC ---
 function initOrders() {
@@ -947,3 +1279,127 @@ window.showToast = function(msg) {
     });
   }, 3000);
 };
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BRAND DIRECTORY
+   ═══════════════════════════════════════════════════════════════════════ */
+window.initBrandDirectory = function() {
+  const sidebar = document.getElementById('dir-sidebar');
+  const contentRoot = document.getElementById('dir-content-root');
+  if (!sidebar || !contentRoot) return;
+
+  const FOLDER_TO_CAT = {
+    'grocery_logo': { title: 'Groceries', slug: 'groceries' },
+    'electronics_logo': { title: 'Electronics', slug: 'electronics' },
+    'gadgets_logo': { title: 'Gadgets', slug: 'gadgets' },
+    'clothing_logo': { title: 'Clothing', slug: 'clothing' },
+    'shoes_logo': { title: 'Shoes', slug: 'shoes' },
+    'beauty_logo': { title: 'Beauty', slug: 'beauty' },
+    'sports_logo': { title: 'Sports', slug: 'sports' },
+    'home & kitchen': { title: 'Home & Kitchen', slug: 'home-kitchen' }
+  };
+
+  const categories = {};
+  
+  // Parse BRAND_LOGOS
+  for (const [brandName, path] of Object.entries(BRAND_LOGOS)) {
+    const match = path.match(/images\/logos\/([^\/]+)\//);
+    if (match) {
+      const folder = match[1];
+      const catInfo = FOLDER_TO_CAT[folder];
+      if (catInfo) {
+        if (!categories[catInfo.slug]) {
+          categories[catInfo.slug] = { title: catInfo.title, slug: catInfo.slug, brands: [] };
+        }
+        categories[catInfo.slug].brands.push({ name: brandName, path: path });
+      }
+    }
+  }
+
+  // Generate HTML
+  let sidebarHTML = '';
+  let contentHTML = '';
+
+  for (const cat of Object.values(categories)) {
+    sidebarHTML += `<a href="#${cat.slug}">${cat.title}</a>`;
+    
+    let gridHTML = '';
+    for (const brand of cat.brands) {
+      gridHTML += `<a href="brand-store.html?brand=${brand.name}" class="brand-card">
+        <img src="${brand.path}" alt="${brand.name}">
+      </a>`;
+    }
+
+    contentHTML += `
+      <div class="dir-cat-block" id="${cat.slug}">
+        <h2 class="dir-cat-title">${cat.title}</h2>
+        <div class="dir-grid">
+          ${gridHTML}
+        </div>
+      </div>
+    `;
+  }
+
+  sidebar.innerHTML = sidebarHTML;
+  contentRoot.innerHTML = contentHTML;
+
+  // Active state for sidebar on scroll
+  const links = sidebar.querySelectorAll('a');
+  const sections = document.querySelectorAll('.dir-cat-block');
+
+  // Manual scroll handler to guarantee correct offset
+  const scrollToTarget = (targetId, isSmooth = true) => {
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      const headerOffset = 140; // Height of the sticky header
+      const elementPosition = targetElement.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({
+           top: offsetPosition,
+           behavior: isSmooth ? "smooth" : "auto"
+      });
+    }
+  };
+
+  links.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const href = link.getAttribute('href');
+      const targetId = href.substring(1);
+      
+      // Update URL without native jump
+      if (history.pushState) {
+          history.pushState(null, null, href);
+      } else {
+          window.location.hash = href;
+      }
+      
+      scrollToTarget(targetId, true);
+    });
+  });
+
+  // Handle initial page load with a hash
+  if (window.location.hash) {
+    setTimeout(() => {
+      scrollToTarget(window.location.hash.substring(1), false);
+    }, 100);
+  }
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      const secTop = sec.offsetTop;
+      if (pageYOffset >= secTop - 150) {
+        current = sec.getAttribute('id');
+      }
+    });
+    
+    links.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${current}`) {
+        link.classList.add('active');
+      }
+    });
+  }, { passive: true });
+};
+

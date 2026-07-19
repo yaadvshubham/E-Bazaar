@@ -2662,6 +2662,7 @@ html[data-theme="dark"] .filter-tag-rm{background:rgba(255,255,255,.1)}
 }
 
 .cat-card{
+  position:relative;
   background:var(--bg-card);border-radius:var(--r-md);
   border:1px solid var(--border);overflow:hidden;
   transition:transform var(--ease),box-shadow var(--ease),border-color var(--ease);

@@ -567,6 +567,8 @@ html[data-theme="dark"] .s-dot{background:rgba(255,255,255,.2)}
   padding-bottom:10px;scrollbar-width:none;
 }
 .track::-webkit-scrollbar{display:none}
+.track > .cat-card { flex: 0 0 170px; }
+.track > .cat-card .cat-img { height: 170px; }
 .track-wrap::before,.track-wrap::after{content:'';position:absolute;top:0;bottom:10px;width:40px;z-index:2;pointer-events:none}
 .track-wrap::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
 .track-wrap::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
