@@ -3,20 +3,25 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title id="page-title">Shop Category — E-Bazaar</title>
-  <meta name="description" content="Browse thousands of products across categories on E-Bazaar. Filter by brand, price, size, and more."/>
+  <title>E-Bazaar — Your everyday and everything store.</title>
+  <meta name="description" content="E-Bazaar: Premium groceries, electronics, clothing, shoes, beauty and more. Shop 1000+ top brands with unbeatable prices and fast delivery across India."/>
+  <meta name="theme-color" content="#FAF8F5"/>
+  <meta property="og:title" content="E-Bazaar — Your everyday and everything store."/>
+  <meta property="og:type" content="website"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/category.css"/>
   <style>
+    /* Logo SVG gradient references */
     .logo-bag-body{fill:url(#bagGrad)}
     html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
   </style>
 </head>
-<body data-page="category">
+<body>
 
+<!-- SVG Gradient Defs -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
   <defs>
     <linearGradient id="bagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -31,7 +36,7 @@
   </defs>
 </svg>
 
-<!-- HEADER (shared) -->
+<!-- ═══════════════════ HEADER ═══════════════════ -->
 <header id="site-header" role="banner">
 
   <!-- TOP ROW -->
@@ -231,172 +236,172 @@
     </div>
   </nav>
 
-</header>
+</header><!-- /site-header -->
 
-<!-- MOBILE DRAWER -->
-<div class="drawer-overlay" id="drawer-overlay"></div>
+<!-- ═══════════════════ MOBILE DRAWER ═══════════════════ -->
+<div class="drawer-overlay" id="drawer-overlay" role="presentation"></div>
 <nav class="mobile-drawer" id="mobile-drawer" aria-label="Mobile navigation">
-  <div class="drawer-head"><a href="index.html" style="font-size:20px;font-weight:800;color:var(--text)">E-<em style="font-style:normal;color:var(--accent)">Bazaar</em></a><button class="drawer-close" id="drawer-close" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="drawer-head">
+    <a href="index.html" style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.4px">E-<em style="font-style:normal;color:var(--accent)">Bazaar</em></a>
+    <button class="drawer-close" id="drawer-close" aria-label="Close navigation">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-search">
+    <input type="search" placeholder="Search E-Bazaar…" aria-label="Search" id="mobile-search"/>
+  </div>
+  <div class="drawer-links">
+    <a href="orders.html" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/></svg> My Orders</a>
+    <a href="#" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Wishlist</a>
+    <a href="#" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> My Account</a>
+  </div>
   <div class="drawer-cats">
-    <a href="category.html?cat=groceries" class="drawer-cat"><span>Groceries</span><span>›</span></a>
-    <a href="category.html?cat=electronics" class="drawer-cat"><span>Electronics</span><span>›</span></a>
-    <a href="category.html?cat=gadgets" class="drawer-cat"><span>Gadgets</span><span>›</span></a>
-    <a href="category.html?cat=clothing" class="drawer-cat"><span>Clothing</span><span>›</span></a>
-    <a href="category.html?cat=shoes" class="drawer-cat"><span>Shoes</span><span>›</span></a>
-    <a href="category.html?cat=beauty" class="drawer-cat"><span>Beauty</span><span>›</span></a>
-    <a href="category.html?cat=sports" class="drawer-cat"><span>Sports</span><span>›</span></a>
-    <a href="category.html?cat=home-kitchen" class="drawer-cat"><span>Home & Kitchen</span><span>›</span></a>
+    <div class="drawer-cat-head">All Categories</div>
+    <a href="category.html?cat=groceries"  class="drawer-cat"><span>Groceries</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=electronics" class="drawer-cat"><span>Electronics</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=gadgets"    class="drawer-cat"><span>Gadgets</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=clothing"   class="drawer-cat"><span>Clothing</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=shoes"      class="drawer-cat"><span>Shoes</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=beauty"     class="drawer-cat"><span>Beauty</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=sports"     class="drawer-cat"><span>Sports</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=home-kitchen" class="drawer-cat"><span>Home & Kitchen</span><span class="drawer-cat-icon">›</span></a>
   </div>
 </nav>
 
-<!-- BREADCRUMB -->
-<nav class="breadcrumb" aria-label="Breadcrumb">
-  <a href="index.html">Home</a>
-  <span class="bc-sep" aria-hidden="true">›</span>
-  <a href="#" id="bc-parent-cat">Category</a>
-  <span class="bc-sep" aria-hidden="true" id="bc-sep-2" style="display:none">›</span>
-  <span class="bc-current" id="bc-child-cat" style="display:none">Subcategory</span>
-</nav>
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<style>
+  .na-hero {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    padding: 60px 24px;
+    text-align: center;
+    border-radius: var(--r-md);
+    margin: 24px auto;
+    max-width: var(--max-w);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #bbf7d0;
+  }
+  .na-hero::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .na-title { font-size: 48px; font-weight: 800; color: #14532d; margin-bottom: 12px; position: relative; z-index: 1; }
+  .na-subtitle { font-size: 18px; color: #166534; font-weight: 500; margin-bottom: 0; position: relative; z-index: 1; }
+  
+  .na-section { max-width: var(--max-w); margin: 0 auto; padding: 40px var(--side-pad); }
+  .na-sec-title { font-size: 28px; font-weight: 800; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: var(--text); }
+  
+  .na-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
 
-<!-- MAIN CATALOG -->
-<div class="cat-page">
+  .cat-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 16px;
+    position: relative;
+    transition: transform var(--ease), box-shadow var(--ease);
+    display: flex;
+    flex-direction: column;
+  }
+  .cat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+  }
+  .cat-img-box {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #f9fafb;
+    border-radius: var(--r-sm);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .new-badge {
+    position: absolute;
+    top: -8px; left: -8px;
+    background: #3b82f6;
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    z-index: 2;
+    letter-spacing: 1px;
+  }
+  .wl-btn {
+    position: absolute; top: 12px; right: 12px;
+    background: white; border: none; width: 32px; height: 32px; border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer;
+    display: flex; align-items: center; justify-content: center; z-index: 2;
+  }
+  .wl-btn:hover { background: #f9fafb; }
+  .wl-btn.active svg { fill: #ef4444; stroke: #ef4444; }
+  
+  .cat-brand { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; font-weight: 600; }
+  .cat-name { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 8px; text-decoration: none; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
+  .cat-prices { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .cat-price { font-size: 18px; font-weight: 800; color: var(--text); }
+  
+  .cat-add-btn {
+    width: 100%; padding: 10px; background: var(--text); color: var(--bg);
+    border: none; border-radius: var(--r-sm); font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: background var(--ease);
+  }
+  .cat-add-btn:hover { background: var(--accent); }
+</style>
 
-  <!-- LEFT FILTER PANEL -->
-  <aside class="filter-panel" aria-label="Filter products">
-    <div class="filter-head">
-      <span class="filter-title">Filters</span>
-      <button class="filter-clear" aria-label="Clear all filters">Clear All</button>
-    </div>
 
-    <!-- Active filter tags -->
-    <div class="active-filters" id="active-filter-tags" aria-label="Active filters">
-      <span class="active-filters-label">Active:</span>
-      <!-- Dynamic tags will be injected here -->
-    </div>
-
-    <!-- Price Range -->
-    <div class="f-section open" id="fs-price">
-      <button class="f-section-head" aria-expanded="true" aria-controls="fb-price">
-        <span class="f-section-head-text">Price Range</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-price">
-        <div class="price-display">
-          <span id="price-min-display">₹500</span>
-          <span id="price-max-display">₹20,000</span>
-        </div>
-        <div class="range-wrap">
-          <div class="range-fill" id="range-fill" style="left:0%;width:100%"></div>
-          <input type="range" class="price-input" id="price-min" min="0" max="200000" value="0" step="100" aria-label="Minimum price"/>
-          <input type="range" class="price-input" id="price-max" min="0" max="200000" value="200000" step="100" aria-label="Maximum price"/>
-        </div>
-      </div>
-    </div>
-
-    <!-- Brands -->
-    <div class="f-section open" id="fs-brands">
-      <button class="f-section-head" aria-expanded="true" aria-controls="fb-brands">
-        <span class="f-section-head-text">Brand</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-brands">
-        <div class="brand-list" id="filter-brand-list">
-          <!-- Populated dynamically based on category -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Rating -->
-    <div class="f-section" id="fs-rating">
-      <button class="f-section-head" aria-expanded="false" aria-controls="fb-rating">
-        <span class="f-section-head-text">Customer Rating</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-rating">
-        <div class="rating-list">
-          <label class="rating-row"><input type="radio" name="rating" value="4"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">4★ &amp; above</span></label>
-          <label class="rating-row"><input type="radio" name="rating" value="3"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">3★ &amp; above</span></label>
-          <label class="rating-row"><input type="radio" name="rating" value="2"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">2★ &amp; above</span></label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Discount -->
-    <div class="f-section" id="fs-discount">
-      <button class="f-section-head" aria-expanded="false" aria-controls="fb-disc">
-        <span class="f-section-head-text">Discount</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-disc">
-        <div class="discount-list">
-          <label class="discount-row"><input type="checkbox" value="10" name="discount"/><span class="discount-label">10% and above</span></label>
-          <label class="discount-row"><input type="checkbox" value="20" name="discount"/><span class="discount-label">20% and above</span></label>
-          <label class="discount-row"><input type="checkbox" value="30" name="discount"/><span class="discount-label">30% and above</span></label>
-          <label class="discount-row"><input type="checkbox" value="40" name="discount"/><span class="discount-label">40% and above</span></label>
-          <label class="discount-row"><input type="checkbox" value="50" name="discount"/><span class="discount-label">50% and above</span></label>
-        </div>
-      </div>
-    </div>
-
-  </aside>
-
-  <!-- RIGHT CATALOG GRID -->
-  <main class="cat-right" id="main-content">
-
-    <!-- Sort bar -->
-    <div class="sort-bar">
-      <p class="result-count" id="result-count">Showing <strong>0 products</strong></p>
-      <div class="sort-controls">
-        <button class="filter-toggle-btn" aria-label="Open filters"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg> Filters</button>
-        <label for="sort-select" class="sort-label">Sort:</label>
-        <select class="sort-select" id="sort-select" aria-label="Sort products">
-          <option value="relevance">Most Relevant</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="newest">Newest First</option>
-          <option value="rating">Top Rated</option>
-          <option value="discount">Best Discount</option>
-        </select>
-        <div class="view-toggles" aria-label="View mode">
-          <button class="view-btn active" aria-label="Grid view" title="Grid view"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>
-          <button class="view-btn" aria-label="List view" title="List view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Brand Showcase Row (Dynamically populated) -->
-    <div class="brand-showcase-row" id="brand-showcase-row" aria-label="Featured Brands"></div>
-
-    <!-- Product grid (dynamically populated) -->
-    <div class="cat-grid" id="main-cat-grid" role="list" aria-label="Products">
-      <!-- Injected by script.js -->
-    </div>
-
-    <div class="load-more-wrap">
-      <button class="load-more-btn" onclick="showToast('⏳ Loading more products…')">Load More Products</button>
-    </div>
-
-  </main>
-
-</div><!-- /cat-page -->
-
-<!-- Mobile filter drawer -->
-<div class="filter-drawer-overlay" id="filter-drawer-overlay"></div>
-<aside class="filter-drawer" id="filter-drawer" aria-label="Filter panel">
-  <div class="filter-drawer-head">
-    <span class="filter-drawer-title">Filters</span>
-    <button class="modal-close" id="filter-drawer-close" aria-label="Close filters"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+<main class="page-main">
+  <div class="breadcrumb" aria-label="Breadcrumb">
+    <a href="index.html">Home</a><span aria-hidden="true">&rsaquo;</span><span aria-current="page">Privacy Policy</span>
   </div>
-  <div style="padding:24px">
-    <p style="font-size:14px;color:var(--text-muted)">Filter options mirror the desktop panel. Use on mobile to refine results.</p>
-    <div style="margin-top:24px;display:flex;gap:12px">
-      <button class="form-submit" style="flex:1" onclick="document.getElementById('filter-drawer').classList.remove('open');document.getElementById('filter-drawer-overlay').classList.remove('open');showToast('✅ Filters applied')">Apply Filters</button>
-      <button class="addr-act-btn secondary" style="height:48px;padding:0 24px;border-radius:var(--r-sm)" onclick="document.getElementById('filter-drawer').classList.remove('open');document.getElementById('filter-drawer-overlay').classList.remove('open')">Cancel</button>
-    </div>
-  </div>
-</aside>
+  <section class="section" style="max-width: 900px; margin: 0 auto; padding-top: 16px;">
+    <h1 class="sec-title" style="margin-bottom: 24px; font-size: 36px;">Privacy Policy</h1>
+    <p style="color: var(--text-muted); margin-bottom: 32px;">Last Updated: July 19, 2026</p>
+    
+    <div style="background: var(--bg-white); padding: 40px; border-radius: var(--r-lg); border: 1px solid var(--border); box-shadow: var(--shadow-sm); line-height: 1.7; color: var(--text);">
+      <p style="margin-bottom: 24px;">At E-Bazaar, we are committed to protecting your personal data and respecting your privacy. This policy outlines how we collect, use, and protect your information when you use our services.</p>
+      
+      <h3 style="margin-top: 32px; margin-bottom: 16px; font-size: 22px; color: var(--accent);">1. Information We Collect</h3>
+      <p style="margin-bottom: 12px;"><strong>Directly Provided Data:</strong> When you create an account, place an order, or contact us, we collect your name, email address, shipping/billing address, phone number, and payment details.</p>
+      <p style="margin-bottom: 24px;"><strong>Automatically Collected Data:</strong> We automatically collect certain information when you visit our site, including your IP address, browser type, device information, cookies, and browsing history.</p>
 
-<!-- FOOTER -->
+      <h3 style="margin-top: 32px; margin-bottom: 16px; font-size: 22px; color: var(--accent);">2. How We Use Your Information</h3>
+      <ul style="margin-bottom: 24px; margin-left: 20px; color: var(--text-muted);">
+        <li>To process and fulfill your orders, including sending emails to confirm your order status and shipment.</li>
+        <li>To communicate with you and provide customer support.</li>
+        <li>To personalize your shopping experience and recommend products.</li>
+        <li>To improve our website functionality, security, and fraud prevention.</li>
+      </ul>
+
+      <h3 style="margin-top: 32px; margin-bottom: 16px; font-size: 22px; color: var(--accent);">3. Data Sharing and Third Parties</h3>
+      <p style="margin-bottom: 24px;">We do not sell your personal data. We only share your information with trusted third parties necessary to operate our business, such as payment processors (e.g., Stripe, PayPal), shipping partners, and analytics providers (e.g., Google Analytics). These parties are obligated to keep your information secure and confidential.</p>
+
+      <h3 style="margin-top: 32px; margin-bottom: 16px; font-size: 22px; color: var(--accent);">4. Your Rights</h3>
+      <p style="margin-bottom: 24px;">Depending on your location, you have the right to access, correct, delete, or restrict the processing of your personal data. You can update your account information directly in your profile or contact us to exercise these rights.</p>
+
+      <h3 style="margin-top: 32px; margin-bottom: 16px; font-size: 22px; color: var(--accent);">5. Cookies</h3>
+      <p style="margin-bottom: 24px;">We use cookies to keep track of your cart, remember your preferences, and analyze site traffic. You can choose to disable cookies through your browser settings, though this may limit your ability to use certain features of our site.</p>
+
+      <h3 style="margin-top: 32px; margin-bottom: 16px; font-size: 22px; color: var(--accent);">6. Security</h3>
+      <p style="margin-bottom: 24px;">We implement robust security measures, including SSL encryption and strict access controls, to protect your personal information from unauthorized access, alteration, or disclosure.</p>
+
+      <h3 style="margin-top: 32px; margin-bottom: 16px; font-size: 22px; color: var(--accent);">7. Contact Us</h3>
+      <p style="margin-bottom: 16px;">If you have any questions or concerns regarding this Privacy Policy, please reach out to our Data Protection Officer via our <a href="contact.html" style="color: var(--accent); text-decoration: underline;">Contact Us</a> page or email us at <strong>privacy@e-bazaar.com</strong>.</p>
+    </div>
+  </section>
+</main>
 <footer role="contentinfo">
   <div class="footer-main">
     <div class="f-brand">
@@ -419,10 +424,6 @@
   </div>
   <div class="footer-bottom"><span>&copy; 2026 E-Bazaar Pvt. Ltd. &nbsp;&middot;&nbsp; <a href="#">Terms</a> &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy</a></span><div class="pay-row" aria-label="Payment methods"><div class="pay-chip">VISA</div><div class="pay-chip">MC</div><div class="pay-chip">UPI</div><div class="pay-chip">GPay</div><div class="pay-chip">COD</div><div class="pay-chip">EMI</div></div></div>
 </footer>
-
-<button id="btt" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg></button>
-<div id="toast" role="alert" aria-live="polite"><div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span></div>
-
 <script src="js/script.js"></script>
 </body>
 </html>

@@ -1,0 +1,90 @@
+
+
+<script>
+  function renderNewArrivals() {
+    const fashionDrops = [
+      { id: 'n1', brand: 'Nike', name: 'Air Max 2026 Edition', price: '₹14,999', orig: '', disc: '', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 8v1.5a8 8 0 0 1-5.33 7.5L2 22l6-2a8 8 0 0 0 5.33-7.5V11a8 8 0 0 0 7.05-7.54z"/></svg>' },
+      { id: 'n2', brand: 'Zara', name: 'Oversized Linen Blend Blazer', price: '₹5,999', orig: '', disc: '', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 8v1.5a8 8 0 0 1-5.33 7.5L2 22l6-2a8 8 0 0 0 5.33-7.5V11a8 8 0 0 0 7.05-7.54z"/></svg>' },
+      { id: 'n3', brand: 'H&M', name: 'Textured Knit Polo Shirt', price: '₹1,999', orig: '', disc: '', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 8v1.5a8 8 0 0 1-5.33 7.5L2 22l6-2a8 8 0 0 0 5.33-7.5V11a8 8 0 0 0 7.05-7.54z"/></svg>' },
+      { id: 'n4', brand: 'Comet', name: 'Retro High-Top Sneakers - Nebula', price: '₹4,499', orig: '', disc: '', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 8v1.5a8 8 0 0 1-5.33 7.5L2 22l6-2a8 8 0 0 0 5.33-7.5V11a8 8 0 0 0 7.05-7.54z"/></svg>' }
+    ];
+
+    const techDrops = [
+      { id: 'n5', brand: 'Apple', name: 'Apple Watch Series 11 - 45mm GPS', price: '₹44,900', orig: '', disc: '', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><rect x="6" y="4" width="12" height="16" rx="3" ry="3"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/></svg>' },
+      { id: 'n6', brand: 'Samsung', name: 'Galaxy Z Flip 7 - 512GB', price: '₹99,999', orig: '', disc: '', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' },
+      { id: 'n7', brand: 'Sony', name: 'WH-1000XM6 Wireless Noise Cancelling', price: '₹32,990', orig: '', disc: '', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>' },
+      { id: 'n8', brand: 'Logitech', name: 'MX Master 4S Advanced Wireless Mouse', price: '₹9,499', orig: '', disc: '', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="7" ry="7"/><line x1="12" y1="6" x2="12" y2="10"/></svg>' }
+    ];
+
+    function generateCards(arr, containerId) {
+      const container = document.getElementById(containerId);
+      if(!container) return;
+      
+      let wl = JSON.parse(localStorage.getItem('eb_wishlist') || '[]');
+      
+      container.innerHTML = arr.map(p => {
+        const pStr = encodeURIComponent(JSON.stringify(p));
+        const inWl = wl.some(w => w.id === p.id);
+        const stroke = inWl ? 'none' : 'currentColor';
+        const fill = inWl ? '#ef4444' : 'none';
+        
+        return `
+        <article class="cat-card">
+          <div class="cat-img-box">
+            <span class="new-badge">NEW</span>
+            <button class="wl-btn ${inWl ? 'active' : ''}" onclick="toggleWishlist(this, '${pStr}')" aria-label="Toggle wishlist">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            ${p.img}
+          </div>
+          <div class="cat-brand">${p.brand}</div>
+          <div class="cat-name">${p.name}</div>
+          <div class="cat-prices"><span class="cat-price">${p.price}</span></div>
+          <button class="cat-add-btn" onclick="addToCart('${pStr}')">+ Add to Cart</button>
+        </article>`;
+      }).join('');
+    }
+
+    generateCards(fashionDrops, 'fashion-na-grid');
+    generateCards(techDrops, 'tech-na-grid');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Wait for script.js functions
+    setTimeout(renderNewArrivals, 100);
+  });
+</script>
+</main>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <div class="footer-main">
+    <div class="f-brand">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <svg width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)"/><path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/><polyline fill="none" stroke="rgba(255,255,255,.90)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/><path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/><line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/><polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/></svg>
+        <div class="f-logo">E-<em>Bazaar</em></div>
+      </div>
+      <p>Your everyday and everything store. Premium products, unmatched service, delivered with care across India.</p>
+      <div class="f-socials" aria-label="Social media">
+        <a href="#" class="soc-btn" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="#" class="soc-btn" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="#" class="soc-btn" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="soc-btn" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="var(--bg-nav)"/></svg></a>
+      </div>
+    </div>
+    <div class="f-col"><h5>Shop</h5><ul><li><a href="new-arrivals.html">New Arrivals</a></li><li><a href="category.html?cat=trending">Trending Now</a></li><li><a href="deals.html">Today's Deals</a></li><li><a href="category.html?cat=electronics">Electronics</a></li><li><a href="category.html?cat=clothing">Fashion</a></li><li><a href="category.html?cat=groceries">Groceries</a></li></ul></div>
+    <div class="f-col"><h5>Company</h5><ul><li><a href="#">About E-Bazaar</a></li><li><a href="#">Careers</a></li><li><a href="#">Press & Media</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Our Blog</a></li><li><a href="#">Investors</a></li></ul></div>
+    <div class="f-col"><h5>Help</h5><ul><li><a href="#">FAQs</a></li><li><a href="orders.html">Track My Order</a></li><li><a href="#">Returns & Refunds</a></li><li><a href="#">Shipping Info</a></li><li><a href="#">Contact Us</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+    <div class="f-col"><h5>Stay in the Loop</h5><p class="nl-desc">Deals, drops and news — in your inbox.</p><form class="nl-form" id="nl-form" novalidate><label for="nl-email" class="sr-only">Email</label><input type="email" id="nl-email" placeholder="your@email.com" required autocomplete="email"/><button type="submit">Join</button></form></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2026 E-Bazaar Pvt. Ltd. &nbsp;&middot;&nbsp; <a href="#">Terms</a> &nbsp;&middot;&nbsp; <a href="#">Privacy</a></span><div class="pay-row" aria-label="Payment methods"><div class="pay-chip">VISA</div><div class="pay-chip">MC</div><div class="pay-chip">UPI</div><div class="pay-chip">GPay</div><div class="pay-chip">COD</div><div class="pay-chip">EMI</div></div></div>
+</footer>
+
+
+<!-- BACK TO TOP & TOAST -->
+<button id="btt" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg></button>
+<div id="toast" role="alert" aria-live="polite"><div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

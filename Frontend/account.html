@@ -3,20 +3,26 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title id="page-title">Shop Category — E-Bazaar</title>
-  <meta name="description" content="Browse thousands of products across categories on E-Bazaar. Filter by brand, price, size, and more."/>
+  <title id="page-title">My Account — E-Bazaar</title>
+  <meta name="description" content="E-Bazaar: Premium groceries, electronics, clothing, shoes, beauty and more. Shop 1000+ top brands with unbeatable prices and fast delivery across India."/>
+  <meta name="theme-color" content="#FAF8F5"/>
+  <meta property="og:title" content="E-Bazaar — Your everyday and everything store."/>
+  <meta property="og:type" content="website"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="stylesheet" href="css/category.css"/>
+  <link rel="stylesheet" href="css/auth.css"/>
   <style>
+    /* Logo SVG gradient references */
     .logo-bag-body{fill:url(#bagGrad)}
     html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
   </style>
 </head>
-<body data-page="category">
+<body data-page="auth">
 
+<!-- SVG Gradient Defs -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
   <defs>
     <linearGradient id="bagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -31,7 +37,7 @@
   </defs>
 </svg>
 
-<!-- HEADER (shared) -->
+<!-- ═══════════════════ HEADER ═══════════════════ -->
 <header id="site-header" role="banner">
 
   <!-- TOP ROW -->
@@ -74,7 +80,7 @@
         <span class="toggle-icon" id="theme-icon" aria-hidden="true">🌙</span>
       </button>
       <!-- Account -->
-      <a href="auth.html" class="nav-btn" id="acc-btn" aria-label="My Account">
+      <a href="auth.html" id="acc-btn" class="nav-btn active" aria-label="My Account">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Account</span>
       </a>
@@ -231,172 +237,304 @@
     </div>
   </nav>
 
-</header>
+</header><!-- /site-header -->
 
-<!-- MOBILE DRAWER -->
-<div class="drawer-overlay" id="drawer-overlay"></div>
+<!-- ═══════════════════ MOBILE DRAWER ═══════════════════ -->
+<div class="drawer-overlay" id="drawer-overlay" role="presentation"></div>
 <nav class="mobile-drawer" id="mobile-drawer" aria-label="Mobile navigation">
-  <div class="drawer-head"><a href="index.html" style="font-size:20px;font-weight:800;color:var(--text)">E-<em style="font-style:normal;color:var(--accent)">Bazaar</em></a><button class="drawer-close" id="drawer-close" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="drawer-head">
+    <a href="index.html" style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.4px">E-<em style="font-style:normal;color:var(--accent)">Bazaar</em></a>
+    <button class="drawer-close" id="drawer-close" aria-label="Close navigation">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-search">
+    <input type="search" placeholder="Search E-Bazaar…" aria-label="Search" id="mobile-search"/>
+  </div>
+  <div class="drawer-links">
+    <a href="orders.html" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/></svg> My Orders</a>
+    <a href="#" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Wishlist</a>
+    <a href="#" class="drawer-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> My Account</a>
+  </div>
   <div class="drawer-cats">
-    <a href="category.html?cat=groceries" class="drawer-cat"><span>Groceries</span><span>›</span></a>
-    <a href="category.html?cat=electronics" class="drawer-cat"><span>Electronics</span><span>›</span></a>
-    <a href="category.html?cat=gadgets" class="drawer-cat"><span>Gadgets</span><span>›</span></a>
-    <a href="category.html?cat=clothing" class="drawer-cat"><span>Clothing</span><span>›</span></a>
-    <a href="category.html?cat=shoes" class="drawer-cat"><span>Shoes</span><span>›</span></a>
-    <a href="category.html?cat=beauty" class="drawer-cat"><span>Beauty</span><span>›</span></a>
-    <a href="category.html?cat=sports" class="drawer-cat"><span>Sports</span><span>›</span></a>
-    <a href="category.html?cat=home-kitchen" class="drawer-cat"><span>Home & Kitchen</span><span>›</span></a>
+    <div class="drawer-cat-head">All Categories</div>
+    <a href="category.html?cat=groceries"  class="drawer-cat"><span>Groceries</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=electronics" class="drawer-cat"><span>Electronics</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=gadgets"    class="drawer-cat"><span>Gadgets</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=clothing"   class="drawer-cat"><span>Clothing</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=shoes"      class="drawer-cat"><span>Shoes</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=beauty"     class="drawer-cat"><span>Beauty</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=sports"     class="drawer-cat"><span>Sports</span><span class="drawer-cat-icon">›</span></a>
+    <a href="category.html?cat=home-kitchen" class="drawer-cat"><span>Home & Kitchen</span><span class="drawer-cat-icon">›</span></a>
   </div>
 </nav>
 
-<!-- BREADCRUMB -->
-<nav class="breadcrumb" aria-label="Breadcrumb">
-  <a href="index.html">Home</a>
-  <span class="bc-sep" aria-hidden="true">›</span>
-  <a href="#" id="bc-parent-cat">Category</a>
-  <span class="bc-sep" aria-hidden="true" id="bc-sep-2" style="display:none">›</span>
-  <span class="bc-current" id="bc-child-cat" style="display:none">Subcategory</span>
-</nav>
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<style>
+  .acc-container { max-width: var(--max-w); margin: 0 auto; padding: 40px var(--side-pad); display: grid; grid-template-columns: 280px 1fr; gap: 40px; align-items: start; min-height: 60vh; }
+  .acc-sidebar { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--r-md); padding: 24px; position: sticky; top: 100px; }
+  .acc-user-card { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+  .acc-avatar-wrap { position: relative; width: 100px; height: 100px; margin-bottom: 16px; border-radius: 50%; border: 4px solid var(--bg); overflow: hidden; background: #e3e8ee; display: flex; align-items: center; justify-content: center; }
+  .acc-avatar { width: 100%; height: 100%; object-fit: cover; }
+  .acc-avatar-edit { position: absolute; inset: 0; background: rgba(0,0,0,0.5); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity var(--ease); cursor: pointer; font-size: 12px; font-weight: 600; gap: 4px; }
+  .acc-avatar-wrap:hover .acc-avatar-edit { opacity: 1; }
+  .acc-name { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+  .acc-email { font-size: 14px; color: var(--text-muted); }
+  .acc-nav { display: flex; flex-direction: column; gap: 4px; }
+  .acc-nav-link { padding: 12px 16px; font-size: 15px; font-weight: 600; color: var(--text-sub); border-radius: var(--r-sm); cursor: pointer; transition: background var(--ease), color var(--ease); display: flex; align-items: center; gap: 12px; }
+  .acc-nav-link:hover { background: var(--bg-alt); color: var(--text); }
+  .acc-nav-link.active { background: var(--accent); color: white; }
+  
+  .acc-panel { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--r-md); padding: 32px; display: none; }
+  .acc-panel.active { display: block; animation: fadeUp 0.3s ease; }
+  
+  .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+  .panel-title { font-size: 24px; font-weight: 800; color: var(--text); }
+  
+  .acc-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .form-group input { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--r-sm); font-size: 15px; transition: border-color var(--ease); }
+  .form-group input:focus { border-color: var(--accent); outline: none; }
+  .form-group input[disabled] { background: var(--bg-alt); color: var(--text-muted); cursor: not-allowed; }
+  
+  .btn-primary { background: var(--text); color: var(--bg); border: none; padding: 12px 24px; border-radius: var(--r-sm); font-size: 15px; font-weight: 600; cursor: pointer; transition: background var(--ease); }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-danger { background: #fee2e2; color: #dc2626; border: none; padding: 12px 24px; border-radius: var(--r-sm); font-size: 15px; font-weight: 600; cursor: pointer; transition: background var(--ease); }
+  .btn-danger:hover { background: #fca5a5; }
+  
+  .address-card { border: 1px solid var(--border); border-radius: var(--r-sm); padding: 16px; margin-bottom: 16px; position: relative; }
+  .addr-type { font-weight: 700; font-size: 14px; margin-bottom: 8px; display: inline-block; background: var(--bg-alt); padding: 4px 10px; border-radius: 20px; }
+  .addr-text { font-size: 14px; color: var(--text-sub); line-height: 1.5; margin-bottom: 16px; }
+  .addr-actions { display: flex; gap: 12px; }
+  .addr-btn { background: none; border: 1px solid var(--border); padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: var(--r-sm); transition: all var(--ease); }
+  .addr-btn:hover { background: var(--bg-alt); }
+  
+  @media(max-width: 960px) {
+    .acc-container { grid-template-columns: 1fr; }
+    .acc-form-grid { grid-template-columns: 1fr; }
+    .acc-sidebar { position: static; }
+  }
+</style>
 
-<!-- MAIN CATALOG -->
-<div class="cat-page">
-
-  <!-- LEFT FILTER PANEL -->
-  <aside class="filter-panel" aria-label="Filter products">
-    <div class="filter-head">
-      <span class="filter-title">Filters</span>
-      <button class="filter-clear" aria-label="Clear all filters">Clear All</button>
-    </div>
-
-    <!-- Active filter tags -->
-    <div class="active-filters" id="active-filter-tags" aria-label="Active filters">
-      <span class="active-filters-label">Active:</span>
-      <!-- Dynamic tags will be injected here -->
-    </div>
-
-    <!-- Price Range -->
-    <div class="f-section open" id="fs-price">
-      <button class="f-section-head" aria-expanded="true" aria-controls="fb-price">
-        <span class="f-section-head-text">Price Range</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-price">
-        <div class="price-display">
-          <span id="price-min-display">₹500</span>
-          <span id="price-max-display">₹20,000</span>
+<main id="main-content">
+  <div class="acc-container">
+    
+    <!-- Sidebar -->
+    <aside class="acc-sidebar">
+      <div class="acc-user-card">
+        <input type="file" id="avatar-upload" accept="image/*" style="display:none;" />
+        <div class="acc-avatar-wrap" onclick="document.getElementById('avatar-upload').click()">
+          <img src="" alt="Avatar" class="acc-avatar" id="sidebar-avatar" style="display:none;" />
+          <svg id="sidebar-avatar-placeholder" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <div class="acc-avatar-edit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            Upload
+          </div>
         </div>
-        <div class="range-wrap">
-          <div class="range-fill" id="range-fill" style="left:0%;width:100%"></div>
-          <input type="range" class="price-input" id="price-min" min="0" max="200000" value="0" step="100" aria-label="Minimum price"/>
-          <input type="range" class="price-input" id="price-max" min="0" max="200000" value="200000" step="100" aria-label="Maximum price"/>
+        <div class="acc-name" id="sidebar-name">User Name</div>
+        <div class="acc-email" id="sidebar-email">user@email.com</div>
+      </div>
+      
+      <nav class="acc-nav">
+        <div class="acc-nav-link active" onclick="switchPanel('profile', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profile Details
+        </div>
+        <div class="acc-nav-link" onclick="switchPanel('addresses', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Addresses
+        </div>
+        <div class="acc-nav-link" onclick="window.location.href='orders.html'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
+          My Orders
+        </div>
+        <div class="acc-nav-link" onclick="logout()" style="color:var(--danger); margin-top:24px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </div>
+      </nav>
+    </aside>
+    
+    <!-- Main Content Panels -->
+    <div class="acc-content">
+      
+      <!-- Panel: Profile -->
+      <div class="acc-panel active" id="panel-profile">
+        <div class="panel-header">
+          <h2 class="panel-title">Profile Details</h2>
+        </div>
+        <form id="profile-form">
+          <div class="acc-form-grid" style="margin-bottom: 24px;">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="prof-name" required />
+            </div>
+            <div class="form-group">
+              <label>Email Address (Cannot be changed)</label>
+              <input type="email" id="prof-email" disabled />
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" id="prof-phone" />
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <button type="submit" class="btn-primary">Save Changes</button>
+            <button type="button" class="btn-danger" onclick="deleteAccount()">Delete Account</button>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Panel: Addresses -->
+      <div class="acc-panel" id="panel-addresses">
+        <div class="panel-header">
+          <h2 class="panel-title">Saved Addresses</h2>
+          <button class="btn-primary" onclick="AddressModal.open()">+ Add New Address</button>
+        </div>
+        
+        <div id="acc-address-list">
+          <!-- Rendered via JS -->
         </div>
       </div>
+      
     </div>
-
-    <!-- Brands -->
-    <div class="f-section open" id="fs-brands">
-      <button class="f-section-head" aria-expanded="true" aria-controls="fb-brands">
-        <span class="f-section-head-text">Brand</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-brands">
-        <div class="brand-list" id="filter-brand-list">
-          <!-- Populated dynamically based on category -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Rating -->
-    <div class="f-section" id="fs-rating">
-      <button class="f-section-head" aria-expanded="false" aria-controls="fb-rating">
-        <span class="f-section-head-text">Customer Rating</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-rating">
-        <div class="rating-list">
-          <label class="rating-row"><input type="radio" name="rating" value="4"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">4★ &amp; above</span></label>
-          <label class="rating-row"><input type="radio" name="rating" value="3"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">3★ &amp; above</span></label>
-          <label class="rating-row"><input type="radio" name="rating" value="2"/><div class="rating-stars-mini"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" color="#E8A030"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rating-label">2★ &amp; above</span></label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Discount -->
-    <div class="f-section" id="fs-discount">
-      <button class="f-section-head" aria-expanded="false" aria-controls="fb-disc">
-        <span class="f-section-head-text">Discount</span>
-        <svg class="f-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="f-section-body" id="fb-disc">
-        <div class="discount-list">
-          <label class="discount-row"><input type="checkbox" value="10" name="discount"/><span class="discount-label">10% and above</span></label>
-          <label class="discount-row"><input type="checkbox" value="20" name="discount"/><span class="discount-label">20% and above</span></label>
-          <label class="discount-row"><input type="checkbox" value="30" name="discount"/><span class="discount-label">30% and above</span></label>
-          <label class="discount-row"><input type="checkbox" value="40" name="discount"/><span class="discount-label">40% and above</span></label>
-          <label class="discount-row"><input type="checkbox" value="50" name="discount"/><span class="discount-label">50% and above</span></label>
-        </div>
-      </div>
-    </div>
-
-  </aside>
-
-  <!-- RIGHT CATALOG GRID -->
-  <main class="cat-right" id="main-content">
-
-    <!-- Sort bar -->
-    <div class="sort-bar">
-      <p class="result-count" id="result-count">Showing <strong>0 products</strong></p>
-      <div class="sort-controls">
-        <button class="filter-toggle-btn" aria-label="Open filters"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg> Filters</button>
-        <label for="sort-select" class="sort-label">Sort:</label>
-        <select class="sort-select" id="sort-select" aria-label="Sort products">
-          <option value="relevance">Most Relevant</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="newest">Newest First</option>
-          <option value="rating">Top Rated</option>
-          <option value="discount">Best Discount</option>
-        </select>
-        <div class="view-toggles" aria-label="View mode">
-          <button class="view-btn active" aria-label="Grid view" title="Grid view"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>
-          <button class="view-btn" aria-label="List view" title="List view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Brand Showcase Row (Dynamically populated) -->
-    <div class="brand-showcase-row" id="brand-showcase-row" aria-label="Featured Brands"></div>
-
-    <!-- Product grid (dynamically populated) -->
-    <div class="cat-grid" id="main-cat-grid" role="list" aria-label="Products">
-      <!-- Injected by script.js -->
-    </div>
-
-    <div class="load-more-wrap">
-      <button class="load-more-btn" onclick="showToast('⏳ Loading more products…')">Load More Products</button>
-    </div>
-
-  </main>
-
-</div><!-- /cat-page -->
-
-<!-- Mobile filter drawer -->
-<div class="filter-drawer-overlay" id="filter-drawer-overlay"></div>
-<aside class="filter-drawer" id="filter-drawer" aria-label="Filter panel">
-  <div class="filter-drawer-head">
-    <span class="filter-drawer-title">Filters</span>
-    <button class="modal-close" id="filter-drawer-close" aria-label="Close filters"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    
   </div>
-  <div style="padding:24px">
-    <p style="font-size:14px;color:var(--text-muted)">Filter options mirror the desktop panel. Use on mobile to refine results.</p>
-    <div style="margin-top:24px;display:flex;gap:12px">
-      <button class="form-submit" style="flex:1" onclick="document.getElementById('filter-drawer').classList.remove('open');document.getElementById('filter-drawer-overlay').classList.remove('open');showToast('✅ Filters applied')">Apply Filters</button>
-      <button class="addr-act-btn secondary" style="height:48px;padding:0 24px;border-radius:var(--r-sm)" onclick="document.getElementById('filter-drawer').classList.remove('open');document.getElementById('filter-drawer-overlay').classList.remove('open')">Cancel</button>
-    </div>
-  </div>
-</aside>
+</main>
+<script>
+  let currentUser = JSON.parse(localStorage.getItem('eb_user'));
+  
+  if(!currentUser) {
+    window.location.href = 'auth.html';
+  }
 
-<!-- FOOTER -->
+  function initAccount() {
+    // Populate Sidebar
+    document.getElementById('sidebar-name').textContent = currentUser.name;
+    document.getElementById('sidebar-email').textContent = currentUser.email;
+    if(currentUser.profilePic) {
+      document.getElementById('sidebar-avatar').src = currentUser.profilePic;
+      document.getElementById('sidebar-avatar').style.display = 'block';
+      document.getElementById('sidebar-avatar-placeholder').style.display = 'none';
+    }
+    
+    // Populate Profile Form
+    document.getElementById('prof-name').value = currentUser.name;
+    document.getElementById('prof-email').value = currentUser.email;
+    document.getElementById('prof-phone').value = currentUser.phone || '';
+    
+    // Render Addresses
+    renderAddresses();
+  }
+
+  function renderAddresses() {
+    const list = document.getElementById('acc-address-list');
+    const addrs = currentUser.addresses || [];
+    
+    if(addrs.length === 0) {
+      list.innerHTML = '<p style="color:var(--text-muted);">You have no saved addresses.</p>';
+      return;
+    }
+    
+    list.innerHTML = addrs.map((a, idx) => `
+      <div class="address-card">
+        <div class="addr-type">${a.type}</div>
+        <div class="addr-text">${a.line1}<br>${a.line2}</div>
+        <div class="addr-actions">
+          <button class="addr-btn" onclick="deleteAddress(${idx})">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function switchPanel(panelId, tabEl) {
+    document.querySelectorAll('.acc-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + panelId).classList.add('active');
+    
+    document.querySelectorAll('.acc-nav-link').forEach(l => l.classList.remove('active'));
+    tabEl.classList.add('active');
+  }
+
+  // Profile update
+  document.getElementById('profile-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    currentUser.name = document.getElementById('prof-name').value;
+    currentUser.phone = document.getElementById('prof-phone').value;
+    localStorage.setItem('eb_user', JSON.stringify(currentUser));
+    initAccount();
+    if(typeof showToast === 'function') showToast('✅ Profile updated successfully');
+  });
+
+  // Avatar upload with Canvas compression
+  document.getElementById('avatar-upload')?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 300;
+        const scaleSize = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scaleSize;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.8); // Compress slightly
+        currentUser.profilePic = dataUrl;
+        localStorage.setItem('eb_user', JSON.stringify(currentUser));
+        initAccount();
+        if(typeof showToast === 'function') showToast('📸 Profile picture updated');
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Address logic overrides
+  function deleteAddress(idx) {
+    if(confirm('Delete this address?')) {
+      currentUser.addresses.splice(idx, 1);
+      localStorage.setItem('eb_user', JSON.stringify(currentUser));
+      renderAddresses();
+      if(typeof showToast === 'function') showToast('🗑️ Address deleted');
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem('eb_user');
+    window.location.href = 'auth.html';
+  }
+  
+  function deleteAccount() {
+    if(confirm('Are you sure you want to permanently delete your account? This action cannot be undone.')) {
+      localStorage.removeItem('eb_user');
+      localStorage.removeItem('eb_cart_items');
+      localStorage.removeItem('eb_wishlist');
+      alert('Account deleted.');
+      window.location.href = 'index.html';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initAccount();
+    
+    // Override AddressModal's onSave if it exists globally to update UI here
+    setTimeout(() => {
+      if(window.AddressModal) {
+        const oldSave = AddressModal.onSave;
+        AddressModal.onSave = function(addr) {
+          oldSave.call(AddressModal, addr);
+          currentUser = JSON.parse(localStorage.getItem('eb_user'));
+          renderAddresses();
+        };
+      }
+    }, 500);
+  });
+</script>
+</main>
 <footer role="contentinfo">
   <div class="footer-main">
     <div class="f-brand">
@@ -420,9 +558,99 @@
   <div class="footer-bottom"><span>&copy; 2026 E-Bazaar Pvt. Ltd. &nbsp;&middot;&nbsp; <a href="#">Terms</a> &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy</a></span><div class="pay-row" aria-label="Payment methods"><div class="pay-chip">VISA</div><div class="pay-chip">MC</div><div class="pay-chip">UPI</div><div class="pay-chip">GPay</div><div class="pay-chip">COD</div><div class="pay-chip">EMI</div></div></div>
 </footer>
 
+
+
+<!-- BACK TO TOP & TOAST -->
 <button id="btt" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg></button>
 <div id="toast" role="alert" aria-live="polite"><div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span></div>
 
 <script src="js/script.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const formLogin = document.getElementById('form-login');
+    const formRegister = document.getElementById('form-register');
+    const formProfile = document.getElementById('form-profile');
+
+    // Check if user already logged in
+    const user = JSON.parse(localStorage.getItem('eb_user'));
+    if (user) {
+      window.location.href = 'account.html';
+      return;
+    }
+
+    // Tab switching
+    tabLogin.addEventListener('click', () => {
+      tabLogin.classList.add('active');
+      tabRegister.classList.remove('active');
+      formLogin.classList.remove('hidden');
+      formLogin.classList.add('active');
+      formRegister.classList.remove('active');
+      formRegister.classList.add('hidden');
+    });
+
+    tabRegister.addEventListener('click', () => {
+      tabRegister.classList.add('active');
+      tabLogin.classList.remove('active');
+      formRegister.classList.remove('hidden');
+      formRegister.classList.add('active');
+      formLogin.classList.remove('active');
+      formLogin.classList.add('hidden');
+    });
+
+    // Handle Register
+    formRegister.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+      const phone = document.getElementById('reg-phone').value;
+      const password = document.getElementById('reg-password').value;
+
+      if (!name || !email || !password) {
+        showToast('❌ Please fill in all required fields');
+        return;
+      }
+
+      const newUser = {
+        name, email, phone, password,
+        addresses: [],
+        profilePic: null
+      };
+
+      localStorage.setItem('eb_user', JSON.stringify(newUser));
+      showToast('✅ Account created successfully!');
+      setTimeout(() => { window.location.href = 'account.html'; }, 1000);
+    });
+
+    // Handle Login
+    formLogin.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-password').value;
+      
+      const savedUser = JSON.parse(localStorage.getItem('eb_user'));
+      
+      // If we have a saved user, verify credentials. 
+      // If not, we just mock login successfully with a dummy user for demo purposes.
+      if (savedUser) {
+        if (savedUser.email === email && savedUser.password === pass) {
+          showToast('✅ Login successful!');
+          setTimeout(() => { window.location.href = 'account.html'; }, 1000);
+        } else {
+          showToast('❌ Invalid email or password');
+        }
+      } else {
+        // Create dummy user for demo if database is empty
+        const dummyUser = {
+          name: email.split('@')[0], email, phone: '', password: pass, addresses: [], profilePic: null
+        };
+        localStorage.setItem('eb_user', JSON.stringify(dummyUser));
+        showToast('✅ Login successful!');
+        setTimeout(() => { window.location.href = 'account.html'; }, 1000);
+      }
+    });
+  });
+</script>
 </body>
 </html>

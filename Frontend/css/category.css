@@ -4652,3 +4652,25 @@ html[data-theme="dark"] .tag-exclusive{background:#EAE5DF;color:#161413}
   max-height: 60%;
   fill: var(--text);
 }
+
+/* List view styles */
+.cat-grid.list-view {
+  grid-template-columns: 1fr !important;
+}
+.cat-grid.list-view .cat-card {
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+.cat-grid.list-view .cat-img-box {
+  width: 200px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+.cat-grid.list-view .cat-badge-wrap {
+  position: absolute;
+}
+.cat-grid.list-view .cat-add-btn {
+  width: auto;
+  min-width: 150px;
+}
