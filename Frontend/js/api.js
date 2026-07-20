@@ -13,16 +13,25 @@ window._apiReady = false;
 
 /* ─── Fetch Engine ────────────────────────────────────────────────────────── */
 async function fetchProducts() {
-  try {
-    const timestampUrl = 'http://localhost:5000/api/products?t=' + new Date().getTime();
-    const res = await fetch(timestampUrl);
-    if (!res.ok) throw new Error(`API responded with ${res.status}`);
-    const data = await res.json();
-    return Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : []);
-  } catch (err) {
-    console.error('[E-Bazaar API] Fetch failed:', err);
-    return [];
+  const ts = new Date().getTime();
+  const endpoints = [
+    `http://127.0.0.1:5000/api/products?t=${ts}`,
+    `http://localhost:5000/api/products?t=${ts}`
+  ];
+
+  for (const url of endpoints) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : []);
+        if (items.length > 0) return items;
+      }
+    } catch (err) {
+      console.warn(`[E-Bazaar API] Connection attempt failed for ${url}`);
+    }
   }
+  return [];
 }
 
 /* ─── Normalise a backend product → same shape as MASTER_PRODUCTS ─────────── */

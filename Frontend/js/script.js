@@ -3626,8 +3626,153 @@ const MASTER_PRODUCTS = [
     "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
     "category": "mens-innerwear",
     "brand": "Macho"
+  },
+  // --- FALLBACK GROCERIES ---
+  {
+    "id": "groc_fb_1",
+    "title": "Amul Taaza Toned Milk (1L Tetra Pack)",
+    "price": 72,
+    "originalPrice": 75,
+    "badge": "hot",
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=800&q=80",
+    "category": "groceries",
+    "brand": "Amul",
+    "rating": 4.9,
+    "reviews": 12400,
+    "description": "100% Pure Vegetarian UHT treated toned milk enriched with Vitamin A & D."
+  },
+  {
+    "id": "groc_fb_2",
+    "title": "Amul Pasteurised Salted Butter (500g)",
+    "price": 275,
+    "originalPrice": 290,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=800&q=80",
+    "category": "groceries",
+    "brand": "Amul",
+    "rating": 4.9,
+    "reviews": 18400,
+    "description": "Utterly butterly delicious butter made from fresh cow & buffalo milk cream."
+  },
+  {
+    "id": "groc_fb_3",
+    "title": "Mother Dairy Toned Milk 1L Pack",
+    "price": 68,
+    "originalPrice": 72,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=800&q=80",
+    "category": "groceries",
+    "brand": "Mother Dairy",
+    "rating": 4.8,
+    "reviews": 8900,
+    "description": "Pasteurised toned milk with essential vitamins for healthy daily nutrition."
+  },
+  {
+    "id": "groc_fb_4",
+    "title": "Nestle Maggi 2-Minute Masala Noodles (Pack of 12)",
+    "price": 168,
+    "originalPrice": 180,
+    "badge": "hot",
+    "image": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=800&q=80",
+    "category": "groceries",
+    "brand": "Nestle",
+    "rating": 4.8,
+    "reviews": 32000,
+    "description": "India's favorite instant noodles infused with signature roasted spices."
+  },
+  {
+    "id": "groc_fb_5",
+    "title": "Britannia Good Day Cashew Cookies (600g)",
+    "price": 140,
+    "originalPrice": 160,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=800&q=80",
+    "category": "groceries",
+    "brand": "Britannia",
+    "rating": 4.7,
+    "reviews": 14200,
+    "description": "Rich butter cookies filled with real crunchy cashew nuts."
+  },
+  {
+    "id": "groc_fb_6",
+    "title": "Tata Salt Vacuum Evaporated Iodised Salt (1kg)",
+    "price": 28,
+    "originalPrice": 30,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1518110168401-f2877ee2c085?w=800&q=80",
+    "category": "groceries",
+    "brand": "Tata",
+    "rating": 4.9,
+    "reviews": 45000,
+    "description": "Desh Ka Namak — 100% pure iodised salt ensuring mental development."
+  },
+  {
+    "id": "groc_fb_7",
+    "title": "Aashirvaad Shuddh Chakki Atta 10kg",
+    "price": 460,
+    "originalPrice": 510,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&q=80",
+    "category": "groceries",
+    "brand": "ITC",
+    "rating": 4.9,
+    "reviews": 28000,
+    "description": "100% pure whole wheat flour milled in traditional chakki for soft rotis."
+  },
+  // --- FALLBACK SPORTS ---
+  {
+    "id": "sports_fb_1",
+    "title": "Yonex Nanoray 18i Light Graphite Badminton Racquet",
+    "price": 1890,
+    "originalPrice": 2490,
+    "badge": "hot",
+    "image": "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80",
+    "category": "sports",
+    "brand": "Yonex",
+    "rating": 4.8,
+    "reviews": 5600,
+    "description": "Ultra lightweight 77g racquet with isometric head shape for speedy swings."
+  },
+  {
+    "id": "sports_fb_2",
+    "title": "Decathlon Domyos Hex Rubber Dumbbell (10kg Pair)",
+    "price": 2499,
+    "originalPrice": 2999,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80",
+    "category": "sports",
+    "brand": "Decathlon",
+    "rating": 4.8,
+    "reviews": 4100,
+    "description": "Commercial grade hexagonal anti-roll rubber dumbbells with ergonomic chrome grip."
+  },
+  // --- FALLBACK KITCHEN ---
+  {
+    "id": "kitch_fb_1",
+    "title": "Hawkins Contura 3 Litre Pressure Cooker",
+    "price": 1525,
+    "originalPrice": 1750,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=800&q=80",
+    "category": "home-kitchen",
+    "brand": "Hawkins",
+    "rating": 4.9,
+    "reviews": 16500,
+    "description": "Hard anodised body with stainless steel lid for fast energy-efficient cooking."
+  },
+  {
+    "id": "kitch_fb_2",
+    "title": "Prestige Iris 750W Mixer Grinder with 4 Jars",
+    "price": 3199,
+    "originalPrice": 4500,
+    "badge": "hot",
+    "image": "https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=800&q=80",
+    "category": "home-kitchen",
+    "brand": "Prestige",
+    "rating": 4.7,
+    "reviews": 23000,
+    "description": "Powerful 750W motor with 3 stainless steel jars + 1 polycarbonate juicer jar."
   }
-
 ];
 
 function generateMockProductsForCategory(catId) {

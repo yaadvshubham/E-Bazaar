@@ -12,11 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ── Middleware ────────────────────────────────────────────────────────────────
-app.use(cors({
-  origin: ['http://localhost:5501', 'http://127.0.0.1:5501', 'http://localhost:3000', '*'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -62,8 +58,8 @@ sequelize.authenticate()
     return sequelize.sync({ alter: true });
   })
   .then(() => {
-    app.listen(PORT, () => {
-      console.log(`[Server] E-Bazaar API running on http://localhost:${PORT}`);
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`[Server] E-Bazaar API running on http://localhost:${PORT} and http://127.0.0.1:${PORT}`);
       console.log(`[Server] Health check: http://localhost:${PORT}/api/health`);
     });
   })
