@@ -18,7 +18,14 @@ function signToken(user) {
 }
 
 function safeUser(user) {
-  return { id: user.id, name: user.name, email: user.email, phone: user.phone || '' };
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    phone: user.phone || '',
+    profilePic: user.profilePic || null,
+    walletBalance: typeof user.walletBalance === 'number' ? user.walletBalance : 1500.00
+  };
 }
 
 /* ── POST /api/auth/register ─────────────────────────────────────────────── */
@@ -49,6 +56,7 @@ router.post('/register', async (req, res) => {
       email:    email.toLowerCase().trim(),
       password: hashedPassword,
       phone:    phone || null,
+      walletBalance: 1500.00
     });
 
     const token = signToken(user);
@@ -112,6 +120,66 @@ router.get('/me', async (req, res) => {
     return res.json({ user: safeUser(user) });
   } catch (err) {
     return res.status(401).json({ error: 'Invalid or expired token.' });
+  }
+});
+
+/* ── PUT /api/auth/profile — Update user profile details ─────────────────── */
+router.put('/profile', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Authorization required.' });
+    }
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findByPk(decoded.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    const { name, phone, profilePic } = req.body;
+    if (name) user.name = name.trim();
+    if (phone !== undefined) user.phone = phone.trim();
+    if (profilePic !== undefined) user.profilePic = profilePic;
+
+    await user.save();
+
+    return res.json({
+      message: 'Profile updated successfully',
+      user: safeUser(user)
+    });
+  } catch (err) {
+    console.error('[Auth] Profile update error:', err.message);
+    return res.status(500).json({ error: 'Failed to update profile: ' + err.message });
+  }
+});
+
+/* ── POST /api/auth/wallet/add — Add money to user wallet ───────────────── */
+router.post('/wallet/add', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Authorization required.' });
+    }
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findByPk(decoded.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    const amount = parseFloat(req.body.amount);
+    if (isNaN(amount) || amount <= 0) {
+      return res.status(400).json({ error: 'Please enter a valid amount.' });
+    }
+
+    user.walletBalance = (user.walletBalance || 0) + amount;
+    await user.save();
+
+    return res.json({
+      message: `Successfully added ₹${amount.toLocaleString('en-IN')} to your wallet!`,
+      walletBalance: user.walletBalance,
+      user: safeUser(user)
+    });
+  } catch (err) {
+    console.error('[Auth] Wallet add error:', err.message);
+    return res.status(500).json({ error: 'Failed to add funds to wallet: ' + err.message });
   }
 });
 

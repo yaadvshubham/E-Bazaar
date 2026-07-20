@@ -20,7 +20,18 @@ async function fetchProducts(params = {}) {
     const data = await res.json();
     return Array.isArray(data.products) ? data.products : [];
   } catch (err) {
-    console.warn('[E-Bazaar API] Fetch failed, using local data:', err.message);
+    console.error('[E-Bazaar API] Fetch failed:', err);
+    
+    const fallbackHTML = `<div style="padding: 20px; text-align: center; color: red; grid-column: 1/-1;">Backend server is offline or unreachable. Please start the Node.js server.</div>`;
+    const gridIds = ['main-cat-grid', 'tr-new', 'tr-trend', 'disc-row-1', 'disc-row-2', 'disc-row-3'];
+    gridIds.forEach(id => {
+      const container = document.getElementById(id);
+      if (container) container.innerHTML = fallbackHTML;
+    });
+    document.querySelectorAll('.products-grid, .tr-grid').forEach(el => {
+      el.innerHTML = fallbackHTML;
+    });
+    
     return [];
   }
 }
@@ -66,11 +77,21 @@ function applyUrlFilters() {
   const params = new URLSearchParams(window.location.search);
   const catParam   = params.get('category') || params.get('cat');
   const brandParam = params.get('brand');
+  const qParam     = params.get('q');
 
-  if (!catParam && !brandParam) return null;
+  if (!catParam && !brandParam && !qParam) return null;
 
   let filtered = [...window.allProducts];
 
+  if (qParam) {
+    const qLower = qParam.trim().toLowerCase();
+    filtered = filtered.filter(p =>
+      (p.title || p.name || '').toLowerCase().includes(qLower) ||
+      (p.brand || '').toLowerCase().includes(qLower) ||
+      (p.category || '').toLowerCase().includes(qLower) ||
+      (p.description || '').toLowerCase().includes(qLower)
+    );
+  }
   if (catParam) {
     filtered = filtered.filter(p =>
       (p.category || '').toLowerCase() === catParam.toLowerCase()
@@ -82,13 +103,17 @@ function applyUrlFilters() {
     );
   }
 
+  let title = `Explore Catalog`;
+  if (qParam) title = `Search Results for "${qParam}"`;
+  else if (brandParam) title = `Brand Store: ${brandParam}`;
+  else if (catParam) title = `Explore: ${catParam.charAt(0).toUpperCase() + catParam.slice(1)}`;
+
   return {
     products: filtered,
     catParam,
     brandParam,
-    title: brandParam
-      ? `Brand Store: ${brandParam}`
-      : `Explore: ${catParam.charAt(0).toUpperCase() + catParam.slice(1)}`,
+    qParam,
+    title,
   };
 }
 
@@ -221,8 +246,24 @@ async function initApiEngine() {
     // If we're on the category page, refresh it with merged data
     if (document.body.dataset.page === 'category') {
       const urlParams = new URLSearchParams(window.location.search);
+      const qParam = urlParams.get('q');
       const catId = urlParams.get('cat') || 'clothing';
-      if (window.currentCategoryProducts) {
+
+      if (qParam && window.allProducts) {
+        const qLower = qParam.trim().toLowerCase();
+        const searchMatches = window.allProducts.filter(p =>
+          (p.title || p.name || '').toLowerCase().includes(qLower) ||
+          (p.brand || '').toLowerCase().includes(qLower) ||
+          (p.category || '').toLowerCase().includes(qLower) ||
+          (p.description || '').toLowerCase().includes(qLower)
+        );
+        window.currentCategoryProducts = searchMatches;
+        window.currentPage = 1;
+        if (typeof renderFilteredProducts === 'function') renderFilteredProducts();
+
+        const countEl = document.getElementById('result-count');
+        if (countEl) countEl.innerHTML = `Showing <strong>${searchMatches.length} products</strong> for "${qParam}"`;
+      } else if (window.currentCategoryProducts) {
         // Inject matching API products into the category product pool
         const apiForCat = apiProducts
           .map(normaliseApiProduct)

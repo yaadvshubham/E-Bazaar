@@ -259,7 +259,7 @@
       </div>
       <div class="invoice-meta">
         <h1>ORDER INVOICE</h1>
-        <p>Invoice #: EB-2026-908234</p>
+        <p id="invoice-id">Invoice #: EB-2026-908234</p>
         <p id="invoice-date">Date: 12 July 2026</p>
       </div>
     </div>
@@ -271,19 +271,19 @@
         <div class="box-title">Customer Details</div>
         <div class="info-row">
           <span class="info-label">Name</span>
-          <span class="info-val">Aryan Kumar</span>
+          <span class="info-val" id="cust-name">Aryan Kumar</span>
         </div>
         <div class="info-row">
           <span class="info-label">Gender</span>
-          <span class="info-val">Male</span>
+          <span class="info-val" id="cust-gender">Male</span>
         </div>
         <div class="info-row">
           <span class="info-label">Phone</span>
-          <span class="info-val">+91 98765 43210</span>
+          <span class="info-val" id="cust-phone">+91 98765 43210</span>
         </div>
         <div class="info-row">
           <span class="info-label">Address</span>
-          <span class="info-val">12, Green Park, New Delhi, 110001</span>
+          <span class="info-val" id="cust-address">12, Green Park, New Delhi, 110001</span>
         </div>
       </div>
 
@@ -292,19 +292,19 @@
         <div class="box-title">Payment Details</div>
         <div class="info-row">
           <span class="info-label">Method</span>
-          <span class="info-val">UPI (Google Pay)</span>
+          <span class="info-val" id="pay-method">UPI (Google Pay)</span>
         </div>
         <div class="info-row">
           <span class="info-label">Transaction ID</span>
-          <span class="info-val">UPI90812374659</span>
+          <span class="info-val" id="pay-txn">UPI90812374659</span>
         </div>
         <div class="info-row">
           <span class="info-label">Status</span>
-          <span class="info-val status-paid">Paid</span>
+          <span class="info-val status-paid" id="pay-status">Paid</span>
         </div>
         <div class="info-row">
           <span class="info-label">Order Type</span>
-          <span class="info-val">Prepaid</span>
+          <span class="info-val" id="pay-type">Prepaid</span>
         </div>
       </div>
     </div>
@@ -388,8 +388,9 @@
   </div>
 
   <script>
-    // Logic to handle pending/delivered state dynamically based on URL parameter
+    // Logic to handle dynamic order billing/shipping info from backend
     const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('id');
     const status = urlParams.get('status') || 'delivered'; // default to delivered
 
     const deliveryContent = document.getElementById('delivery-content');
@@ -399,79 +400,232 @@
     
     invoiceDate.innerText = `Date: ${dateToday}`;
 
-    if (status === 'pending') {
-      deliveryContent.innerHTML = `
-        <div class="info-row">
-          <span class="info-label">Status</span>
-          <span class="info-val status-pending">Order Not Delivered Yet</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">Received By</span>
-          <span class="info-val" style="color: #999;">Pending Delivery</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">Expected Delivery</span>
-          <span class="info-val">15 July 2026</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">Delivery Time</span>
-          <span class="info-val" style="color: #999;">TBD</span>
-        </div>
-      `;
-      
-      // Inject pending item
-      itemsTbody.innerHTML = `
-        <tr>
-          <td>
-            <div class="item-name">PUMA RS-X Core Sneakers - White/Black</div>
-            <div class="item-sku">SKU: PUMA-RSX-9UK</div>
-          </td>
-          <td class="text-right">1</td>
-          <td class="text-right">₹3,643.22</td>
-          <td class="text-right">₹655.78</td>
-          <td class="text-right">₹4,299.00</td>
-        </tr>
-      `;
-      // Update totals
-      document.querySelector('.totals-box').innerHTML = `
-          <div class="total-row">
-            <span class="info-label">Subtotal:</span>
-            <span class="info-val">₹3,643.22</span>
-          </div>
-          <div class="total-row">
-            <span class="info-label">GST (18%):</span>
-            <span class="info-val">₹655.78</span>
-          </div>
-          <div class="total-row">
-            <span class="info-label">Shipping:</span>
-            <span class="info-val">₹0.00</span>
-          </div>
-          <div class="total-row grand-total">
-            <span>Grand Total:</span>
-            <span>₹4,299.00</span>
-          </div>
-      `;
-    } else {
-      // Default Delivered item (iPhone)
-      itemsTbody.innerHTML = `
-        <tr>
-          <td>
-            <div class="item-name">Apple iPhone 15 - Black, 128GB</div>
-            <div class="item-sku">SKU: AAPL-IP15-128-BLK</div>
-          </td>
-          <td class="text-right">1</td>
-          <td class="text-right">₹59,237.29</td>
-          <td class="text-right">₹10,662.71</td>
-          <td class="text-right">₹69,900.00</td>
-        </tr>
-      `;
-    }
+    // Read JWT Token
+    const token = localStorage.getItem('ebazaar_token');
     
-    // Auto trigger print if parameter is passed
-    if (urlParams.get('print') === 'true') {
-      setTimeout(() => {
-        window.print();
-      }, 500);
+    if (orderId && token) {
+      fetch('http://localhost:5000/api/orders', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('API request failed');
+        return res.json();
+      })
+      .then(orders => {
+        const order = orders.find(o => String(o.id) === String(orderId));
+        if (order) {
+          renderInvoiceData(order);
+        } else {
+          renderMockInvoice();
+        }
+      })
+      .catch(err => {
+        console.error('[Invoice] Failed to fetch live data, using mock fallback:', err);
+        renderMockInvoice();
+      });
+    } else {
+      renderMockInvoice();
+    }
+
+    function renderInvoiceData(order) {
+      document.getElementById('invoice-id').innerText = `Invoice #: EB-2026-${order.id}`;
+      
+      let dateStr = dateToday;
+      try {
+        const date = new Date(order.createdAt);
+        dateStr = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      } catch (e) {}
+      document.getElementById('invoice-date').innerText = `Date: ${dateStr}`;
+
+      const user = JSON.parse(localStorage.getItem('eb_user') || '{}');
+      document.getElementById('cust-name').innerText = user.name || 'Customer';
+
+      let deliveryAddr = order.deliveryAddress || 'No address specified';
+      if (deliveryAddr.startsWith('{')) {
+        try {
+          const addrObj = JSON.parse(deliveryAddr);
+          deliveryAddr = `${addrObj.fname} ${addrObj.lname}, ${addrObj.line1}, ${addrObj.line2 ? addrObj.line2 + ', ' : ''}${addrObj.city} - ${addrObj.pin}`;
+          document.getElementById('cust-name').innerText = `${addrObj.fname} ${addrObj.lname}`;
+          if (addrObj.phone) document.getElementById('cust-phone').innerText = addrObj.phone;
+        } catch(e) {}
+      }
+      document.getElementById('cust-address').innerText = deliveryAddr;
+
+      document.getElementById('pay-method').innerText = order.paymentMethod || 'UPI';
+      document.getElementById('pay-txn').innerText = order.paymentMethod === 'Razorpay' ? `RZP${order.id}T${Math.floor(100000 + Math.random() * 900000)}` : `UPI${order.id}T${Math.floor(100000 + Math.random() * 900000)}`;
+      document.getElementById('pay-status').innerText = order.status === 'Pending' ? 'Pending' : 'Paid';
+      document.getElementById('pay-status').className = order.status === 'Pending' ? 'info-val status-pending' : 'info-val status-paid';
+      document.getElementById('pay-type').innerText = order.paymentMethod === 'COD' ? 'Pay on Delivery' : 'Prepaid';
+
+      let items = order.items;
+      if (typeof items === 'string') {
+        try { items = JSON.parse(items); } catch(e) { items = []; }
+      }
+      if (!Array.isArray(items)) items = [];
+
+      itemsTbody.innerHTML = items.map(item => {
+        const qty = item.qty || 1;
+        const total = (parseFloat(String(item.price).replace(/[^\d]/g, '')) || 0) * qty;
+        const sub = Math.round((total / 1.18) * 100) / 100;
+        const gst = Math.round((total - sub) * 100) / 100;
+
+        return `
+          <tr>
+            <td>
+              <div class="item-name">${item.title || item.name || 'Product'}</div>
+              <div class="item-sku">SKU: EB-PROD-${item.id}</div>
+            </td>
+            <td class="text-right">${qty}</td>
+            <td class="text-right">₹${sub.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            <td class="text-right">₹${gst.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            <td class="text-right">₹${total.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const grandTotal = order.totalAmount;
+      const subtotal = Math.round((grandTotal / 1.18) * 100) / 100;
+      const gstTotal = Math.round((grandTotal - subtotal) * 100) / 100;
+
+      document.querySelector('.totals-box').innerHTML = `
+        <div class="total-row">
+          <span class="info-label">Subtotal:</span>
+          <span class="info-val">₹${subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+        <div class="total-row">
+          <span class="info-label">GST (18%):</span>
+          <span class="info-val">₹${gstTotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+        <div class="total-row">
+          <span class="info-label">Shipping:</span>
+          <span class="info-val">₹0.00</span>
+        </div>
+        <div class="total-row grand-total">
+          <span>Grand Total:</span>
+          <span>₹${grandTotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+        </div>
+      `;
+
+      if (order.status === 'Pending') {
+        deliveryContent.innerHTML = `
+          <div class="info-row">
+            <span class="info-label">Status</span>
+            <span class="info-val status-pending">Order Not Delivered Yet</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Received By</span>
+            <span class="info-val" style="color: #999;">Pending Delivery</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Expected Delivery</span>
+            <span class="info-val">TBD (3-5 Business Days)</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Delivery Time</span>
+            <span class="info-val" style="color: #999;">TBD</span>
+          </div>
+        `;
+      } else {
+        deliveryContent.innerHTML = `
+          <div class="info-row">
+            <span class="info-label">Status</span>
+            <span class="info-val status-paid">Delivered</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Received By</span>
+            <span class="info-val">${user.name || 'Customer'} (Resident)</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Delivery Date</span>
+            <span class="info-val">${dateStr}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Delivery Time</span>
+            <span class="info-val">02:45 PM</span>
+          </div>
+        `;
+      }
+
+      triggerPrintIfNeeded();
+    }
+
+    function renderMockInvoice() {
+      if (status === 'pending') {
+        deliveryContent.innerHTML = `
+          <div class="info-row">
+            <span class="info-label">Status</span>
+            <span class="info-val status-pending">Order Not Delivered Yet</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Received By</span>
+            <span class="info-val" style="color: #999;">Pending Delivery</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Expected Delivery</span>
+            <span class="info-val">15 July 2026</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Delivery Time</span>
+            <span class="info-val" style="color: #999;">TBD</span>
+          </div>
+        `;
+        
+        itemsTbody.innerHTML = `
+          <tr>
+            <td>
+              <div class="item-name">PUMA RS-X Core Sneakers - White/Black</div>
+              <div class="item-sku">SKU: PUMA-RSX-9UK</div>
+            </td>
+            <td class="text-right">1</td>
+            <td class="text-right">₹3,643.22</td>
+            <td class="text-right">₹655.78</td>
+            <td class="text-right">₹4,299.00</td>
+          </tr>
+        `;
+        document.querySelector('.totals-box').innerHTML = `
+            <div class="total-row">
+              <span class="info-label">Subtotal:</span>
+              <span class="info-val">₹3,643.22</span>
+            </div>
+            <div class="total-row">
+              <span class="info-label">GST (18%):</span>
+              <span class="info-val">₹655.78</span>
+            </div>
+            <div class="total-row">
+              <span class="info-label">Shipping:</span>
+              <span class="info-val">₹0.00</span>
+            </div>
+            <div class="total-row grand-total">
+              <span>Grand Total:</span>
+              <span>₹4,299.00</span>
+            </div>
+        `;
+      } else {
+        itemsTbody.innerHTML = `
+          <tr>
+            <td>
+              <div class="item-name">Apple iPhone 15 - Black, 128GB</div>
+              <div class="item-sku">SKU: AAPL-IP15-128-BLK</div>
+            </td>
+            <td class="text-right">1</td>
+            <td class="text-right">₹59,237.29</td>
+            <td class="text-right">₹10,662.71</td>
+            <td class="text-right">₹69,900.00</td>
+          </tr>
+        `;
+      }
+      triggerPrintIfNeeded();
+    }
+
+    function triggerPrintIfNeeded() {
+      if (urlParams.get('print') === 'true') {
+        setTimeout(() => {
+          window.print();
+        }, 500);
+      }
     }
   </script>
 </body>

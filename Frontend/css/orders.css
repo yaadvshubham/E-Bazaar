@@ -258,21 +258,29 @@
 .timeline-container {
   padding: 24px 0 12px;
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .timeline-track {
   position: absolute;
-  top: 39px; /* Centered with the nodes */
-  left: 10%;
-  right: 10%;
-  height: 2px;
-  background: var(--border-line); /* Thin horizontal progress line container */
+  top: 40px; /* Aligned with center of 32px node indicators */
+  left: 12.5%;
+  right: 12.5%;
+  height: 4px;
+  background: #e5ded6; /* Visible contrasting base track */
   z-index: 1;
+  border-radius: 4px;
 }
 
-.timeline-container {
-  display: flex;
-  justify-content: space-between;
+.timeline-track-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #A88C6D, #8a6f52);
+  border-radius: 4px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 4px rgba(168, 140, 109, 0.4);
 }
 
 .milestone {
@@ -283,59 +291,64 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .node-indicator {
-  width: 32px;
-  height: 32px;
-  background: var(--bg-surface);
-  border: 2px solid var(--border-line);
+  width: 34px;
+  height: 34px;
+  background: var(--bg-surface, #ffffff);
+  border: 2px solid #d5cbbf;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  color: var(--bg-surface);
-  transition: all var(--ease);
+  color: var(--text-sub, #777777);
+  transition: all 0.3s ease;
 }
 
 .node-label {
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-sub);
+  color: var(--text-sub, #777777);
+  transition: color 0.3s ease;
 }
 
 /* Timeline Accent Progress Colors */
 .milestone.completed .node-indicator {
-  background: var(--accent-caramel); /* Active solid Premium Caramel */
-  border-color: var(--accent-caramel);
-  color: #fff;
+  background: #A88C6D; /* Solid Luxury Caramel */
+  border-color: #A88C6D;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(168, 140, 109, 0.35);
 }
 
 .milestone.completed .node-label {
-  color: var(--text-primary);
+  color: var(--text-primary, #111111);
+  font-weight: 700;
 }
 
 .milestone.active .node-indicator {
-  background: var(--bg-surface);
-  border-color: var(--accent-caramel); /* Active node indicator has clear outline */
-  border-width: 3px;
-  box-shadow: 0 0 0 4px rgba(168, 140, 109, 0.15);
+  background: #ffffff;
+  border: 3px solid #A88C6D;
+  color: #A88C6D;
+  box-shadow: 0 0 0 5px rgba(168, 140, 109, 0.22);
 }
 
 .milestone.active .node-label {
-  color: var(--text-primary);
+  color: #A88C6D;
+  font-weight: 700;
 }
 
 .milestone.pending .node-indicator {
-  background: var(--bg-canvas); /* Soft sand hue / grayed out */
-  border-color: var(--border-line);
+  background: var(--bg-canvas, #faf8f5);
+  border-color: #d5cbbf;
+  color: #999999;
 }
 
 .milestone.pending .node-label {
-  color: var(--text-sub);
+  color: #999999;
 }
 
 /* Empty State */

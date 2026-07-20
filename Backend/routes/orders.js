@@ -160,5 +160,44 @@ router.post('/verify', authMiddleware, async (req, res) => {
   }
 });
 
+// ── POST /api/orders/:id/return — Initiate Return/Replacement for an order ─────
+router.post('/:id/return', authMiddleware, async (req, res) => {
+  try {
+    const { reason, comments, action, items, pickupAddress } = req.body;
+    const order = await Order.findOne({ where: { id: req.params.id, userId: req.user.id } });
+    
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found.' });
+    }
+    
+    // Update status based on requested resolution action
+    if (action === 'replace') {
+      order.status = 'Replacement Requested';
+    } else {
+      order.status = 'Refunded';
+    }
+    
+    // Save serialized return details including reason, action, comments, pickupAddress and specific items
+    order.returnDetails = JSON.stringify({
+      reason: reason || 'Not specified',
+      comments: comments || '',
+      action: action || 'refund',
+      items: items || [],
+      pickupAddress: pickupAddress || '',
+      requestDate: new Date().toISOString()
+    });
+    
+    await order.save();
+    
+    return res.json({
+      message: `Return request submitted successfully. Resolution: ${action}`,
+      order
+    });
+  } catch (err) {
+    console.error('[Orders Route] Return error:', err.message);
+    return res.status(500).json({ error: 'Failed to process return request: ' + err.message });
+  }
+});
+
 module.exports = router;
 

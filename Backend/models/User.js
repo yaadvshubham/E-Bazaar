@@ -30,6 +30,11 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  walletBalance: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 1500.00,
+  },
 }, {
   tableName: 'users',
   timestamps: true,

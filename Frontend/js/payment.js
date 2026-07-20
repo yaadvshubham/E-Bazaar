@@ -71,6 +71,13 @@ function checkLoginState() {
     if (nameField && user) {
       nameField.value = user.name;
     }
+
+    const walletBalEl = document.getElementById('checkout-wallet-balance');
+    if (walletBalEl && user) {
+      const userObj = JSON.parse(localStorage.getItem('eb_user') || '{}');
+      const bal = typeof userObj.walletBalance === 'number' ? userObj.walletBalance : (user.walletBalance || 1500);
+      walletBalEl.innerText = `₹${bal.toLocaleString('en-IN')}.00`;
+    }
   } else {
     if (formBody) formBody.style.display = 'none';
     if (rzpSection) rzpSection.style.display = 'none';
@@ -325,16 +332,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Fallback Netbanking payment confirmation
-  const nbButton = document.getElementById('btn-netbanking-pay');
-  if (nbButton) {
-    nbButton.addEventListener('click', () => {
-      const bankSelect = document.querySelector('.bank-select');
-      const selectedBank = bankSelect ? bankSelect.value : 'SBI';
-      submitOrder('Netbanking - ' + selectedBank, {
-        btn: nbButton,
-        text: document.getElementById('btn-nb-text'),
-        spinner: document.getElementById('nb-spinner')
+  // Wallet payment handler
+  const walletButton = document.getElementById('btn-wallet-pay');
+  if (walletButton) {
+    walletButton.addEventListener('click', () => {
+      const userObj = JSON.parse(localStorage.getItem('eb_user') || '{}');
+      const bal = typeof userObj.walletBalance === 'number' ? userObj.walletBalance : 1500;
+      if (bal < total) {
+        alert(`Insufficient Wallet Balance (₹${bal.toLocaleString('en-IN')}). Please add funds in My Account or choose another payment method.`);
+        return;
+      }
+
+      // Deduct balance
+      userObj.walletBalance = bal - total;
+      if (!userObj.walletTransactions) userObj.walletTransactions = [];
+      userObj.walletTransactions.unshift({
+        title: 'Order Payment',
+        desc: `Payment for order of ${items.length} items`,
+        amount: `- ₹${total.toLocaleString('en-IN')}.00`,
+        date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        type: 'debit'
+      });
+      localStorage.setItem('eb_user', JSON.stringify(userObj));
+
+      submitOrder('E-Bazaar Wallet', {
+        btn: walletButton,
+        text: document.getElementById('btn-wallet-text'),
+        spinner: document.getElementById('wallet-spinner')
       });
     });
   }

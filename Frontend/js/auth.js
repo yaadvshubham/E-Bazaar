@@ -25,14 +25,14 @@ const AuthSession = {
   },
   getUser() {
     try {
-      return JSON.parse(localStorage.getItem('ebazaar_user')) || null;
+      return JSON.parse(localStorage.getItem('ebazaar_user')) || JSON.parse(localStorage.getItem('eb_user')) || null;
     } catch { return null; }
   },
   getToken() {
-    return localStorage.getItem('ebazaar_token') || null;
+    return localStorage.getItem('ebazaar_token') || (localStorage.getItem('eb_user') ? 'ebazaar_demo_token' : null);
   },
   isLoggedIn() {
-    return !!(this.getToken() && this.getUser());
+    return !!(localStorage.getItem('ebazaar_token') || localStorage.getItem('eb_user'));
   },
 };
 

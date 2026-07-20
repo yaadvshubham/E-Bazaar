@@ -83,6 +83,7 @@
   <div class="body" id="form-body">
     <div class="tabs">
       <div class="tab active" data-target="upi">UPI</div>
+      <div class="tab" data-target="wallet">E-Bazaar Wallet</div>
       <div class="tab" data-target="card">Credit/Debit Card</div>
       <div class="tab" data-target="netbanking">Netbanking</div>
     </div>
@@ -106,6 +107,19 @@
           <div class="spinner" id="upi-spinner" style="display: none; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 20px; height: 20px; animation: spin 1s linear infinite;"></div>
         </button>
       </div>
+    </div>
+
+    <!-- E-Bazaar Wallet Tab -->
+    <div class="tab-content" id="tab-wallet">
+      <div style="background: rgba(168, 140, 109, 0.12); border: 1px solid rgba(168, 140, 109, 0.3); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--accent, #A88C6D); letter-spacing: 0.5px;">AVAILABLE WALLET BALANCE</div>
+        <div style="font-size: 28px; font-weight: 800; margin-top: 4px; color: var(--text-primary, #fff);" id="checkout-wallet-balance">₹1,500.00</div>
+        <div style="font-size: 12px; opacity: 0.8; margin-top: 6px;">⚡ Instant 1-Click Checkout</div>
+      </div>
+      <button type="button" class="btn-pay" id="btn-wallet-pay" style="display: flex; align-items: center; justify-content: center; width: 100%;">
+        <span id="btn-wallet-text">Pay via E-Bazaar Wallet</span>
+        <div class="spinner" id="wallet-spinner" style="display: none; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 20px; height: 20px; animation: spin 1s linear infinite;"></div>
+      </button>
     </div>
 
     <!-- Card Tab -->

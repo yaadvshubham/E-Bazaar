@@ -46,6 +46,10 @@ const Order = sequelize.define('Order', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  returnDetails: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
 }, {
   tableName: 'orders',
   timestamps: true,
