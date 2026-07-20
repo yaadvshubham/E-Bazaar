@@ -86,11 +86,11 @@
     </button>
 
     <!-- Search -->
-    <div class="nav-search" role="search">
+    <form class="nav-search" role="search" action="category.html" method="GET">
       <label for="q" class="sr-only">Search E-Bazaar</label>
-      <input type="search" id="q" placeholder="Search products, brands, categories…" autocomplete="off"/>
-      <button class="search-btn" aria-label="Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-    </div>
+      <input type="search" id="q" name="q" placeholder="Search products, brands, categories…" autocomplete="off"/>
+      <button type="submit" class="search-btn" aria-label="Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    </form>
 
     <!-- Right actions -->
     <div class="nav-actions">

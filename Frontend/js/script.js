@@ -3397,29 +3397,39 @@ function makeSVG(color, shape, w = 200, h = 190) {
 window.makeSVG = makeSVG;
 
 function buildCard(p) {
+  if (!p) return '';
+  const title = p.title || p.name || 'Product';
+  const desc = p.description || p.desc || '';
+  const brand = p.brand || 'E-Bazaar';
+  const rating = p.rating || 4.0;
+  const reviews = p.reviews || 0;
   const bCls = { new:'b-new', sale:'b-sale', hot:'b-hot' }[p.badge] || '';
   const bLbl = { new:'New', sale:'Sale', hot:'🔥 Hot' }[p.badge] || '';
-  const isWished = typeof window.ebWishlist !== 'undefined' ? window.ebWishlist.some(item => item.id === p.id) : false;
+  const isWished = typeof window.ebWishlist !== 'undefined' && Array.isArray(window.ebWishlist) ? window.ebWishlist.some(item => item.id === p.id) : false;
   const stroke = isWished ? '#E03E3E' : '#999';
   const wishCls = isWished ? 'cat-wish-btn wished' : 'cat-wish-btn';
   const pStr = encodeURIComponent(JSON.stringify(p)).replace(/'/g, "%27");
   const imgSrc = p.image || p.imageUrl || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
   const salesDisplay = p.sales ? (String(p.sales).includes('bought') ? p.sales : `${p.sales} bought in past month`) : '';
+
+  const numPrice = typeof p.price === 'number' ? p.price : (parseInt(String(p.price || 0).replace(/[^\d]/g, '')) || 0);
+  const numOrig = typeof p.originalPrice === 'number' ? p.originalPrice : (parseInt(String(p.originalPrice || numPrice).replace(/[^\d]/g, '')) || numPrice);
+  const discText = p.discount || p.disc || '0%';
   
   return `<article class="cat-card" role="listitem">
-    <a href="product-detail.html?id=${p.id}" class="cat-img" style="display:block; text-decoration:none;">
-      <img src="${imgSrc}" alt="${p.title.replace(/"/g, '&quot;')}" loading="lazy" style="width:100%; height:100%; object-fit:cover; background:#f9f9f9;">
-      ${p.badge?`<span class="card-badge ${bCls}">${bLbl}</span>`:``}
+    <a href="product-detail.html?id=${p.id || 'P01'}" class="cat-img" style="display:block; text-decoration:none;">
+      <img src="${imgSrc}" alt="${String(title).replace(/"/g, '&quot;')}" loading="lazy" style="width:100%; height:100%; object-fit:cover; background:#f9f9f9;">
+      ${p.badge ? `<span class="card-badge ${bCls}">${bLbl}</span>` : ``}
     </a>
-    <button class="${wishCls}" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:var(--bg-white);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;z-index:2;" aria-label="Add to wishlist" onclick="toggleWish('w_${p.id}', '${p.title.replace(/'/g, "\\'")}', '${pStr}')" id="w_${p.id}">
+    <button class="${wishCls}" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:var(--bg-white);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;z-index:2;" aria-label="Add to wishlist" onclick="toggleWish('w_${p.id || 'P01'}', '${String(title).replace(/'/g, "\\'")}', '${pStr}')" id="w_${p.id || 'P01'}">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </button>
     <div class="cat-body">
-      <div class="cat-brand">${p.brand}</div>
-      <a href="product-detail.html?id=${p.id}" class="cat-name" style="display:block;">${p.title}</a>
-      <p class="product-desc-snippet" style="font-size:12px; color:var(--text-muted); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; margin-top:4px; margin-bottom:8px; line-height: 1.4;">${p.description}</p>
-      <div class="cat-prices"><span class="cat-price">₹${p.price.toLocaleString('en-IN')}</span><span class="cat-orig">₹${p.originalPrice.toLocaleString('en-IN')}</span><span class="cat-disc">${p.discount} off</span></div>
-      <div class="cat-rating"><div class="cat-stars" aria-label="${p.rating} out of 5">${makeStars(p.rating)}</div><span class="cat-reviews">${p.rating} (${p.reviews})</span></div>
+      <div class="cat-brand">${brand}</div>
+      <a href="product-detail.html?id=${p.id || 'P01'}" class="cat-name" style="display:block;">${title}</a>
+      <p class="product-desc-snippet" style="font-size:12px; color:var(--text-muted); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; margin-top:4px; margin-bottom:8px; line-height: 1.4;">${desc}</p>
+      <div class="cat-prices"><span class="cat-price">₹${numPrice.toLocaleString('en-IN')}</span><span class="cat-orig">₹${numOrig.toLocaleString('en-IN')}</span><span class="cat-disc">${discText} off</span></div>
+      <div class="cat-rating"><div class="cat-stars" aria-label="${rating} out of 5">${makeStars(rating)}</div><span class="cat-reviews">${rating} (${reviews})</span></div>
       ${salesDisplay ? `<div class="cat-transactions" style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${salesDisplay}</div>` : ''}
       <button class="cat-add-btn" onclick="addToCart('${pStr}')">+ Add to Cart</button>
     </div>
@@ -3438,6 +3448,56 @@ function getBrandLogoSVG(brand) {
 
 function initDynamicCategory() {
   const urlParams = new URLSearchParams(window.location.search);
+  const qParam = urlParams.get('q');
+
+  if (qParam) {
+    const qLower = qParam.trim().toLowerCase();
+    const allPool = (window.MASTER_PRODUCTS || []).concat(window.allProducts || []);
+    const uniquePool = Array.from(new Map(allPool.map(item => [item.id || item.title, item])).values());
+    const matches = uniquePool.filter(p =>
+      (p.title || p.name || '').toLowerCase().includes(qLower) ||
+      (p.brand || '').toLowerCase().includes(qLower) ||
+      (p.category || '').toLowerCase().includes(qLower) ||
+      (p.description || '').toLowerCase().includes(qLower)
+    );
+
+    document.title = `Search Results for "${qParam}" — E-Bazaar`;
+    const parentBC = document.getElementById('bc-parent-cat');
+    if (parentBC) {
+      parentBC.textContent = `Search: "${qParam}"`;
+      parentBC.href = `category.html?q=${encodeURIComponent(qParam)}`;
+    }
+
+    const searchBrands = Array.from(new Set(matches.map(p => p.brand).filter(Boolean)));
+    const brandListEl = document.getElementById('filter-brand-list');
+    if (brandListEl) {
+      brandListEl.innerHTML = searchBrands.map(brand => `
+        <label class="brand-check">
+          <input type="checkbox" value="${brand}" checked/>
+          <span class="brand-check-name">${brand}</span>
+        </label>
+      `).join('');
+    }
+
+    const grid = document.getElementById('main-cat-grid');
+    if (grid) {
+      window.currentCategoryProducts = matches;
+      grid.innerHTML = matches.length 
+        ? matches.map(buildCard).join('') 
+        : `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted)">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px;opacity:.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <p style="font-size:16px;margin:0 0 8px">No products found matching "<strong>${qParam}</strong>"</p>
+            <p style="font-size:13px;color:var(--text-sub)">Try checking spelling or using more generic search terms.</p>
+          </div>`;
+    }
+
+    const countEl = document.getElementById('result-count');
+    if (countEl) {
+      countEl.innerHTML = `Showing <strong>${matches.length} products</strong> for "${qParam}"`;
+    }
+    return;
+  }
+
   let catId = urlParams.get('cat') || 'clothing';
   
   // Default fallback if category not mapped
@@ -3535,36 +3595,48 @@ function initCategoryFilters() {
     if (!window.currentCategoryProducts) return;
     let filtered = [...window.currentCategoryProducts];
     
-    // Brand filter
+    // Helper to safely extract price as number
+    const getNumericPrice = (p) => {
+      if (typeof p.price === 'number') return p.price;
+      if (!p.price) return 0;
+      return parseInt(String(p.price).replace(/[^\d]/g, '')) || 0;
+    };
+
+    // Helper to safely extract discount percentage
+    const getNumericDiscount = (p) => {
+      const discStr = p.discount || p.disc || '0%';
+      return parseInt(String(discStr).replace(/[^\d]/g, '')) || 0;
+    };
+
+    // Brand filter — only filter if checked brands overlap with current category pool
     const checkedBrands = [...document.querySelectorAll('.brand-check input:checked')].map(cb => cb.value);
-    if (checkedBrands.length > 0) {
-      filtered = filtered.filter(p => checkedBrands.includes(p.brand));
+    const validPoolBrands = new Set(window.currentCategoryProducts.map(p => p.brand).filter(Boolean));
+    const activeRelevantBrands = checkedBrands.filter(b => validPoolBrands.has(b));
+
+    if (activeRelevantBrands.length > 0) {
+      filtered = filtered.filter(p => activeRelevantBrands.includes(p.brand));
     }
     
     // Rating filter
     const ratingInput = document.querySelector('.rating-row input:checked');
     if (ratingInput) {
-      const minRating = parseInt(ratingInput.value);
-      filtered = filtered.filter(p => parseFloat(p.rating) >= minRating);
+      const minRating = parseFloat(ratingInput.value);
+      filtered = filtered.filter(p => parseFloat(p.rating || 0) >= minRating);
     }
 
     // Discount filter
     const checkedDiscounts = [...document.querySelectorAll('.discount-row input:checked')].map(cb => parseInt(cb.value));
     if (checkedDiscounts.length > 0) {
       const minDiscount = Math.min(...checkedDiscounts);
-      filtered = filtered.filter(p => {
-        const discStr = p.disc || '0%';
-        const discNum = parseInt(discStr.replace('%', ''));
-        return discNum >= minDiscount;
-      });
+      filtered = filtered.filter(p => getNumericDiscount(p) >= minDiscount);
     }
     
     // Price filter
     if (minInput && maxInput) {
       const minPrice = parseInt(minInput.value || 0);
-      const maxPrice = parseInt(maxInput.value || 100000);
+      const maxPrice = parseInt(maxInput.value || 1000000);
       filtered = filtered.filter(p => {
-        const priceNum = parseInt(p.price.replace(/[^\d]/g, ''));
+        const priceNum = getNumericPrice(p);
         return priceNum >= minPrice && priceNum <= maxPrice;
       });
     }
@@ -3574,15 +3646,15 @@ function initCategoryFilters() {
     if (sortSelect) {
       const sortVal = sortSelect.value;
       if (sortVal === 'price-asc') {
-        filtered.sort((a, b) => parseInt(a.price.replace(/[^\d]/g, '')) - parseInt(b.price.replace(/[^\d]/g, '')));
+        filtered.sort((a, b) => getNumericPrice(a) - getNumericPrice(b));
       } else if (sortVal === 'price-desc') {
-        filtered.sort((a, b) => parseInt(b.price.replace(/[^\d]/g, '')) - parseInt(a.price.replace(/[^\d]/g, '')));
+        filtered.sort((a, b) => getNumericPrice(b) - getNumericPrice(a));
       } else if (sortVal === 'newest') {
         filtered.sort((a, b) => (b.badge === 'new' ? -1 : (a.badge === 'new' ? 1 : 0)));
       } else if (sortVal === 'rating') {
-        filtered.sort((a, b) => b.rating - a.rating);
+        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
       } else if (sortVal === 'discount') {
-        filtered.sort((a, b) => parseInt((b.disc || '0%').replace('%','')) - parseInt((a.disc || '0%').replace('%','')));
+        filtered.sort((a, b) => getNumericDiscount(b) - getNumericDiscount(a));
       }
     }
 
@@ -4118,18 +4190,7 @@ window.changeBrandPage = function(page) {
 /* ═══════════════════════════════════════════════════════════════════════
    SHARED UTILITIES
    ═══════════════════════════════════════════════════════════════════════ */
-function initSearch() {
-  const inp = document.getElementById('q');
-  if (!inp) return;
-  inp.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && inp.value.trim())
-      window.location.href = `category.html?q=${encodeURIComponent(inp.value.trim())}`;
-  });
-  document.querySelector('.search-btn')?.addEventListener('click', () => {
-    if (inp.value.trim()) window.location.href = `category.html?q=${encodeURIComponent(inp.value.trim())}`;
-    else inp.focus();
-  });
-}
+// Shared Utilities
 
 function initNewsletter() {
   const form = document.getElementById('nl-form');
