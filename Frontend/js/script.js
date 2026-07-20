@@ -567,6 +567,96 @@ const MASTER_PRODUCTS = [
     "sales": 1100
   },
   {
+    "id": "amul_801",
+    "title": "Amul Pure Cow Ghee 1 Litre Tin",
+    "description": "100% pure cow ghee made from fresh cream with rich aroma and granular texture.",
+    "price": 650,
+    "originalPrice": 699,
+    "discount": "7%",
+    "rating": 4.9,
+    "reviews": 14200,
+    "brand": "Amul",
+    "category": "groceries",
+    "image": "https://images.unsplash.com/photo-1589927986089-35812388d1f4?w=800",
+    "badge": "hot",
+    "sales": 12500
+  },
+  {
+    "id": "amul_802",
+    "title": "Amul Pasteurised Salted Butter 500g Pack",
+    "description": "Utterly butterly delicious fresh cream butter for cooking, baking, and spreading.",
+    "price": 275,
+    "originalPrice": 290,
+    "discount": "5%",
+    "rating": 4.9,
+    "reviews": 18400,
+    "brand": "Amul",
+    "category": "groceries",
+    "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=800",
+    "badge": "hot",
+    "sales": 19500
+  },
+  {
+    "id": "amul_803",
+    "title": "Amul Processed Cheese Blocks 1kg",
+    "description": "Rich and creamy wholesome processed cheese made from pure milk.",
+    "price": 540,
+    "originalPrice": 580,
+    "discount": "7%",
+    "rating": 4.8,
+    "reviews": 9200,
+    "brand": "Amul",
+    "category": "groceries",
+    "image": "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=800",
+    "badge": "sale",
+    "sales": 8100
+  },
+  {
+    "id": "amul_804",
+    "title": "Amul Taaza Toned Milk (Pack of 12 x 1L)",
+    "description": "Long life UHT treated toned milk with no added preservatives.",
+    "price": 840,
+    "originalPrice": 900,
+    "discount": "6%",
+    "rating": 4.7,
+    "reviews": 11200,
+    "brand": "Amul",
+    "category": "groceries",
+    "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=800",
+    "badge": "",
+    "sales": 14000
+  },
+  {
+    "id": "amul_805",
+    "title": "Amul Dark Chocolate 75% Cocoa 150g",
+    "description": "Premium dark chocolate crafted with fine cocoa beans for chocolate connoisseurs.",
+    "price": 150,
+    "originalPrice": 175,
+    "discount": "14%",
+    "rating": 4.8,
+    "reviews": 6400,
+    "brand": "Amul",
+    "category": "groceries",
+    "image": "https://images.unsplash.com/photo-1511381939415-e44015466834?w=800",
+    "badge": "new",
+    "sales": 5200
+  },
+  {
+    "id": "amul_806",
+    "title": "Amul Fresh Malai Paneer 500g Pouch",
+    "description": "Soft and succulent fresh paneer made from pure wholesome milk.",
+    "price": 210,
+    "originalPrice": 230,
+    "discount": "8%",
+    "rating": 4.8,
+    "reviews": 7800,
+    "brand": "Amul",
+    "category": "groceries",
+    "image": "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=800",
+    "badge": "hot",
+    "sales": 8900
+  },
+  {
     "id": "sony_301",
     "title": "Sony WH-1000XM5 Wireless Noise Canceling Headphones",
     "description": "Industry-leading noise cancellation, 30-hour battery life, and crystal clear hands-free calling.",
@@ -3657,10 +3747,20 @@ function initDynamicCategory() {
     const searchWords = qLower.split(/\s+/).filter(Boolean);
     const pool = getAllStoreProducts();
 
+    // Check if qParam corresponds to a brand in our store
+    const knownBrands = Array.from(new Set(pool.map(p => p.brand).filter(Boolean)));
+    const matchedBrand = knownBrands.find(b => b.toLowerCase() === qLower || qLower.includes(b.toLowerCase()) || b.toLowerCase().includes(qLower));
+
     let matches = pool.filter(p => {
       const haystack = `${p.title || p.name || ''} ${p.brand || ''} ${p.category || ''} ${p.description || p.desc || ''}`.toLowerCase();
       return searchWords.every(w => haystack.includes(w));
     });
+
+    // If query matches a brand, include all products of that brand!
+    if (matchedBrand) {
+      const allBrandProducts = pool.filter(p => (p.brand || '').toLowerCase() === matchedBrand.toLowerCase());
+      matches = Array.from(new Map([...allBrandProducts, ...matches].map(item => [(item.id || item.title).toLowerCase(), item])).values());
+    }
 
     if (matches.length === 0) {
       matches = pool.filter(p => {
@@ -3691,13 +3791,33 @@ function initDynamicCategory() {
 
     const grid = document.getElementById('main-cat-grid');
     if (grid) {
-      grid.innerHTML = matches.length 
+      let bannerHTML = '';
+      if (matchedBrand) {
+        bannerHTML = `
+          <div class="brand-store-banner" style="grid-column: 1/-1; background: linear-gradient(135deg, #1c1917 0%, #2c251e 100%); color: white; padding: 24px 28px; border-radius: 16px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.12);">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 56px; height: 56px; border-radius: 12px; background: #ffffff; padding: 6px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); flex-shrink:0;">
+                ${getBrandLogoSVG(matchedBrand)}
+              </div>
+              <div>
+                <div style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">${matchedBrand} Official Store</div>
+                <div style="font-size: 13px; opacity: 0.85;">Explore all products and authentic collections from ${matchedBrand}.</div>
+              </div>
+            </div>
+            <a href="brand-store.html?brand=${encodeURIComponent(matchedBrand)}" style="background: var(--accent-caramel, #A88C6D); color: #ffffff; text-decoration: none; padding: 12px 22px; border-radius: 10px; font-weight: 700; font-size: 14px; white-space: nowrap; transition: transform 0.2s ease; display: inline-flex; align-items: center; gap: 6px;">
+              Visit ${matchedBrand} Store &rarr;
+            </a>
+          </div>
+        `;
+      }
+
+      grid.innerHTML = bannerHTML + (matches.length 
         ? matches.map(buildCard).join('') 
         : `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted)">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px;opacity:.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             <p style="font-size:16px;margin:0 0 8px">No products found matching "<strong>${qParam}</strong>"</p>
             <p style="font-size:13px;color:var(--text-sub)">Try checking spelling or using more generic search terms.</p>
-          </div>`;
+          </div>`);
     }
 
     const countEl = document.getElementById('result-count');
@@ -4651,16 +4771,35 @@ function initSearch() {
           return;
         }
 
-        const pool = (window.MASTER_PRODUCTS || []).concat(window.allProducts || []);
-        const uniquePool = Array.from(new Map(pool.map(item => [item.id || item.title, item])).values());
+        const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.MASTER_PRODUCTS || []);
         const searchWords = val.split(/\s+/).filter(Boolean);
 
-        const matches = uniquePool.filter(p => {
+        // Check if val matches a known brand
+        const knownBrands = Array.from(new Set(pool.map(p => p.brand).filter(Boolean)));
+        const matchedBrand = knownBrands.find(b => b.toLowerCase() === val || val.includes(b.toLowerCase()) || b.toLowerCase().includes(val));
+
+        let brandStoreHTML = '';
+        if (matchedBrand) {
+          brandStoreHTML = `
+            <a href="brand-store.html?brand=${encodeURIComponent(matchedBrand)}" class="auto-brand-card" style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #FAF5E1 0%, #F4EAD3 100%); padding: 12px 16px; border-bottom: 1px solid var(--border-line, #e2d9cf); text-decoration: none; color: #333;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 18px;">🏪</span>
+                <div>
+                  <div style="font-size: 13px; font-weight: 800; color: #111;">Visit ${matchedBrand} Official Store</div>
+                  <div style="font-size: 11px; color: #666;">View all products in the official ${matchedBrand} catalog</div>
+                </div>
+              </div>
+              <span style="font-size: 12px; font-weight: 700; color: var(--accent-caramel, #A88C6D);">Open Store &rarr;</span>
+            </a>
+          `;
+        }
+
+        const matches = pool.filter(p => {
           const haystack = `${p.title || p.name || ''} ${p.brand || ''} ${p.category || ''} ${p.description || p.desc || ''}`.toLowerCase();
           return searchWords.every(w => haystack.includes(w));
         }).slice(0, 8);
 
-        if (matches.length === 0) {
+        if (matches.length === 0 && !matchedBrand) {
           autoBox.innerHTML = `
             <div style="padding: 16px; font-size: 13px; color: var(--text-sub, #666); text-align: center;">
               No matching products found for "<strong>${val}</strong>"
@@ -4670,9 +4809,10 @@ function initSearch() {
           return;
         }
 
-        autoBox.innerHTML = matches.map(p => {
+        autoBox.innerHTML = brandStoreHTML + matches.map(p => {
           const title = p.title || p.name || 'Product';
-          const price = typeof p.price === 'number' ? `₹${p.price.toLocaleString('en-IN')}` : (p.price || '₹0');
+          const priceNum = typeof p.price === 'number' ? p.price : (parseInt(String(p.price || 0).replace(/[^\d]/g, '')) || 0);
+          const price = `₹${priceNum.toLocaleString('en-IN')}`;
           const img = p.image || p.imageUrl || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
           const link = p.id ? `product-detail.html?id=${p.id}` : `category.html?q=${encodeURIComponent(title)}`;
           return `
@@ -4813,6 +4953,50 @@ document.addEventListener('DOMContentLoaded', () => {
     initWishlist();
   }
 });
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BRAND STORE PAGE LOGIC
+   ═══════════════════════════════════════════════════════════════════════ */
+function initBrandStore() {
+  const urlParams = new URLSearchParams(window.location.search);
+  let brand = urlParams.get('brand') || 'Amul';
+
+  document.title = `${brand} Official Store — E-Bazaar`;
+
+  const titleEl = document.getElementById('brand-title');
+  if (titleEl) titleEl.textContent = `${brand} Official Store`;
+
+  const logoEl = document.getElementById('brand-logo-large');
+  if (logoEl && typeof getBrandLogoSVG === 'function') {
+    logoEl.innerHTML = getBrandLogoSVG(brand);
+  }
+
+  const bcParent = document.getElementById('bc-parent-cat');
+  if (bcParent) {
+    bcParent.textContent = `${brand} Brand Store`;
+    bcParent.href = `brand-store.html?brand=${encodeURIComponent(brand)}`;
+  }
+
+  const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.MASTER_PRODUCTS || []);
+  let brandProds = pool.filter(p => (p.brand || '').toLowerCase() === brand.toLowerCase());
+
+  if (brandProds.length === 0) {
+    brandProds = pool.filter(p => (p.title || p.name || '').toLowerCase().includes(brand.toLowerCase()));
+  }
+
+  const grid = document.getElementById('main-cat-grid');
+  if (grid) {
+    grid.innerHTML = brandProds.length 
+      ? brandProds.map(buildCard).join('') 
+      : `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted)">No products currently listed for ${brand}.</div>`;
+  }
+
+  const countEl = document.getElementById('result-count');
+  if (countEl) {
+    countEl.innerHTML = `Showing <strong>${brandProds.length} products</strong> for ${brand}`;
+  }
+}
+window.initBrandStore = initBrandStore;
 
 // --- WISHLIST PAGE LOGIC ---
 function initWishlist() {
