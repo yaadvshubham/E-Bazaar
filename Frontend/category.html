@@ -13,7 +13,33 @@
   <style>
     .logo-bag-body{fill:url(#bagGrad)}
     html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
-  </style>
+  
+    .page-btn {
+      padding: 8px 12px;
+      min-width: 40px;
+      border: 1px solid var(--border);
+      background: var(--bg-white);
+      color: var(--text);
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .page-btn:hover:not(:disabled) {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .page-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+</style>
 </head>
 <body data-page="category">
 
@@ -372,9 +398,7 @@
       <!-- Injected by script.js -->
     </div>
 
-    <div class="load-more-wrap">
-      <button class="load-more-btn" onclick="showToast('⏳ Loading more products…')">Load More Products</button>
-    </div>
+    <div class="pagination-wrap" id="pagination-container" style="display:flex;justify-content:center;align-items:center;gap:8px;padding:40px 0;flex-wrap:wrap;"></div>
 
   </main>
 
@@ -424,5 +448,7 @@
 <div id="toast" role="alert" aria-live="polite"><div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span></div>
 
 <script src="js/script.js"></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/auth.js"></script>
 </body>
 </html>

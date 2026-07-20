@@ -407,58 +407,11 @@
       formLogin.classList.add('hidden');
     });
 
-    // Handle Register
-    formRegister.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('reg-name').value;
-      const email = document.getElementById('reg-email').value;
-      const phone = document.getElementById('reg-phone').value;
-      const password = document.getElementById('reg-password').value;
+    // Register is now handled by js/auth.js
 
-      if (!name || !email || !password) {
-        showToast('❌ Please fill in all required fields');
-        return;
-      }
-
-      const newUser = {
-        name, email, phone, password,
-        addresses: [],
-        profilePic: null
-      };
-
-      localStorage.setItem('eb_user', JSON.stringify(newUser));
-      showToast('✅ Account created successfully!');
-      setTimeout(() => { window.location.href = 'account.html'; }, 1000);
-    });
-
-    // Handle Login
-    formLogin.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value;
-      const pass = document.getElementById('login-password').value;
-      
-      const savedUser = JSON.parse(localStorage.getItem('eb_user'));
-      
-      // If we have a saved user, verify credentials. 
-      // If not, we just mock login successfully with a dummy user for demo purposes.
-      if (savedUser) {
-        if (savedUser.email === email && savedUser.password === pass) {
-          showToast('✅ Login successful!');
-          setTimeout(() => { window.location.href = 'account.html'; }, 1000);
-        } else {
-          showToast('❌ Invalid email or password');
-        }
-      } else {
-        // Create dummy user for demo if database is empty
-        const dummyUser = {
-          name: email.split('@')[0], email, phone: '', password: pass, addresses: [], profilePic: null
-        };
-        localStorage.setItem('eb_user', JSON.stringify(dummyUser));
-        showToast('✅ Login successful!');
-        setTimeout(() => { window.location.href = 'account.html'; }, 1000);
-      }
-    });
+    // Login is now handled by js/auth.js
   });
 </script>
+  <script src="js/auth.js"></script>
 </body>
 </html>

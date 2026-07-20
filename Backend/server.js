@@ -1,0 +1,62 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const sequelize = require('./config/database');
+
+// Import models to register them with Sequelize
+require('./models/Product');
+require('./models/User');
+require('./models/Order');
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// ── Middleware ────────────────────────────────────────────────────────────────
+app.use(cors({
+  origin: ['http://localhost:5501', 'http://127.0.0.1:5501', 'http://localhost:3000', '*'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ── Routes ────────────────────────────────────────────────────────────────────
+const productRoutes = require('./routes/products');
+const authRoutes    = require('./routes/auth');
+const orderRoutes   = require('./routes/orders');
+app.use('/api/products', productRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes);
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString(), message: 'E-Bazaar API is running' });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('[Error]', err.message);
+  res.status(500).json({ error: 'Internal server error', details: err.message });
+});
+
+// ── DB Sync & Start ───────────────────────────────────────────────────────────
+sequelize.authenticate()
+  .then(() => {
+    console.log('[DB] SQLite connection established.');
+    return sequelize.sync({ alter: true });
+  })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`[Server] E-Bazaar API running on http://localhost:${PORT}`);
+      console.log(`[Server] Health check: http://localhost:${PORT}/api/health`);
+    });
+  })
+  .catch(err => {
+    console.error('[DB] Unable to connect:', err);
+    process.exit(1);
+  });

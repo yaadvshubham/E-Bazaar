@@ -2695,6 +2695,668 @@ const MASTER_PRODUCTS = [
     "badge": "new",
     "sales": 5
   }
+,
+  {
+    "id": "custom_2000",
+    "title": "Samsung Galaxy M34 5G",
+    "price": 16999,
+    "originalPrice": 22098.7,
+    "badge": "new",
+    "image": "https://images.unsplash.com/photo-1598327105666-5b89351cb315?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Samsung"
+  },
+  {
+    "id": "custom_2001",
+    "title": "Samsung Galaxy F54 5G",
+    "price": 24999,
+    "originalPrice": 32498.7,
+    "badge": "new",
+    "image": "https://images.unsplash.com/photo-1598327105666-5b89351cb315?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Samsung"
+  },
+  {
+    "id": "custom_2002",
+    "title": "Vivo T2 Pro 5G",
+    "price": 23999,
+    "originalPrice": 31198.7,
+    "badge": "new",
+    "image": "https://images.unsplash.com/photo-1598327105666-5b89351cb315?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Vivo"
+  },
+  {
+    "id": "custom_2003",
+    "title": "Vivo T2x 5G",
+    "price": 12999,
+    "originalPrice": 16898.7,
+    "badge": "new",
+    "image": "https://images.unsplash.com/photo-1598327105666-5b89351cb315?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Vivo"
+  },
+  {
+    "id": "custom_2004",
+    "title": "Oppo F23 5G",
+    "price": 24999,
+    "originalPrice": 32498.7,
+    "badge": "new",
+    "image": "https://images.unsplash.com/photo-1598327105666-5b89351cb315?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Oppo"
+  },
+  {
+    "id": "custom_2005",
+    "title": "Oppo F21s Pro",
+    "price": 21999,
+    "originalPrice": 28598.7,
+    "badge": "new",
+    "image": "https://images.unsplash.com/photo-1598327105666-5b89351cb315?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Oppo"
+  },
+  {
+    "id": "custom_2006",
+    "title": "Redmi Note 13 Pro",
+    "price": 25999,
+    "originalPrice": 33798.700000000004,
+    "badge": "new",
+    "image": "https://images.unsplash.com/photo-1598327105666-5b89351cb315?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Xiaomi"
+  },
+  {
+    "id": "custom_2007",
+    "title": "Redmi Note 12 5G",
+    "price": 15999,
+    "originalPrice": 20798.7,
+    "badge": "new",
+    "image": "https://images.unsplash.com/photo-1598327105666-5b89351cb315?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Xiaomi"
+  },
+  {
+    "id": "custom_2008",
+    "title": "Motorola Edge 40 Neo",
+    "price": 22999,
+    "originalPrice": 29898.7,
+    "badge": "new",
+    "image": "https://images.unsplash.com/photo-1598327105666-5b89351cb315?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Motorola"
+  },
+  {
+    "id": "custom_2009",
+    "title": "Moto G84 5G",
+    "price": 18999,
+    "originalPrice": 24698.7,
+    "badge": "new",
+    "image": "https://images.unsplash.com/photo-1598327105666-5b89351cb315?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Motorola"
+  },
+  {
+    "id": "custom_2010",
+    "title": "Samsung Galaxy S24 Ultra",
+    "price": 129999,
+    "originalPrice": 168998.7,
+    "badge": "hot",
+    "image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Samsung"
+  },
+  {
+    "id": "custom_2011",
+    "title": "Samsung Galaxy S23",
+    "price": 64999,
+    "originalPrice": 84498.7,
+    "badge": "hot",
+    "image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Samsung"
+  },
+  {
+    "id": "custom_2012",
+    "title": "Apple iPhone 15 Pro Max",
+    "price": 159900,
+    "originalPrice": 207870,
+    "badge": "hot",
+    "image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Apple"
+  },
+  {
+    "id": "custom_2013",
+    "title": "Apple iPhone 15",
+    "price": 79900,
+    "originalPrice": 103870,
+    "badge": "hot",
+    "image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Apple"
+  },
+  {
+    "id": "custom_2014",
+    "title": "Vivo X100 Pro",
+    "price": 89999,
+    "originalPrice": 116998.7,
+    "badge": "hot",
+    "image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Vivo"
+  },
+  {
+    "id": "custom_2015",
+    "title": "Oppo Find N3 Flip",
+    "price": 94999,
+    "originalPrice": 123498.7,
+    "badge": "hot",
+    "image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&q=80",
+    "category": "smartphones",
+    "brand": "Oppo"
+  },
+  {
+    "id": "custom_2016",
+    "title": "Apple Watch Series 9",
+    "price": 41900,
+    "originalPrice": 54470,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&q=80",
+    "category": "gadgets",
+    "brand": "Apple"
+  },
+  {
+    "id": "custom_2017",
+    "title": "Samsung Galaxy Watch 6",
+    "price": 29999,
+    "originalPrice": 38998.700000000004,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&q=80",
+    "category": "gadgets",
+    "brand": "Samsung"
+  },
+  {
+    "id": "custom_2018",
+    "title": "boAt Lunar Connect Smartwatch",
+    "price": 1999,
+    "originalPrice": 2598.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&q=80",
+    "category": "gadgets",
+    "brand": "boAt"
+  },
+  {
+    "id": "custom_2019",
+    "title": "Noise ColorFit Pro 4",
+    "price": 2499,
+    "originalPrice": 3248.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&q=80",
+    "category": "gadgets",
+    "brand": "Noise"
+  },
+  {
+    "id": "custom_2020",
+    "title": "Fire-Boltt Visionary",
+    "price": 2999,
+    "originalPrice": 3898.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&q=80",
+    "category": "gadgets",
+    "brand": "Fire-Boltt"
+  },
+  {
+    "id": "custom_2021",
+    "title": "Meta Quest 3 Smart Goggles",
+    "price": 49999,
+    "originalPrice": 64998.700000000004,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&q=80",
+    "category": "gadgets",
+    "brand": "Meta"
+  },
+  {
+    "id": "custom_2022",
+    "title": "Ray-Ban Meta Smart Glasses",
+    "price": 32999,
+    "originalPrice": 42898.700000000004,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&q=80",
+    "category": "gadgets",
+    "brand": "Meta"
+  },
+  {
+    "id": "custom_2023",
+    "title": "Sony Bravia 55 inch 4K Ultra HD TV",
+    "price": 62990,
+    "originalPrice": 81887,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "appliances",
+    "brand": "Sony"
+  },
+  {
+    "id": "custom_2024",
+    "title": "Samsung 65 inch QLED 4K TV",
+    "price": 89990,
+    "originalPrice": 116987,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "appliances",
+    "brand": "Samsung"
+  },
+  {
+    "id": "custom_2025",
+    "title": "LG 1.5 Ton 5 Star AI DUAL Inverter AC",
+    "price": 45990,
+    "originalPrice": 59787,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "appliances",
+    "brand": "LG"
+  },
+  {
+    "id": "custom_2026",
+    "title": "Voltas 1.5 Ton 3 Star Split AC",
+    "price": 32990,
+    "originalPrice": 42887,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "appliances",
+    "brand": "Voltas"
+  },
+  {
+    "id": "custom_2027",
+    "title": "Symphony Diet 3D 55i+ Cooler",
+    "price": 10499,
+    "originalPrice": 13648.7,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "appliances",
+    "brand": "Symphony"
+  },
+  {
+    "id": "custom_2028",
+    "title": "Samsung 236 L 3 Star Refrigerator",
+    "price": 24490,
+    "originalPrice": 31837,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "appliances",
+    "brand": "Samsung"
+  },
+  {
+    "id": "custom_2029",
+    "title": "Whirlpool 240 L Frost Free Refrigerator",
+    "price": 25990,
+    "originalPrice": 33787,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "appliances",
+    "brand": "Whirlpool"
+  },
+  {
+    "id": "custom_2030",
+    "title": "Intel Core i9-13900K Processor CPU",
+    "price": 52999,
+    "originalPrice": 68898.7,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "gadgets",
+    "brand": "Intel"
+  },
+  {
+    "id": "custom_2031",
+    "title": "AMD Ryzen 9 7950X Processor CPU",
+    "price": 55999,
+    "originalPrice": 72798.7,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "gadgets",
+    "brand": "AMD"
+  },
+  {
+    "id": "custom_2032",
+    "title": "LG 27 inch 4K UHD Monitor",
+    "price": 32000,
+    "originalPrice": 41600,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "gadgets",
+    "brand": "LG"
+  },
+  {
+    "id": "custom_2033",
+    "title": "BenQ 32 inch 4K Designer Monitor",
+    "price": 45000,
+    "originalPrice": 58500,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "gadgets",
+    "brand": "BenQ"
+  },
+  {
+    "id": "custom_2034",
+    "title": "Apple MacBook Air M2",
+    "price": 99900,
+    "originalPrice": 129870,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "laptops",
+    "brand": "Apple"
+  },
+  {
+    "id": "custom_2035",
+    "title": "Dell XPS 15 Laptop",
+    "price": 189990,
+    "originalPrice": 246987,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "laptops",
+    "brand": "Dell"
+  },
+  {
+    "id": "custom_2036",
+    "title": "HP Pavilion 14 Laptop",
+    "price": 62990,
+    "originalPrice": 81887,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "laptops",
+    "brand": "HP"
+  },
+  {
+    "id": "custom_2037",
+    "title": "Asus ROG Zephyrus G14",
+    "price": 139990,
+    "originalPrice": 181987,
+    "badge": "sale",
+    "image": "https://images.unsplash.com/photo-1550009158-9effb66236b2?w=500&q=80",
+    "category": "laptops",
+    "brand": "Asus"
+  },
+  {
+    "id": "custom_2038",
+    "title": "Levis Mens 511 Slim Fit Jeans",
+    "price": 2599,
+    "originalPrice": 3378.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "bottoms",
+    "brand": "Levis"
+  },
+  {
+    "id": "custom_2039",
+    "title": "Wrangler Mens Regular Fit Jeans",
+    "price": 1999,
+    "originalPrice": 2598.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "bottoms",
+    "brand": "Wrangler"
+  },
+  {
+    "id": "custom_2040",
+    "title": "H&M Mens Cotton Chino Pants",
+    "price": 1499,
+    "originalPrice": 1948.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "bottoms",
+    "brand": "H&M"
+  },
+  {
+    "id": "custom_2041",
+    "title": "Allen Solly Mens Casual Trousers",
+    "price": 1799,
+    "originalPrice": 2338.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "bottoms",
+    "brand": "Allen Solly"
+  },
+  {
+    "id": "custom_2042",
+    "title": "Zara Mens Turtleneck Sweater",
+    "price": 2999,
+    "originalPrice": 3898.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "mens-shirts",
+    "brand": "Zara"
+  },
+  {
+    "id": "custom_2043",
+    "title": "Puma Mens Essential Hoodie",
+    "price": 2299,
+    "originalPrice": 2988.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "mens-shirts",
+    "brand": "Puma"
+  },
+  {
+    "id": "custom_2044",
+    "title": "Nike Sportswear Club Fleece Hoodie",
+    "price": 3499,
+    "originalPrice": 4548.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "mens-shirts",
+    "brand": "Nike"
+  },
+  {
+    "id": "custom_2045",
+    "title": "Urbanic Womens Bodycon Dress",
+    "price": 1299,
+    "originalPrice": 1688.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-dresses",
+    "brand": "Urbanic"
+  },
+  {
+    "id": "custom_2046",
+    "title": "Zara Ribbed Bodycon Midi Dress",
+    "price": 2599,
+    "originalPrice": 3378.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-dresses",
+    "brand": "Zara"
+  },
+  {
+    "id": "custom_2047",
+    "title": "H&M Womens Floral Onepiece",
+    "price": 1999,
+    "originalPrice": 2598.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-dresses",
+    "brand": "H&M"
+  },
+  {
+    "id": "custom_2048",
+    "title": "Mango Womens A-Line Onepiece",
+    "price": 3499,
+    "originalPrice": 4548.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-dresses",
+    "brand": "Mango"
+  },
+  {
+    "id": "custom_2049",
+    "title": "Forever 21 Womens Crop Top",
+    "price": 799,
+    "originalPrice": 1038.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "tops",
+    "brand": "Forever 21"
+  },
+  {
+    "id": "custom_2050",
+    "title": "FabIndia Womens Silk Saree",
+    "price": 5999,
+    "originalPrice": 7798.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "traditional",
+    "brand": "FabIndia"
+  },
+  {
+    "id": "custom_2051",
+    "title": "Biba Womens Cotton Salwar Suit",
+    "price": 2499,
+    "originalPrice": 3248.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "traditional",
+    "brand": "Biba"
+  },
+  {
+    "id": "custom_2052",
+    "title": "Manyavar Mens Kurta Set",
+    "price": 3999,
+    "originalPrice": 5198.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "traditional",
+    "brand": "Manyavar"
+  },
+  {
+    "id": "custom_2053",
+    "title": "Nike Air Max Sneakers",
+    "price": 8999,
+    "originalPrice": 11698.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-shoes",
+    "brand": "Nike"
+  },
+  {
+    "id": "custom_2054",
+    "title": "Puma RS-X Sneakers",
+    "price": 7499,
+    "originalPrice": 9748.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-shoes",
+    "brand": "Puma"
+  },
+  {
+    "id": "custom_2055",
+    "title": "Steve Madden Womens Stiletto Heels",
+    "price": 4599,
+    "originalPrice": 5978.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-shoes",
+    "brand": "Steve Madden"
+  },
+  {
+    "id": "custom_2056",
+    "title": "Van Heusen Mens Office Wear Shirt",
+    "price": 1599,
+    "originalPrice": 2078.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "office-wear",
+    "brand": "Van Heusen"
+  },
+  {
+    "id": "custom_2057",
+    "title": "Arrow Womens Formal Trousers",
+    "price": 1899,
+    "originalPrice": 2468.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "office-wear",
+    "brand": "Arrow"
+  },
+  {
+    "id": "custom_2058",
+    "title": "Calvin Klein Womens Push-Up Bra",
+    "price": 2499,
+    "originalPrice": 3248.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-innerwear",
+    "brand": "Calvin Klein"
+  },
+  {
+    "id": "custom_2059",
+    "title": "Calvin Klein Womens Panty Briefs",
+    "price": 999,
+    "originalPrice": 1298.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-innerwear",
+    "brand": "Calvin Klein"
+  },
+  {
+    "id": "custom_2060",
+    "title": "Victoria Secret Lace Bralette",
+    "price": 3599,
+    "originalPrice": 4678.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-innerwear",
+    "brand": "Victoria Secret"
+  },
+  {
+    "id": "custom_2061",
+    "title": "Victoria Secret Cotton Panty",
+    "price": 1299,
+    "originalPrice": 1688.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "womens-innerwear",
+    "brand": "Victoria Secret"
+  },
+  {
+    "id": "custom_2062",
+    "title": "Calvin Klein Mens Trunks 3-Pack",
+    "price": 2999,
+    "originalPrice": 3898.7000000000003,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "mens-innerwear",
+    "brand": "Calvin Klein"
+  },
+  {
+    "id": "custom_2063",
+    "title": "Calvin Klein Mens Cotton Vest",
+    "price": 1499,
+    "originalPrice": 1948.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "mens-innerwear",
+    "brand": "Calvin Klein"
+  },
+  {
+    "id": "custom_2064",
+    "title": "Macho Mens Sporto Vest",
+    "price": 299,
+    "originalPrice": 388.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "mens-innerwear",
+    "brand": "Macho"
+  },
+  {
+    "id": "custom_2065",
+    "title": "Macho Mens Innerwear Briefs",
+    "price": 249,
+    "originalPrice": 323.7,
+    "badge": "",
+    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "category": "mens-innerwear",
+    "brand": "Macho"
+  }
+
 ];
 
 function generateMockProductsForCategory(catId) {
@@ -2726,7 +3388,7 @@ function buildCard(p) {
   
   return `<article class="cat-card" role="listitem">
     <a href="product-detail.html?id=${p.id}" class="cat-img" style="display:block; text-decoration:none;">
-      <img src="${p.image}" alt="${p.title.replace(/"/g, '&quot;')}" style="width:100%; height:100%; object-fit:cover; background:#f9f9f9;">
+      <img src="${imgSrc}" alt="${p.title.replace(/"/g, '&quot;')}" loading="lazy" style="width:100%; height:100%; object-fit:cover; background:#f9f9f9;">
       ${p.badge?`<span class="card-badge ${bCls}">${bLbl}</span>`:``}
     </a>
     <button class="${wishCls}" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:var(--bg-white);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;z-index:2;" aria-label="Add to wishlist" onclick="toggleWish('w_${p.id}', '${p.title.replace(/'/g, "\\'")}', '${pStr}')" id="w_${p.id}">
@@ -2738,7 +3400,7 @@ function buildCard(p) {
       <p class="product-desc-snippet" style="font-size:12px; color:var(--text-muted); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; margin-top:4px; margin-bottom:8px; line-height: 1.4;">${p.description}</p>
       <div class="cat-prices"><span class="cat-price">₹${p.price.toLocaleString('en-IN')}</span><span class="cat-orig">₹${p.originalPrice.toLocaleString('en-IN')}</span><span class="cat-disc">${p.discount} off</span></div>
       <div class="cat-rating"><div class="cat-stars" aria-label="${p.rating} out of 5">${makeStars(p.rating)}</div><span class="cat-reviews">${p.rating} (${p.reviews})</span></div>
-      <div class="cat-transactions" style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${p.sales}k+ bought in past month</div>
+      ${salesDisplay ? `<div class="cat-transactions" style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${salesDisplay}</div>` : ''}
       <button class="cat-add-btn" onclick="addToCart('${pStr}')">+ Add to Cart</button>
     </div>
   </article>`;
@@ -2904,32 +3566,103 @@ function initCategoryFilters() {
       }
     }
 
-    // Render
+    // Render with Pagination
+    window.allFilteredProducts = filtered;
+    
+    const itemsPerPage = 12;
+    if (typeof window.currentPage === 'undefined') window.currentPage = 1;
+    
+    const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+    if (window.currentPage > totalPages) window.currentPage = 1;
+    
+    const startIndex = (window.currentPage - 1) * itemsPerPage;
+    const endIndex = window.currentPage * itemsPerPage;
+    const visibleProducts = filtered.slice(startIndex, endIndex);
+    
     const grid = document.getElementById('main-cat-grid');
     if (grid) {
-      grid.innerHTML = filtered.length ? filtered.map(buildCard).join('') : '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)">No products found matching filters.</div>';
+      grid.innerHTML = visibleProducts.length ? visibleProducts.map(buildCard).join('') : '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)">No products found matching filters.</div>';
     }
     
     const countEl = document.getElementById('result-count');
     if (countEl) {
-      countEl.innerHTML = `Showing <strong>${filtered.length} products</strong>`;
+      const displayStart = visibleProducts.length ? startIndex + 1 : 0;
+      const displayEnd = startIndex + visibleProducts.length;
+      countEl.innerHTML = `Showing <strong>${displayStart} - ${displayEnd}</strong> of <strong>${filtered.length}</strong> products`;
     }
+    
+    renderPaginationControls(totalPages);
   }
 
-  if (minInput) { minInput.addEventListener('input', () => { if (parseInt(minInput.value) >= parseInt(maxInput.value)) minInput.value = parseInt(maxInput.value) - 500; updatePriceUI(); renderFilteredProducts(); }); }
-  if (maxInput) { maxInput.addEventListener('input', () => { if (parseInt(maxInput.value) <= parseInt(minInput.value)) maxInput.value = parseInt(minInput.value) + 500; updatePriceUI(); renderFilteredProducts(); }); }
+  window.goToPage = function(page) {
+    window.currentPage = page;
+    renderFilteredProducts();
+    // Scroll to top of grid slightly smoothly
+    const grid = document.getElementById('main-cat-grid');
+    if (grid) {
+       const y = grid.getBoundingClientRect().top + window.scrollY - 150;
+       window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
+  function renderPaginationControls(totalPages) {
+    const container = document.getElementById('pagination-container');
+    if (!container) return;
+    
+    if (totalPages <= 1) {
+      container.innerHTML = '';
+      return;
+    }
+
+    let html = '';
+    
+    // Start & Prev
+    html += `<button class="page-btn" ${window.currentPage === 1 ? 'disabled' : ''} onclick="goToPage(1)">Start</button>`;
+    html += `<button class="page-btn" ${window.currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${window.currentPage - 1})">Prev</button>`;
+    
+    // Page Numbers (Show window of +/- 2)
+    let startPage = Math.max(1, window.currentPage - 2);
+    let endPage = Math.min(totalPages, window.currentPage + 2);
+    
+    // Adjust window if near edges
+    if (endPage - startPage < 4) {
+      if (startPage === 1) endPage = Math.min(totalPages, startPage + 4);
+      else if (endPage === totalPages) startPage = Math.max(1, endPage - 4);
+    }
+    
+    if (startPage > 1) {
+       html += `<span style="padding: 0 4px; color: var(--text-muted)">...</span>`;
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      html += `<button class="page-btn ${window.currentPage === i ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+    }
+    
+    if (endPage < totalPages) {
+       html += `<span style="padding: 0 4px; color: var(--text-muted)">...</span>`;
+    }
+
+    // Next & End
+    html += `<button class="page-btn" ${window.currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${window.currentPage + 1})">Next</button>`;
+    html += `<button class="page-btn" ${window.currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${totalPages})">End</button>`;
+
+    container.innerHTML = html;
+    }
+
+  if (minInput) { minInput.addEventListener('input', () => { if (parseInt(minInput.value) >= parseInt(maxInput.value)) minInput.value = parseInt(maxInput.value) - 500; updatePriceUI(); window.currentPage = 1; renderFilteredProducts(); }); }
+  if (maxInput) { maxInput.addEventListener('input', () => { if (parseInt(maxInput.value) <= parseInt(minInput.value)) maxInput.value = parseInt(minInput.value) + 500; updatePriceUI(); window.currentPage = 1; renderFilteredProducts(); }); }
   updatePriceUI();
 
   // Brand checkboxes
   document.getElementById('filter-brand-list')?.addEventListener('change', () => {
     updateFilterTags();
-    renderFilteredProducts();
+    window.currentPage = 1; renderFilteredProducts();
   });
 
-  document.querySelector('.sort-select')?.addEventListener('change', renderFilteredProducts);
+  document.querySelector('.sort-select')?.addEventListener('change', () => { window.currentPage = 1; renderFilteredProducts(); });
 
-  document.querySelectorAll('.rating-row input').forEach(input => input.addEventListener('change', renderFilteredProducts));
-  document.querySelectorAll('.discount-row input').forEach(input => input.addEventListener('change', renderFilteredProducts));
+  document.querySelectorAll('.rating-row input').forEach(input => input.addEventListener('change', () => { window.currentPage = 1; renderFilteredProducts(); }));
+  document.querySelectorAll('.discount-row input').forEach(input => input.addEventListener('change', () => { window.currentPage = 1; renderFilteredProducts(); }));
 
 
   const clearBtn = document.querySelector('.filter-clear');
@@ -2940,7 +3673,7 @@ function initCategoryFilters() {
     if (maxInput) { maxInput.value = maxInput.max; }
     updatePriceUI();
     updateFilterTags();
-    renderFilteredProducts();
+    window.currentPage = 1; renderFilteredProducts();
     showToast('🔄 Filters cleared');
   });
 
@@ -2951,7 +3684,7 @@ function initCategoryFilters() {
       const cb = document.querySelector(`.brand-check input[value="${brand}"]`);
       if (cb) cb.checked = false;
       e.target.closest('.filter-tag')?.remove();
-      renderFilteredProducts();
+      window.currentPage = 1; renderFilteredProducts();
     }
   });
   
@@ -2977,6 +3710,8 @@ function initCategoryFilters() {
   }
 
   updateFilterTags();
+  window.currentPage = 1;
+  renderFilteredProducts();
 }
 function updateFilterTags() {
   const container = document.getElementById('active-filter-tags');

@@ -1,492 +1,1267 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title id="page-title">My Orders — E-Bazaar</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/category.css"/>
-  <link rel="stylesheet" href="css/orders.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/category.css" />
+  <link rel="stylesheet" href="css/orders.css" />
 </head>
+
 <body data-page="orders">
 
-<header id="site-header" role="banner">
+  <header id="site-header" role="banner">
 
-  <!-- TOP ROW -->
-  <div class="nav-top">
-    <!-- Logo -->
-    <a href="index.html" class="nav-logo" aria-label="E-Bazaar Home">
-      <svg class="logo-svg-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="E-Bazaar logo">
-        <rect class="logo-bag-body" x="12" y="28" width="56" height="44" rx="7"/>
-        <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/>
-        <polyline fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/>
-        <path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/>
-        <line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/>
-        <polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/>
-      </svg>
-      <div>
-        <div class="logo-wordmark">E-<em>Bazaar</em></div>
-        <div class="logo-tagline">Your everyday and everything store.</div>
+    <!-- TOP ROW -->
+    <div class="nav-top">
+      <!-- Logo -->
+      <a href="index.html" class="nav-logo" aria-label="E-Bazaar Home">
+        <svg class="logo-svg-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" role="img"
+          aria-label="E-Bazaar logo">
+          <rect class="logo-bag-body" x="12" y="28" width="56" height="44" rx="7" />
+          <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5"
+            stroke-linecap="round" />
+          <polyline fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.8" stroke-linecap="round"
+            stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50" />
+          <path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round"
+            d="M18 70 Q40 82 64 62" />
+          <line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30" />
+          <polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38" />
+        </svg>
+        <div>
+          <div class="logo-wordmark">E-<em>Bazaar</em></div>
+          <div class="logo-tagline">Your everyday and everything store.</div>
+        </div>
+      </a>
+
+      <!-- Address widget -->
+      <button class="nav-address" id="addr-trigger" aria-haspopup="dialog" aria-label="Manage delivery addresses">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+        <div><span class="addr-label">Deliver to</span><span class="addr-value">Aryan · New Delhi 110001</span></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      <!-- Search -->
+      <div class="nav-search" role="search">
+        <label for="q" class="sr-only">Search E-Bazaar</label>
+        <input type="search" id="q" placeholder="Search products, brands, categories…" autocomplete="off" />
+        <button class="search-btn" aria-label="Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg></button>
       </div>
-    </a>
 
-    <!-- Address widget -->
-    <button class="nav-address" id="addr-trigger" aria-haspopup="dialog" aria-label="Manage delivery addresses">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <div><span class="addr-label">Deliver to</span><span class="addr-value">Aryan · New Delhi 110001</span></div>
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-    </button>
+      <!-- Right actions -->
+      <div class="nav-actions">
+        <!-- Theme toggle -->
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <div class="toggle-track" aria-hidden="true">
+            <div class="toggle-thumb"></div>
+          </div>
+          <span class="toggle-icon" id="theme-icon" aria-hidden="true">🌙</span>
+        </button>
+        <!-- Account -->
+        <a href="auth.html" class="nav-btn" id="acc-btn" aria-label="My Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span>Account</span>
+        </a>
+        <!-- Orders -->
+        <a href="orders.html" id="nav-orders" class="nav-btn active" aria-label="My Orders">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+            <rect x="9" y="3" width="6" height="4" rx="2" />
+            <line x1="9" y1="12" x2="15" y2="12" />
+            <line x1="9" y1="16" x2="13" y2="16" />
+          </svg>
+          <span>Orders</span>
+        </a>
+        <!-- Wishlist -->
+        <button class="nav-btn" id="wl-nav-btn" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+          <span>Wishlist</span>
+        </button>
+        <!-- Cart -->
+        <button class="nav-btn cart-wrap" id="cart-btn" aria-label="Cart">
+          <span class="cart-badge cart-count-el" id="cart-count" aria-live="polite">3</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg>
+          <span>Cart</span>
+        </button>
+      </div>
 
-    <!-- Search -->
-    <div class="nav-search" role="search">
-      <label for="q" class="sr-only">Search E-Bazaar</label>
-      <input type="search" id="q" placeholder="Search products, brands, categories…" autocomplete="off"/>
-      <button class="search-btn" aria-label="Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+      <!-- Hamburger (mobile) -->
+      <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div><!-- /nav-top -->
+
+    <!-- SUBNAV — Clean text-based compact dropdowns -->
+    <nav class="nav-sub" aria-label="Main categories">
+      <div class="nav-sub-inner">
+        <div class="cat-links-wrap">
+
+          <!-- 1. Groceries -->
+          <div class="mega-item">
+            <a href="category.html?cat=groceries" aria-haspopup="true" aria-expanded="false">Groceries <svg class="chev"
+                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></a>
+            <div class="mega-drop" role="dialog" aria-label="Groceries brands">
+              <a href="category.html?cat=groceries&brand=Amul">Amul</a>
+              <a href="category.html?cat=groceries&brand=Nestle">Nestle</a>
+              <a href="category.html?cat=groceries&brand=Britannia">Britannia</a>
+              <a href="category.html?cat=groceries&brand=Tata">Tata</a>
+              <a href="category.html?cat=groceries&brand=MotherDairy">Mother Dairy</a>
+              <a href="category.html?cat=groceries&brand=ITC">ITC</a>
+              <a href="category.html?cat=groceries&brand=HUL">HUL</a>
+            </div>
+          </div>
+
+          <!-- 2. Electronics -->
+          <div class="mega-item">
+            <a href="category.html?cat=electronics" aria-haspopup="true" aria-expanded="false">Electronics <svg
+                class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></a>
+            <div class="mega-drop" role="dialog" aria-label="Electronics brands">
+              <a href="category.html?cat=electronics&brand=Apple">Apple</a>
+              <a href="category.html?cat=electronics&brand=Samsung">Samsung</a>
+              <a href="category.html?cat=electronics&brand=Sony">Sony</a>
+              <a href="category.html?cat=electronics&brand=OnePlus">OnePlus</a>
+              <a href="category.html?cat=electronics&brand=Xiaomi">Xiaomi</a>
+              <a href="category.html?cat=electronics&brand=Vivo">Vivo</a>
+              <a href="category.html?cat=electronics&brand=Nothing">Nothing</a>
+            </div>
+          </div>
+
+          <!-- 3. Gadgets -->
+          <div class="mega-item">
+            <a href="category.html?cat=gadgets" aria-haspopup="true" aria-expanded="false">Gadgets <svg class="chev"
+                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></a>
+            <div class="mega-drop" role="dialog" aria-label="Gadgets brands">
+              <a href="category.html?cat=gadgets&brand=Philips">Philips</a>
+              <a href="category.html?cat=gadgets&brand=LG">LG</a>
+              <a href="category.html?cat=gadgets&brand=Boat">Boat</a>
+              <a href="category.html?cat=gadgets&brand=JBL">JBL</a>
+              <a href="category.html?cat=gadgets&brand=Noise">Noise</a>
+              <a href="category.html?cat=gadgets&brand=Boult">Boult</a>
+              <a href="category.html?cat=gadgets&brand=Logitech">Logitech</a>
+            </div>
+          </div>
+
+          <!-- 4. Clothing -->
+          <div class="mega-item">
+            <a href="category.html?cat=clothing" aria-haspopup="true" aria-expanded="false">Clothing <svg class="chev"
+                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></a>
+            <div class="mega-drop" role="dialog" aria-label="Clothing brands">
+              <a href="category.html?cat=clothing&gender=men">Men's Collection</a>
+              <a href="category.html?cat=clothing&gender=women">Women's Collection</a>
+              <a href="category.html?cat=clothing&season=summer">Summer Collection</a>
+              <a href="category.html?cat=clothing&season=winter">Winter Collection</a>
+              <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+              <a href="category.html?cat=clothing&brand=Levis">Levis</a>
+              <a href="category.html?cat=clothing&brand=Zara">Zara</a>
+              <a href="category.html?cat=clothing&brand=HM">H&amp;M</a>
+              <a href="category.html?cat=clothing&brand=Tommy">Tommy Hilfiger</a>
+              <a href="category.html?cat=clothing&brand=USPolo">US Polo</a>
+              <a href="category.html?cat=clothing&brand=AllenSolly">Allen Solly</a>
+            </div>
+          </div>
+
+          <!-- 5. Shoes -->
+          <div class="mega-item">
+            <a href="category.html?cat=shoes" aria-haspopup="true" aria-expanded="false">Shoes <svg class="chev"
+                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></a>
+            <div class="mega-drop" role="dialog" aria-label="Shoes brands">
+              <a href="category.html?cat=shoes&brand=Nike">Nike</a>
+              <a href="category.html?cat=shoes&brand=Adidas">Adidas</a>
+              <a href="category.html?cat=shoes&brand=Campus">Campus</a>
+              <a href="category.html?cat=shoes&brand=Puma">Puma</a>
+              <a href="category.html?cat=shoes&brand=Comet">Comet</a>
+              <a href="category.html?cat=shoes&brand=NewBalance">New Balance</a>
+              <a href="category.html?cat=shoes&brand=Reebok">Reebok</a>
+            </div>
+          </div>
+
+          <!-- 6. Beauty -->
+          <div class="mega-item">
+            <a href="category.html?cat=beauty" aria-haspopup="true" aria-expanded="false">Beauty <svg class="chev"
+                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></a>
+            <div class="mega-drop" role="dialog" aria-label="Beauty brands">
+              <a href="category.html?cat=beauty&brand=LOreal">L'Oreal</a>
+              <a href="category.html?cat=beauty&brand=Maybelline">Maybelline</a>
+              <a href="category.html?cat=beauty&brand=Nykaa">Nykaa</a>
+              <a href="category.html?cat=beauty&brand=MAC">MAC</a>
+              <a href="category.html?cat=beauty&brand=Cetaphil">Cetaphil</a>
+              <a href="category.html?cat=beauty&brand=Mamaearth">Mamaearth</a>
+            </div>
+          </div>
+
+          <!-- 7. Sports -->
+          <div class="mega-item">
+            <a href="category.html?cat=sports" aria-haspopup="true" aria-expanded="false">Sports <svg class="chev"
+                width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></a>
+            <div class="mega-drop" role="dialog" aria-label="Sports brands">
+              <a href="category.html?cat=sports&brand=Decathlon">Decathlon</a>
+              <a href="category.html?cat=sports&brand=Yonex">Yonex</a>
+              <a href="category.html?cat=sports&brand=Cosco">Cosco</a>
+              <a href="category.html?cat=sports&brand=Nivia">Nivia</a>
+              <a href="category.html?cat=sports&brand=Speedo">Speedo</a>
+              <a href="category.html?cat=sports&brand=Spalding">Spalding</a>
+            </div>
+          </div>
+
+          <!-- 8. Home & Kitchen -->
+          <div class="mega-item">
+            <a href="category.html?cat=home-kitchen" aria-haspopup="true" aria-expanded="false">Home &amp; Kitchen <svg
+                class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg></a>
+            <div class="mega-drop" role="dialog" aria-label="Home and Kitchen brands">
+              <a href="category.html?cat=home-kitchen&brand=Prestige">Prestige</a>
+              <a href="category.html?cat=home-kitchen&brand=Hawkins">Hawkins</a>
+              <a href="category.html?cat=home-kitchen&brand=Pigeon">Pigeon</a>
+              <a href="category.html?cat=home-kitchen&brand=Milton">Milton</a>
+              <a href="category.html?cat=home-kitchen&brand=Borosil">Borosil</a>
+              <a href="category.html?cat=home-kitchen&brand=Bajaj">Bajaj</a>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="display:flex;align-items:center;">
+          <div class="subnav-divider" aria-hidden="true"></div>
+          <a href="deals.html"
+            style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">Today's
+            Deals <span class="hot-tag">HOT</span></a>
+          <a href="new-arrivals.html"
+            style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">New
+            Arrivals <span class="new-tag">NEW</span></a>
+          <a href="brand-directory.html" class="nav-item-link" id="link-brand-store"
+            style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">Brand
+            Store</a>
+        </div>
+      </div>
+    </nav>
+
+  </header>
+
+  <main id="main-content" class="orders-wrapper">
+    <div class="orders-container">
+      <h1 class="page-title">My Orders</h1>
+      <p class="page-sub">Track, manage, and review your recent purchases.</p>
+
+      <div class="orders-tabs">
+        <button class="orders-tab active" data-target="active-orders">Active Orders <span
+            class="count">(1)</span></button>
+        <button class="orders-tab" data-target="past-orders">Order History</button>
+        <button class="orders-tab" data-target="returns-refunds">Return & Refund</button>
+      </div>
+
+      <!-- Active Orders Panel -->
+      <div class="tab-panel active" id="active-orders">
+
+        <div class="order-card-wrapper">
+          <div class="order-card-top">
+            <div class="order-info-grid">
+              <div class="info-block">
+                <span class="info-label">ORDER PLACED</span>
+                <span class="info-val">12 July 2026</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label">TOTAL</span>
+                <span class="info-val">₹4,299</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label">SHIP TO</span>
+                <span class="info-val">Aryan, New Delhi</span>
+              </div>
+            </div>
+            <div class="order-status-badge status-shipped">Shipped</div>
+          </div>
+
+          <div class="order-card-body">
+            <div class="order-split">
+              <div class="order-left">
+                <div class="item-img-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <div class="item-details">
+                  <div class="item-title">PUMA RS-X Core Sneakers - White/Black</div>
+                  <div class="item-meta">Qty: 1</div>
+                  <div class="item-meta">Size: 9 UK</div>
+                </div>
+              </div>
+
+              <div class="order-right actions-stack">
+                <button class="btn-primary-outline">Track Package</button>
+                <button class="btn-text-link btn-invoice">Download Invoice</button>
+                <button class="btn-text-link btn-return">Return or Replace Items</button>
+              </div>
+            </div>
+
+            <div class="timeline-container">
+              <div class="timeline-track"></div>
+
+              <div class="milestone completed">
+                <div class="node-indicator">✓</div>
+                <div class="node-label">Confirmed</div>
+              </div>
+
+              <div class="milestone active">
+                <div class="node-indicator"></div>
+                <div class="node-label">Shipped</div>
+              </div>
+
+              <div class="milestone pending">
+                <div class="node-indicator"></div>
+                <div class="node-label">Out for Delivery</div>
+              </div>
+
+              <div class="milestone pending">
+                <div class="node-indicator"></div>
+                <div class="node-label">Delivered</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Past Orders Panel -->
+      <div class="tab-panel" id="past-orders">
+
+        <div class="order-card-wrapper">
+          <div class="order-card-top" style="background: var(--bg-surface);">
+            <div class="order-info-grid">
+              <div class="info-block">
+                <span class="info-label">ORDER PLACED</span>
+                <span class="info-val">05 June 2026</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label">TOTAL</span>
+                <span class="info-val">₹69,900</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label">SHIP TO</span>
+                <span class="info-val">Aryan, New Delhi</span>
+              </div>
+            </div>
+            <div class="order-status-badge status-delivered" style="background: rgba(46,125,50,0.12); color: #2e7d32;">
+              Delivered</div>
+          </div>
+
+          <div class="order-card-body">
+            <div class="order-split">
+              <div class="order-left">
+                <div class="item-img-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" style="width:32px;height:32px;">
+                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+                    <line x1="12" y1="18" x2="12.01" y2="18" />
+                  </svg>
+                </div>
+                <div class="item-details">
+                  <div class="item-title">Apple iPhone 15 - Black, 128GB</div>
+                  <div class="item-meta">Qty: 1 | Color: Black</div>
+                  <div class="item-meta" style="margin-top:4px; font-weight:600; color:var(--text-primary);">₹69,900
+                  </div>
+                </div>
+              </div>
+
+              <div class="order-right actions-stack">
+                <button class="btn-primary-outline"
+                  style="border-color:var(--border-line); color:var(--text-primary);">Buy it Again</button>
+                <button class="btn-text-link btn-invoice">Download Invoice</button>
+                <button class="btn-text-link">Write a Product Review</button>
+              </div>
+            </div>
+
+            <div
+              style="padding:16px; background:var(--bg-canvas); border-radius:8px; border:1px solid var(--border-line); display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:40px;height:40px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;color:#2e7d32;border:1px solid rgba(46,125,50,0.2);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <div>
+                <div style="font-weight:600;color:var(--text-primary);font-size:14px;">Delivered on Jun 08, 2026</div>
+                <div style="color:var(--text-sub);font-size:13px;margin-top:2px;">Handed directly to resident.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Returns Panel -->
+      <div class="tab-panel" id="returns-refunds">
+
+        <div class="order-card-wrapper">
+          <div class="order-card-top" style="background: var(--bg-surface);">
+            <div class="order-info-grid">
+              <div class="info-block">
+                <span class="info-label">RETURN INITIATED</span>
+                <span class="info-val">10 May 2026</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label">REFUND AMOUNT</span>
+                <span class="info-val">₹2,199</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label">REFUND TO</span>
+                <span class="info-val">Original Payment Method (UPI)</span>
+              </div>
+            </div>
+            <div class="order-status-badge status-refunded" style="background: rgba(198,40,40,0.12); color: #c62828;">
+              Refund Processed</div>
+          </div>
+
+          <div class="order-card-body">
+            <div class="order-split">
+              <div class="order-left">
+                <div class="item-img-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" style="width:32px;height:32px;">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                  </svg>
+                </div>
+                <div class="item-details">
+                  <div class="item-title">Zara Oversized Cotton Shirt</div>
+                  <div class="item-meta">Qty: 1 | Size: L</div>
+                  <div class="item-meta" style="margin-top:4px; font-weight:600; color:var(--text-primary);">₹2,199
+                  </div>
+                </div>
+              </div>
+
+              <div class="order-right actions-stack">
+                <button class="btn-primary-outline"
+                  style="border-color:var(--border-line); color:var(--text-primary);">View Return Status</button>
+                <button class="btn-text-link">Download Return Label</button>
+              </div>
+            </div>
+
+            <div
+              style="padding:16px; background:var(--bg-canvas); border-radius:8px; border:1px solid var(--border-line); display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:40px;height:40px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;color:#c62828;border:1px solid rgba(198,40,40,0.2);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <path d="M12 18v-6" />
+                  <path d="M9 15l3 3 3-3" />
+                </svg>
+              </div>
+              <div>
+                <div style="font-weight:600;color:var(--text-primary);font-size:14px;">Refund Completed on May 12, 2026
+                </div>
+                <div style="color:var(--text-sub);font-size:13px;margin-top:2px;">Funds have been credited to your bank
+                  account. (Txn ID: UPI982374)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
+  </main>
 
-    <!-- Right actions -->
-    <div class="nav-actions">
-      <!-- Theme toggle -->
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-        <div class="toggle-track" aria-hidden="true"><div class="toggle-thumb"></div></div>
-        <span class="toggle-icon" id="theme-icon" aria-hidden="true">🌙</span>
-      </button>
-      <!-- Account -->
-      <a href="auth.html" class="nav-btn" id="acc-btn" aria-label="My Account">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span>Account</span>
-      </a>
-      <!-- Orders -->
-      <a href="orders.html" id="nav-orders" class="nav-btn active" aria-label="My Orders">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
-        <span>Orders</span>
-      </a>
-      <!-- Wishlist -->
-      <button class="nav-btn" id="wl-nav-btn" aria-label="Wishlist">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <span>Wishlist</span>
-      </button>
-      <!-- Cart -->
-      <button class="nav-btn cart-wrap" id="cart-btn" aria-label="Cart">
-        <span class="cart-badge cart-count-el" id="cart-count" aria-live="polite">3</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        <span>Cart</span>
-      </button>
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <div class="footer-main">
+      <div class="f-brand">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+          <svg width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)" />
+            <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5"
+              stroke-linecap="round" />
+            <polyline fill="none" stroke="rgba(255,255,255,.90)" stroke-width="2.8" stroke-linecap="round"
+              stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50" />
+            <path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round"
+              d="M18 70 Q40 82 64 62" />
+            <line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30" />
+            <polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38" />
+          </svg>
+          <div class="f-logo">E-<em>Bazaar</em></div>
+        </div>
+        <p>Your everyday and everything store. Premium products, unmatched service, delivered with care across India.
+        </p>
+        <div class="f-socials" aria-label="Social media">
+          <a href="#" class="soc-btn" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24"
+              fill="currentColor">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+            </svg></a>
+          <a href="#" class="soc-btn" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg></a>
+          <a href="#" class="soc-btn" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24"
+              fill="currentColor">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg></a>
+          <a href="#" class="soc-btn" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24"
+              fill="currentColor">
+              <path
+                d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+              <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="var(--bg-nav)" />
+            </svg></a>
+        </div>
+      </div>
+      <div class="f-col">
+        <h5>Shop</h5>
+        <ul>
+          <li><a href="new-arrivals.html">New Arrivals</a></li>
+          <li><a href="category.html?cat=trending">Trending Now</a></li>
+          <li><a href="deals.html">Today's Deals</a></li>
+          <li><a href="category.html?cat=electronics">Electronics</a></li>
+          <li><a href="category.html?cat=clothing">Fashion</a></li>
+          <li><a href="category.html?cat=groceries">Groceries</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About E-Bazaar</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press & Media</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Our Blog</a></li>
+          <li><a href="#">Investors</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h5>Help</h5>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="orders.html">Track My Order</a></li>
+          <li><a href="returns.html">Return & Refund Policy</a></li>
+          <li><a href="shipping.html">Shipping Info</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h5>Stay in the Loop</h5>
+        <p class="nl-desc">Deals, drops and news — in your inbox.</p>
+        <form class="nl-form" id="nl-form" novalidate><label for="nl-email" class="sr-only">Email</label><input
+            type="email" id="nl-email" placeholder="your@email.com" required autocomplete="email" /><button
+            type="submit">Join</button></form>
+      </div>
     </div>
+    <div class="footer-bottom"><span>&copy; 2026 E-Bazaar Pvt. Ltd. &nbsp;&middot;&nbsp; <a href="#">Terms</a>
+        &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy</a></span>
+      <div class="pay-row" aria-label="Payment methods">
+        <div class="pay-chip">VISA</div>
+        <div class="pay-chip">MC</div>
+        <div class="pay-chip">UPI</div>
+        <div class="pay-chip">GPay</div>
+        <div class="pay-chip">COD</div>
+        <div class="pay-chip">EMI</div>
+      </div>
+    </div>
+  </footer>
 
-    <!-- Hamburger (mobile) -->
-    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div><!-- /nav-top -->
+  <!-- BACK TO TOP & TOAST -->
+  <button id="btt" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="18 15 12 9 6 15" />
+    </svg></button>
+  <div id="toast" role="alert" aria-live="polite">
+    <div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span>
+  </div>
 
-  <!-- SUBNAV — Clean text-based compact dropdowns -->
-  <nav class="nav-sub" aria-label="Main categories">
-    <div class="nav-sub-inner">
-      <div class="cat-links-wrap">
+  <!-- RETURN MODAL -->
+  <div class="modal-overlay" id="return-modal" role="dialog" aria-modal="true" aria-label="Initiate Return">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 class="modal-title">Return or Replace Items</h2>
+        <button class="modal-close" id="return-close-btn" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="addr-form" id="return-form" novalidate>
+          <div class="form-group full">
+            <label for="ret-reason">Reason for Return</label>
+            <select id="ret-reason" required
+              style="width:100%; padding:12px; border:1px solid var(--border-line); border-radius:8px; font-family:var(--font-primary); background:var(--bg-canvas); color:var(--text-primary);">
+              <option value="">Select a reason...</option>
+              <option value="defective">Item is defective or doesn't work</option>
+              <option value="damaged">Item or packaging was damaged</option>
+              <option value="wrong">Wrong item sent</option>
+              <option value="no-longer-needed">No longer needed / Better price available</option>
+              <option value="other">Other (Explain below)</option>
+            </select>
+          </div>
+          <div class="form-group full" style="margin-top:16px;">
+            <label for="ret-comments">Comments (Optional)</label>
+            <textarea id="ret-comments" rows="3" placeholder="Please provide any additional details..."
+              style="width:100%; padding:12px; border:1px solid var(--border-line); border-radius:8px; font-family:var(--font-primary); background:var(--bg-canvas); color:var(--text-primary); resize:vertical; margin-top:4px;"></textarea>
+          </div>
+          <div class="form-group full" style="margin-top:16px;">
+            <label>Resolution Action</label>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="radio" name="ret-action" value="replace" checked /> Replace with identical item
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="radio" name="ret-action" value="refund-original" /> Refund to Original Payment Method
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="radio" name="ret-action" value="refund-wallet" /> Refund to E-Bazaar Wallet (Instant)
+              </label>
+            </div>
+          </div>
+          <div style="display:flex; gap:16px; margin-top:24px;">
+            <button type="submit" class="form-submit" style="flex:1">Confirm Request</button>
+            <button type="button" id="return-form-cancel" class="addr-act-btn secondary"
+              style="height:48px; padding:0 24px; border-radius:14px; background:var(--bg-canvas); border:1px solid var(--border-line); color:var(--text-primary); cursor:pointer;">Cancel</button>
+          </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="order-right actions-stack">
+                <button class="btn-primary-outline"
+                  style="border-color:var(--border-line); color:var(--text-primary);">View Return Status</button>
+                <button class="btn-text-link">Download Return Label</button>
+              </div>
+            </div>
+
+            <div
+              style="padding:16px; background:var(--bg-canvas); border-radius:8px; border:1px solid var(--border-line); display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:40px;height:40px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;color:#c62828;border:1px solid rgba(198,40,40,0.2);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <path d="M12 18v-6" />
+                  <path d="M9 15l3 3 3-3" />
+                </svg>
+              </div>
+              <div>
+                <div style="font-weight:600;color:var(--text-primary);font-size:14px;">Refund Completed on May 12, 2026
+                </div>
+                <div style="color:var(--text-sub);font-size:13px;margin-top:2px;">Funds have been credited to your bank
+                  account. (Txn ID: UPI982374)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <div class="footer-main">
+      <div class="f-brand">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+          <svg width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)" />
+            <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5"
+              stroke-linecap="round" />
+            <polyline fill="none" stroke="rgba(255,255,255,.90)" stroke-width="2.8" stroke-linecap="round"
+              stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50" />
+            <path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round"
+              d="M18 70 Q40 82 64 62" />
+            <line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30" />
+            <polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38" />
+          </svg>
+          <div class="f-logo">E-<em>Bazaar</em></div>
+        </div>
+        <p>Your everyday and everything store. Premium products, unmatched service, delivered with care across India.
+        </p>
+        <div class="f-socials" aria-label="Social media">
+          <a href="#" class="soc-btn" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24"
+              fill="currentColor">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+            </svg></a>
+          <a href="#" class="soc-btn" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg></a>
+          <a href="#" class="soc-btn" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24"
+              fill="currentColor">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg></a>
+          <a href="#" class="soc-btn" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24"
+              fill="currentColor">
+              <path
+                d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+              <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="var(--bg-nav)" />
+            </svg></a>
+        </div>
+      </div>
+      <div class="f-col">
+        <h5>Shop</h5>
+        <ul>
+          <li><a href="new-arrivals.html">New Arrivals</a></li>
+          <li><a href="category.html?cat=trending">Trending Now</a></li>
+          <li><a href="deals.html">Today's Deals</a></li>
+          <li><a href="category.html?cat=electronics">Electronics</a></li>
+          <li><a href="category.html?cat=clothing">Fashion</a></li>
+          <li><a href="category.html?cat=groceries">Groceries</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About E-Bazaar</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press & Media</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Our Blog</a></li>
+          <li><a href="#">Investors</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h5>Help</h5>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="orders.html">Track My Order</a></li>
+          <li><a href="returns.html">Return & Refund Policy</a></li>
+          <li><a href="shipping.html">Shipping Info</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h5>Stay in the Loop</h5>
+        <p class="nl-desc">Deals, drops and news — in your inbox.</p>
+        <form class="nl-form" id="nl-form" novalidate><label for="nl-email" class="sr-only">Email</label><input
+            type="email" id="nl-email" placeholder="your@email.com" required autocomplete="email" /><button
+            type="submit">Join</button></form>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>&copy; 2026 E-Bazaar Pvt. Ltd. &nbsp;&middot;&nbsp; <a href="#">Terms</a>
+        &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy</a></span>
+      <div class="pay-row" aria-label="Payment methods">
+        <div class="pay-chip">VISA</div>
+        <div class="pay-chip">MC</div>
+        <div class="pay-chip">UPI</div>
+        <div class="pay-chip">GPay</div>
+        <div class="pay-chip">COD</div>
+        <div class="pay-chip">EMI</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP & TOAST -->
+  <button id="btt" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="18 15 12 9 6 15" />
+    </svg></button>
+  <div id="toast" role="alert" aria-live="polite">
+    <div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span>
+  </div>
+
+  <!-- RETURN MODAL -->
+  <div class="modal-overlay" id="return-modal" role="dialog" aria-modal="true" aria-label="Initiate Return">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 class="modal-title">Return or Replace Items</h2>
+        <button class="modal-close" id="return-close-btn" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="addr-form" id="return-form" novalidate>
+          <div class="form-group full">
+            <label for="ret-reason">Reason for Return</label>
+            <select id="ret-reason" required
+              style="width:100%; padding:12px; border:1px solid var(--border-line); border-radius:8px; font-family:var(--font-primary); background:var(--bg-canvas); color:var(--text-primary);">
+              <option value="">Select a reason...</option>
+              <option value="defective">Item is defective or doesn't work</option>
+              <option value="damaged">Item or packaging was damaged</option>
+              <option value="wrong">Wrong item sent</option>
+              <option value="no-longer-needed">No longer needed / Better price available</option>
+              <option value="other">Other (Explain below)</option>
+            </select>
+          </div>
+          <div class="form-group full" style="margin-top:16px;">
+            <label for="ret-comments">Comments (Optional)</label>
+            <textarea id="ret-comments" rows="3" placeholder="Please provide any additional details..."
+              style="width:100%; padding:12px; border:1px solid var(--border-line); border-radius:8px; font-family:var(--font-primary); background:var(--bg-canvas); color:var(--text-primary); resize:vertical; margin-top:4px;"></textarea>
+          </div>
+          <div class="form-group full" style="margin-top:16px;">
+            <label>Resolution Action</label>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="radio" name="ret-action" value="replace" checked /> Replace with identical item
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="radio" name="ret-action" value="refund-original" /> Refund to Original Payment Method
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="radio" name="ret-action" value="refund-wallet" /> Refund to E-Bazaar Wallet (Instant)
+              </label>
+            </div>
+          </div>
+          <div style="display:flex; gap:16px; margin-top:24px;">
+            <button type="submit" class="form-submit" style="flex:1">Confirm Request</button>
+            <button type="button" id="return-form-cancel" class="addr-act-btn secondary"
+              style="height:48px; padding:0 24px; border-radius:14px; background:var(--bg-canvas); border:1px solid var(--border-line); color:var(--text-primary); cursor:pointer;">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Dynamic Orders Fetching & Rendering Engine
+    function initOrders() {
+      const isLoggedIn = window.AuthSession && window.AuthSession.isLoggedIn();
+      const container = document.querySelector('.orders-container');
+      const tabsEl = document.querySelector('.orders-tabs');
+      const panels = document.querySelectorAll('.tab-panel');
+
+      if (!isLoggedIn) {
+        // Hide tabs and panels
+        if (tabsEl) tabsEl.style.display = 'none';
+        panels.forEach(p => p.style.display = 'none');
+
+        // Check if login prompt is already there
+        if (!document.querySelector('.orders-login-prompt')) {
+          const loginPrompt = document.createElement('div');
+          loginPrompt.className = 'orders-login-prompt';
+          loginPrompt.style.cssText = 'text-align: center; padding: 60px 20px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-line); margin-top: 24px;';
+          loginPrompt.innerHTML = `
+            <div style="font-size: 54px; margin-bottom: 20px;">📦🔒</div>
+            <h2 style="font-size: 22px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">Access Your Orders</h2>
+            <p style="color: var(--text-sub); max-width: 400px; margin: 0 auto 24px; font-size: 14px; line-height: 1.6;">Please sign in to view your purchase history, track packages, download invoices, or request returns.</p>
+            <a href="auth.html" class="form-submit" style="display: inline-block; max-width: 200px; text-decoration: none; padding: 12px 24px; border-radius: 10px; background: var(--primary, #A88C6D); color: #fff; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s ease; text-align: center;">Sign In / Sign Up</a>
+          `;
+          container.appendChild(loginPrompt);
+        }
+        return;
+      }
+
+      // Show tabs and active panel
+      if (tabsEl) tabsEl.style.display = 'flex';
+      
+      // Remove any existing login prompt
+      const existingPrompt = document.querySelector('.orders-login-prompt');
+      if (existingPrompt) existingPrompt.remove();
+
+      // Fetch Orders from REST API
+      const token = window.AuthSession.getToken();
+      
+      // Show loading skeletons or spinner inside panels
+      const loadingHtml = `
+        <div style="text-align: center; padding: 60px 24px;">
+          <div style="display: inline-block; border: 4px solid var(--border-line); border-radius: 50%; border-top: 4px solid var(--primary); width: 36px; height: 36px; animation: spin 1s linear infinite; margin-bottom: 12px;"></div>
+          <p style="color: var(--text-sub); font-size: 14px;">Loading your orders...</p>
+        </div>
+      `;
+      panels.forEach(p => p.innerHTML = loadingHtml);
+
+      fetch('http://localhost:5000/api/orders', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to retrieve orders');
+        return res.json();
+      })
+      .then(orders => {
+        // Group orders by status
+        const activeOrders = [];
+        const pastOrders = [];
+        const returnedOrders = [];
+
+        orders.forEach(order => {
+          if (order.status === 'Delivered') {
+            pastOrders.push(order);
+          } else if (order.status === 'Returned' || order.status === 'Refunded' || order.status === 'Cancelled') {
+            returnedOrders.push(order);
+          } else {
+            activeOrders.push(order);
+          }
+        });
+
+        // Update counts on tabs
+        const tabButtons = document.querySelectorAll('.orders-tab');
+        tabButtons.forEach(btn => {
+          const target = btn.dataset.target;
+          if (target === 'active-orders') {
+            btn.innerHTML = `Active Orders <span class="count">(${activeOrders.length})</span>`;
+          } else if (target === 'past-orders') {
+            btn.innerHTML = `Order History <span class="count">(${pastOrders.length})</span>`;
+          } else if (target === 'returns-refunds') {
+            btn.innerHTML = `Return & Refund <span class="count">(${returnedOrders.length})</span>`;
+          }
+        });
+
+        // Render active orders panel
+        const activePanel = document.getElementById('active-orders');
+        if (activePanel) {
+          if (activeOrders.length === 0) {
+            activePanel.innerHTML = `
+              <div style="text-align: center; padding: 48px 24px; color: var(--text-sub); background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-line);">
+                <p style="font-size: 15px;">No active orders currently.</p>
+              </div>
+            `;
+          } else {
+            activePanel.innerHTML = activeOrders.map(buildOrderCard).join('');
+          }
+        }
+
+        // Render past orders panel
+        const pastPanel = document.getElementById('past-orders');
+        if (pastPanel) {
+          if (pastOrders.length === 0) {
+            pastPanel.innerHTML = `
+              <div style="text-align: center; padding: 48px 24px; color: var(--text-sub); background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-line);">
+                <p style="font-size: 15px;">You have no order history.</p>
+              </div>
+            `;
+          } else {
+            pastPanel.innerHTML = pastOrders.map(buildOrderCard).join('');
+          }
+        }
+
+        // Render returns/refunds panel
+        const returnedPanel = document.getElementById('returns-refunds');
+        if (returnedPanel) {
+          if (returnedOrders.length === 0) {
+            returnedPanel.innerHTML = `
+              <div style="text-align: center; padding: 48px 24px; color: var(--text-sub); background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-line);">
+                <p style="font-size: 15px;">No return or refund requests found.</p>
+              </div>
+            `;
+          } else {
+            returnedPanel.innerHTML = returnedOrders.map(buildOrderCard).join('');
+          }
+        }
+      })
+      .catch(err => {
+        console.error('[Orders] Error loading orders:', err);
+        panels.forEach(p => {
+          p.innerHTML = `
+            <div style="text-align: center; padding: 48px 24px; color: #c0392b;">
+              <p style="font-size: 15px; font-weight: 500;">Failed to load orders. Please try again later.</p>
+            </div>
+          `;
+        });
+      });
+    }
+
+    function buildOrderCard(order) {
+      let dateStr = 'Unknown Date';
+      try {
+        const date = new Date(order.createdAt);
+        dateStr = date.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      } catch (e) {}
+
+      let items = order.items;
+      if (typeof items === 'string') {
+        try { items = JSON.parse(items); } catch(e) { items = []; }
+      }
+      if (!Array.isArray(items)) items = [];
+
+      let deliveryAddr = order.deliveryAddress || 'No address specified';
+      if (deliveryAddr.startsWith('{')) {
+        try {
+          const addrObj = JSON.parse(deliveryAddr);
+          deliveryAddr = `${addrObj.fname} ${addrObj.lname}, ${addrObj.line1}, ${addrObj.line2 ? addrObj.line2 + ', ' : ''}${addrObj.city} - ${addrObj.pin}`;
+        } catch(e) {}
+      }
+      const displayAddress = deliveryAddr.length > 30 ? deliveryAddr.substring(0, 27) + '...' : deliveryAddr;
+
+      const itemsHtml = items.map(item => {
+        const itemPrice = typeof item.price === 'number' ? `₹${item.price.toLocaleString('en-IN')}` : (item.price || '₹0');
+        const imageSrc = item.image || item.img || 'images/placeholder.png';
+        return `
+          <div class="order-split" style="border-bottom: 1px dashed var(--border-line); padding-bottom: 16px; margin-bottom: 16px;">
+            <div class="order-left" style="display:flex; align-items:center;">
+              <div class="item-img-box" style="width: 80px; height: 80px; border-radius: 8px; border: 1px solid var(--border-line); overflow: hidden; padding: 4px; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="${imageSrc}" style="max-width:100%; max-height:100%; object-fit:contain;" alt="${item.title || 'Product'}">
+              </div>
+              <div class="item-details" style="margin-left: 16px;">
+                <div class="item-title" style="font-weight: 600; color: var(--text-primary); font-size:15px;">${item.title || 'Product Item'}</div>
+                <div class="item-meta" style="font-size: 13px; color: var(--text-sub); margin-top: 4px;">Qty: ${item.qty || 1}</div>
+                <div class="item-meta" style="font-size: 14px; font-weight: 600; color: var(--accent); margin-top: 4px;">${itemPrice}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      let badgeClass = 'status-shipped';
+      if (order.status === 'Delivered') badgeClass = 'status-delivered';
+      if (order.status === 'Refunded' || order.status === 'Returned' || order.status === 'Cancelled') badgeClass = 'status-refunded';
+
+      let timelineHtml = '';
+      if (order.status !== 'Refunded' && order.status !== 'Returned' && order.status !== 'Cancelled') {
+        const statuses = ['Confirmed', 'Shipped', 'Out for Delivery', 'Delivered'];
+        const currentIdx = statuses.indexOf(order.status);
         
-        <!-- 1. Groceries -->
-        <div class="mega-item">
-          <a href="category.html?cat=groceries" aria-haspopup="true" aria-expanded="false">Groceries <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-          <div class="mega-drop" role="dialog" aria-label="Groceries brands">
-            <a href="category.html?cat=groceries&brand=Amul">Amul</a>
-            <a href="category.html?cat=groceries&brand=Nestle">Nestle</a>
-            <a href="category.html?cat=groceries&brand=Britannia">Britannia</a>
-            <a href="category.html?cat=groceries&brand=Tata">Tata</a>
-            <a href="category.html?cat=groceries&brand=MotherDairy">Mother Dairy</a>
-            <a href="category.html?cat=groceries&brand=ITC">ITC</a>
-            <a href="category.html?cat=groceries&brand=HUL">HUL</a>
-          </div>
-        </div>
-
-        <!-- 2. Electronics -->
-        <div class="mega-item">
-          <a href="category.html?cat=electronics" aria-haspopup="true" aria-expanded="false">Electronics <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-          <div class="mega-drop" role="dialog" aria-label="Electronics brands">
-            <a href="category.html?cat=electronics&brand=Apple">Apple</a>
-            <a href="category.html?cat=electronics&brand=Samsung">Samsung</a>
-            <a href="category.html?cat=electronics&brand=Sony">Sony</a>
-            <a href="category.html?cat=electronics&brand=OnePlus">OnePlus</a>
-            <a href="category.html?cat=electronics&brand=Xiaomi">Xiaomi</a>
-            <a href="category.html?cat=electronics&brand=Vivo">Vivo</a>
-            <a href="category.html?cat=electronics&brand=Nothing">Nothing</a>
-          </div>
-        </div>
-
-        <!-- 3. Gadgets -->
-        <div class="mega-item">
-          <a href="category.html?cat=gadgets" aria-haspopup="true" aria-expanded="false">Gadgets <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-          <div class="mega-drop" role="dialog" aria-label="Gadgets brands">
-            <a href="category.html?cat=gadgets&brand=Philips">Philips</a>
-            <a href="category.html?cat=gadgets&brand=LG">LG</a>
-            <a href="category.html?cat=gadgets&brand=Boat">Boat</a>
-            <a href="category.html?cat=gadgets&brand=JBL">JBL</a>
-            <a href="category.html?cat=gadgets&brand=Noise">Noise</a>
-            <a href="category.html?cat=gadgets&brand=Boult">Boult</a>
-            <a href="category.html?cat=gadgets&brand=Logitech">Logitech</a>
-          </div>
-        </div>
-
-        <!-- 4. Clothing -->
-        <div class="mega-item">
-          <a href="category.html?cat=clothing" aria-haspopup="true" aria-expanded="false">Clothing <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-          <div class="mega-drop" role="dialog" aria-label="Clothing brands">
-            <a href="category.html?cat=clothing&gender=men">Men's Collection</a>
-            <a href="category.html?cat=clothing&gender=women">Women's Collection</a>
-            <a href="category.html?cat=clothing&season=summer">Summer Collection</a>
-            <a href="category.html?cat=clothing&season=winter">Winter Collection</a>
-            <div style="height:1px;background:var(--border);margin:8px 0;"></div>
-            <a href="category.html?cat=clothing&brand=Levis">Levis</a>
-            <a href="category.html?cat=clothing&brand=Zara">Zara</a>
-            <a href="category.html?cat=clothing&brand=HM">H&amp;M</a>
-            <a href="category.html?cat=clothing&brand=Tommy">Tommy Hilfiger</a>
-            <a href="category.html?cat=clothing&brand=USPolo">US Polo</a>
-            <a href="category.html?cat=clothing&brand=AllenSolly">Allen Solly</a>
-          </div>
-        </div>
-
-        <!-- 5. Shoes -->
-        <div class="mega-item">
-          <a href="category.html?cat=shoes" aria-haspopup="true" aria-expanded="false">Shoes <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-          <div class="mega-drop" role="dialog" aria-label="Shoes brands">
-            <a href="category.html?cat=shoes&brand=Nike">Nike</a>
-            <a href="category.html?cat=shoes&brand=Adidas">Adidas</a>
-            <a href="category.html?cat=shoes&brand=Campus">Campus</a>
-            <a href="category.html?cat=shoes&brand=Puma">Puma</a>
-            <a href="category.html?cat=shoes&brand=Comet">Comet</a>
-            <a href="category.html?cat=shoes&brand=NewBalance">New Balance</a>
-            <a href="category.html?cat=shoes&brand=Reebok">Reebok</a>
-          </div>
-        </div>
-
-        <!-- 6. Beauty -->
-        <div class="mega-item">
-          <a href="category.html?cat=beauty" aria-haspopup="true" aria-expanded="false">Beauty <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-          <div class="mega-drop" role="dialog" aria-label="Beauty brands">
-            <a href="category.html?cat=beauty&brand=LOreal">L'Oreal</a>
-            <a href="category.html?cat=beauty&brand=Maybelline">Maybelline</a>
-            <a href="category.html?cat=beauty&brand=Nykaa">Nykaa</a>
-            <a href="category.html?cat=beauty&brand=MAC">MAC</a>
-            <a href="category.html?cat=beauty&brand=Cetaphil">Cetaphil</a>
-            <a href="category.html?cat=beauty&brand=Mamaearth">Mamaearth</a>
-          </div>
-        </div>
-
-        <!-- 7. Sports -->
-        <div class="mega-item">
-          <a href="category.html?cat=sports" aria-haspopup="true" aria-expanded="false">Sports <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-          <div class="mega-drop" role="dialog" aria-label="Sports brands">
-            <a href="category.html?cat=sports&brand=Decathlon">Decathlon</a>
-            <a href="category.html?cat=sports&brand=Yonex">Yonex</a>
-            <a href="category.html?cat=sports&brand=Cosco">Cosco</a>
-            <a href="category.html?cat=sports&brand=Nivia">Nivia</a>
-            <a href="category.html?cat=sports&brand=Speedo">Speedo</a>
-            <a href="category.html?cat=sports&brand=Spalding">Spalding</a>
-          </div>
-        </div>
-
-        <!-- 8. Home & Kitchen -->
-        <div class="mega-item">
-          <a href="category.html?cat=home-kitchen" aria-haspopup="true" aria-expanded="false">Home &amp; Kitchen <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-          <div class="mega-drop" role="dialog" aria-label="Home and Kitchen brands">
-            <a href="category.html?cat=home-kitchen&brand=Prestige">Prestige</a>
-            <a href="category.html?cat=home-kitchen&brand=Hawkins">Hawkins</a>
-            <a href="category.html?cat=home-kitchen&brand=Pigeon">Pigeon</a>
-            <a href="category.html?cat=home-kitchen&brand=Milton">Milton</a>
-            <a href="category.html?cat=home-kitchen&brand=Borosil">Borosil</a>
-            <a href="category.html?cat=home-kitchen&brand=Bajaj">Bajaj</a>
-          </div>
-        </div>
-
-      </div>
-
-      <div style="display:flex;align-items:center;">
-        <div class="subnav-divider" aria-hidden="true"></div>
-        <a href="deals.html" style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">Today's Deals <span class="hot-tag">HOT</span></a>
-        <a href="new-arrivals.html" style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">New Arrivals <span class="new-tag">NEW</span></a>
-        <a href="brand-directory.html" class="nav-item-link" id="link-brand-store" style="display:flex;align-items:center;gap:6px;padding:0 12px;font-size:14px;font-weight:600;color:var(--text-sub);white-space:nowrap;transition:color var(--ease)">Brand Store</a>
-      </div>
-    </div>
-  </nav>
-
-</header>
-
-<main id="main-content" class="orders-wrapper">
-  <div class="orders-container">
-    <h1 class="page-title">My Orders</h1>
-    <p class="page-sub">Track, manage, and review your recent purchases.</p>
-    
-    <div class="orders-tabs">
-      <button class="orders-tab active" data-target="active-orders">Active Orders <span class="count">(1)</span></button>
-      <button class="orders-tab" data-target="past-orders">Order History</button>
-      <button class="orders-tab" data-target="returns-refunds">Return & Refund Policy</button>
-    </div>
-
-    <!-- Active Orders Panel -->
-    <div class="tab-panel active" id="active-orders">
-      
-      <div class="order-card-wrapper">
-        <div class="order-card-top">
-          <div class="order-info-grid">
-            <div class="info-block">
-              <span class="info-label">ORDER PLACED</span>
-              <span class="info-val">12 July 2026</span>
+        const milestones = statuses.map((status, idx) => {
+          let mClass = 'pending';
+          let indicator = '';
+          if (idx < currentIdx) {
+            mClass = 'completed';
+            indicator = '✓';
+          } else if (idx === currentIdx) {
+            mClass = 'active';
+            indicator = '';
+          }
+          return `
+            <div class="milestone ${mClass}">
+              <div class="node-indicator">${indicator}</div>
+              <div class="node-label">${status}</div>
             </div>
-            <div class="info-block">
-              <span class="info-label">TOTAL</span>
-              <span class="info-val">₹4,299</span>
-            </div>
-            <div class="info-block">
-              <span class="info-label">SHIP TO</span>
-              <span class="info-val">Aryan, New Delhi</span>
-            </div>
-          </div>
-          <div class="order-status-badge status-shipped">Shipped</div>
-        </div>
+          `;
+        }).join('');
 
-        <div class="order-card-body">
-          <div class="order-split">
-            <div class="order-left">
-              <div class="item-img-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              </div>
-              <div class="item-details">
-                <div class="item-title">PUMA RS-X Core Sneakers - White/Black</div>
-                <div class="item-meta">Qty: 1</div>
-                <div class="item-meta">Size: 9 UK</div>
-              </div>
-            </div>
-            
-            <div class="order-right actions-stack">
-              <button class="btn-primary-outline">Track Package</button>
-              <button class="btn-text-link btn-invoice">Download Invoice</button>
-              <button class="btn-text-link btn-return">Return or Replace Items</button>
-            </div>
-          </div>
-          
-          <div class="timeline-container">
+        timelineHtml = `
+          <div class="timeline-container" style="margin-top: 24px;">
             <div class="timeline-track"></div>
-            
-            <div class="milestone completed">
-              <div class="node-indicator">✓</div>
-              <div class="node-label">Confirmed</div>
-            </div>
-            
-            <div class="milestone active">
-              <div class="node-indicator"></div>
-              <div class="node-label">Shipped</div>
-            </div>
-            
-            <div class="milestone pending">
-              <div class="node-indicator"></div>
-              <div class="node-label">Out for Delivery</div>
-            </div>
-            
-            <div class="milestone pending">
-              <div class="node-indicator"></div>
-              <div class="node-label">Delivered</div>
-            </div>
-            
+            ${milestones}
           </div>
-        </div>
-      </div>
-      
-    </div>
-    
-    <!-- Past Orders Panel -->
-    <div class="tab-panel" id="past-orders">
-      
-      <div class="order-card-wrapper">
-        <div class="order-card-top" style="background: var(--bg-surface);">
-          <div class="order-info-grid">
-            <div class="info-block">
-              <span class="info-label">ORDER PLACED</span>
-              <span class="info-val">05 June 2026</span>
-            </div>
-            <div class="info-block">
-              <span class="info-label">TOTAL</span>
-              <span class="info-val">₹69,900</span>
-            </div>
-            <div class="info-block">
-              <span class="info-label">SHIP TO</span>
-              <span class="info-val">Aryan, New Delhi</span>
-            </div>
-          </div>
-          <div class="order-status-badge status-delivered" style="background: rgba(46,125,50,0.12); color: #2e7d32;">Delivered</div>
-        </div>
-
-        <div class="order-card-body">
-          <div class="order-split">
-            <div class="order-left">
-              <div class="item-img-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-              </div>
-              <div class="item-details">
-                <div class="item-title">Apple iPhone 15 - Black, 128GB</div>
-                <div class="item-meta">Qty: 1 | Color: Black</div>
-                <div class="item-meta" style="margin-top:4px; font-weight:600; color:var(--text-primary);">₹69,900</div>
-              </div>
-            </div>
-            
-            <div class="order-right actions-stack">
-              <button class="btn-primary-outline" style="border-color:var(--border-line); color:var(--text-primary);">Buy it Again</button>
-              <button class="btn-text-link btn-invoice">Download Invoice</button>
-              <button class="btn-text-link">Write a Product Review</button>
-            </div>
-          </div>
-          
-          <div style="padding:16px; background:var(--bg-canvas); border-radius:8px; border:1px solid var(--border-line); display:flex; align-items:center; gap:12px;">
-            <div style="width:40px;height:40px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;color:#2e7d32;border:1px solid rgba(46,125,50,0.2);">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div>
-              <div style="font-weight:600;color:var(--text-primary);font-size:14px;">Delivered on Jun 08, 2026</div>
-              <div style="color:var(--text-sub);font-size:13px;margin-top:2px;">Handed directly to resident.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    
-    <!-- Returns Panel -->
-    <div class="tab-panel" id="returns-refunds">
-      
-      <div class="order-card-wrapper">
-        <div class="order-card-top" style="background: var(--bg-surface);">
-          <div class="order-info-grid">
-            <div class="info-block">
-              <span class="info-label">RETURN INITIATED</span>
-              <span class="info-val">10 May 2026</span>
-            </div>
-            <div class="info-block">
-              <span class="info-label">REFUND AMOUNT</span>
-              <span class="info-val">₹2,199</span>
-            </div>
-            <div class="info-block">
-              <span class="info-label">REFUND TO</span>
-              <span class="info-val">Original Payment Method (UPI)</span>
-            </div>
-          </div>
-          <div class="order-status-badge status-refunded" style="background: rgba(198,40,40,0.12); color: #c62828;">Refund Processed</div>
-        </div>
-
-        <div class="order-card-body">
-          <div class="order-split">
-            <div class="order-left">
-              <div class="item-img-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-              </div>
-              <div class="item-details">
-                <div class="item-title">Zara Oversized Cotton Shirt</div>
-                <div class="item-meta">Qty: 1 | Size: L</div>
-                <div class="item-meta" style="margin-top:4px; font-weight:600; color:var(--text-primary);">₹2,199</div>
-              </div>
-            </div>
-            
-            <div class="order-right actions-stack">
-              <button class="btn-primary-outline" style="border-color:var(--border-line); color:var(--text-primary);">View Return Status</button>
-              <button class="btn-text-link">Download Return Label</button>
-            </div>
-          </div>
-          
-          <div style="padding:16px; background:var(--bg-canvas); border-radius:8px; border:1px solid var(--border-line); display:flex; align-items:center; gap:12px;">
+        `;
+      } else {
+        timelineHtml = `
+          <div style="padding:16px; background:var(--bg-canvas); border-radius:8px; border:1px solid var(--border-line); display:flex; align-items:center; gap:12px; margin-top: 16px;">
             <div style="width:40px;height:40px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;color:#c62828;border:1px solid rgba(198,40,40,0.2);">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="M9 15l3 3 3-3"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <path d="M12 18v-6" />
+                <path d="M9 15l3 3 3-3" />
+              </svg>
             </div>
             <div>
-              <div style="font-weight:600;color:var(--text-primary);font-size:14px;">Refund Completed on May 12, 2026</div>
-              <div style="color:var(--text-sub);font-size:13px;margin-top:2px;">Funds have been credited to your bank account. (Txn ID: UPI982374)</div>
+              <div style="font-weight:600;color:var(--text-primary);font-size:14px;">Refund Processed (${order.status})</div>
+              <div style="color:var(--text-sub);font-size:13px;margin-top:2px;">Method: ${order.paymentMethod}. Address: ${deliveryAddr}</div>
             </div>
           </div>
-        </div>
-      </div>
+        `;
+      }
 
-    </div>
+      let actionButtonsHtml = '';
+      if (order.status === 'Delivered') {
+        actionButtonsHtml = `
+          <button class="btn-primary-outline" style="border-color:var(--border-line); color:var(--text-primary);" onclick="reorderItems(${JSON.stringify(items).replace(/"/g, '&quot;')})">Buy it Again</button>
+          <button class="btn-text-link btn-invoice" onclick="downloadInvoice(${order.id}, 'delivered')">Download Invoice</button>
+          <button class="btn-text-link btn-return-trigger" onclick="initiateReturn(${order.id})">Return or Replace Items</button>
+        `;
+      } else if (order.status === 'Refunded' || order.status === 'Returned' || order.status === 'Cancelled') {
+        actionButtonsHtml = `
+          <button class="btn-primary-outline" style="border-color:var(--border-line); color:var(--text-primary);">View Return Status</button>
+          <button class="btn-text-link">Download Return Label</button>
+        `;
+      } else {
+        actionButtonsHtml = `
+          <button class="btn-primary-outline" onclick="trackOrder(${order.id})">Track Package</button>
+          <button class="btn-text-link btn-invoice" onclick="downloadInvoice(${order.id}, 'pending')">Download Invoice</button>
+          <button class="btn-text-link btn-return-trigger" onclick="initiateReturn(${order.id})">Return or Replace Items</button>
+        `;
+      }
 
-  </div>
-</main>
+      return `
+        <div class="order-card-wrapper" data-order-id="${order.id}" style="margin-bottom: 24px; border: 1px solid var(--border-line); border-radius:12px; overflow:hidden; background: var(--bg-surface);">
+          <div class="order-card-top" style="background: var(--bg-surface); display: flex; justify-content: space-between; align-items: center; border-bottom:1px solid var(--border-line); padding: 16px;">
+            <div class="order-info-grid" style="display:flex; gap: 32px; flex-wrap:wrap;">
+              <div class="info-block">
+                <span class="info-label" style="display:block; font-size:11px; color:var(--text-sub); text-transform:uppercase; letter-spacing:0.5px;">ORDER ID</span>
+                <span class="info-val" style="font-weight:600; font-size:13px; color:var(--text-primary);">#EB-${order.id}</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label" style="display:block; font-size:11px; color:var(--text-sub); text-transform:uppercase; letter-spacing:0.5px;">ORDER PLACED</span>
+                <span class="info-val" style="font-weight:600; font-size:13px; color:var(--text-primary);">${dateStr}</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label" style="display:block; font-size:11px; color:var(--text-sub); text-transform:uppercase; letter-spacing:0.5px;">TOTAL</span>
+                <span class="info-val" style="font-weight:600; font-size:13px; color:var(--text-primary);">₹${order.totalAmount.toLocaleString('en-IN')}</span>
+              </div>
+              <div class="info-block" title="${deliveryAddr}">
+                <span class="info-label" style="display:block; font-size:11px; color:var(--text-sub); text-transform:uppercase; letter-spacing:0.5px;">SHIP TO</span>
+                <span class="info-val" style="font-weight:600; font-size:13px; color:var(--text-primary);">${displayAddress}</span>
+              </div>
+            </div>
+            <div class="order-status-badge ${badgeClass}" style="padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 12px; text-transform: uppercase;">${order.status}</div>
+          </div>
 
-<!-- FOOTER -->
-<footer role="contentinfo">
-  <div class="footer-main">
-    <div class="f-brand">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-        <svg width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)"/><path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/><polyline fill="none" stroke="rgba(255,255,255,.90)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/><path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/><line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/><polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/></svg>
-        <div class="f-logo">E-<em>Bazaar</em></div>
-      </div>
-      <p>Your everyday and everything store. Premium products, unmatched service, delivered with care across India.</p>
-      <div class="f-socials" aria-label="Social media">
-        <a href="#" class="soc-btn" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-        <a href="#" class="soc-btn" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-        <a href="#" class="soc-btn" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-        <a href="#" class="soc-btn" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="var(--bg-nav)"/></svg></a>
-      </div>
-    </div>
-    <div class="f-col"><h5>Shop</h5><ul><li><a href="new-arrivals.html">New Arrivals</a></li><li><a href="category.html?cat=trending">Trending Now</a></li><li><a href="deals.html">Today's Deals</a></li><li><a href="category.html?cat=electronics">Electronics</a></li><li><a href="category.html?cat=clothing">Fashion</a></li><li><a href="category.html?cat=groceries">Groceries</a></li></ul></div>
-    <div class="f-col"><h5>Company</h5><ul><li><a href="#">About E-Bazaar</a></li><li><a href="#">Careers</a></li><li><a href="#">Press & Media</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Our Blog</a></li><li><a href="#">Investors</a></li></ul></div>
-    <div class="f-col"><h5>Help</h5><ul><li><a href="faq.html">FAQs</a></li><li><a href="orders.html">Track My Order</a></li><li><a href="returns.html">Return & Refund Policy</a></li><li><a href="shipping.html">Shipping Info</a></li><li><a href="contact.html">Contact Us</a></li><li><a href="privacy.html">Privacy Policy</a></li></ul></div>
-    <div class="f-col"><h5>Stay in the Loop</h5><p class="nl-desc">Deals, drops and news — in your inbox.</p><form class="nl-form" id="nl-form" novalidate><label for="nl-email" class="sr-only">Email</label><input type="email" id="nl-email" placeholder="your@email.com" required autocomplete="email"/><button type="submit">Join</button></form></div>
-  </div>
-  <div class="footer-bottom"><span>&copy; 2026 E-Bazaar Pvt. Ltd. &nbsp;&middot;&nbsp; <a href="#">Terms</a> &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy</a></span><div class="pay-row" aria-label="Payment methods"><div class="pay-chip">VISA</div><div class="pay-chip">MC</div><div class="pay-chip">UPI</div><div class="pay-chip">GPay</div><div class="pay-chip">COD</div><div class="pay-chip">EMI</div></div></div>
-</footer>
-
-<!-- BACK TO TOP & TOAST -->
-<button id="btt" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg></button>
-<div id="toast" role="alert" aria-live="polite"><div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span></div>
-
-<!-- RETURN MODAL -->
-<div class="modal-overlay" id="return-modal" role="dialog" aria-modal="true" aria-label="Initiate Return">
-  <div class="modal-card">
-    <div class="modal-head">
-      <h2 class="modal-title">Return or Replace Items</h2>
-      <button class="modal-close" id="return-close-btn" aria-label="Close">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form class="addr-form" id="return-form" novalidate>
-        <div class="form-group full">
-          <label for="ret-reason">Reason for Return</label>
-          <select id="ret-reason" required style="width:100%; padding:12px; border:1px solid var(--border-line); border-radius:8px; font-family:var(--font-primary); background:var(--bg-canvas); color:var(--text-primary);">
-            <option value="">Select a reason...</option>
-            <option value="defective">Item is defective or doesn't work</option>
-            <option value="damaged">Item or packaging was damaged</option>
-            <option value="wrong">Wrong item sent</option>
-            <option value="no-longer-needed">No longer needed / Better price available</option>
-            <option value="other">Other (Explain below)</option>
-          </select>
-        </div>
-        <div class="form-group full" style="margin-top:16px;">
-          <label for="ret-comments">Comments (Optional)</label>
-          <textarea id="ret-comments" rows="3" placeholder="Please provide any additional details..." style="width:100%; padding:12px; border:1px solid var(--border-line); border-radius:8px; font-family:var(--font-primary); background:var(--bg-canvas); color:var(--text-primary); resize:vertical; margin-top:4px;"></textarea>
-        </div>
-        <div class="form-group full" style="margin-top:16px;">
-          <label>Resolution Action</label>
-          <div style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
-            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-              <input type="radio" name="ret-action" value="replace" checked /> Replace with identical item
-            </label>
-            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-              <input type="radio" name="ret-action" value="refund-original" /> Refund to Original Payment Method
-            </label>
-            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-              <input type="radio" name="ret-action" value="refund-wallet" /> Refund to E-Bazaar Wallet (Instant)
-            </label>
+          <div class="order-card-body" style="padding: 20px;">
+            <div class="order-split-container" style="display: flex; flex-direction: column;">
+              ${itemsHtml}
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 16px; border-top: 1px solid var(--border-line); padding-top: 16px;">
+              <div style="font-size: 13px; color: var(--text-sub);">
+                <strong>Payment Method:</strong> ${order.paymentMethod}
+              </div>
+              <div class="actions-stack" style="display: flex; gap: 12px; align-items: center;">
+                ${actionButtonsHtml}
+              </div>
+            </div>
+            ${timelineHtml}
           </div>
         </div>
-        <div style="display:flex; gap:16px; margin-top:24px;">
-          <button type="submit" class="form-submit" style="flex:1">Confirm Request</button>
-          <button type="button" id="return-form-cancel" class="addr-act-btn secondary" style="height:48px; padding:0 24px; border-radius:14px; background:var(--bg-canvas); border:1px solid var(--border-line); color:var(--text-primary); cursor:pointer;">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+      `;
+    }
 
-<script src="js/script.js"></script>
+    // Helper functions
+    window.reorderItems = function(items) {
+      try {
+        let cart = JSON.parse(localStorage.getItem('eb_cart_items') || '[]');
+        items.forEach(item => {
+          const cartItem = {
+            id: item.id,
+            title: item.title,
+            price: '₹' + item.price.toLocaleString('en-IN'),
+            orig: '₹' + item.price.toLocaleString('en-IN'),
+            qty: item.qty || 1,
+            image: item.image
+          };
+          const existing = cart.find(i => i.id === cartItem.id);
+          if (existing) {
+            existing.qty += cartItem.qty;
+          } else {
+            cart.push(cartItem);
+          }
+        });
+        localStorage.setItem('eb_cart_items', JSON.stringify(cart));
+        if (typeof showToast === 'function') {
+          showToast('🛒 Added items back to cart!');
+        }
+        setTimeout(() => { window.location.href = 'cart.html'; }, 1000);
+      } catch (err) {
+        console.error('[Orders] Error reordering:', err);
+      }
+    };
+
+    window.trackOrder = function(orderId) {
+      if (typeof showToast === 'function') {
+        showToast(`📍 Tracking package for order #EB-${orderId}... On its way!`);
+      }
+    };
+
+    window.downloadInvoice = function(orderId, status) {
+      if (typeof showToast === 'function') {
+        showToast('Generating invoice... Please wait.');
+      }
+      setTimeout(() => {
+        window.open(`invoice.html?id=${orderId}&status=${status}&print=true`, '_blank');
+      }, 600);
+    };
+
+    window.initiateReturn = function(orderId) {
+      const returnModal = document.getElementById('return-modal');
+      if (returnModal) {
+        returnModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        const returnForm = document.getElementById('return-form');
+        if (returnForm) {
+          returnForm.dataset.orderId = orderId;
+        }
+      }
+    };
+
+    // Override the form submission inside return modal if necessary
+    document.addEventListener('DOMContentLoaded', () => {
+      const returnForm = document.getElementById('return-form');
+      if (returnForm) {
+        returnForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const orderId = returnForm.dataset.orderId;
+          const reason = document.getElementById('ret-reason').value;
+          const comments = document.getElementById('ret-comments').value;
+          const action = document.querySelector('input[name="ret-action"]:checked').value;
+
+          // Simply toast and simulate return processing for demo/mock simplicity
+          const returnModal = document.getElementById('return-modal');
+          if (returnModal) {
+            returnModal.classList.remove('active');
+            document.body.style.overflow = '';
+          }
+          if (typeof showToast === 'function') {
+            showToast(`✅ Return request for order #EB-${orderId} submitted! (${action})`);
+          }
+          
+          // Re-fetch to update or mock update the screen (since it is frontend only return simulation)
+          setTimeout(() => {
+            initOrders();
+          }, 1500);
+        });
+      }
+    });
+  </script>
 </body>
+
 </html>
