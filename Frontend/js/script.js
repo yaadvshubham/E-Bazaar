@@ -4431,10 +4431,21 @@ function initBrandStore() {
           alt="${brand} Logo" style="width:100%; height:100%; object-fit:contain; border-radius:50%; background-color:#ffffff;">`;
     }
     
-    currentBrandProducts = generateBrandProducts(brand, cat);
+    const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.MASTER_PRODUCTS || []);
+    let brandProds = pool.filter(p => (p.brand || '').toLowerCase() === brand.toLowerCase());
+
+    if (brandProds.length === 0) {
+        brandProds = pool.filter(p => (p.title || p.name || '').toLowerCase().includes(brand.toLowerCase()));
+    }
+    if (brandProds.length === 0) {
+        brandProds = generateBrandProducts(brand, cat);
+    }
+
+    currentBrandProducts = brandProds;
     brandCurrentPage = 1;
     renderBrandPage();
 }
+window.initBrandStore = initBrandStore;
 
 function renderBrandPage() {
     const grid = document.getElementById('main-cat-grid');
@@ -4970,49 +4981,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-/* ═══════════════════════════════════════════════════════════════════════
-   BRAND STORE PAGE LOGIC
-   ═══════════════════════════════════════════════════════════════════════ */
-function initBrandStore() {
-  const urlParams = new URLSearchParams(window.location.search);
-  let brand = urlParams.get('brand') || 'Amul';
 
-  document.title = `${brand} Store — E-Bazaar`;
-
-  const titleEl = document.getElementById('brand-title');
-  if (titleEl) titleEl.textContent = `${brand} Store`;
-
-  const logoEl = document.getElementById('brand-logo-large');
-  if (logoEl && typeof getBrandLogoSVG === 'function') {
-    logoEl.innerHTML = getBrandLogoSVG(brand);
-  }
-
-  const bcParent = document.getElementById('bc-parent-cat');
-  if (bcParent) {
-    bcParent.textContent = `${brand} Brand Store`;
-    bcParent.href = `brand-store.html?brand=${encodeURIComponent(brand)}`;
-  }
-
-  const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.MASTER_PRODUCTS || []);
-  let brandProds = pool.filter(p => (p.brand || '').toLowerCase() === brand.toLowerCase());
-
-  if (brandProds.length === 0) {
-    brandProds = pool.filter(p => (p.title || p.name || '').toLowerCase().includes(brand.toLowerCase()));
-  }
-
-  const grid = document.getElementById('main-cat-grid');
-  if (grid) {
-    grid.innerHTML = brandProds.length 
-      ? brandProds.map(buildCard).join('') 
-      : `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted)">No products currently listed for ${brand}.</div>`;
-  }
-
-  const countEl = document.getElementById('result-count');
-  if (countEl) {
-    countEl.innerHTML = `Showing <strong>${brandProds.length} products</strong> for ${brand}`;
-  }
-}
-window.initBrandStore = initBrandStore;
 
 // --- WISHLIST PAGE LOGIC ---
 function initWishlist() {
