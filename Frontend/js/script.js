@@ -4053,12 +4053,12 @@ function initDynamicCategory() {
     const displayBrands = catBrands.length > 0 ? catBrands : (categoryData ? categoryData.brands : []);
     
     brandListEl.innerHTML = displayBrands.map(brand => {
-      const count = products.filter(p => p.brand === brand).length;
+      const count = products.filter(p => typeof isBrandMatch === 'function' ? isBrandMatch(p.brand, [brand]) : (p.brand === brand)).length;
       return `
         <label class="brand-check">
-          <input type="checkbox" value="${brand}" checked/>
+          <input type="checkbox" value="${brand}"/>
           <span class="brand-check-name">${brand}</span>
-          <span class="brand-check-count">(${count > 0 ? count : Math.floor(Math.random() * 20) + 5})</span>
+          <span class="brand-check-count">(${count})</span>
         </label>
       `;
     }).join('');
@@ -4123,6 +4123,18 @@ function initCategoryFilters() {
     return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   }
 
+  function isBrandMatch(productBrand, checkedBrandValues) {
+    if (!checkedBrandValues || checkedBrandValues.length === 0) return true;
+    const pNorm = normStr(productBrand);
+    if (!pNorm) return false;
+    return checkedBrandValues.some(cbVal => {
+      const cbNorm = normStr(cbVal);
+      if (!cbNorm) return false;
+      return pNorm.includes(cbNorm) || cbNorm.includes(pNorm);
+    });
+  }
+  window.isBrandMatch = isBrandMatch;
+
   function renderFilteredProducts() {
     if (!window.currentCategoryProducts || window.currentCategoryProducts.length === 0) {
       if (typeof generateMockProductsForCategory === 'function') {
@@ -4147,13 +4159,11 @@ function initCategoryFilters() {
       return parseInt(String(discStr).replace(/[^\d]/g, '')) || 0;
     };
 
-    // Brand filter — only filter if user has unchecked specific brands
-    const checkedInputs = [...document.querySelectorAll('.brand-check input:checked')];
-    const totalInputs = document.querySelectorAll('.brand-check input');
+    // Brand filter — only filter if user has checked 1 or more specific brands
+    const checkedInputs = [...document.querySelectorAll('.brand-check input:checked')].map(cb => cb.value);
     
-    if (checkedInputs.length > 0 && checkedInputs.length < totalInputs.length) {
-      const checkedNorms = new Set(checkedInputs.map(cb => normStr(cb.value)));
-      filtered = filtered.filter(p => checkedNorms.has(normStr(p.brand)));
+    if (checkedInputs.length > 0) {
+      filtered = filtered.filter(p => isBrandMatch(p.brand, checkedInputs));
     }
     
     // Rating filter
