@@ -3738,6 +3738,22 @@ function getAllStoreProducts() {
 }
 window.getAllStoreProducts = getAllStoreProducts;
 
+function getAllBrands() {
+  const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.MASTER_PRODUCTS || []);
+  const poolBrands = pool.map(p => p.brand).filter(Boolean);
+  
+  const catBrands = [];
+  if (typeof CATEGORY_MAP !== 'undefined') {
+    Object.values(CATEGORY_MAP).forEach(cat => {
+      if (Array.isArray(cat.brands)) catBrands.push(...cat.brands);
+    });
+  }
+
+  const combined = [...poolBrands, ...catBrands];
+  return Array.from(new Set(combined.map(b => String(b).trim()))).filter(Boolean);
+}
+window.getAllBrands = getAllBrands;
+
 function initDynamicCategory() {
   const urlParams = new URLSearchParams(window.location.search);
   const qParam = urlParams.get('q');
@@ -3747,8 +3763,8 @@ function initDynamicCategory() {
     const searchWords = qLower.split(/\s+/).filter(Boolean);
     const pool = getAllStoreProducts();
 
-    // Check if qParam corresponds to a brand in our store
-    const knownBrands = Array.from(new Set(pool.map(p => p.brand).filter(Boolean)));
+    // Check if qParam corresponds to any brand in our store
+    const knownBrands = getAllBrands();
     const matchedBrand = knownBrands.find(b => b.toLowerCase() === qLower || qLower.includes(b.toLowerCase()) || b.toLowerCase().includes(qLower));
 
     let matches = pool.filter(p => {
@@ -3800,8 +3816,8 @@ function initDynamicCategory() {
                 ${getBrandLogoSVG(matchedBrand)}
               </div>
               <div>
-                <div style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">${matchedBrand} Official Store</div>
-                <div style="font-size: 13px; opacity: 0.85;">Explore all products and authentic collections from ${matchedBrand}.</div>
+                <div style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">${matchedBrand} Store</div>
+                <div style="font-size: 13px; opacity: 0.85;">Explore all products and collections from ${matchedBrand}.</div>
               </div>
             </div>
             <a href="brand-store.html?brand=${encodeURIComponent(matchedBrand)}" style="background: var(--accent-caramel, #A88C6D); color: #ffffff; text-decoration: none; padding: 12px 22px; border-radius: 10px; font-weight: 700; font-size: 14px; white-space: nowrap; transition: transform 0.2s ease; display: inline-flex; align-items: center; gap: 6px;">
@@ -4376,7 +4392,7 @@ function initBrandStore() {
         cat = getCategoryForBrand(brand);
     }
     
-    document.title = `${brand} Official Store — E-Bazaar`;
+    document.title = `${brand} Store — E-Bazaar`;
 
     const brandHero = document.getElementById('brand-hero');
     if (brandHero) {
@@ -4774,8 +4790,8 @@ function initSearch() {
         const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.MASTER_PRODUCTS || []);
         const searchWords = val.split(/\s+/).filter(Boolean);
 
-        // Check if val matches a known brand
-        const knownBrands = Array.from(new Set(pool.map(p => p.brand).filter(Boolean)));
+        // Check if val matches a known brand in the store
+        const knownBrands = getAllBrands();
         const matchedBrand = knownBrands.find(b => b.toLowerCase() === val || val.includes(b.toLowerCase()) || b.toLowerCase().includes(val));
 
         let brandStoreHTML = '';
@@ -4785,8 +4801,8 @@ function initSearch() {
               <div style="display: flex; align-items: center; gap: 10px;">
                 <span style="font-size: 18px;">🏪</span>
                 <div>
-                  <div style="font-size: 13px; font-weight: 800; color: #111;">Visit ${matchedBrand} Official Store</div>
-                  <div style="font-size: 11px; color: #666;">View all products in the official ${matchedBrand} catalog</div>
+                  <div style="font-size: 13px; font-weight: 800; color: #111;">Visit ${matchedBrand} Store</div>
+                  <div style="font-size: 11px; color: #666;">View all products from ${matchedBrand}</div>
                 </div>
               </div>
               <span style="font-size: 12px; font-weight: 700; color: var(--accent-caramel, #A88C6D);">Open Store &rarr;</span>
@@ -4961,10 +4977,10 @@ function initBrandStore() {
   const urlParams = new URLSearchParams(window.location.search);
   let brand = urlParams.get('brand') || 'Amul';
 
-  document.title = `${brand} Official Store — E-Bazaar`;
+  document.title = `${brand} Store — E-Bazaar`;
 
   const titleEl = document.getElementById('brand-title');
-  if (titleEl) titleEl.textContent = `${brand} Official Store`;
+  if (titleEl) titleEl.textContent = `${brand} Store`;
 
   const logoEl = document.getElementById('brand-logo-large');
   if (logoEl && typeof getBrandLogoSVG === 'function') {
