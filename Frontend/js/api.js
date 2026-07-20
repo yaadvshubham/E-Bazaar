@@ -2,7 +2,7 @@
    E-BAZAAR — api.js
    Backend API Integration & Dynamic Rendering Engine
    Connects to http://localhost:5000 and enriches the frontend with
-   live database products while preserving all existing functionality.
+   live database products with cache-busting and case-insensitive matching.
    ═══════════════════════════════════════════════════════════════════════ */
 
 const API_BASE = 'http://localhost:5000/api';
@@ -12,26 +12,15 @@ window.allProducts = [];
 window._apiReady = false;
 
 /* ─── Fetch Engine ────────────────────────────────────────────────────────── */
-async function fetchProducts(params = {}) {
+async function fetchProducts() {
   try {
-    const query = new URLSearchParams({ limit: 200, ...params }).toString();
-    const res = await fetch(`${API_BASE}/products?${query}`);
+    const timestampUrl = 'http://localhost:5000/api/products?t=' + new Date().getTime();
+    const res = await fetch(timestampUrl);
     if (!res.ok) throw new Error(`API responded with ${res.status}`);
     const data = await res.json();
-    return Array.isArray(data.products) ? data.products : [];
+    return Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : []);
   } catch (err) {
     console.error('[E-Bazaar API] Fetch failed:', err);
-    
-    const fallbackHTML = `<div style="padding: 20px; text-align: center; color: red; grid-column: 1/-1;">Backend server is offline or unreachable. Please start the Node.js server.</div>`;
-    const gridIds = ['main-cat-grid', 'tr-new', 'tr-trend', 'disc-row-1', 'disc-row-2', 'disc-row-3'];
-    gridIds.forEach(id => {
-      const container = document.getElementById(id);
-      if (container) container.innerHTML = fallbackHTML;
-    });
-    document.querySelectorAll('.products-grid, .tr-grid').forEach(el => {
-      el.innerHTML = fallbackHTML;
-    });
-    
     return [];
   }
 }
@@ -41,38 +30,39 @@ function normaliseApiProduct(p) {
   return {
     id:            `api_${p.id}`,
     title:         p.title         || 'Unnamed Product',
+    name:          p.title         || 'Unnamed Product',
     description:   p.description   || '',
     price:         p.price         || 0,
     originalPrice: p.originalPrice || p.price,
     discount:      p.discount      || '0%',
     rating:        p.rating        || 4.0,
     reviews:       p.reviews       || 0,
-    sales:         p.sales         || null,   // real value — no more "undefinedk+"
+    sales:         p.sales         || null,
     brand:         p.brand         || 'Generic',
-    category:      p.category      || 'general',
+    category:      (p.category     || 'general').toLowerCase(),
     badge:         p.badge         || null,
-    image:         p.imageUrl      || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80',
-    imageUrl:      p.imageUrl      || null,
+    image:         p.imageUrl      || p.image || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80',
+    imageUrl:      p.imageUrl      || p.image || null,
     _fromApi:      true,
   };
 }
 
-/* ─── Merge backend products into the global MASTER_PRODUCTS array ─────────── */
+/* ─── Merge backend products into global arrays ──────────────────────────── */
 function mergeApiProducts(apiProducts) {
   const normalisedApiProducts = apiProducts.map(normaliseApiProduct);
 
-  // De-duplicate: keep existing local products, prepend API products
+  if (!window.MASTER_PRODUCTS) window.MASTER_PRODUCTS = [];
+
   const existingIds = new Set(MASTER_PRODUCTS.map(p => p.id));
   const newApiProducts = normalisedApiProducts.filter(p => !existingIds.has(p.id));
 
-  // Prepend API products so they appear first in all grids
   MASTER_PRODUCTS.unshift(...newApiProducts);
   window.allProducts = [...MASTER_PRODUCTS];
   window._apiReady = true;
   console.log(`[E-Bazaar API] Merged ${newApiProducts.length} backend products. Total: ${MASTER_PRODUCTS.length}`);
 }
 
-/* ─── Apply URL Parameter Filtering ──────────────────────────────────────── */
+/* ─── Apply URL Parameter Filtering (Case-Insensitive) ────────────────────── */
 function applyUrlFilters() {
   const params = new URLSearchParams(window.location.search);
   const catParam   = params.get('category') || params.get('cat');
@@ -93,13 +83,15 @@ function applyUrlFilters() {
     );
   }
   if (catParam) {
+    const targetCat = catParam.trim().toLowerCase();
     filtered = filtered.filter(p =>
-      (p.category || '').toLowerCase() === catParam.toLowerCase()
+      (p.category || '').toLowerCase() === targetCat || targetCat === 'all'
     );
   }
   if (brandParam) {
+    const targetBrand = brandParam.trim().toLowerCase();
     filtered = filtered.filter(p =>
-      (p.brand || '').toLowerCase() === brandParam.toLowerCase()
+      (p.brand || '').toLowerCase() === targetBrand
     );
   }
 
@@ -117,7 +109,7 @@ function applyUrlFilters() {
   };
 }
 
-/* ─── Render a product grid from API/local data ───────────────────────────── */
+/* ─── Render a product grid ───────────────────────────────────────────────── */
 function renderProductGrid(products, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -128,86 +120,38 @@ function renderProductGrid(products, containerId) {
     </div>`;
     return;
   }
-  container.innerHTML = products.map(p => buildCard(p)).join('');
+  container.innerHTML = products.map(p => (window.buildCard ? window.buildCard(p) : '')).join('');
 }
 
-/* ─── Update section titles for URL-filtered pages ───────────────────────── */
+/* ─── Update section titles ───────────────────────────────────────────────── */
 function updatePageTitles(filterResult) {
   if (!filterResult) return;
-
-  // <title> tag
   document.title = `${filterResult.title} — E-Bazaar`;
 
-  // h1 / section headings that are on category / brand-store pages
   const sectionTitle = document.querySelector('.cat-page-title, .section-title, [data-section-title]');
   if (sectionTitle) sectionTitle.textContent = filterResult.title;
 
-  // Breadcrumb
   const bc = document.getElementById('bc-parent-cat');
   if (bc) bc.textContent = filterResult.title;
 }
 
-/* ─── Patch populateHomeTracks to use real API data once loaded ───────────── */
-function patchHomeTracksWithApiData() {
-  if (document.body.dataset.page === 'category') return;
-
-  const nr = document.getElementById('tr-new');
-  if (nr) {
-    const apiProds = window.allProducts.filter(p => p._fromApi || p.badge === 'new');
-    const mixed = [...apiProds, ...MASTER_PRODUCTS.filter(p => !p._fromApi)]
-      .sort(() => 0.5 - Math.random()).slice(0, 36);
-    nr.innerHTML = mixed.map(buildCard).join('');
-  }
-
-  const tr = document.getElementById('tr-trend');
-  if (tr) {
-    const trendCats = ['electronics', 'gadgets', 'smartphones', 'laptops', 'fashion'];
-    const api = window.allProducts.filter(p => trendCats.includes(p.category));
-    const local = MASTER_PRODUCTS.filter(p => !p._fromApi && trendCats.includes(p.category));
-    const combined = [...api, ...local].sort(() => 0.5 - Math.random()).slice(0, 36);
-    tr.innerHTML = combined.map(buildCard).join('');
-  }
-
-  ['row1', 'row2', 'row3'].forEach((k, i) => {
-    const el = document.getElementById(`disc-row-${i + 1}`);
-    if (!el) return;
-    const catMaps = [
-      ['electronics', 'gadgets', 'smartphones', 'laptops'],
-      ['fashion', 'shoes', 'mens-shirts', 'womens-dresses'],
-      ['groceries', 'appliances', 'electronics'],
-    ];
-    const prods = window.allProducts
-      .filter(p => catMaps[i].includes(p.category))
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 36);
-    el.innerHTML = (prods.length > 0 ? prods : window.allProducts.sort(() => 0.5 - Math.random())).slice(0, 36).map(buildCard).join('');
-  });
-}
-
-/* ─── Fix buildCard to support both `image` and `imageUrl` fields ──────────── 
-   Also fixes the "undefinedk+ bought" bug in transactions line.               */
+/* ─── Patch buildCard to support imageUrl and sales ──────────────────────── */
 function patchBuildCard() {
+  if (typeof buildCard !== 'function') return;
   const _orig = window._origBuildCard || buildCard;
   window._origBuildCard = _orig;
 
-  // Override the global buildCard
   window.buildCard = function(p) {
-    // Ensure image field is always set (backend uses imageUrl, local uses image)
     if (!p.image && p.imageUrl) p.image = p.imageUrl;
     if (!p.image) p.image = 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
 
-    // Build the card using the original function (now p.image is always valid)
     const card = _orig(p);
-
-    // Fix "undefinedk+ bought" — replace with real `sales` value or hide if null
     if (p.sales) {
-      // Backend provides full string like "5k+ sold"
       return card.replace(
         /\$\{p\.sales\}k\+ bought in past month/,
         `${p.sales} in past month`
       );
     }
-    // If no sales data, strip the transactions div entirely
     return card.replace(
       /<div class="cat-transactions"[^>]*>[^<]*<\/div>/,
       ''
@@ -215,87 +159,60 @@ function patchBuildCard() {
   };
 }
 
-/* ─── Bootstrap — called after DOMContentLoaded ──────────────────────────── */
+/* ─── Bootstrap ──────────────────────────────────────────────────────────── */
 async function initApiEngine() {
-  // Patch buildCard first (sync, safe to do before fetch)
   patchBuildCard();
 
-  // Fetch backend products
   const apiProducts = await fetchProducts();
 
   if (apiProducts.length > 0) {
     mergeApiProducts(apiProducts);
 
-    // Re-render home tracks with live API data
-    patchHomeTracksWithApiData();
+    // Filter and update category page grid if on category page
+    const urlParams = new URLSearchParams(window.location.search);
+    const catParam = urlParams.get('cat') || urlParams.get('category');
+    const brandParam = urlParams.get('brand');
+    const qParam = urlParams.get('q');
 
-    // Handle URL-based filtering (used by nav links like ?category=electronics)
-    const filterResult = applyUrlFilters();
-    if (filterResult) {
-      updatePageTitles(filterResult);
+    if (catParam || brandParam || qParam) {
+      const normalized = apiProducts.map(normaliseApiProduct);
+      let matches = normalized;
 
-      // If we're on a filtered URL but NOT the category page, render a grid
-      if (document.body.dataset.page !== 'category') {
-        const grid = document.querySelector('.products-grid, #main-cat-grid, #tr-new, #tr-trend');
-        if (grid) {
-          grid.innerHTML = filterResult.products.map(p => window.buildCard(p)).join('');
+      if (catParam) {
+        const targetCat = catParam.trim().toLowerCase();
+        if (targetCat !== 'all') {
+          matches = matches.filter(p => (p.category || '').toLowerCase() === targetCat);
         }
       }
-    }
-
-    // If we're on the category page, refresh it with merged data
-    if (document.body.dataset.page === 'category') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const qParam = urlParams.get('q');
-      const catId = urlParams.get('cat') || 'clothing';
-
+      if (brandParam) {
+        const targetBrand = brandParam.trim().toLowerCase();
+        matches = matches.filter(p => (p.brand || '').toLowerCase() === targetBrand);
+      }
       if (qParam) {
-        const pool = typeof window.getAllStoreProducts === 'function' ? window.getAllStoreProducts() : [...(window.MASTER_PRODUCTS || []), ...(window.allProducts || [])];
-        const searchWords = qParam.trim().toLowerCase().split(/\s+/).filter(Boolean);
-        let searchMatches = pool.filter(p => {
-          const haystack = `${p.title || p.name || ''} ${p.brand || ''} ${p.category || ''} ${p.description || p.desc || ''}`.toLowerCase();
-          return searchWords.every(w => haystack.includes(w));
-        });
+        const qLower = qParam.trim().toLowerCase();
+        matches = matches.filter(p =>
+          (p.title || '').toLowerCase().includes(qLower) ||
+          (p.brand || '').toLowerCase().includes(qLower) ||
+          (p.category || '').toLowerCase().includes(qLower)
+        );
+      }
 
-        if (searchMatches.length === 0) {
-          searchMatches = pool.filter(p => {
-            const haystack = `${p.title || p.name || ''} ${p.brand || ''} ${p.category || ''}`.toLowerCase();
-            return searchWords.some(w => haystack.includes(w));
-          });
-        }
-
-        window.currentCategoryProducts = searchMatches;
+      if (typeof window.renderFilteredProducts === 'function' && window.currentCategoryProducts) {
+        const existingIds = new Set((window.currentCategoryProducts || []).map(p => p.id));
+        const newMatches = matches.filter(p => !existingIds.has(p.id));
+        window.currentCategoryProducts = [...newMatches, ...(window.currentCategoryProducts || [])];
         window.currentPage = 1;
-        if (typeof renderFilteredProducts === 'function') renderFilteredProducts();
-
-        const countEl = document.getElementById('result-count');
-        if (countEl) countEl.innerHTML = `Showing <strong>${searchMatches.length} products</strong> for "${qParam}"`;
-      } else if (window.currentCategoryProducts) {
-        // Inject matching API products into the category product pool
-        const apiForCat = apiProducts
-          .map(normaliseApiProduct)
-          .filter(p => p.category === catId || catId === 'all');
-        if (apiForCat.length > 0) {
-          window.currentCategoryProducts = [...apiForCat, ...window.currentCategoryProducts];
-          // Trigger a re-render via the existing pagination system
-          window.currentPage = 1;
-          if (typeof renderFilteredProducts === 'function') renderFilteredProducts();
-        }
+        window.renderFilteredProducts();
       }
     }
 
-    // Toast success notification (subtle, only in dev)
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      console.log(`[E-Bazaar API] ✅ ${apiProducts.length} live products loaded from backend.`);
-    }
+    console.log(`[E-Bazaar API] ✅ ${apiProducts.length} live products loaded from backend.`);
   } else {
-    console.info('[E-Bazaar API] Backend unavailable — running in offline mode with local data.');
-    window.allProducts = [...MASTER_PRODUCTS];
+    console.info('[E-Bazaar API] Running with local data.');
+    window.allProducts = [...(window.MASTER_PRODUCTS || [])];
   }
 }
 
-// Auto-init after DOMContentLoaded (append to existing boot sequence)
 document.addEventListener('DOMContentLoaded', () => {
-  // Small delay to let the main script.js DOMContentLoaded handler run first
   setTimeout(initApiEngine, 100);
 });

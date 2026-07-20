@@ -33,6 +33,17 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), message: 'E-Bazaar API is running' });
 });
 
+// Debug count route
+app.get('/api/debug/count', async (req, res) => {
+  try {
+    const Product = require('./models/Product');
+    const count = await Product.count();
+    res.json({ totalProducts: count });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
