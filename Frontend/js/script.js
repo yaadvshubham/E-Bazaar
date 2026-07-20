@@ -474,112 +474,1518 @@ function getCategoryForBrand(brand) {
   return 'beauty'; // default fallback
 }
 
-// Mock product generator based on category parameters
-
-// Mock product generator based on category parameters
-function generateMockProductsForCategory(catId) {
-  const products = [];
-  const categoryData = CATEGORY_MAP[catId] || CATEGORY_MAP['all'];
-  const allBrands = Object.values(CATEGORY_MAP).filter(c => c.brands).flatMap(c => c.brands);
-  
-  const productNames = {
-    'electronics': ['Smartphone', 'OLED Smart TV', 'Laptop Pro', 'Tablet Ultra', 'Noise Cancelling Earbuds', 'Mirrorless Camera', 'Drone 4K', 'Smartwatch Series', 'Gaming Console', 'VR Headset'],
-    'gadgets': ['Wireless Earbuds', 'Smart Speaker', 'Power Bank 20000mAh', 'Fitness Tracker', '4K Webcam', 'Gaming Mouse', 'Mechanical Keyboard', 'Smart Ring', 'Portable Projector', 'Dash Cam'],
-    'clothing': ['T-Shirt', 'Denim Jeans', 'Leather Jacket', 'Cashmere Sweater', 'Summer Dress', 'Cargo Shorts', 'Puffer Coat', 'Athleisure Set', 'Formal Blazer', 'Linen Shirt'],
-    'shoes': ['Sneakers', 'Running Shoes', 'Formal Oxfords', 'Trekking Boots', 'Slip-on Loafers', 'High-Top Kicks', 'Basketball Shoes', 'Flip Flops', 'Chelsea Boots', 'Trainers'],
-    'beauty': ['Face Wash', 'Hydrating Moisturizer', 'Matte Lipstick', 'SPF 50 Sunscreen', 'Eau De Parfum', 'Vitamin C Serum', 'Anti-aging Cream', 'Eye Contour Gel', 'Hair Treatment Mask', 'Foundation'],
-    'sports': ['Badminton Racket', 'Pro Football', 'Eco Yoga Mat', 'Adjustable Dumbbells', 'Tennis Ball Pack', 'Skipping Rope', 'Resistance Bands', 'Protein Shaker', 'Cycling Helmet', 'Treadmill'],
-    'home-kitchen': ['Blender Pro', 'Non-stick Cookware Set', 'Ceramic Dinner Set', 'Insulated Water Bottle', 'Glass Storage Container', 'Mixer Grinder', 'Air Fryer', 'Smart Coffee Maker', 'Vacuum Cleaner', 'Microwave Oven'],
-    'groceries': ['Premium Atta', 'Basmati Rice', 'Organic Dal', 'Olive Oil', 'Green Tea', 'Instant Coffee', 'Dry Fruits Mix', 'Dark Chocolate', 'Quinoa', 'Peanut Butter']
-  };
-  const categoryNames = productNames[catId] || ['Premium Item', 'Signature Product', 'Exclusive Collection', 'Limited Edition', 'Bestseller'];
-  
-  // Assign brands correctly based on category context
-  for(let i=0; i<36; i++) {
-    let brand;
-    if (catId === 'all' || catId === 'trending' || catId === 'new-arrivals') {
-      brand = allBrands[Math.floor(Math.random() * allBrands.length)] || 'E-Bazaar Exclusive';
-    } else if (categoryData.brands && categoryData.brands.length > 0) {
-      brand = categoryData.brands[Math.floor(Math.random() * categoryData.brands.length)];
-    } else {
-      brand = 'E-Bazaar Exclusive';
-    }
-    
-    const itemName = categoryNames[Math.floor(Math.random() * categoryNames.length)];
-    products.push({
-      id: `prod_${catId}_${i}`,
-      brand: brand,
-      name: `${brand} ${itemName} - Edition ${i+1}`,
-      price: `₹${(Math.floor(Math.random() * 80) + 10) * 100}`,
-      orig: `₹${(Math.floor(Math.random() * 120) + 90) * 100}`,
-      disc: `${Math.floor(Math.random() * 50) + 10}%`,
-      rating: (Math.random() * 1.5 + 3.5).toFixed(1),
-      reviews: `${Math.floor(Math.random() * 1500) + 50}`,
-      badge: Math.random() > 0.8 ? 'new' : (Math.random() > 0.6 ? 'sale' : (Math.random() > 0.9 ? 'hot' : '')),
-      color: `hsl(${Math.floor(Math.random() * 360)}, 25%, 35%)`,
-      shape: ['circle','oval','diamond','hexagon','rect'][Math.floor(Math.random()*5)]
-    });
+const MASTER_PRODUCTS = [
+  {
+    "id": "1",
+    "title": "Essence Mascara Lash Princess",
+    "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
+    "price": 799,
+    "originalPrice": 959,
+    "discount": "10%",
+    "rating": 2.56,
+    "reviews": 3,
+    "brand": "Essence",
+    "category": "beauty",
+    "image": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+    "badge": "new",
+    "sales": 1
+  },
+  {
+    "id": "2",
+    "title": "Eyeshadow Palette with Mirror",
+    "description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
+    "price": 1599,
+    "originalPrice": 1919,
+    "discount": "18%",
+    "rating": 2.86,
+    "reviews": 3,
+    "brand": "Glamour Beauty",
+    "category": "beauty",
+    "image": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
+    "badge": "sale",
+    "sales": 2
+  },
+  {
+    "id": "3",
+    "title": "Powder Canister",
+    "description": "The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish.",
+    "price": 1199,
+    "originalPrice": 1439,
+    "discount": "10%",
+    "rating": 4.64,
+    "reviews": 3,
+    "brand": "Velvet Touch",
+    "category": "beauty",
+    "image": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp",
+    "badge": "sale",
+    "sales": 1
+  },
+  {
+    "id": "4",
+    "title": "Red Lipstick",
+    "description": "The Red Lipstick is a classic and bold choice for adding a pop of color to your lips. With a creamy and pigmented formula, it provides a vibrant and long-lasting finish.",
+    "price": 1039,
+    "originalPrice": 1247,
+    "discount": "12%",
+    "rating": 4.36,
+    "reviews": 3,
+    "brand": "Chic Cosmetics",
+    "category": "beauty",
+    "image": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp",
+    "badge": "new",
+    "sales": 9
+  },
+  {
+    "id": "5",
+    "title": "Red Nail Polish",
+    "description": "The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails. With a quick-drying formula, it provides a salon-quality finish at home.",
+    "price": 719,
+    "originalPrice": 863,
+    "discount": "11%",
+    "rating": 4.32,
+    "reviews": 3,
+    "brand": "Nail Couture",
+    "category": "beauty",
+    "image": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp",
+    "badge": "new",
+    "sales": 9
+  },
+  {
+    "id": "6",
+    "title": "Calvin Klein CK One",
+    "description": "CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent. It's a versatile fragrance suitable for everyday wear.",
+    "price": 3999,
+    "originalPrice": 4799,
+    "discount": "2%",
+    "rating": 4.37,
+    "reviews": 3,
+    "brand": "Calvin Klein",
+    "category": "fragrances",
+    "image": "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp",
+    "badge": "new",
+    "sales": 6
+  },
+  {
+    "id": "7",
+    "title": "Chanel Coco Noir Eau De",
+    "description": "Coco Noir by Chanel is an elegant and mysterious fragrance, featuring notes of grapefruit, rose, and sandalwood. Perfect for evening occasions.",
+    "price": 10399,
+    "originalPrice": 12479,
+    "discount": "17%",
+    "rating": 4.26,
+    "reviews": 3,
+    "brand": "Chanel",
+    "category": "fragrances",
+    "image": "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/thumbnail.webp",
+    "badge": "hot",
+    "sales": 6
+  },
+  {
+    "id": "8",
+    "title": "Dior J'adore",
+    "description": "J'adore by Dior is a luxurious and floral fragrance, known for its blend of ylang-ylang, rose, and jasmine. It embodies femininity and sophistication.",
+    "price": 7199,
+    "originalPrice": 8639,
+    "discount": "15%",
+    "rating": 3.8,
+    "reviews": 3,
+    "brand": "Dior",
+    "category": "fragrances",
+    "image": "https://cdn.dummyjson.com/product-images/fragrances/dior-j'adore/thumbnail.webp",
+    "badge": "hot",
+    "sales": 4
+  },
+  {
+    "id": "9",
+    "title": "Dolce Shine Eau de",
+    "description": "Dolce Shine by Dolce & Gabbana is a vibrant and fruity fragrance, featuring notes of mango, jasmine, and blonde woods. It's a joyful and youthful scent.",
+    "price": 5599,
+    "originalPrice": 6719,
+    "discount": "1%",
+    "rating": 3.96,
+    "reviews": 3,
+    "brand": "Dolce & Gabbana",
+    "category": "fragrances",
+    "image": "https://cdn.dummyjson.com/product-images/fragrances/dolce-shine-eau-de/thumbnail.webp",
+    "badge": "sale",
+    "sales": 2
+  },
+  {
+    "id": "10",
+    "title": "Gucci Bloom Eau de",
+    "description": "Gucci Bloom by Gucci is a floral and captivating fragrance, with notes of tuberose, jasmine, and Rangoon creeper. It's a modern and romantic scent.",
+    "price": 6399,
+    "originalPrice": 7679,
+    "discount": "14%",
+    "rating": 2.74,
+    "reviews": 3,
+    "brand": "Gucci",
+    "category": "fragrances",
+    "image": "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/thumbnail.webp",
+    "badge": "new",
+    "sales": 4
+  },
+  {
+    "id": "11",
+    "title": "Annibale Colombo Bed",
+    "description": "The Annibale Colombo Bed is a luxurious and elegant bed frame, crafted with high-quality materials for a comfortable and stylish bedroom.",
+    "price": 151999,
+    "originalPrice": 182399,
+    "discount": "9%",
+    "rating": 4.77,
+    "reviews": 3,
+    "brand": "Annibale Colombo",
+    "category": "furniture",
+    "image": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/thumbnail.webp",
+    "badge": "sale",
+    "sales": 8
+  },
+  {
+    "id": "12",
+    "title": "Annibale Colombo Sofa",
+    "description": "The Annibale Colombo Sofa is a sophisticated and comfortable seating option, featuring exquisite design and premium upholstery for your living room.",
+    "price": 199999,
+    "originalPrice": 239999,
+    "discount": "14%",
+    "rating": 3.92,
+    "reviews": 3,
+    "brand": "Annibale Colombo",
+    "category": "furniture",
+    "image": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/thumbnail.webp",
+    "badge": "sale",
+    "sales": 10
+  },
+  {
+    "id": "13",
+    "title": "Bedside Table African Cherry",
+    "description": "The Bedside Table in African Cherry is a stylish and functional addition to your bedroom, providing convenient storage space and a touch of elegance.",
+    "price": 23999,
+    "originalPrice": 28799,
+    "discount": "19%",
+    "rating": 2.87,
+    "reviews": 3,
+    "brand": "Furniture Co.",
+    "category": "furniture",
+    "image": "https://cdn.dummyjson.com/product-images/furniture/bedside-table-african-cherry/thumbnail.webp",
+    "badge": "sale",
+    "sales": 1
+  },
+  {
+    "id": "14",
+    "title": "Knoll Saarinen Executive Conference Chair",
+    "description": "The Knoll Saarinen Executive Conference Chair is a modern and ergonomic chair, perfect for your office or conference room with its timeless design.",
+    "price": 39999,
+    "originalPrice": 47999,
+    "discount": "2%",
+    "rating": 4.88,
+    "reviews": 3,
+    "brand": "Knoll",
+    "category": "furniture",
+    "image": "https://cdn.dummyjson.com/product-images/furniture/knoll-saarinen-executive-conference-chair/thumbnail.webp",
+    "badge": "sale",
+    "sales": 3
+  },
+  {
+    "id": "15",
+    "title": "Wooden Bathroom Sink With Mirror",
+    "description": "The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror.",
+    "price": 63999,
+    "originalPrice": 76799,
+    "discount": "9%",
+    "rating": 3.59,
+    "reviews": 3,
+    "brand": "Bath Trends",
+    "category": "furniture",
+    "image": "https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/thumbnail.webp",
+    "badge": "hot",
+    "sales": 1
+  },
+  {
+    "id": "16",
+    "title": "Apple",
+    "description": "Fresh and crisp apples, perfect for snacking or incorporating into various recipes.",
+    "price": 159,
+    "originalPrice": 191,
+    "discount": "13%",
+    "rating": 4.19,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/apple/thumbnail.webp",
+    "badge": "sale",
+    "sales": 5
+  },
+  {
+    "id": "17",
+    "title": "Beef Steak",
+    "description": "High-quality beef steak, great for grilling or cooking to your preferred level of doneness.",
+    "price": 1039,
+    "originalPrice": 1247,
+    "discount": "10%",
+    "rating": 4.47,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/beef-steak/thumbnail.webp",
+    "badge": "hot",
+    "sales": 6
+  },
+  {
+    "id": "18",
+    "title": "Cat Food",
+    "description": "Nutritious cat food formulated to meet the dietary needs of your feline friend.",
+    "price": 719,
+    "originalPrice": 863,
+    "discount": "10%",
+    "rating": 3.13,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/cat-food/thumbnail.webp",
+    "badge": "sale",
+    "sales": 10
+  },
+  {
+    "id": "19",
+    "title": "Chicken Meat",
+    "description": "Fresh and tender chicken meat, suitable for various culinary preparations.",
+    "price": 799,
+    "originalPrice": 959,
+    "discount": "14%",
+    "rating": 3.19,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/thumbnail.webp",
+    "badge": "new",
+    "sales": 6
+  },
+  {
+    "id": "20",
+    "title": "Cooking Oil",
+    "description": "Versatile cooking oil suitable for frying, sautéing, and various culinary applications.",
+    "price": 399,
+    "originalPrice": 479,
+    "discount": "9%",
+    "rating": 4.8,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/cooking-oil/thumbnail.webp",
+    "badge": "hot",
+    "sales": 10
+  },
+  {
+    "id": "21",
+    "title": "Cucumber",
+    "description": "Crisp and hydrating cucumbers, ideal for salads, snacks, or as a refreshing side.",
+    "price": 119,
+    "originalPrice": 143,
+    "discount": "0%",
+    "rating": 4.07,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/cucumber/thumbnail.webp",
+    "badge": "new",
+    "sales": 9
+  },
+  {
+    "id": "22",
+    "title": "Dog Food",
+    "description": "Specially formulated dog food designed to provide essential nutrients for your canine companion.",
+    "price": 879,
+    "originalPrice": 1055,
+    "discount": "10%",
+    "rating": 4.55,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/dog-food/thumbnail.webp",
+    "badge": "new",
+    "sales": 4
+  },
+  {
+    "id": "23",
+    "title": "Eggs",
+    "description": "Fresh eggs, a versatile ingredient for baking, cooking, or breakfast.",
+    "price": 239,
+    "originalPrice": 287,
+    "discount": "11%",
+    "rating": 2.53,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/eggs/thumbnail.webp",
+    "badge": "new",
+    "sales": 4
+  },
+  {
+    "id": "24",
+    "title": "Fish Steak",
+    "description": "Quality fish steak, suitable for grilling, baking, or pan-searing.",
+    "price": 1199,
+    "originalPrice": 1439,
+    "discount": "4%",
+    "rating": 3.78,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/fish-steak/thumbnail.webp",
+    "badge": "sale",
+    "sales": 7
+  },
+  {
+    "id": "25",
+    "title": "Green Bell Pepper",
+    "description": "Fresh and vibrant green bell pepper, perfect for adding color and flavor to your dishes.",
+    "price": 103,
+    "originalPrice": 124,
+    "discount": "0%",
+    "rating": 3.25,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/green-bell-pepper/thumbnail.webp",
+    "badge": "sale",
+    "sales": 2
+  },
+  {
+    "id": "26",
+    "title": "Green Chili Pepper",
+    "description": "Spicy green chili pepper, ideal for adding heat to your favorite recipes.",
+    "price": 79,
+    "originalPrice": 95,
+    "discount": "1%",
+    "rating": 3.66,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/green-chili-pepper/thumbnail.webp",
+    "badge": "new",
+    "sales": 10
+  },
+  {
+    "id": "27",
+    "title": "Honey Jar",
+    "description": "Pure and natural honey in a convenient jar, perfect for sweetening beverages or drizzling over food.",
+    "price": 559,
+    "originalPrice": 671,
+    "discount": "14%",
+    "rating": 3.97,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/honey-jar/thumbnail.webp",
+    "badge": "sale",
+    "sales": 8
+  },
+  {
+    "id": "28",
+    "title": "Ice Cream",
+    "description": "Creamy and delicious ice cream, available in various flavors for a delightful treat.",
+    "price": 439,
+    "originalPrice": 527,
+    "discount": "9%",
+    "rating": 3.39,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/ice-cream/thumbnail.webp",
+    "badge": "new",
+    "sales": 10
+  },
+  {
+    "id": "29",
+    "title": "Juice",
+    "description": "Refreshing fruit juice, packed with vitamins and great for staying hydrated.",
+    "price": 319,
+    "originalPrice": 383,
+    "discount": "12%",
+    "rating": 3.94,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/juice/thumbnail.webp",
+    "badge": "sale",
+    "sales": 4
+  },
+  {
+    "id": "30",
+    "title": "Kiwi",
+    "description": "Nutrient-rich kiwi, perfect for snacking or adding a tropical twist to your dishes.",
+    "price": 199,
+    "originalPrice": 239,
+    "discount": "15%",
+    "rating": 4.93,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/kiwi/thumbnail.webp",
+    "badge": "sale",
+    "sales": 2
+  },
+  {
+    "id": "31",
+    "title": "Lemon",
+    "description": "Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages.",
+    "price": 63,
+    "originalPrice": 76,
+    "discount": "10%",
+    "rating": 3.53,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/lemon/thumbnail.webp",
+    "badge": "sale",
+    "sales": 6
+  },
+  {
+    "id": "32",
+    "title": "Milk",
+    "description": "Fresh and nutritious milk, a staple for various recipes and daily consumption.",
+    "price": 279,
+    "originalPrice": 335,
+    "discount": "14%",
+    "rating": 2.61,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/milk/thumbnail.webp",
+    "badge": "sale",
+    "sales": 1
+  },
+  {
+    "id": "33",
+    "title": "Mulberry",
+    "description": "Sweet and juicy mulberries, perfect for snacking or adding to desserts and cereals.",
+    "price": 399,
+    "originalPrice": 479,
+    "discount": "13%",
+    "rating": 4.95,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/mulberry/thumbnail.webp",
+    "badge": "sale",
+    "sales": 10
+  },
+  {
+    "id": "34",
+    "title": "Nescafe Coffee",
+    "description": "Quality coffee from Nescafe, available in various blends for a rich and satisfying cup.",
+    "price": 639,
+    "originalPrice": 767,
+    "discount": "2%",
+    "rating": 4.82,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/nescafe-coffee/thumbnail.webp",
+    "badge": "new",
+    "sales": 8
+  },
+  {
+    "id": "35",
+    "title": "Potatoes",
+    "description": "Versatile and starchy potatoes, great for roasting, mashing, or as a side dish.",
+    "price": 183,
+    "originalPrice": 220,
+    "discount": "5%",
+    "rating": 4.81,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/potatoes/thumbnail.webp",
+    "badge": "hot",
+    "sales": 10
+  },
+  {
+    "id": "36",
+    "title": "Protein Powder",
+    "description": "Nutrient-packed protein powder, ideal for supplementing your diet with essential proteins.",
+    "price": 1599,
+    "originalPrice": 1919,
+    "discount": "8%",
+    "rating": 4.18,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/protein-powder/thumbnail.webp",
+    "badge": "hot",
+    "sales": 6
+  },
+  {
+    "id": "37",
+    "title": "Red Onions",
+    "description": "Flavorful and aromatic red onions, perfect for adding depth to your savory dishes.",
+    "price": 159,
+    "originalPrice": 191,
+    "discount": "10%",
+    "rating": 4.2,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/red-onions/thumbnail.webp",
+    "badge": "new",
+    "sales": 6
+  },
+  {
+    "id": "38",
+    "title": "Rice",
+    "description": "High-quality rice, a staple for various cuisines and a versatile base for many dishes.",
+    "price": 479,
+    "originalPrice": 575,
+    "discount": "9%",
+    "rating": 3.18,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/rice/thumbnail.webp",
+    "badge": "sale",
+    "sales": 9
+  },
+  {
+    "id": "39",
+    "title": "Soft Drinks",
+    "description": "Assorted soft drinks in various flavors, perfect for refreshing beverages.",
+    "price": 159,
+    "originalPrice": 191,
+    "discount": "17%",
+    "rating": 4.75,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/soft-drinks/thumbnail.webp",
+    "badge": "new",
+    "sales": 6
+  },
+  {
+    "id": "40",
+    "title": "Strawberry",
+    "description": "Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies.",
+    "price": 319,
+    "originalPrice": 383,
+    "discount": "1%",
+    "rating": 3.08,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/strawberry/thumbnail.webp",
+    "badge": "new",
+    "sales": 4
+  },
+  {
+    "id": "41",
+    "title": "Tissue Paper Box",
+    "description": "Convenient tissue paper box for everyday use, providing soft and absorbent tissues.",
+    "price": 199,
+    "originalPrice": 239,
+    "discount": "13%",
+    "rating": 2.69,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/tissue-paper-box/thumbnail.webp",
+    "badge": "sale",
+    "sales": 3
+  },
+  {
+    "id": "42",
+    "title": "Water",
+    "description": "Pure and refreshing bottled water, essential for staying hydrated throughout the day.",
+    "price": 79,
+    "originalPrice": 95,
+    "discount": "15%",
+    "rating": 4.96,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "groceries",
+    "image": "https://cdn.dummyjson.com/product-images/groceries/water/thumbnail.webp",
+    "badge": "new",
+    "sales": 4
+  },
+  {
+    "id": "43",
+    "title": "Decoration Swing",
+    "description": "The Decoration Swing is a charming addition to your home decor. Crafted with intricate details, it adds a touch of elegance and whimsy to any room.",
+    "price": 4799,
+    "originalPrice": 5759,
+    "discount": "10%",
+    "rating": 3.16,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "home-decoration",
+    "image": "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/thumbnail.webp",
+    "badge": "sale",
+    "sales": 6
+  },
+  {
+    "id": "44",
+    "title": "Family Tree Photo Frame",
+    "description": "The Family Tree Photo Frame is a sentimental and stylish way to display your cherished family memories. With multiple photo slots, it tells the story of your loved ones.",
+    "price": 2399,
+    "originalPrice": 2879,
+    "discount": "15%",
+    "rating": 4.53,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "home-decoration",
+    "image": "https://cdn.dummyjson.com/product-images/home-decoration/family-tree-photo-frame/thumbnail.webp",
+    "badge": "new",
+    "sales": 3
+  },
+  {
+    "id": "45",
+    "title": "House Showpiece Plant",
+    "description": "The House Showpiece Plant is an artificial plant that brings a touch of nature to your home without the need for maintenance. It adds greenery and style to any space.",
+    "price": 3199,
+    "originalPrice": 3839,
+    "discount": "7%",
+    "rating": 4.67,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "home-decoration",
+    "image": "https://cdn.dummyjson.com/product-images/home-decoration/house-showpiece-plant/thumbnail.webp",
+    "badge": "new",
+    "sales": 4
+  },
+  {
+    "id": "46",
+    "title": "Plant Pot",
+    "description": "The Plant Pot is a stylish container for your favorite plants. With a sleek design, it complements your indoor or outdoor garden, adding a modern touch to your plant display.",
+    "price": 1199,
+    "originalPrice": 1439,
+    "discount": "7%",
+    "rating": 3.01,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "home-decoration",
+    "image": "https://cdn.dummyjson.com/product-images/home-decoration/plant-pot/thumbnail.webp",
+    "badge": "sale",
+    "sales": 4
+  },
+  {
+    "id": "47",
+    "title": "Table Lamp",
+    "description": "The Table Lamp is a functional and decorative lighting solution for your living space. With a modern design, it provides both ambient and task lighting, enhancing the atmosphere.",
+    "price": 3999,
+    "originalPrice": 4799,
+    "discount": "7%",
+    "rating": 3.55,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "home-decoration",
+    "image": "https://cdn.dummyjson.com/product-images/home-decoration/table-lamp/thumbnail.webp",
+    "badge": "hot",
+    "sales": 1
+  },
+  {
+    "id": "48",
+    "title": "Bamboo Spatula",
+    "description": "The Bamboo Spatula is a versatile kitchen tool made from eco-friendly bamboo. Ideal for flipping, stirring, and serving various dishes.",
+    "price": 639,
+    "originalPrice": 767,
+    "discount": "3%",
+    "rating": 3.27,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/bamboo-spatula/thumbnail.webp",
+    "badge": "sale",
+    "sales": 3
+  },
+  {
+    "id": "49",
+    "title": "Black Aluminium Cup",
+    "description": "The Black Aluminium Cup is a stylish and durable cup suitable for both hot and cold beverages. Its sleek black design adds a modern touch to your drinkware collection.",
+    "price": 479,
+    "originalPrice": 575,
+    "discount": "16%",
+    "rating": 4.46,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/thumbnail.webp",
+    "badge": "sale",
+    "sales": 2
+  },
+  {
+    "id": "50",
+    "title": "Black Whisk",
+    "description": "The Black Whisk is a kitchen essential for whisking and beating ingredients. Its ergonomic handle and sleek design make it a practical and stylish tool.",
+    "price": 799,
+    "originalPrice": 959,
+    "discount": "10%",
+    "rating": 3.9,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-whisk/thumbnail.webp",
+    "badge": "sale",
+    "sales": 8
+  },
+  {
+    "id": "51",
+    "title": "Boxed Blender",
+    "description": "The Boxed Blender is a powerful and compact blender perfect for smoothies, shakes, and more. Its convenient design and multiple functions make it a versatile kitchen appliance.",
+    "price": 3199,
+    "originalPrice": 3839,
+    "discount": "7%",
+    "rating": 4.56,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/boxed-blender/thumbnail.webp",
+    "badge": "hot",
+    "sales": 2
+  },
+  {
+    "id": "52",
+    "title": "Carbon Steel Wok",
+    "description": "The Carbon Steel Wok is a versatile cooking pan suitable for stir-frying, sautéing, and deep frying. Its sturdy construction ensures even heat distribution for delicious meals.",
+    "price": 2399,
+    "originalPrice": 2879,
+    "discount": "7%",
+    "rating": 4.05,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/carbon-steel-wok/thumbnail.webp",
+    "badge": "new",
+    "sales": 4
+  },
+  {
+    "id": "53",
+    "title": "Chopping Board",
+    "description": "The Chopping Board is an essential kitchen accessory for food preparation. Made from durable material, it provides a safe and hygienic surface for cutting and chopping.",
+    "price": 1039,
+    "originalPrice": 1247,
+    "discount": "8%",
+    "rating": 3.7,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/chopping-board/thumbnail.webp",
+    "badge": "sale",
+    "sales": 6
+  },
+  {
+    "id": "54",
+    "title": "Citrus Squeezer Yellow",
+    "description": "The Citrus Squeezer in Yellow is a handy tool for extracting juice from citrus fruits. Its vibrant color adds a cheerful touch to your kitchen gadgets.",
+    "price": 719,
+    "originalPrice": 863,
+    "discount": "12%",
+    "rating": 4.63,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/citrus-squeezer-yellow/thumbnail.webp",
+    "badge": "sale",
+    "sales": 1
+  },
+  {
+    "id": "55",
+    "title": "Egg Slicer",
+    "description": "The Egg Slicer is a convenient tool for slicing boiled eggs evenly. It's perfect for salads, sandwiches, and other dishes where sliced eggs are desired.",
+    "price": 559,
+    "originalPrice": 671,
+    "discount": "15%",
+    "rating": 3.09,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/egg-slicer/thumbnail.webp",
+    "badge": "sale",
+    "sales": 6
+  },
+  {
+    "id": "56",
+    "title": "Electric Stove",
+    "description": "The Electric Stove provides a portable and efficient cooking solution. Ideal for small kitchens or as an additional cooking surface for various culinary needs.",
+    "price": 3999,
+    "originalPrice": 4799,
+    "discount": "14%",
+    "rating": 4.11,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/electric-stove/thumbnail.webp",
+    "badge": "new",
+    "sales": 2
+  },
+  {
+    "id": "57",
+    "title": "Fine Mesh Strainer",
+    "description": "The Fine Mesh Strainer is a versatile tool for straining liquids and sifting dry ingredients. Its fine mesh ensures efficient filtering for smooth cooking and baking.",
+    "price": 799,
+    "originalPrice": 959,
+    "discount": "4%",
+    "rating": 3.04,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/fine-mesh-strainer/thumbnail.webp",
+    "badge": "hot",
+    "sales": 5
+  },
+  {
+    "id": "58",
+    "title": "Fork",
+    "description": "The Fork is a classic utensil for various dining and serving purposes. Its durable and ergonomic design makes it a reliable choice for everyday use.",
+    "price": 319,
+    "originalPrice": 383,
+    "discount": "8%",
+    "rating": 3.11,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/fork/thumbnail.webp",
+    "badge": "new",
+    "sales": 9
+  },
+  {
+    "id": "59",
+    "title": "Glass",
+    "description": "The Glass is a versatile and elegant drinking vessel suitable for a variety of beverages. Its clear design allows you to enjoy the colors and textures of your drinks.",
+    "price": 399,
+    "originalPrice": 479,
+    "discount": "8%",
+    "rating": 4.02,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/glass/thumbnail.webp",
+    "badge": "new",
+    "sales": 3
+  },
+  {
+    "id": "60",
+    "title": "Grater Black",
+    "description": "The Grater in Black is a handy kitchen tool for grating cheese, vegetables, and more. Its sleek design and sharp blades make food preparation efficient and easy.",
+    "price": 879,
+    "originalPrice": 1055,
+    "discount": "4%",
+    "rating": 3.21,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/grater-black/thumbnail.webp",
+    "badge": "new",
+    "sales": 5
+  },
+  {
+    "id": "61",
+    "title": "Hand Blender",
+    "description": "The Hand Blender is a versatile kitchen appliance for blending, pureeing, and mixing. Its compact design and powerful motor make it a convenient tool for various recipes.",
+    "price": 2799,
+    "originalPrice": 3359,
+    "discount": "17%",
+    "rating": 3.86,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/hand-blender/thumbnail.webp",
+    "badge": "sale",
+    "sales": 3
+  },
+  {
+    "id": "62",
+    "title": "Ice Cube Tray",
+    "description": "The Ice Cube Tray is a practical accessory for making ice cubes in various shapes. Perfect for keeping your drinks cool and adding a fun element to your beverages.",
+    "price": 479,
+    "originalPrice": 575,
+    "discount": "1%",
+    "rating": 4.71,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/ice-cube-tray/thumbnail.webp",
+    "badge": "new",
+    "sales": 7
+  },
+  {
+    "id": "63",
+    "title": "Kitchen Sieve",
+    "description": "The Kitchen Sieve is a versatile tool for sifting and straining dry and wet ingredients. Its fine mesh design ensures smooth results in your cooking and baking.",
+    "price": 639,
+    "originalPrice": 767,
+    "discount": "19%",
+    "rating": 3.09,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/kitchen-sieve/thumbnail.webp",
+    "badge": "sale",
+    "sales": 5
+  },
+  {
+    "id": "64",
+    "title": "Knife",
+    "description": "The Knife is an essential kitchen tool for chopping, slicing, and dicing. Its sharp blade and ergonomic handle make it a reliable choice for food preparation.",
+    "price": 1199,
+    "originalPrice": 1439,
+    "discount": "19%",
+    "rating": 3.26,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/knife/thumbnail.webp",
+    "badge": "sale",
+    "sales": 7
+  },
+  {
+    "id": "65",
+    "title": "Lunch Box",
+    "description": "The Lunch Box is a convenient and portable container for packing and carrying your meals. With compartments for different foods, it's perfect for on-the-go dining.",
+    "price": 1039,
+    "originalPrice": 1247,
+    "discount": "10%",
+    "rating": 4.93,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/lunch-box/thumbnail.webp",
+    "badge": "sale",
+    "sales": 3
+  },
+  {
+    "id": "66",
+    "title": "Microwave Oven",
+    "description": "The Microwave Oven is a versatile kitchen appliance for quick and efficient cooking, reheating, and defrosting. Its compact size makes it suitable for various kitchen setups.",
+    "price": 7199,
+    "originalPrice": 8639,
+    "discount": "12%",
+    "rating": 4.82,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/microwave-oven/thumbnail.webp",
+    "badge": "new",
+    "sales": 4
+  },
+  {
+    "id": "67",
+    "title": "Mug Tree Stand",
+    "description": "The Mug Tree Stand is a stylish and space-saving solution for organizing your mugs. Keep your favorite mugs easily accessible and neatly displayed in your kitchen.",
+    "price": 1279,
+    "originalPrice": 1535,
+    "discount": "9%",
+    "rating": 2.64,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/mug-tree-stand/thumbnail.webp",
+    "badge": "sale",
+    "sales": 9
+  },
+  {
+    "id": "68",
+    "title": "Pan",
+    "description": "The Pan is a versatile and essential cookware item for frying, sautéing, and cooking various dishes. Its non-stick coating ensures easy food release and cleanup.",
+    "price": 1999,
+    "originalPrice": 2399,
+    "discount": "3%",
+    "rating": 2.79,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/pan/thumbnail.webp",
+    "badge": "sale",
+    "sales": 3
+  },
+  {
+    "id": "69",
+    "title": "Plate",
+    "description": "The Plate is a classic and essential dishware item for serving meals. Its durable and stylish design makes it suitable for everyday use or special occasions.",
+    "price": 319,
+    "originalPrice": 383,
+    "discount": "7%",
+    "rating": 3.65,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/plate/thumbnail.webp",
+    "badge": "new",
+    "sales": 8
+  },
+  {
+    "id": "70",
+    "title": "Red Tongs",
+    "description": "The Red Tongs are versatile kitchen tongs suitable for various cooking and serving tasks. Their vibrant color adds a pop of excitement to your kitchen utensils.",
+    "price": 559,
+    "originalPrice": 671,
+    "discount": "15%",
+    "rating": 4.42,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/red-tongs/thumbnail.webp",
+    "badge": "new",
+    "sales": 3
+  },
+  {
+    "id": "71",
+    "title": "Silver Pot With Glass Cap",
+    "description": "The Silver Pot with Glass Cap is a stylish and functional cookware item for boiling, simmering, and preparing delicious meals. Its glass cap allows you to monitor cooking progress.",
+    "price": 3199,
+    "originalPrice": 3839,
+    "discount": "6%",
+    "rating": 3.22,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/silver-pot-with-glass-cap/thumbnail.webp",
+    "badge": "sale",
+    "sales": 3
+  },
+  {
+    "id": "72",
+    "title": "Slotted Turner",
+    "description": "The Slotted Turner is a kitchen utensil designed for flipping and turning food items. Its slotted design allows excess liquid to drain, making it ideal for frying and sautéing.",
+    "price": 719,
+    "originalPrice": 863,
+    "discount": "13%",
+    "rating": 3.4,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/slotted-turner/thumbnail.webp",
+    "badge": "new",
+    "sales": 2
+  },
+  {
+    "id": "73",
+    "title": "Spice Rack",
+    "description": "The Spice Rack is a convenient organizer for your spices and seasonings. Keep your kitchen essentials within reach and neatly arranged with this stylish spice rack.",
+    "price": 1599,
+    "originalPrice": 1919,
+    "discount": "12%",
+    "rating": 4.87,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/spice-rack/thumbnail.webp",
+    "badge": "sale",
+    "sales": 10
+  },
+  {
+    "id": "74",
+    "title": "Spoon",
+    "description": "The Spoon is a versatile kitchen utensil for stirring, serving, and tasting. Its ergonomic design and durable construction make it an essential tool for every kitchen.",
+    "price": 399,
+    "originalPrice": 479,
+    "discount": "2%",
+    "rating": 4.03,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/spoon/thumbnail.webp",
+    "badge": "sale",
+    "sales": 10
+  },
+  {
+    "id": "75",
+    "title": "Tray",
+    "description": "The Tray is a functional and decorative item for serving snacks, appetizers, or drinks. Its stylish design makes it a versatile accessory for entertaining guests.",
+    "price": 1359,
+    "originalPrice": 1631,
+    "discount": "7%",
+    "rating": 4.62,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/tray/thumbnail.webp",
+    "badge": "sale",
+    "sales": 10
+  },
+  {
+    "id": "76",
+    "title": "Wooden Rolling Pin",
+    "description": "The Wooden Rolling Pin is a classic kitchen tool for rolling out dough for baking. Its smooth surface and sturdy handles make it easy to achieve uniform thickness.",
+    "price": 959,
+    "originalPrice": 1151,
+    "discount": "10%",
+    "rating": 2.92,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/wooden-rolling-pin/thumbnail.webp",
+    "badge": "hot",
+    "sales": 7
+  },
+  {
+    "id": "77",
+    "title": "Yellow Peeler",
+    "description": "The Yellow Peeler is a handy tool for peeling fruits and vegetables with ease. Its bright yellow color adds a cheerful touch to your kitchen gadgets.",
+    "price": 479,
+    "originalPrice": 575,
+    "discount": "12%",
+    "rating": 4.24,
+    "reviews": 3,
+    "brand": "Generic",
+    "category": "kitchen-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/kitchen-accessories/yellow-peeler/thumbnail.webp",
+    "badge": "hot",
+    "sales": 5
+  },
+  {
+    "id": "78",
+    "title": "Apple MacBook Pro 14 Inch Space Grey",
+    "description": "The MacBook Pro 14 Inch in Space Grey is a powerful and sleek laptop, featuring Apple's M1 Pro chip for exceptional performance and a stunning Retina display.",
+    "price": 159999,
+    "originalPrice": 191999,
+    "discount": "5%",
+    "rating": 3.65,
+    "reviews": 3,
+    "brand": "Apple",
+    "category": "laptops",
+    "image": "https://cdn.dummyjson.com/product-images/laptops/apple-macbook-pro-14-inch-space-grey/thumbnail.webp",
+    "badge": "hot",
+    "sales": 10
+  },
+  {
+    "id": "79",
+    "title": "Asus Zenbook Pro Dual Screen Laptop",
+    "description": "The Asus Zenbook Pro Dual Screen Laptop is a high-performance device with dual screens, providing productivity and versatility for creative professionals.",
+    "price": 143999,
+    "originalPrice": 172799,
+    "discount": "11%",
+    "rating": 3.95,
+    "reviews": 3,
+    "brand": "Asus",
+    "category": "laptops",
+    "image": "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/thumbnail.webp",
+    "badge": "sale",
+    "sales": 8
+  },
+  {
+    "id": "80",
+    "title": "Huawei Matebook X Pro",
+    "description": "The Huawei Matebook X Pro is a slim and stylish laptop with a high-resolution touchscreen display, offering a premium experience for users on the go.",
+    "price": 111999,
+    "originalPrice": 134399,
+    "discount": "9%",
+    "rating": 4.98,
+    "reviews": 3,
+    "brand": "Huawei",
+    "category": "laptops",
+    "image": "https://cdn.dummyjson.com/product-images/laptops/huawei-matebook-x-pro/thumbnail.webp",
+    "badge": "sale",
+    "sales": 1
+  },
+  {
+    "id": "81",
+    "title": "Lenovo Yoga 920",
+    "description": "The Lenovo Yoga 920 is a 2-in-1 convertible laptop with a flexible hinge, allowing you to use it as a laptop or tablet, offering versatility and portability.",
+    "price": 87999,
+    "originalPrice": 105599,
+    "discount": "7%",
+    "rating": 2.86,
+    "reviews": 3,
+    "brand": "Lenovo",
+    "category": "laptops",
+    "image": "https://cdn.dummyjson.com/product-images/laptops/lenovo-yoga-920/thumbnail.webp",
+    "badge": "hot",
+    "sales": 10
+  },
+  {
+    "id": "82",
+    "title": "New DELL XPS 13 9300 Laptop",
+    "description": "The New DELL XPS 13 9300 Laptop is a compact and powerful device, featuring a virtually borderless InfinityEdge display and high-end performance for various tasks.",
+    "price": 119999,
+    "originalPrice": 143999,
+    "discount": "12%",
+    "rating": 2.67,
+    "reviews": 3,
+    "brand": "Dell",
+    "category": "laptops",
+    "image": "https://cdn.dummyjson.com/product-images/laptops/new-dell-xps-13-9300-laptop/thumbnail.webp",
+    "badge": "hot",
+    "sales": 3
+  },
+  {
+    "id": "83",
+    "title": "Blue & Black Check Shirt",
+    "description": "The Blue & Black Check Shirt is a stylish and comfortable men's shirt featuring a classic check pattern. Made from high-quality fabric, it's suitable for both casual and semi-formal occasions.",
+    "price": 2399,
+    "originalPrice": 2879,
+    "discount": "15%",
+    "rating": 3.64,
+    "reviews": 3,
+    "brand": "Fashion Trends",
+    "category": "mens-shirts",
+    "image": "https://cdn.dummyjson.com/product-images/mens-shirts/blue-&-black-check-shirt/thumbnail.webp",
+    "badge": "new",
+    "sales": 10
+  },
+  {
+    "id": "84",
+    "title": "Gigabyte Aorus Men Tshirt",
+    "description": "The Gigabyte Aorus Men Tshirt is a cool and casual shirt for gaming enthusiasts. With the Aorus logo and sleek design, it's perfect for expressing your gaming style.",
+    "price": 1999,
+    "originalPrice": 2399,
+    "discount": "1%",
+    "rating": 3.18,
+    "reviews": 3,
+    "brand": "Gigabyte",
+    "category": "mens-shirts",
+    "image": "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/thumbnail.webp",
+    "badge": "new",
+    "sales": 2
+  },
+  {
+    "id": "85",
+    "title": "Man Plaid Shirt",
+    "description": "The Man Plaid Shirt is a timeless and versatile men's shirt with a classic plaid pattern. Its comfortable fit and casual style make it a wardrobe essential for various occasions.",
+    "price": 2799,
+    "originalPrice": 3359,
+    "discount": "20%",
+    "rating": 3.46,
+    "reviews": 3,
+    "brand": "Classic Wear",
+    "category": "mens-shirts",
+    "image": "https://cdn.dummyjson.com/product-images/mens-shirts/man-plaid-shirt/thumbnail.webp",
+    "badge": "hot",
+    "sales": 9
+  },
+  {
+    "id": "86",
+    "title": "Man Short Sleeve Shirt",
+    "description": "The Man Short Sleeve Shirt is a breezy and stylish option for warm days. With a comfortable fit and short sleeves, it's perfect for a laid-back yet polished look.",
+    "price": 1599,
+    "originalPrice": 1919,
+    "discount": "7%",
+    "rating": 2.9,
+    "reviews": 3,
+    "brand": "Casual Comfort",
+    "category": "mens-shirts",
+    "image": "https://cdn.dummyjson.com/product-images/mens-shirts/man-short-sleeve-shirt/thumbnail.webp",
+    "badge": "new",
+    "sales": 6
+  },
+  {
+    "id": "87",
+    "title": "Men Check Shirt",
+    "description": "The Men Check Shirt is a classic and versatile shirt featuring a stylish check pattern. Suitable for various occasions, it adds a smart and polished touch to your wardrobe.",
+    "price": 2239,
+    "originalPrice": 2687,
+    "discount": "11%",
+    "rating": 2.72,
+    "reviews": 3,
+    "brand": "Urban Chic",
+    "category": "mens-shirts",
+    "image": "https://cdn.dummyjson.com/product-images/mens-shirts/men-check-shirt/thumbnail.webp",
+    "badge": "new",
+    "sales": 5
+  },
+  {
+    "id": "88",
+    "title": "Nike Air Jordan 1 Red And Black",
+    "description": "The Nike Air Jordan 1 in Red and Black is an iconic basketball sneaker known for its stylish design and high-performance features, making it a favorite among sneaker enthusiasts and athletes.",
+    "price": 11999,
+    "originalPrice": 14399,
+    "discount": "4%",
+    "rating": 4.77,
+    "reviews": 3,
+    "brand": "Nike",
+    "category": "mens-shoes",
+    "image": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-air-jordan-1-red-and-black/thumbnail.webp",
+    "badge": "sale",
+    "sales": 1
+  },
+  {
+    "id": "89",
+    "title": "Nike Baseball Cleats",
+    "description": "Nike Baseball Cleats are designed for maximum traction and performance on the baseball field. They provide stability and support for players during games and practices.",
+    "price": 6399,
+    "originalPrice": 7679,
+    "discount": "18%",
+    "rating": 3.88,
+    "reviews": 3,
+    "brand": "Nike",
+    "category": "mens-shoes",
+    "image": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-baseball-cleats/thumbnail.webp",
+    "badge": "sale",
+    "sales": 9
+  },
+  {
+    "id": "90",
+    "title": "Puma Future Rider Trainers",
+    "description": "The Puma Future Rider Trainers offer a blend of retro style and modern comfort. Perfect for casual wear, these trainers provide a fashionable and comfortable option for everyday use.",
+    "price": 7199,
+    "originalPrice": 8639,
+    "discount": "4%",
+    "rating": 4.9,
+    "reviews": 3,
+    "brand": "Puma",
+    "category": "mens-shoes",
+    "image": "https://cdn.dummyjson.com/product-images/mens-shoes/puma-future-rider-trainers/thumbnail.webp",
+    "badge": "hot",
+    "sales": 5
+  },
+  {
+    "id": "91",
+    "title": "Sports Sneakers Off White & Red",
+    "description": "The Sports Sneakers in Off White and Red combine style and functionality, making them a fashionable choice for sports enthusiasts. The red and off-white color combination adds a bold and energetic touch.",
+    "price": 9599,
+    "originalPrice": 11519,
+    "discount": "5%",
+    "rating": 4.77,
+    "reviews": 3,
+    "brand": "Off White",
+    "category": "mens-shoes",
+    "image": "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-&-red/thumbnail.webp",
+    "badge": "sale",
+    "sales": 4
+  },
+  {
+    "id": "92",
+    "title": "Sports Sneakers Off White Red",
+    "description": "Another variant of the Sports Sneakers in Off White Red, featuring a unique design. These sneakers offer style and comfort for casual occasions.",
+    "price": 8799,
+    "originalPrice": 10559,
+    "discount": "0%",
+    "rating": 4.69,
+    "reviews": 3,
+    "brand": "Off White",
+    "category": "mens-shoes",
+    "image": "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-red/thumbnail.webp",
+    "badge": "new",
+    "sales": 3
+  },
+  {
+    "id": "93",
+    "title": "Brown Leather Belt Watch",
+    "description": "The Brown Leather Belt Watch is a stylish timepiece with a classic design. Featuring a genuine leather strap and a sleek dial, it adds a touch of sophistication to your look.",
+    "price": 7199,
+    "originalPrice": 8639,
+    "discount": "6%",
+    "rating": 4.19,
+    "reviews": 3,
+    "brand": "Fashion Timepieces",
+    "category": "mens-watches",
+    "image": "https://cdn.dummyjson.com/product-images/mens-watches/brown-leather-belt-watch/thumbnail.webp",
+    "badge": "sale",
+    "sales": 10
+  },
+  {
+    "id": "94",
+    "title": "Longines Master Collection",
+    "description": "The Longines Master Collection is an elegant and refined watch known for its precision and craftsmanship. With a timeless design, it's a symbol of luxury and sophistication.",
+    "price": 119999,
+    "originalPrice": 143999,
+    "discount": "17%",
+    "rating": 3.87,
+    "reviews": 3,
+    "brand": "Longines",
+    "category": "mens-watches",
+    "image": "https://cdn.dummyjson.com/product-images/mens-watches/longines-master-collection/thumbnail.webp",
+    "badge": "new",
+    "sales": 3
+  },
+  {
+    "id": "95",
+    "title": "Rolex Cellini Date Black Dial",
+    "description": "The Rolex Cellini Date with Black Dial is a classic and prestigious watch. With a black dial and date complication, it exudes sophistication and is a symbol of Rolex's heritage.",
+    "price": 719999,
+    "originalPrice": 863999,
+    "discount": "9%",
+    "rating": 4.97,
+    "reviews": 3,
+    "brand": "Rolex",
+    "category": "mens-watches",
+    "image": "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-date-black-dial/thumbnail.webp",
+    "badge": "sale",
+    "sales": 4
+  },
+  {
+    "id": "96",
+    "title": "Rolex Cellini Moonphase",
+    "description": "The Rolex Cellini Moonphase is a masterpiece of horology, featuring a moon phase complication and exquisite design. It reflects Rolex's commitment to precision and elegance.",
+    "price": 1039999,
+    "originalPrice": 1247999,
+    "discount": "18%",
+    "rating": 2.58,
+    "reviews": 3,
+    "brand": "Rolex",
+    "category": "mens-watches",
+    "image": "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-moonphase/thumbnail.webp",
+    "badge": "sale",
+    "sales": 9
+  },
+  {
+    "id": "97",
+    "title": "Rolex Datejust",
+    "description": "The Rolex Datejust is an iconic and versatile timepiece with a date window. Known for its timeless design and reliability, it's a symbol of Rolex's watchmaking excellence.",
+    "price": 879999,
+    "originalPrice": 1055999,
+    "discount": "4%",
+    "rating": 3.66,
+    "reviews": 3,
+    "brand": "Rolex",
+    "category": "mens-watches",
+    "image": "https://cdn.dummyjson.com/product-images/mens-watches/rolex-datejust/thumbnail.webp",
+    "badge": "sale",
+    "sales": 6
+  },
+  {
+    "id": "98",
+    "title": "Rolex Submariner Watch",
+    "description": "The Rolex Submariner is a legendary dive watch with a rich history. Known for its durability and water resistance, it's a symbol of adventure and exploration.",
+    "price": 1119999,
+    "originalPrice": 1343999,
+    "discount": "5%",
+    "rating": 2.69,
+    "reviews": 3,
+    "brand": "Rolex",
+    "category": "mens-watches",
+    "image": "https://cdn.dummyjson.com/product-images/mens-watches/rolex-submariner-watch/thumbnail.webp",
+    "badge": "hot",
+    "sales": 2
+  },
+  {
+    "id": "99",
+    "title": "Amazon Echo Plus",
+    "description": "The Amazon Echo Plus is a smart speaker with built-in Alexa voice control. It features premium sound quality and serves as a hub for controlling smart home devices.",
+    "price": 7999,
+    "originalPrice": 9599,
+    "discount": "12%",
+    "rating": 4.99,
+    "reviews": 3,
+    "brand": "Amazon",
+    "category": "mobile-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/mobile-accessories/amazon-echo-plus/thumbnail.webp",
+    "badge": "sale",
+    "sales": 2
+  },
+  {
+    "id": "100",
+    "title": "Apple Airpods",
+    "description": "The Apple Airpods offer a seamless wireless audio experience. With easy pairing, high-quality sound, and Siri integration, they are perfect for on-the-go listening.",
+    "price": 10399,
+    "originalPrice": 12479,
+    "discount": "16%",
+    "rating": 4.15,
+    "reviews": 3,
+    "brand": "Apple",
+    "category": "mobile-accessories",
+    "image": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods/thumbnail.webp",
+    "badge": "new",
+    "sales": 5
   }
-  return products;
+];
+
+function generateMockProductsForCategory(catId) {
+  if (catId === 'all' || catId === 'trending' || catId === 'new-arrivals') return MASTER_PRODUCTS.slice(0, 36);
+  const filtered = MASTER_PRODUCTS.filter(p => p.category === catId);
+  return filtered.length > 0 ? filtered : MASTER_PRODUCTS.slice(0, 36);
 }
 
 function generateBrandProducts(brand, catId) {
-    const products = [];
-    const productNames = {
-        'electronics': ['Smartphone', 'OLED Smart TV', 'Laptop Pro', 'Tablet Ultra', 'Noise Cancelling Earbuds', 'Mirrorless Camera', 'Drone 4K', 'Smartwatch Series', 'Gaming Console', 'VR Headset'],
-        'gadgets': ['Wireless Earbuds', 'Smart Speaker', 'Power Bank 20000mAh', 'Fitness Tracker', '4K Webcam', 'Gaming Mouse', 'Mechanical Keyboard', 'Smart Ring', 'Portable Projector', 'Dash Cam'],
-        'clothing': ['T-Shirt', 'Denim Jeans', 'Leather Jacket', 'Cashmere Sweater', 'Summer Dress', 'Cargo Shorts', 'Puffer Coat', 'Athleisure Set', 'Formal Blazer', 'Linen Shirt'],
-        'shoes': ['Sneakers', 'Running Shoes', 'Formal Oxfords', 'Trekking Boots', 'Slip-on Loafers', 'High-Top Kicks', 'Basketball Shoes', 'Flip Flops', 'Chelsea Boots', 'Trainers'],
-        'beauty': ['Face Wash', 'Hydrating Moisturizer', 'Matte Lipstick', 'SPF 50 Sunscreen', 'Eau De Parfum', 'Vitamin C Serum', 'Anti-aging Cream', 'Eye Contour Gel', 'Hair Treatment Mask', 'Foundation'],
-        'sports': ['Badminton Racket', 'Pro Football', 'Eco Yoga Mat', 'Adjustable Dumbbells', 'Tennis Ball Pack', 'Skipping Rope', 'Resistance Bands', 'Protein Shaker', 'Cycling Helmet', 'Treadmill'],
-        'home-kitchen': ['Blender Pro', 'Non-stick Cookware Set', 'Ceramic Dinner Set', 'Insulated Water Bottle', 'Glass Storage Container', 'Mixer Grinder', 'Air Fryer', 'Smart Coffee Maker', 'Vacuum Cleaner', 'Microwave Oven'],
-        'groceries': ['Premium Atta', 'Basmati Rice', 'Organic Dal', 'Olive Oil', 'Green Tea', 'Instant Coffee', 'Dry Fruits Mix', 'Dark Chocolate', 'Quinoa', 'Peanut Butter']
-    };
-    
-    // For brand store, strictly generate only this brand's products
-    let catNames = [];
-    if (catId && productNames[catId]) {
-        catNames = productNames[catId];
-    } else {
-        // Mix if unknown category
-        catNames = Object.values(productNames).flat();
-    }
-    
-    // Generate massive list for brand store (48 items)
-    for(let i=0; i<48; i++) {
-        const itemName = catNames[Math.floor(Math.random() * catNames.length)];
-        products.push({
-            id: `prod_brand_${brand}_${i}`,
-            brand: brand,
-            name: `${brand} ${itemName} - Signature ${i+1}`,
-            price: `₹${(Math.floor(Math.random() * 80) + 15) * 100}`,
-            orig: `₹${(Math.floor(Math.random() * 120) + 95) * 100}`,
-            disc: `${Math.floor(Math.random() * 45) + 5}%`,
-            rating: (Math.random() * 1.0 + 4.0).toFixed(1),
-            reviews: `${Math.floor(Math.random() * 3000) + 100}`,
-            badge: Math.random() > 0.85 ? 'new' : (Math.random() > 0.7 ? 'sale' : (Math.random() > 0.9 ? 'hot' : '')),
-            color: `hsl(${Math.floor(Math.random() * 360)}, 25%, 35%)`,
-            shape: ['circle','oval','diamond','hexagon','rect'][Math.floor(Math.random()*5)]
-        });
-    }
-    return products;
-}
-
-// Reuse SVG generator
-function makeSVG(color, shape, w = 200, h = 190) {
-  const cx = w / 2, cy = h / 2, r = Math.min(cx, cy);
-  let inner = '';
-  switch (shape) {
-    case 'circle':  inner = `<circle cx="${cx}" cy="${cy}" r="${r*.52}" fill="${color}" opacity=".4"/>`; break;
-    case 'oval':    inner = `<ellipse cx="${cx}" cy="${cy}" rx="${r*.62}" ry="${r*.36}" fill="${color}" opacity=".4"/>`;  break;
-    case 'diamond': inner = `<polygon points="${cx},${cy*.20} ${cx*1.58},${cy} ${cx},${cy*1.80} ${cx*.42},${cy}" fill="${color}" opacity=".4"/>`;  break;
-    case 'hexagon': {
-      const pts = Array.from({length:6},(_,i)=>{const a=(Math.PI/3)*i-Math.PI/6;return `${cx+r*.52*Math.cos(a)},${cy+r*.52*Math.sin(a)}`;});
-      inner = `<polygon points="${pts.join(' ')}" fill="${color}" opacity=".4"/>`;  break;
-    }
-    default:        inner = `<rect x="${cx*.28}" y="${cy*.28}" width="${cx*1.44}" height="${cy*1.44}" rx="8" fill="${color}" opacity=".4"/>`;
-  }
-  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${inner}</svg>`;
+  const filtered = MASTER_PRODUCTS.filter(p => p.brand === brand);
+  return filtered.length > 0 ? filtered : MASTER_PRODUCTS.slice(0, 48);
 }
 
 function makeStars(rating) {
@@ -593,26 +1999,30 @@ function makeStars(rating) {
 function buildCard(p) {
   const bCls = { new:'b-new', sale:'b-sale', hot:'b-hot' }[p.badge] || '';
   const bLbl = { new:'New', sale:'Sale', hot:'🔥 Hot' }[p.badge] || '';
-  const isWished = ebWishlist.some(item => item.id === p.id);
+  const isWished = typeof ebWishlist !== 'undefined' ? ebWishlist.some(item => item.id === p.id) : false;
   const stroke = isWished ? '#E03E3E' : '#999';
   const wishCls = isWished ? 'cat-wish-btn wished' : 'cat-wish-btn';
   const pStr = encodeURIComponent(JSON.stringify(p)).replace(/'/g, "%27");
+  
   return `<article class="cat-card" role="listitem">
-    <a href="product-detail.html?id=${p.id}" class="cat-img" style="display:block; text-decoration:none;">${makeSVG(p.color,p.shape)}${p.badge?`<span class="card-badge ${bCls}">${bLbl}</span>`:''}</a>
-    <button class="${wishCls}" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:var(--bg-white);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;z-index:2;" aria-label="Add to wishlist" onclick="toggleWish('w_${p.id}', '${p.name.replace(/'/g, "\\'")}', '${pStr}')" id="w_${p.id}">
+    <a href="product-detail.html?id=${p.id}" class="cat-img" style="display:block; text-decoration:none;">
+      <img src="${p.image}" alt="${p.title.replace(/"/g, '&quot;')}" style="width:100%; height:100%; object-fit:contain; background:#f9f9f9;">
+      ${p.badge?`<span class="card-badge ${bCls}">${bLbl}</span>`:``}
+    </a>
+    <button class="${wishCls}" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:var(--bg-white);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;z-index:2;" aria-label="Add to wishlist" onclick="toggleWish('w_${p.id}', '${p.title.replace(/'/g, "\\'")}', '${pStr}')" id="w_${p.id}">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </button>
     <div class="cat-body">
       <div class="cat-brand">${p.brand}</div>
-      <a href="product-detail.html?id=${p.id}" class="cat-name" style="display:block;">${p.name}</a>
-      <div class="cat-prices"><span class="cat-price">${p.price}</span><span class="cat-orig">${p.orig}</span><span class="cat-disc">${p.disc} off</span></div>
+      <a href="product-detail.html?id=${p.id}" class="cat-name" style="display:block;">${p.title}</a>
+      <p class="product-desc-snippet" style="font-size:12px; color:var(--text-muted); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; margin-top:4px; margin-bottom:8px; line-height: 1.4;">${p.description}</p>
+      <div class="cat-prices"><span class="cat-price">₹${p.price.toLocaleString('en-IN')}</span><span class="cat-orig">₹${p.originalPrice.toLocaleString('en-IN')}</span><span class="cat-disc">${p.discount} off</span></div>
       <div class="cat-rating"><div class="cat-stars" aria-label="${p.rating} out of 5">${makeStars(p.rating)}</div><span class="cat-reviews">${p.rating} (${p.reviews})</span></div>
-      <div class="cat-transactions" style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${p.bought}k+ bought in past month</div>
+      <div class="cat-transactions" style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${p.sales}k+ bought in past month</div>
       <button class="cat-add-btn" onclick="addToCart('${pStr}')">+ Add to Cart</button>
     </div>
   </article>`;
 }
-
 /* Category Page Specific Logic */
 function getBrandLogoSVG(brand) {
     const safeBrand = brand.toLowerCase();
@@ -1028,6 +2438,31 @@ function renderBrandPage() {
     renderBrandPagination();
 }
 
+function populateHomeTracks() {
+  if (document.body.dataset.page === 'category') return; // Skip if on category page
+  
+  const nr = document.getElementById('tr-new');
+  if (nr) nr.innerHTML = [...MASTER_PRODUCTS].sort(() => 0.5 - Math.random()).slice(0, 36).map(buildCard).join('');
+  
+  const tr = document.getElementById('tr-trend');
+  if (tr) {
+    const trendCats = ['smartphones', 'laptops', 'mens-shirts', 'womens-dresses', 'fragrances'];
+    const trendProds = MASTER_PRODUCTS.filter(p => trendCats.includes(p.category)).sort(() => 0.5 - Math.random());
+    const otherProds = MASTER_PRODUCTS.filter(p => !trendCats.includes(p.category)).sort(() => 0.5 - Math.random());
+    tr.innerHTML = [...trendProds, ...otherProds].slice(0, 36).map(buildCard).join('');
+  }
+  
+  ['row1','row2','row3'].forEach((k,i) => {
+    const el = document.getElementById(`disc-row-${i+1}`);
+    if (el) {
+        const catMap = [['smartphones', 'laptops', 'motorcycle', 'gadgets'], ['mens-shoes', 'womens-shoes', 'mens-shirts', 'womens-dresses', 'tops', 'mens-watches', 'womens-watches'], ['skincare', 'fragrances', 'beauty']];
+        const prods = MASTER_PRODUCTS.filter(p => catMap[i].includes(p.category)).sort(() => 0.5 - Math.random());
+        const fb = MASTER_PRODUCTS.sort(() => 0.5 - Math.random());
+        el.innerHTML = (prods.length > 0 ? prods : fb).slice(0, 36).map(buildCard).join('');
+    }
+  });
+}
+
 function renderBrandPagination() {
     const container = document.getElementById('brand-pagination');
     if (!container) return;
@@ -1082,21 +2517,6 @@ window.changeBrandPage = function(page) {
 }
 
 // Generate simple mock products for home page tracks if on index
-function populateHomeTracks() {
-  if (document.body.dataset.page === 'category') return; // Skip if on category page
-  
-  const nr = document.getElementById('tr-new');
-  if (nr) nr.innerHTML = generateMockProductsForCategory('electronics').slice(0,36).map(buildCard).join('');
-  
-  const tr = document.getElementById('tr-trend');
-  if (tr) tr.innerHTML = generateMockProductsForCategory('clothing').slice(0,36).map(buildCard).join('');
-  
-  ['row1','row2','row3'].forEach((k,i) => {
-    const el = document.getElementById(`disc-row-${i+1}`);
-    if (el) el.innerHTML = generateMockProductsForCategory(i === 0 ? 'gadgets' : i === 1 ? 'shoes' : 'beauty').slice(0,36).map(buildCard).join('');
-  });
-}
-
 
 /* ═══════════════════════════════════════════════════════════════════════
    SHARED UTILITIES
