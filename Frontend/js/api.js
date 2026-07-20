@@ -4,9 +4,7 @@
    Connects to http://localhost:5000 and enriches the frontend with
    live database products with cache-busting and case-insensitive matching.
    ═══════════════════════════════════════════════════════════════════════ */
-
-const API_BASE = 'http://localhost:5000/api';
-
+var API_BASE = 'http://localhost:5000/api';
 // Global state — backend products are merged into this
 window.allProducts = [];
 window._apiReady = false;
@@ -23,9 +21,9 @@ async function fetchProducts() {
     try {
       const res = await fetch(url);
       if (res.ok) {
-        const data = await res.json();
-        const items = Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : []);
-        if (items.length > 0) return items;
+        let data = await res.json();
+        let items = data.products || data;
+        if (items && items.length > 0) return items;
       }
     } catch (err) {
       console.warn(`[E-Bazaar API] Connection attempt failed for ${url}`);
@@ -37,22 +35,22 @@ async function fetchProducts() {
 /* ─── Normalise a backend product → same shape as MASTER_PRODUCTS ─────────── */
 function normaliseApiProduct(p) {
   return {
-    id:            `api_${p.id}`,
-    title:         p.title         || 'Unnamed Product',
-    name:          p.title         || 'Unnamed Product',
-    description:   p.description   || '',
-    price:         p.price         || 0,
+    id: `api_${p.id}`,
+    title: p.title || 'Unnamed Product',
+    name: p.title || 'Unnamed Product',
+    description: p.description || '',
+    price: p.price || 0,
     originalPrice: p.originalPrice || p.price,
-    discount:      p.discount      || '0%',
-    rating:        p.rating        || 4.0,
-    reviews:       p.reviews       || 0,
-    sales:         p.sales         || null,
-    brand:         p.brand         || 'Generic',
-    category:      (p.category     || 'general').toLowerCase(),
-    badge:         p.badge         || null,
-    image:         p.imageUrl      || p.image || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80',
-    imageUrl:      p.imageUrl      || p.image || null,
-    _fromApi:      true,
+    discount: p.discount || '0%',
+    rating: p.rating || 4.0,
+    reviews: p.reviews || 0,
+    sales: p.sales || null,
+    brand: p.brand || 'Generic',
+    category: (p.category || 'general').toLowerCase(),
+    badge: p.badge || null,
+    image: p.imageUrl || p.image || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80',
+    imageUrl: p.imageUrl || p.image || null,
+    _fromApi: true,
   };
 }
 
@@ -74,9 +72,9 @@ function mergeApiProducts(apiProducts) {
 /* ─── Apply URL Parameter Filtering (Case-Insensitive) ────────────────────── */
 function applyUrlFilters() {
   const params = new URLSearchParams(window.location.search);
-  const catParam   = params.get('category') || params.get('cat');
+  const catParam = params.get('category') || params.get('cat');
   const brandParam = params.get('brand');
-  const qParam     = params.get('q');
+  const qParam = params.get('q');
 
   if (!catParam && !brandParam && !qParam) return null;
 
@@ -119,18 +117,18 @@ function applyUrlFilters() {
 }
 
 /* ─── Render a product grid ───────────────────────────────────────────────── */
-function renderProductGrid(products, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  if (!products || products.length === 0) {
-    container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted)">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px;opacity:.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <p style="font-size:16px;margin:0">No products found.</p>
-    </div>`;
-    return;
-  }
-  container.innerHTML = products.map(p => (window.buildCard ? window.buildCard(p) : '')).join('');
-}
+// function renderProductGrid(products, containerId) {
+//   const container = document.getElementById(containerId);
+//   if (!container) return;
+//   if (!products || products.length === 0) {
+//     container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted)">
+//       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px;opacity:.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+//       <p style="font-size:16px;margin:0">No products found.</p>
+//     </div>`;
+//     return;
+//   }
+//   container.innerHTML = products.map(p => (window.buildCard ? window.buildCard(p) : '')).join('');
+// }
 
 /* ─── Update section titles ───────────────────────────────────────────────── */
 function updatePageTitles(filterResult) {
@@ -150,7 +148,7 @@ function patchBuildCard() {
   const _orig = window._origBuildCard || buildCard;
   window._origBuildCard = _orig;
 
-  window.buildCard = function(p) {
+  window.buildCard = function (p) {
     if (!p.image && p.imageUrl) p.image = p.imageUrl;
     if (!p.image) p.image = 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
 
@@ -176,6 +174,9 @@ async function initApiEngine() {
 
   if (apiProducts.length > 0) {
     mergeApiProducts(apiProducts);
+
+    // Add renderProducts call for testing as requested
+    // renderProducts(apiProducts);
 
     // Re-initialize home page tracks if on index.html
     if (typeof populateHomeTracks === 'function' && document.body.dataset.page !== 'category') {
@@ -203,3 +204,26 @@ async function initApiEngine() {
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(initApiEngine, 100);
 });
+
+function renderProducts(products) {
+  // 1. Locate main container. Using #tr-trend as requested to replace trending items.
+  const container = document.querySelector('#tr-trend');
+
+  // 2. Add debugging logs
+  console.log("Data reached render function:", products);
+  console.log("Target container found:", container);
+
+  if (!container) return;
+
+  // 3. Clear hardcoded HTML
+  container.innerHTML = '';
+
+  // 4. Render product cards
+  container.innerHTML = products.slice(0, 20).map(p => `
+    <div class="product-card" style="border: 1px solid #e0e0e0; padding: 12px; border-radius: 8px; min-width: 200px;">
+      <img src="${p.image || p.imageUrl || 'https://placehold.co/200x200'}" alt="${p.title}" style="width: 100%; height: 160px; object-fit: contain;">
+      <h3 style="font-size: 14px; margin-top: 8px;">${p.title}</h3>
+      <p style="font-weight: 700; color: #333;">₹${p.price}</p>
+    </div>
+  `).join('');
+}

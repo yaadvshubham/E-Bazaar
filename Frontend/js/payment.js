@@ -53,13 +53,9 @@ function checkLoginState() {
   const isLoggedIn = window.AuthSession && window.AuthSession.isLoggedIn();
   const formBody = document.getElementById('form-body');
   const loginWarning = document.getElementById('login-warning');
-  const rzpSection = document.querySelector('.razorpay-section');
-  const disclaimer = document.querySelector('.sandbox-disclaimer');
 
   if (isLoggedIn) {
     if (formBody) formBody.style.display = 'block';
-    if (rzpSection) rzpSection.style.display = 'block';
-    if (disclaimer) disclaimer.style.display = 'block';
     if (loginWarning) loginWarning.style.display = 'none';
 
     const user = window.AuthSession.getUser();
@@ -71,87 +67,9 @@ function checkLoginState() {
     if (nameField && user) {
       nameField.value = user.name;
     }
-
-    const walletBalEl = document.getElementById('checkout-wallet-balance');
-    if (walletBalEl && user) {
-      const userObj = JSON.parse(localStorage.getItem('eb_user') || '{}');
-      const bal = typeof userObj.walletBalance === 'number' ? userObj.walletBalance : (user.walletBalance || 1500);
-      walletBalEl.innerText = `₹${bal.toLocaleString('en-IN')}.00`;
-    }
   } else {
     if (formBody) formBody.style.display = 'none';
-    if (rzpSection) rzpSection.style.display = 'none';
-    if (disclaimer) disclaimer.style.display = 'none';
     if (loginWarning) loginWarning.style.display = 'block';
-  }
-}
-
-// Order placement handler (fallback/standard checkout)
-async function submitOrder(paymentMethod, loadingControls) {
-  if (!window.AuthSession || !window.AuthSession.isLoggedIn()) {
-    alert('You must be logged in to proceed.');
-    checkLoginState();
-    return;
-  }
-
-  if (items.length === 0) {
-    alert('Your cart is empty.');
-    return;
-  }
-
-  const { btn, text, spinner } = loadingControls;
-  if (btn) btn.disabled = true;
-  if (text) text.style.display = 'none';
-  if (spinner) spinner.style.display = 'block';
-
-  try {
-    const token = window.AuthSession.getToken();
-    const res = await fetch('http://localhost:5000/api/orders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        items,
-        totalAmount: total,
-        paymentMethod,
-        deliveryAddress
-      })
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.error || 'Server error placing order');
-    }
-
-    // Clear cart
-    localStorage.setItem('cart', '[]');
-    localStorage.setItem('eb_cart_items', '[]');
-    localStorage.setItem('eb-cart', '0');
-
-    // Signal opener window if exists
-    if (window.opener && !window.opener.closed) {
-      try {
-        window.opener.postMessage('PAYMENT_SUCCESS', '*');
-      } catch (err) { }
-    }
-
-    // Show success state
-    const formBody = document.getElementById('form-body');
-    if (formBody) formBody.style.display = 'none';
-    const rzpSection = document.querySelector('.razorpay-section');
-    if (rzpSection) rzpSection.style.display = 'none';
-    document.getElementById('card-footer').style.display = 'none';
-    document.querySelector('.sandbox-disclaimer').style.display = 'none';
-    document.getElementById('success-body').style.display = 'block';
-
-  } catch (err) {
-    console.error('[Payment] Error placing order:', err);
-    alert('Payment processing failed: ' + err.message);
-    if (btn) btn.disabled = false;
-    if (text) text.style.display = 'block';
-    if (spinner) spinner.style.display = 'none';
   }
 }
 
@@ -159,13 +77,9 @@ async function submitOrder(paymentMethod, loadingControls) {
 document.addEventListener('DOMContentLoaded', () => {
   // Update amounts in UI
   const displayAmountEl = document.getElementById('display-amount');
-  const btnTextEl = document.getElementById('btn-text');
   
   if (displayAmountEl) {
     displayAmountEl.textContent = '₹' + total.toLocaleString('en-IN');
-  }
-  if (btnTextEl) {
-    btnTextEl.textContent = 'Pay ₹' + total.toLocaleString('en-IN');
   }
 
   // Check initial login state
@@ -173,17 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Watch for focus to catch external login events
   window.addEventListener('focus', checkLoginState);
-
-  // Tab switching
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-      tab.classList.add('active');
-      document.getElementById('tab-' + tab.dataset.target).classList.add('active');
-    });
-  });
 
   // Razorpay test button listener
   const rzpButton = document.getElementById('rzp-button1');
@@ -201,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       rzpButton.disabled = true;
       const originalText = rzpButton.textContent;
-      rzpButton.textContent = 'Contacting Payment Gateway...';
+      rzpButton.innerHTML = 'Contacting Payment Gateway... <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>';
 
       try {
         const token = window.AuthSession.getToken();
@@ -269,10 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
               // UI Transition to Success
               const formBody = document.getElementById('form-body');
               if (formBody) formBody.style.display = 'none';
-              const rzpSec = document.querySelector('.razorpay-section');
-              if (rzpSec) rzpSec.style.display = 'none';
-              document.getElementById('card-footer').style.display = 'none';
-              document.querySelector('.sandbox-disclaimer').style.display = 'none';
+              const cardFooter = document.getElementById('card-footer');
+              if (cardFooter) cardFooter.style.display = 'none';
               document.getElementById('success-body').style.display = 'block';
 
             } catch (err) {
@@ -291,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
           modal: {
             ondismiss: function() {
               rzpButton.disabled = false;
-              rzpButton.textContent = originalText;
+              rzpButton.innerHTML = originalText;
             }
           }
         };
@@ -302,64 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         alert('Order setup failed: ' + err.message);
         rzpButton.disabled = false;
-        rzpButton.textContent = originalText;
+        rzpButton.innerHTML = originalText;
       }
-    });
-  }
-
-  // Fallback card payment submission
-  const cardForm = document.getElementById('payment-form');
-  if (cardForm) {
-    cardForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      submitOrder('Credit/Debit Card', {
-        btn: document.getElementById('btn-pay'),
-        text: document.getElementById('btn-text'),
-        spinner: document.getElementById('spinner')
-      });
-    });
-  }
-
-  // Fallback UPI payment confirmation
-  const upiButton = document.getElementById('btn-upi-pay');
-  if (upiButton) {
-    upiButton.addEventListener('click', () => {
-      submitOrder('UPI', {
-        btn: upiButton,
-        text: document.getElementById('btn-upi-text'),
-        spinner: document.getElementById('upi-spinner')
-      });
-    });
-  }
-
-  // Wallet payment handler
-  const walletButton = document.getElementById('btn-wallet-pay');
-  if (walletButton) {
-    walletButton.addEventListener('click', () => {
-      const userObj = JSON.parse(localStorage.getItem('eb_user') || '{}');
-      const bal = typeof userObj.walletBalance === 'number' ? userObj.walletBalance : 1500;
-      if (bal < total) {
-        alert(`Insufficient Wallet Balance (₹${bal.toLocaleString('en-IN')}). Please add funds in My Account or choose another payment method.`);
-        return;
-      }
-
-      // Deduct balance
-      userObj.walletBalance = bal - total;
-      if (!userObj.walletTransactions) userObj.walletTransactions = [];
-      userObj.walletTransactions.unshift({
-        title: 'Order Payment',
-        desc: `Payment for order of ${items.length} items`,
-        amount: `- ₹${total.toLocaleString('en-IN')}.00`,
-        date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
-        type: 'debit'
-      });
-      localStorage.setItem('eb_user', JSON.stringify(userObj));
-
-      submitOrder('E-Bazaar Wallet', {
-        btn: walletButton,
-        text: document.getElementById('btn-wallet-text'),
-        spinner: document.getElementById('wallet-spinner')
-      });
     });
   }
 });

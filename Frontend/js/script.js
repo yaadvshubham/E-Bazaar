@@ -9,7 +9,7 @@
    THEME ENGINE — Dark / Light with localStorage
    ═══════════════════════════════════════════════════════════════════════ */
 const ThemeEngine = (() => {
-  const KEY  = 'eb-theme';
+  const KEY = 'eb-theme';
   const root = document.documentElement;
 
   function apply(theme) {
@@ -39,7 +39,7 @@ const ThemeEngine = (() => {
    ═══════════════════════════════════════════════════════════════════════ */
 let _toastTimer;
 function showToast(msg, duration = 2800) {
-  const el  = document.getElementById('toast');
+  const el = document.getElementById('toast');
   const txt = document.getElementById('toast-msg');
   if (!el || !txt) return;
   txt.textContent = msg;
@@ -86,9 +86,9 @@ const HeroSlider = (() => {
   }
 
   function init() {
-    track  = document.getElementById('heroTrack');
+    track = document.getElementById('heroTrack');
     slides = document.querySelectorAll('.hero-slide');
-    dots   = document.querySelectorAll('.s-dot');
+    dots = document.querySelectorAll('.s-dot');
     if (!track || !slides.length) return;
 
     dots.forEach(d => d.addEventListener('click', () => { goTo(+d.dataset.idx); resetAuto(); }));
@@ -122,10 +122,10 @@ const HeroSlider = (() => {
    HAMBURGER MOBILE NAV
    ═══════════════════════════════════════════════════════════════════════ */
 function initHamburger() {
-  const btn     = document.getElementById('hamburger');
-  const drawer  = document.getElementById('mobile-drawer');
+  const btn = document.getElementById('hamburger');
+  const drawer = document.getElementById('mobile-drawer');
   const overlay = document.getElementById('drawer-overlay');
-  const closeBtn= document.getElementById('drawer-close');
+  const closeBtn = document.getElementById('drawer-close');
   if (!btn || !drawer) return;
 
   function open() {
@@ -162,12 +162,16 @@ function initMegaMenu() {
   function activate(item) {
     if (activeItem && activeItem !== item) deactivate(activeItem);
     item.classList.add('active');
-    item.querySelector('> a')?.setAttribute('aria-expanded','true');
+    try {
+      item.querySelector(':scope > a')?.setAttribute('aria-expanded', 'true');
+    } catch (e) { }
     activeItem = item;
   }
   function deactivate(item) {
     item.classList.remove('active');
-    item.querySelector('> a')?.setAttribute('aria-expanded','false');
+    try {
+      item.querySelector(':scope > a')?.setAttribute('aria-expanded', 'false');
+    } catch (e) { }
     if (activeItem === item) activeItem = null;
   }
 
@@ -231,10 +235,10 @@ const AddressModal = (() => {
   function open() {
     const overlay = injectModalIfNeeded();
     if (!overlay) return;
-    
+
     // Rebind events just in case it was freshly injected
     bindModalEvents(overlay);
-    
+
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -249,18 +253,18 @@ const AddressModal = (() => {
 
   function showAddForm() {
     const form = document.getElementById('new-addr-form');
-    const btn  = document.getElementById('add-addr-btn');
+    const btn = document.getElementById('add-addr-btn');
     if (form) form.classList.add('visible');
-    if (btn)  btn.style.display = 'none';
+    if (btn) btn.style.display = 'none';
   }
 
   function hideAddForm() {
     const form = document.getElementById('new-addr-form');
-    const btn  = document.getElementById('add-addr-btn');
+    const btn = document.getElementById('add-addr-btn');
     if (form) { form.classList.remove('visible'); form.reset?.(); }
-    if (btn)  btn.style.display = '';
+    if (btn) btn.style.display = '';
   }
-  
+
   function bindAddressItemEvents(item) {
     const defaultBtn = item.querySelector('.set-default-btn');
     if (defaultBtn) {
@@ -276,22 +280,22 @@ const AddressModal = (() => {
         if (typeof showToast === 'function') showToast('✅ Default address updated');
       });
     }
-    
+
     const deleteBtn = item.querySelector('.delete-btn');
     if (deleteBtn) {
       deleteBtn.addEventListener('click', () => {
-        if(confirm('Are you sure you want to delete this address?')) {
+        if (confirm('Are you sure you want to delete this address?')) {
           item.remove();
           if (typeof showToast === 'function') showToast('🗑️ Address deleted');
         }
       });
     }
-    
+
     const editBtn = item.querySelector('.edit-btn');
     if (editBtn) {
       editBtn.addEventListener('click', () => {
-         showAddForm();
-         document.getElementById('new-addr-form').scrollIntoView({behavior: 'smooth'});
+        showAddForm();
+        document.getElementById('new-addr-form').scrollIntoView({ behavior: 'smooth' });
       });
     }
   }
@@ -299,7 +303,7 @@ const AddressModal = (() => {
   let eventsBound = false;
   function bindModalEvents(overlay) {
     if (eventsBound) return;
-    
+
     const closeBtn = document.getElementById('modal-close-btn');
     if (closeBtn) closeBtn.addEventListener('click', close);
 
@@ -318,7 +322,7 @@ const AddressModal = (() => {
     if (form) {
       form.addEventListener('submit', e => {
         e.preventDefault();
-        
+
         const fname = document.getElementById('f-name').value;
         const lname = document.getElementById('f-lname').value;
         const line1 = document.getElementById('f-line1').value;
@@ -326,12 +330,12 @@ const AddressModal = (() => {
         const city = document.getElementById('f-city').value;
         const pin = document.getElementById('f-pin').value;
         const phone = document.getElementById('f-phone').value;
-        
+
         const newAddr = {
           type: 'Custom',
           fname, lname, line1, line2, city, pin, phone
         };
-        
+
         let user = JSON.parse(localStorage.getItem('eb_user'));
         if (user) {
           if (!user.addresses) user.addresses = [];
@@ -360,11 +364,11 @@ const AddressModal = (() => {
           list.appendChild(newItem);
           bindAddressItemEvents(newItem);
         }
-        
+
         if (typeof AddressModal.onSave === 'function') {
           AddressModal.onSave(newAddr);
         }
-        
+
         if (typeof showToast === 'function') showToast('🏠 New address saved!');
         hideAddForm();
       });
@@ -377,12 +381,12 @@ const AddressModal = (() => {
     // However, if the modal happens to be hardcoded on the page already, we can bind it now.
     const overlay = document.getElementById('addr-modal');
     if (overlay) {
-        bindModalEvents(overlay);
+      bindModalEvents(overlay);
     }
 
     const triggers = document.querySelectorAll('#addr-trigger, .nav-address');
     triggers.forEach(trigger => {
-        trigger.addEventListener('click', open);
+      trigger.addEventListener('click', open);
     });
   }
 
@@ -400,14 +404,14 @@ window.AddressModal = AddressModal;
    ═══════════════════════════════════════════════════════════════════════ */
 
 const CATEGORY_MAP = {
-  'groceries': { title: 'Groceries', brands: ['Amul','Nestle','Britannia','Tata','MotherDairy','ITC','HUL'] },
-  'electronics': { title: 'Electronics Showcase', brands: ['Apple','Samsung','Sony','OnePlus','Xiaomi','Vivo','Nothing'] },
-  'gadgets': { title: 'Gadgets', brands: ['Philips','LG','Boat','JBL','Noise','Boult','Logitech'] },
-  'clothing': { title: 'Clothing Collection', brands: ['Levis','Zara','HM','Tommy','USPolo','AllenSolly'] },
-  'shoes': { title: 'Shoes', brands: ['Nike','Adidas','Campus','Puma','Comet','NewBalance','Reebok'] },
-  'beauty': { title: 'Beauty', brands: ['LOreal','Maybelline','Nykaa','MAC','Cetaphil','Mamaearth'] },
-  'sports': { title: 'Sports', brands: ['Decathlon','Yonex','Cosco','Nivia','Speedo','Spalding'] },
-  'home-kitchen': { title: 'Home & Kitchen', brands: ['Prestige','Hawkins','Pigeon','Milton','Borosil','Bajaj'] },
+  'groceries': { title: 'Groceries', brands: ['Amul', 'Nestle', 'Britannia', 'Tata', 'MotherDairy', 'ITC', 'HUL'] },
+  'electronics': { title: 'Electronics Showcase', brands: ['Apple', 'Samsung', 'Sony', 'OnePlus', 'Xiaomi', 'Vivo', 'Nothing'] },
+  'gadgets': { title: 'Gadgets', brands: ['Philips', 'LG', 'Boat', 'JBL', 'Noise', 'Boult', 'Logitech'] },
+  'clothing': { title: 'Clothing Collection', brands: ['Levis', 'Zara', 'HM', 'Tommy', 'USPolo', 'AllenSolly'] },
+  'shoes': { title: 'Shoes', brands: ['Nike', 'Adidas', 'Campus', 'Puma', 'Comet', 'NewBalance', 'Reebok'] },
+  'beauty': { title: 'Beauty', brands: ['LOreal', 'Maybelline', 'Nykaa', 'MAC', 'Cetaphil', 'Mamaearth'] },
+  'sports': { title: 'Sports', brands: ['Decathlon', 'Yonex', 'Cosco', 'Nivia', 'Speedo', 'Spalding'] },
+  'home-kitchen': { title: 'Home & Kitchen', brands: ['Prestige', 'Hawkins', 'Pigeon', 'Milton', 'Borosil', 'Bajaj'] },
   'all': { title: 'All Products', brands: ['Nike', 'Apple', 'Zara', 'Sony', 'Puma'] }
 };
 
@@ -2966,7 +2970,7 @@ const MASTER_PRODUCTS = [
     "badge": "new",
     "sales": 5
   }
-,
+  ,
   {
     "id": "custom_2000",
     "title": "Samsung Galaxy M34 5G",
@@ -3353,7 +3357,7 @@ const MASTER_PRODUCTS = [
     "price": 2599,
     "originalPrice": 3378.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&q=80",
+    "image": "https://loremflickr.com/500/600/jeans,fashion,mens/all?lock=100",
     "category": "bottoms",
     "brand": "Levis"
   },
@@ -3363,7 +3367,7 @@ const MASTER_PRODUCTS = [
     "price": 1999,
     "originalPrice": 2598.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1602293589930-45aad59ba3ab?w=500&q=80",
+    "image": "https://loremflickr.com/500/600/jeans,denim,mens/all?lock=101",
     "category": "bottoms",
     "brand": "Wrangler"
   },
@@ -3373,7 +3377,7 @@ const MASTER_PRODUCTS = [
     "price": 1499,
     "originalPrice": 1948.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=500&q=80",
+    "image": "https://loremflickr.com/500/600/chinos,trousers,mens/all?lock=102",
     "category": "bottoms",
     "brand": "H&M"
   },
@@ -3383,7 +3387,7 @@ const MASTER_PRODUCTS = [
     "price": 1799,
     "originalPrice": 2338.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&q=80",
+    "image": "https://loremflickr.com/500/600/trousers,fashion,mens/all?lock=103",
     "category": "bottoms",
     "brand": "Allen Solly"
   },
@@ -3393,7 +3397,7 @@ const MASTER_PRODUCTS = [
     "price": 2999,
     "originalPrice": 3898.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&q=80",
+    "image": "https://otakukart.com/wp-content/uploads/2024/05/Toru-Furuya-2-770x294.jpg",
     "category": "mens-shirts",
     "brand": "Zara"
   },
@@ -3403,7 +3407,7 @@ const MASTER_PRODUCTS = [
     "price": 2299,
     "originalPrice": 2988.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&q=80",
+    "image": "https://loremflickr.com/500/600/hoodie,apparel,mens/all?lock=105",
     "category": "mens-shirts",
     "brand": "Puma"
   },
@@ -3413,7 +3417,7 @@ const MASTER_PRODUCTS = [
     "price": 3499,
     "originalPrice": 4548.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?w=500&q=80",
+    "image": "https://images.stockcake.com/public/2/6/9/2694b5bd-d26b-4ec1-809e-7f3c48fa9c93_large/tortoise-shell-patterns-stockcake.jpg",
     "category": "mens-shirts",
     "brand": "Nike"
   },
@@ -3423,7 +3427,7 @@ const MASTER_PRODUCTS = [
     "price": 1299,
     "originalPrice": 1688.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&q=80",
+    "image": "https://www.westerndigital.com/content/dam/store/en-us/portal-assets/logos/wdc-og-logo.jpg",
     "category": "womens-dresses",
     "brand": "Urbanic"
   },
@@ -3433,7 +3437,7 @@ const MASTER_PRODUCTS = [
     "price": 2599,
     "originalPrice": 3378.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=500&q=80",
+    "image": "https://asset.tribunnews.com/JPU9i7v-H0A4PrpQcmH3WHglvXM=/1200x675/filters:upscale():quality(30):format(webp):focal(0.5x0.5:0.5x0.5)/pontianak/foto/bank/originals/Logo-Kurikulum-Merdeka-2024.jpg",
     "category": "womens-dresses",
     "brand": "Zara"
   },
@@ -3443,7 +3447,7 @@ const MASTER_PRODUCTS = [
     "price": 1999,
     "originalPrice": 2598.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=500&q=80",
+    "image": "https://logos-world.net/wp-content/uploads/2021/02/FIFA-Logo.png",
     "category": "womens-dresses",
     "brand": "H&M"
   },
@@ -3453,7 +3457,7 @@ const MASTER_PRODUCTS = [
     "price": 3499,
     "originalPrice": 4548.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=500&q=80",
+    "image": "https://i.etsystatic.com/8800859/r/il/c1b40f/4737705911/il_1080xN.4737705911_2pkv.jpg",
     "category": "womens-dresses",
     "brand": "Mango"
   },
@@ -3463,7 +3467,7 @@ const MASTER_PRODUCTS = [
     "price": 799,
     "originalPrice": 1038.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500&q=80",
+    "image": "https://images2.alphacoders.com/107/1078546.jpg",
     "category": "tops",
     "brand": "Forever 21"
   },
@@ -3473,7 +3477,7 @@ const MASTER_PRODUCTS = [
     "price": 5999,
     "originalPrice": 7798.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1610189013233-5c8c5040e3f2?w=500&q=80",
+    "image": "https://wallpaperaccess.com/full/472834.jpg",
     "category": "traditional",
     "brand": "FabIndia"
   },
@@ -3483,7 +3487,7 @@ const MASTER_PRODUCTS = [
     "price": 2499,
     "originalPrice": 3248.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1583391733958-d15f0d35a1a1?w=500&q=80",
+    "image": "https://i1.rgstatic.net/ii/profile.image/1093085350105091-1637623264676_Q512/Hashim-Pk.jpg",
     "category": "traditional",
     "brand": "Biba"
   },
@@ -3493,7 +3497,7 @@ const MASTER_PRODUCTS = [
     "price": 3999,
     "originalPrice": 5198.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?w=500&q=80",
+    "image": "https://m.media-amazon.com/images/M/MV5BNzAxOTViYTgtYzNmOS00ZDJjLWE2MDAtNzFlNjQxNTRiZDY0XkEyXkFqcGc@._V1_.jpg",
     "category": "traditional",
     "brand": "Manyavar"
   },
@@ -3503,7 +3507,7 @@ const MASTER_PRODUCTS = [
     "price": 8999,
     "originalPrice": 11698.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80",
+    "image": "https://static.vecteezy.com/system/resources/previews/027/557/171/non_2x/klm-passenger-plane-at-airport-schedule-flight-travel-aviation-and-aircraft-air-transport-global-international-transportation-fly-and-flying-free-photo.jpg",
     "category": "womens-shoes",
     "brand": "Nike"
   },
@@ -3513,7 +3517,7 @@ const MASTER_PRODUCTS = [
     "price": 7499,
     "originalPrice": 9748.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&q=80",
+    "image": "https://www.jagranimages.com/images/newimg/17062024/lorde vishnu.jpg",
     "category": "womens-shoes",
     "brand": "Puma"
   },
@@ -3523,7 +3527,7 @@ const MASTER_PRODUCTS = [
     "price": 4599,
     "originalPrice": 5978.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&q=80",
+    "image": "https://i.pinimg.com/originals/d1/a4/44/d1a444e70d1369a8e16dc174b10ab6f3.jpg",
     "category": "womens-shoes",
     "brand": "Steve Madden"
   },
@@ -3533,7 +3537,7 @@ const MASTER_PRODUCTS = [
     "price": 1599,
     "originalPrice": 2078.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?w=500&q=80",
+    "image": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2023/09/dragon-ball-z.jpg",
     "category": "office-wear",
     "brand": "Van Heusen"
   },
@@ -3543,7 +3547,7 @@ const MASTER_PRODUCTS = [
     "price": 1899,
     "originalPrice": 2468.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1509631179647-0c37cb502f1a?w=500&q=80",
+    "image": "https://loremflickr.com/500/600/trousers,formal,womens/all?lock=119",
     "category": "office-wear",
     "brand": "Arrow"
   },
@@ -3553,7 +3557,7 @@ const MASTER_PRODUCTS = [
     "price": 2499,
     "originalPrice": 3248.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1617391654484-cfbe53f01f8f?w=500&q=80",
+    "image": "https://nvnote.com/wp-content/uploads/2014/07/matlab_graph_3d.png",
     "category": "womens-innerwear",
     "brand": "Calvin Klein"
   },
@@ -3563,7 +3567,7 @@ const MASTER_PRODUCTS = [
     "price": 999,
     "originalPrice": 1298.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1617391654516-7fdb6e118804?w=500&q=80",
+    "image": "https://ph-test-11.slatic.net/p/6f9f26d22790fb7dabd17fb66997e2a4.jpg",
     "category": "womens-innerwear",
     "brand": "Calvin Klein"
   },
@@ -3573,7 +3577,7 @@ const MASTER_PRODUCTS = [
     "price": 3599,
     "originalPrice": 4678.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1582297125301-3844fbd5f257?w=500&q=80",
+    "image": "https://cdn.kibrispdr.org/data/1021/buku-penelitian-hukum-karangan-peter-mahmud-marzuki-7.jpg",
     "category": "womens-innerwear",
     "brand": "Victoria Secret"
   },
@@ -3583,7 +3587,7 @@ const MASTER_PRODUCTS = [
     "price": 1299,
     "originalPrice": 1688.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1522047879668-5431c46320a5?w=500&q=80",
+    "image": "https://bn.banglapedia.org/images/e/e5/NaogaonSadarUpazila.jpg",
     "category": "womens-innerwear",
     "brand": "Victoria Secret"
   },
@@ -3593,7 +3597,7 @@ const MASTER_PRODUCTS = [
     "price": 2999,
     "originalPrice": 3898.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1620803403335-5b43daee8278?w=500&q=80",
+    "image": "https://www.yonghong.co.th/wp-content/uploads/2019/09/dimension-tsurumi-TSM.png",
     "category": "mens-innerwear",
     "brand": "Calvin Klein"
   },
@@ -3603,7 +3607,7 @@ const MASTER_PRODUCTS = [
     "price": 1499,
     "originalPrice": 1948.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=500&q=80",
+    "image": "https://i.ytimg.com/vi/1yI87AIGXv0/maxresdefault.jpg",
     "category": "mens-innerwear",
     "brand": "Calvin Klein"
   },
@@ -3613,7 +3617,7 @@ const MASTER_PRODUCTS = [
     "price": 299,
     "originalPrice": 388.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1563630423918-b58f07336ac9?w=500&q=80",
+    "image": "https://cdn.jugantor.com/assets/news_photos/2025/09/26/social-thumbnail/sheikh-saleh-68d604b431d19.jpg",
     "category": "mens-innerwear",
     "brand": "Macho"
   },
@@ -3623,7 +3627,7 @@ const MASTER_PRODUCTS = [
     "price": 249,
     "originalPrice": 323.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1579899318854-9457884d5df6?w=500&q=80",
+    "image": "https://loremflickr.com/500/600/briefs,underwear,mens/all?lock=127",
     "category": "mens-innerwear",
     "brand": "Macho"
   },
@@ -3818,7 +3822,7 @@ function generateBrandProducts(brand, catId) {
 }
 
 function makeStars(rating) {
-  return Array.from({length:5},(_,i)=>{
+  return Array.from({ length: 5 }, (_, i) => {
     const f = i < Math.floor(rating) ? 'currentColor' : (i - .5 < rating ? 'currentColor' : 'none');
     const op = i < Math.floor(rating) ? '1' : (i - .5 < rating ? '.5' : '.2');
     return `<svg width="12" height="12" viewBox="0 0 24 24" fill="${f}" stroke="currentColor" stroke-width="1.5" opacity="${op}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
@@ -3829,14 +3833,14 @@ function makeSVG(color, shape, w = 200, h = 190) {
   const cx = w / 2, cy = h / 2, r = Math.min(cx, cy);
   let inner = '';
   switch (shape) {
-    case 'circle':  inner = `<circle cx="${cx}" cy="${cy}" r="${r*.52}" fill="${color}" opacity=".4"/>`; break;
-    case 'oval':    inner = `<ellipse cx="${cx}" cy="${cy}" rx="${r*.62}" ry="${r*.36}" fill="${color}" opacity=".4"/>`;  break;
-    case 'diamond': inner = `<polygon points="${cx},${cy*.20} ${cx*1.58},${cy} ${cx},${cy*1.80} ${cx*.42},${cy}" fill="${color}" opacity=".4"/>`;  break;
+    case 'circle': inner = `<circle cx="${cx}" cy="${cy}" r="${r * .52}" fill="${color}" opacity=".4"/>`; break;
+    case 'oval': inner = `<ellipse cx="${cx}" cy="${cy}" rx="${r * .62}" ry="${r * .36}" fill="${color}" opacity=".4"/>`; break;
+    case 'diamond': inner = `<polygon points="${cx},${cy * .20} ${cx * 1.58},${cy} ${cx},${cy * 1.80} ${cx * .42},${cy}" fill="${color}" opacity=".4"/>`; break;
     case 'hexagon': {
-      const pts = Array.from({length:6},(_,i)=>{const a=(Math.PI/3)*i-Math.PI/6;return `${cx+r*.52*Math.cos(a)},${cy+r*.52*Math.sin(a)}`;});
-      inner = `<polygon points="${pts.join(' ')}" fill="${color}" opacity=".4"/>`;  break;
+      const pts = Array.from({ length: 6 }, (_, i) => { const a = (Math.PI / 3) * i - Math.PI / 6; return `${cx + r * .52 * Math.cos(a)},${cy + r * .52 * Math.sin(a)}`; });
+      inner = `<polygon points="${pts.join(' ')}" fill="${color}" opacity=".4"/>`; break;
     }
-    default:        inner = `<rect x="${cx*.28}" y="${cy*.28}" width="${cx*1.44}" height="${cy*1.44}" rx="8" fill="${color}" opacity=".4"/>`;
+    default: inner = `<rect x="${cx * .28}" y="${cy * .28}" width="${cx * 1.44}" height="${cy * 1.44}" rx="8" fill="${color}" opacity=".4"/>`;
   }
   return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${inner}</svg>`;
 }
@@ -3849,8 +3853,8 @@ function buildCard(p) {
   const brand = p.brand || 'E-Bazaar';
   const rating = p.rating || 4.0;
   const reviews = p.reviews || 0;
-  const bCls = { new:'b-new', sale:'b-sale', hot:'b-hot' }[p.badge] || '';
-  const bLbl = { new:'New', sale:'Sale', hot:'🔥 Hot' }[p.badge] || '';
+  const bCls = { new: 'b-new', sale: 'b-sale', hot: 'b-hot' }[p.badge] || '';
+  const bLbl = { new: 'New', sale: 'Sale', hot: '🔥 Hot' }[p.badge] || '';
   const isWished = typeof window.ebWishlist !== 'undefined' && Array.isArray(window.ebWishlist) ? window.ebWishlist.some(item => item.id === p.id) : false;
   const stroke = isWished ? '#E03E3E' : '#999';
   const wishCls = isWished ? 'cat-wish-btn wished' : 'cat-wish-btn';
@@ -3861,7 +3865,7 @@ function buildCard(p) {
   const numPrice = typeof p.price === 'number' ? p.price : (parseInt(String(p.price || 0).replace(/[^\d]/g, '')) || 0);
   const numOrig = typeof p.originalPrice === 'number' ? p.originalPrice : (parseInt(String(p.originalPrice || numPrice).replace(/[^\d]/g, '')) || numPrice);
   const discText = p.discount || p.disc || '0%';
-  
+
   return `<article class="cat-card" role="listitem">
     <a href="product-detail.html?id=${p.id || 'P01'}" class="cat-img" style="display:block; text-decoration:none;">
       <img src="${imgSrc}" alt="${String(title).replace(/"/g, '&quot;')}" loading="lazy" style="width:100%; height:100%; object-fit:cover; background:#f9f9f9;">
@@ -3872,8 +3876,7 @@ function buildCard(p) {
     </button>
     <div class="cat-body">
       <div class="cat-brand">${brand}</div>
-      <a href="product-detail.html?id=${p.id || 'P01'}" class="cat-name" style="display:block;">${title}</a>
-      <p class="product-desc-snippet" style="font-size:12px; color:var(--text-muted); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; margin-top:4px; margin-bottom:8px; line-height: 1.4;">${desc}</p>
+      <a href="product-detail.html?id=${p.id || 'P01'}" class="cat-name" title="${String(title).replace(/"/g, '&quot;')}" style="display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; min-height:2.8em; margin-bottom:8px; text-decoration:none;">${title}</a>
       <div class="cat-prices"><span class="cat-price">₹${numPrice.toLocaleString('en-IN')}</span><span class="cat-orig">₹${numOrig.toLocaleString('en-IN')}</span><span class="cat-disc">${discText} off</span></div>
       <div class="cat-rating"><div class="cat-stars" aria-label="${rating} out of 5">${makeStars(rating)}</div><span class="cat-reviews">${rating} (${reviews})</span></div>
       ${salesDisplay ? `<div class="cat-transactions" style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${salesDisplay}</div>` : ''}
@@ -3883,9 +3886,9 @@ function buildCard(p) {
 }
 /* Category Page Specific Logic */
 function getBrandLogoSVG(brand) {
-    const safeBrand = brand.toLowerCase();
-    const imgSrc = BRAND_LOGOS[brand] || `images/logos/${safeBrand}.png`;
-    return `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; border-radius:12px; overflow:hidden; background-color:#ffffff;">
+  const safeBrand = brand.toLowerCase();
+  const imgSrc = BRAND_LOGOS[brand] || `images/logos/${safeBrand}.png`;
+  return `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; border-radius:12px; overflow:hidden; background-color:#ffffff;">
       <img src="${imgSrc}" 
       onerror="this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.com'; this.onerror=function(){this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.coop'; this.onerror=function(){this.onerror=null; this.src='https://ui-avatars.com/api/?name=${brand}&background=0D8ABC&color=fff&size=140&font-size=0.33'};};" 
       alt="${brand} Logo" style="width:80%; height:80%; object-fit:contain;">
@@ -3914,7 +3917,7 @@ window.getAllStoreProducts = getAllStoreProducts;
 function getAllBrands() {
   const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (MASTER_PRODUCTS || []);
   const poolBrands = pool.map(p => p.brand).filter(Boolean);
-  
+
   const catBrands = [];
   if (typeof CATEGORY_MAP !== 'undefined') {
     Object.values(CATEGORY_MAP).forEach(cat => {
@@ -4000,8 +4003,8 @@ function initDynamicCategory() {
         `;
       }
 
-      grid.innerHTML = bannerHTML + (matches.length 
-        ? matches.map(buildCard).join('') 
+      grid.innerHTML = bannerHTML + (matches.length
+        ? matches.map(buildCard).join('')
         : `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted)">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px;opacity:.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             <p style="font-size:16px;margin:0 0 8px">No products found matching "<strong>${qParam}</strong>"</p>
@@ -4016,11 +4019,15 @@ function initDynamicCategory() {
     return;
   }
 
-  let catId = urlParams.get('cat') || 'clothing';
-  
+  let rawCat = urlParams.get('cat') || urlParams.get('category') || 'clothing';
+  let catId = rawCat.toLowerCase();
+
   // Default fallback if category not mapped
-  if (!CATEGORY_MAP[catId]) catId = 'clothing';
-  
+  if (!CATEGORY_MAP[catId]) {
+    const found = Object.keys(CATEGORY_MAP).find(k => k.toLowerCase() === catId);
+    catId = found ? found : 'clothing';
+  }
+
   const categoryData = CATEGORY_MAP[catId];
 
   // Highlight active category in header
@@ -4032,10 +4039,10 @@ function initDynamicCategory() {
     }
   });
 
-  
+
   // Update Title
   document.title = `${categoryData.title} — E-Bazaar`;
-  
+
   // Update Breadcrumbs
   const parentBC = document.getElementById('bc-parent-cat');
   if (parentBC) {
@@ -4052,7 +4059,7 @@ function initDynamicCategory() {
   if (brandListEl) {
     const catBrands = Array.from(new Set(products.map(p => p.brand).filter(Boolean)));
     const displayBrands = catBrands.length > 0 ? catBrands : (categoryData ? categoryData.brands : []);
-    
+
     brandListEl.innerHTML = displayBrands.map(brand => {
       const count = products.filter(p => typeof isBrandMatch === 'function' ? isBrandMatch(p.brand, [brand]) : (p.brand === brand)).length;
       return `
@@ -4064,7 +4071,7 @@ function initDynamicCategory() {
       `;
     }).join('');
   }
-  
+
   // Generate Brand Showcase Row
   const showcaseRow = document.getElementById('brand-showcase-row');
   if (showcaseRow && categoryData && categoryData.brands) {
@@ -4115,7 +4122,7 @@ function initCategoryFilters() {
     if (minDisplay) minDisplay.textContent = `₹${min.toLocaleString('en-IN')}`;
     if (maxDisplay) maxDisplay.textContent = `₹${max.toLocaleString('en-IN')}`;
     if (fill) {
-      fill.style.left  = (min / total * 100) + '%';
+      fill.style.left = (min / total * 100) + '%';
       fill.style.width = ((max - min) / total * 100) + '%';
     }
   }
@@ -4140,13 +4147,14 @@ function initCategoryFilters() {
     if (!window.currentCategoryProducts || window.currentCategoryProducts.length === 0) {
       if (typeof generateMockProductsForCategory === 'function') {
         const urlParams = new URLSearchParams(window.location.search);
-        const catId = urlParams.get('cat') || urlParams.get('category') || 'all';
+        let rawCat = urlParams.get('cat') || urlParams.get('category') || 'all';
+        const catId = rawCat.toLowerCase();
         window.currentCategoryProducts = generateMockProductsForCategory(catId);
       }
     }
     if (!window.currentCategoryProducts) return;
     let filtered = [...window.currentCategoryProducts];
-    
+
     // Helper to safely extract price as number
     const getNumericPrice = (p) => {
       if (typeof p.price === 'number') return p.price;
@@ -4162,11 +4170,11 @@ function initCategoryFilters() {
 
     // Brand filter — only filter if user has checked 1 or more specific brands
     const checkedInputs = [...document.querySelectorAll('.brand-check input:checked')].map(cb => cb.value);
-    
+
     if (checkedInputs.length > 0) {
       filtered = filtered.filter(p => isBrandMatch(p.brand, checkedInputs));
     }
-    
+
     // Rating filter
     const ratingInput = document.querySelector('.rating-row input:checked');
     if (ratingInput) {
@@ -4180,7 +4188,7 @@ function initCategoryFilters() {
       const minDiscount = Math.min(...checkedDiscounts);
       filtered = filtered.filter(p => getNumericDiscount(p) >= minDiscount);
     }
-    
+
     // Price filter
     if (minInput && maxInput) {
       const minPrice = parseInt(minInput.value || 0);
@@ -4213,80 +4221,80 @@ function initCategoryFilters() {
 
     // Render with Pagination
     window.allFilteredProducts = filtered;
-    
+
     const itemsPerPage = 12;
     if (typeof window.currentPage === 'undefined') window.currentPage = 1;
-    
+
     const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
     if (window.currentPage > totalPages) window.currentPage = 1;
-    
+
     const startIndex = (window.currentPage - 1) * itemsPerPage;
     const endIndex = window.currentPage * itemsPerPage;
     const visibleProducts = filtered.slice(startIndex, endIndex);
-    
+
     const grid = document.getElementById('main-cat-grid');
     if (grid) {
       grid.innerHTML = visibleProducts.length ? visibleProducts.map(buildCard).join('') : '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)">No products found matching filters.</div>';
     }
-    
+
     const countEl = document.getElementById('result-count');
     if (countEl) {
       const displayStart = visibleProducts.length ? startIndex + 1 : 0;
       const displayEnd = startIndex + visibleProducts.length;
       countEl.innerHTML = `Showing <strong>${displayStart} - ${displayEnd}</strong> of <strong>${filtered.length}</strong> products`;
     }
-    
+
     renderPaginationControls(totalPages);
   }
 
   window.renderFilteredProducts = renderFilteredProducts;
 
-  window.goToPage = function(page) {
+  window.goToPage = function (page) {
     window.currentPage = page;
     renderFilteredProducts();
     // Scroll to top of grid slightly smoothly
     const grid = document.getElementById('main-cat-grid');
     if (grid) {
-       const y = grid.getBoundingClientRect().top + window.scrollY - 150;
-       window.scrollTo({ top: y, behavior: 'smooth' });
+      const y = grid.getBoundingClientRect().top + window.scrollY - 150;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
   function renderPaginationControls(totalPages) {
     const container = document.getElementById('pagination-container');
     if (!container) return;
-    
+
     if (totalPages <= 1) {
       container.innerHTML = '';
       return;
     }
 
     let html = '';
-    
+
     // Start & Prev
     html += `<button class="page-btn" ${window.currentPage === 1 ? 'disabled' : ''} onclick="goToPage(1)">Start</button>`;
     html += `<button class="page-btn" ${window.currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${window.currentPage - 1})">Prev</button>`;
-    
+
     // Page Numbers (Show window of +/- 2)
     let startPage = Math.max(1, window.currentPage - 2);
     let endPage = Math.min(totalPages, window.currentPage + 2);
-    
+
     // Adjust window if near edges
     if (endPage - startPage < 4) {
       if (startPage === 1) endPage = Math.min(totalPages, startPage + 4);
       else if (endPage === totalPages) startPage = Math.max(1, endPage - 4);
     }
-    
+
     if (startPage > 1) {
-       html += `<span style="padding: 0 4px; color: var(--text-muted)">...</span>`;
+      html += `<span style="padding: 0 4px; color: var(--text-muted)">...</span>`;
     }
-    
+
     for (let i = startPage; i <= endPage; i++) {
       html += `<button class="page-btn ${window.currentPage === i ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
     }
-    
+
     if (endPage < totalPages) {
-       html += `<span style="padding: 0 4px; color: var(--text-muted)">...</span>`;
+      html += `<span style="padding: 0 4px; color: var(--text-muted)">...</span>`;
     }
 
     // Next & End
@@ -4294,7 +4302,7 @@ function initCategoryFilters() {
     html += `<button class="page-btn" ${window.currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${totalPages})">End</button>`;
 
     container.innerHTML = html;
-    }
+  }
 
   if (minInput) { minInput.addEventListener('input', () => { if (parseInt(minInput.value) >= parseInt(maxInput.value)) minInput.value = parseInt(maxInput.value) - 500; updatePriceUI(); window.currentPage = 1; renderFilteredProducts(); }); }
   if (maxInput) { maxInput.addEventListener('input', () => { if (parseInt(maxInput.value) <= parseInt(minInput.value)) maxInput.value = parseInt(minInput.value) + 500; updatePriceUI(); window.currentPage = 1; renderFilteredProducts(); }); }
@@ -4334,7 +4342,7 @@ function initCategoryFilters() {
       window.currentPage = 1; renderFilteredProducts();
     }
   });
-  
+
   // Grid / List toggling
   const viewGridBtn = document.querySelector('.view-btn[aria-label="Grid view"]');
   const viewListBtn = document.querySelector('.view-btn[aria-label="List view"]');
@@ -4378,7 +4386,7 @@ function updateFilterTags() {
   });
 }
 
-const API_BASE = 'http://localhost:5000/api';
+//const API_BASE = 'http://localhost:5000/api';
 
 async function fetchProducts(params = {}) {
   try {
@@ -4389,7 +4397,7 @@ async function fetchProducts(params = {}) {
     return Array.isArray(data.products) ? data.products : [];
   } catch (err) {
     console.error('[E-Bazaar API] fetchProducts failed:', err);
-    
+
     const fallbackHTML = `<div style="padding: 20px; text-align: center; color: red; grid-column: 1/-1;">Backend server is offline or unreachable. Please start the Node.js server.</div>`;
     const gridIds = ['main-cat-grid', 'tr-new', 'tr-trend', 'disc-row-1', 'disc-row-2', 'disc-row-3'];
     gridIds.forEach(id => {
@@ -4399,7 +4407,7 @@ async function fetchProducts(params = {}) {
     document.querySelectorAll('.products-grid, .tr-grid').forEach(el => {
       el.innerHTML = fallbackHTML;
     });
-    
+
     return [];
   }
 }
@@ -4414,17 +4422,17 @@ function normalizeProduct(p) {
   normalized.id = p.id;
   normalized.title = p.title || p.name || '';
   normalized.name = p.title || p.name || '';
-  
+
   const rawPrice = p.price;
   const rawOrig = p.originalPrice || p.orig || p.price || 0;
-  
+
   normalized.price = typeof rawPrice === 'number' ? `₹${rawPrice.toLocaleString('en-IN')}` : rawPrice;
   normalized.orig = typeof rawOrig === 'number' ? `₹${rawOrig.toLocaleString('en-IN')}` : rawOrig;
   normalized.originalPrice = typeof rawOrig === 'number' ? rawOrig : (parseInt(String(rawOrig).replace(/[^\d]/g, '')) || 0);
-  
+
   normalized.disc = p.discount || p.disc || '0%';
   normalized.discount = p.discount || p.disc || '0%';
-  
+
   normalized.image = p.image || p.imageUrl || '';
   normalized.imageUrl = p.image || p.imageUrl || '';
   normalized.color = p.color || '#4a4a4a';
@@ -4433,7 +4441,7 @@ function normalizeProduct(p) {
   normalized.rating = p.rating || 5;
   normalized.reviews = p.reviews || 0;
   normalized.description = p.description || '';
-  
+
   return normalized;
 }
 window.normalizeProduct = normalizeProduct;
@@ -4441,7 +4449,7 @@ window.normalizeProduct = normalizeProduct;
 var ebCart = [];
 try {
   ebCart = JSON.parse(localStorage.getItem('eb_cart_items') || localStorage.getItem('cart') || '[]').map(normalizeProduct);
-} catch(e) {
+} catch (e) {
   ebCart = [];
 }
 window.ebCart = ebCart;
@@ -4488,7 +4496,7 @@ function addToCart(pStrEncoded) {
     }
     syncCartBadge();
     showToast('🛒 Added to cart!');
-  } catch(e) {
+  } catch (e) {
     console.error('Failed to add to cart', e);
   }
 }
@@ -4500,7 +4508,7 @@ function toggleWish(btnId, title, pStrEncoded) {
   if (btn) {
     btn.querySelector('svg')?.setAttribute('stroke', on ? '#E03E3E' : '#999');
   }
-  
+
   if (pStrEncoded) {
     try {
       const rawP = JSON.parse(decodeURIComponent(pStrEncoded));
@@ -4516,16 +4524,16 @@ function toggleWish(btnId, title, pStrEncoded) {
         window.ebWishlist = ebWishlist;
         window.wishlist = ebWishlist;
         if (document.body.dataset.page === 'wishlist') {
-            initWishlist();
+          initWishlist();
         }
       }
       window.ebWishlist = ebWishlist;
       window.wishlist = ebWishlist;
-    } catch(e) {
+    } catch (e) {
       console.error("Error parsing product for wishlist", e);
     }
   }
-  
+
   showToast(on ? '❤️ Added to wishlist' : 'Removed from wishlist');
   if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
 }
@@ -4592,95 +4600,95 @@ let brandCurrentPage = 1;
 const BRAND_ITEMS_PER_PAGE = 12;
 
 function initBrandStore() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const brand = urlParams.get('brand') || 'Maybelline';
-    let cat = urlParams.get('cat');
-    if (!cat) {
-        cat = getCategoryForBrand(brand);
-    }
-    
-    document.title = `${brand} Store — E-Bazaar`;
+  const urlParams = new URLSearchParams(window.location.search);
+  const brand = urlParams.get('brand') || 'Maybelline';
+  let cat = urlParams.get('cat');
+  if (!cat) {
+    cat = getCategoryForBrand(brand);
+  }
 
-    const brandHero = document.getElementById('brand-hero');
-    if (brandHero) {
-        if (cat) {
-            const safeCat = cat.toLowerCase();
-            let bgImg = `images/banners/banner_${safeCat}.png`;
-            brandHero.style.backgroundImage = `url("${bgImg}")`;
-        } else {
-            brandHero.style.backgroundImage = 'url("images/brand-banner.png")';
-        }
+  document.title = `${brand} Store — E-Bazaar`;
+
+  const brandHero = document.getElementById('brand-hero');
+  if (brandHero) {
+    if (cat) {
+      const safeCat = cat.toLowerCase();
+      let bgImg = `images/banners/banner_${safeCat}.png`;
+      brandHero.style.backgroundImage = `url("${bgImg}")`;
+    } else {
+      brandHero.style.backgroundImage = 'url("images/brand-banner.png")';
     }
-    
-    // Breadcrumbs
-    const bcParentCat = document.getElementById('bc-parent-cat');
-    const bcSep2 = document.getElementById('bc-sep-2');
-    const bcChildCat = document.getElementById('bc-child-cat');
-    
-    if (bcParentCat && bcSep2 && bcChildCat) {
-        const catName = cat.charAt(0).toUpperCase() + cat.slice(1);
-        bcParentCat.textContent = catName;
-        bcParentCat.href = `category.html?cat=${cat}`;
-        bcSep2.style.display = 'inline-block';
-        bcChildCat.style.display = 'inline-block';
-        bcChildCat.textContent = brand;
-    }
-    
-    const titleEl = document.getElementById('brand-title');
-    if (titleEl) titleEl.textContent = brand;
-    
-    const logoEl = document.getElementById('brand-logo-large');
-    if (logoEl) {
-        const safeBrand = brand.toLowerCase();
-        const imgSrc = BRAND_LOGOS[brand] || `images/logos/${safeBrand}.png`;
-        logoEl.innerHTML = `<img src="${imgSrc}" 
+  }
+
+  // Breadcrumbs
+  const bcParentCat = document.getElementById('bc-parent-cat');
+  const bcSep2 = document.getElementById('bc-sep-2');
+  const bcChildCat = document.getElementById('bc-child-cat');
+
+  if (bcParentCat && bcSep2 && bcChildCat) {
+    const catName = cat.charAt(0).toUpperCase() + cat.slice(1);
+    bcParentCat.textContent = catName;
+    bcParentCat.href = `category.html?cat=${cat}`;
+    bcSep2.style.display = 'inline-block';
+    bcChildCat.style.display = 'inline-block';
+    bcChildCat.textContent = brand;
+  }
+
+  const titleEl = document.getElementById('brand-title');
+  if (titleEl) titleEl.textContent = brand;
+
+  const logoEl = document.getElementById('brand-logo-large');
+  if (logoEl) {
+    const safeBrand = brand.toLowerCase();
+    const imgSrc = BRAND_LOGOS[brand] || `images/logos/${safeBrand}.png`;
+    logoEl.innerHTML = `<img src="${imgSrc}" 
         onerror="this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.com'; this.onerror=function(){this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.coop'; this.onerror=function(){this.onerror=null; this.src='https://ui-avatars.com/api/?name=${brand}&background=0D8ABC&color=fff&size=140&font-size=0.33'};};" 
           alt="${brand} Logo" style="width:100%; height:100%; object-fit:contain; border-radius:50%; background-color:#ffffff;">`;
-    }
-    
-    const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (MASTER_PRODUCTS || []);
-    const normalize = b => (b || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
-    
-    let brandProds = pool.filter(p => normalize(p.brand) === normalize(brand));
+  }
 
-    if (brandProds.length === 0) {
-        brandProds = pool.filter(p => normalize(p.title || p.name).includes(normalize(brand)));
-    }
-    if (brandProds.length === 0) {
-        brandProds = generateBrandProducts(brand, cat);
-    }
+  const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (MASTER_PRODUCTS || []);
+  const normalize = b => (b || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
 
-    currentBrandProducts = brandProds;
-    brandCurrentPage = 1;
-    renderBrandPage();
+  let brandProds = pool.filter(p => normalize(p.brand) === normalize(brand));
+
+  if (brandProds.length === 0) {
+    brandProds = pool.filter(p => normalize(p.title || p.name).includes(normalize(brand)));
+  }
+  if (brandProds.length === 0) {
+    brandProds = generateBrandProducts(brand, cat);
+  }
+
+  currentBrandProducts = brandProds;
+  brandCurrentPage = 1;
+  renderBrandPage();
 }
 window.initBrandStore = initBrandStore;
 
 function renderBrandPage() {
-    const grid = document.getElementById('main-cat-grid');
-    const countEl = document.getElementById('result-count');
-    
-    if (!grid) return;
-    
-    const startIndex = (brandCurrentPage - 1) * BRAND_ITEMS_PER_PAGE;
-    const endIndex = startIndex + BRAND_ITEMS_PER_PAGE;
-    const paginatedItems = currentBrandProducts.slice(startIndex, endIndex);
-    
-    grid.innerHTML = paginatedItems.map(buildCard).join('');
-    
-    if (countEl) {
-        countEl.innerHTML = `Showing <strong>${startIndex + 1} - ${Math.min(endIndex, currentBrandProducts.length)}</strong> of <strong>${currentBrandProducts.length}</strong> products`;
-    }
-    
-    renderBrandPagination();
+  const grid = document.getElementById('main-cat-grid');
+  const countEl = document.getElementById('result-count');
+
+  if (!grid) return;
+
+  const startIndex = (brandCurrentPage - 1) * BRAND_ITEMS_PER_PAGE;
+  const endIndex = startIndex + BRAND_ITEMS_PER_PAGE;
+  const paginatedItems = currentBrandProducts.slice(startIndex, endIndex);
+
+  grid.innerHTML = paginatedItems.map(buildCard).join('');
+
+  if (countEl) {
+    countEl.innerHTML = `Showing <strong>${startIndex + 1} - ${Math.min(endIndex, currentBrandProducts.length)}</strong> of <strong>${currentBrandProducts.length}</strong> products`;
+  }
+
+  renderBrandPagination();
 }
 
 function populateHomeTracks() {
   if (document.body.dataset.page === 'category') return; // Skip if on category page
-  
+
   const nr = document.getElementById('tr-new');
   if (nr) nr.innerHTML = [...MASTER_PRODUCTS].sort(() => 0.5 - Math.random()).slice(0, 36).map(buildCard).join('');
-  
+
   const tr = document.getElementById('tr-trend');
   if (tr) {
     const trendCats = ['smartphones', 'laptops', 'mens-shirts', 'womens-dresses', 'fragrances'];
@@ -4688,69 +4696,69 @@ function populateHomeTracks() {
     const otherProds = MASTER_PRODUCTS.filter(p => !trendCats.includes(p.category)).sort(() => 0.5 - Math.random());
     tr.innerHTML = [...trendProds, ...otherProds].slice(0, 36).map(buildCard).join('');
   }
-  
-  ['row1','row2','row3'].forEach((k,i) => {
-    const el = document.getElementById(`disc-row-${i+1}`);
+
+  ['row1', 'row2', 'row3'].forEach((k, i) => {
+    const el = document.getElementById(`disc-row-${i + 1}`);
     if (el) {
-        const catMap = [['smartphones', 'laptops', 'motorcycle', 'gadgets', 'appliances'], ['mens-shoes', 'womens-shoes', 'mens-shirts', 'womens-dresses', 'tops', 'mens-watches', 'womens-watches', 'bottoms', 'traditional'], ['smartphones', 'laptops', 'gadgets', 'appliances']];
-        const prods = MASTER_PRODUCTS.filter(p => catMap[i].includes(p.category)).sort(() => 0.5 - Math.random());
-        const fb = MASTER_PRODUCTS.sort(() => 0.5 - Math.random());
-        el.innerHTML = (prods.length > 0 ? prods : fb).slice(0, 36).map(buildCard).join('');
+      const catMap = [['smartphones', 'laptops', 'motorcycle', 'gadgets', 'appliances'], ['mens-shoes', 'womens-shoes', 'mens-shirts', 'womens-dresses', 'tops', 'mens-watches', 'womens-watches', 'bottoms', 'traditional'], ['smartphones', 'laptops', 'gadgets', 'appliances']];
+      const prods = MASTER_PRODUCTS.filter(p => catMap[i].includes(p.category)).sort(() => 0.5 - Math.random());
+      const fb = MASTER_PRODUCTS.sort(() => 0.5 - Math.random());
+      el.innerHTML = (prods.length > 0 ? prods : fb).slice(0, 36).map(buildCard).join('');
     }
   });
 }
 
 function renderBrandPagination() {
-    const container = document.getElementById('brand-pagination');
-    if (!container) return;
-    
-    const totalPages = Math.ceil(currentBrandProducts.length / BRAND_ITEMS_PER_PAGE);
-    if (totalPages <= 1) {
-        container.innerHTML = '';
-        return;
+  const container = document.getElementById('brand-pagination');
+  if (!container) return;
+
+  const totalPages = Math.ceil(currentBrandProducts.length / BRAND_ITEMS_PER_PAGE);
+  if (totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+
+  let html = '';
+
+  // Start button
+  html += `<button class="page-btn" onclick="changeBrandPage(1)" ${brandCurrentPage === 1 ? 'disabled' : ''}>Start</button>`;
+
+  // Prev button
+  html += `<button class="page-btn" onclick="changeBrandPage(${brandCurrentPage - 1})" ${brandCurrentPage === 1 ? 'disabled' : ''}>Prev</button>`;
+
+  // Page numbers
+  for (let i = 1; i <= totalPages; i++) {
+    if (totalPages > 5) {
+      if (i === 1 || i === totalPages || (i >= brandCurrentPage - 1 && i <= brandCurrentPage + 1)) {
+        html += `<button class="page-btn ${i === brandCurrentPage ? 'active' : ''}" onclick="changeBrandPage(${i})">${i}</button>`;
+      } else if (i === brandCurrentPage - 2 || i === brandCurrentPage + 2) {
+        html += `<span class="page-dots">...</span>`;
+      }
+    } else {
+      html += `<button class="page-btn ${i === brandCurrentPage ? 'active' : ''}" onclick="changeBrandPage(${i})">${i}</button>`;
     }
-    
-    let html = '';
-    
-    // Start button
-    html += `<button class="page-btn" onclick="changeBrandPage(1)" ${brandCurrentPage === 1 ? 'disabled' : ''}>Start</button>`;
-    
-    // Prev button
-    html += `<button class="page-btn" onclick="changeBrandPage(${brandCurrentPage - 1})" ${brandCurrentPage === 1 ? 'disabled' : ''}>Prev</button>`;
-    
-    // Page numbers
-    for (let i = 1; i <= totalPages; i++) {
-        if (totalPages > 5) {
-            if (i === 1 || i === totalPages || (i >= brandCurrentPage - 1 && i <= brandCurrentPage + 1)) {
-                html += `<button class="page-btn ${i === brandCurrentPage ? 'active' : ''}" onclick="changeBrandPage(${i})">${i}</button>`;
-            } else if (i === brandCurrentPage - 2 || i === brandCurrentPage + 2) {
-                html += `<span class="page-dots">...</span>`;
-            }
-        } else {
-            html += `<button class="page-btn ${i === brandCurrentPage ? 'active' : ''}" onclick="changeBrandPage(${i})">${i}</button>`;
-        }
-    }
-    
-    // Next button
-    html += `<button class="page-btn" onclick="changeBrandPage(${brandCurrentPage + 1})" ${brandCurrentPage === totalPages ? 'disabled' : ''}>Next</button>`;
-    
-    // End button
-    html += `<button class="page-btn" onclick="changeBrandPage(${totalPages})" ${brandCurrentPage === totalPages ? 'disabled' : ''}>End</button>`;
-    
-    container.innerHTML = html;
+  }
+
+  // Next button
+  html += `<button class="page-btn" onclick="changeBrandPage(${brandCurrentPage + 1})" ${brandCurrentPage === totalPages ? 'disabled' : ''}>Next</button>`;
+
+  // End button
+  html += `<button class="page-btn" onclick="changeBrandPage(${totalPages})" ${brandCurrentPage === totalPages ? 'disabled' : ''}>End</button>`;
+
+  container.innerHTML = html;
 }
 
-window.changeBrandPage = function(page) {
-    const totalPages = Math.ceil(currentBrandProducts.length / BRAND_ITEMS_PER_PAGE);
-    if (page < 1 || page > totalPages) return;
-    
-    brandCurrentPage = page;
-    renderBrandPage();
-    
-    const hero = document.getElementById('brand-hero');
-    if (hero) {
-        hero.scrollIntoView({ behavior: 'smooth' });
-    }
+window.changeBrandPage = function (page) {
+  const totalPages = Math.ceil(currentBrandProducts.length / BRAND_ITEMS_PER_PAGE);
+  if (page < 1 || page > totalPages) return;
+
+  brandCurrentPage = page;
+  renderBrandPage();
+
+  const hero = document.getElementById('brand-hero');
+  if (hero) {
+    hero.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
 // Generate simple mock products for home page tracks if on index
@@ -4785,7 +4793,7 @@ function initHeaderShadow() {
 
 function initNavActions() {
   document.getElementById('cart-btn')?.addEventListener('click', () => window.location.href = 'cart.html');
-  
+
   const accBtn = document.getElementById('acc-btn');
   if (accBtn) {
     accBtn.addEventListener('click', (e) => {
@@ -4794,7 +4802,7 @@ function initNavActions() {
       if (isLoggedIn) {
         e.preventDefault();
         e.stopPropagation();
-        
+
         let dropdown = document.getElementById('user-dropdown-menu');
         if (!dropdown) {
           dropdown = document.createElement('div');
@@ -4814,7 +4822,7 @@ function initNavActions() {
             z-index: 1000;
             font-family: 'Inter', sans-serif;
           `;
-          
+
           const style = document.createElement('style');
           style.textContent = `
             #user-dropdown-menu.active {
@@ -4849,11 +4857,11 @@ function initNavActions() {
             }
           `;
           document.head.appendChild(style);
-          
+
           const headerInner = document.querySelector('.nav-top') || document.body;
           headerInner.appendChild(dropdown);
         }
-        
+
         const user = JSON.parse(localStorage.getItem('eb_user') || '{}');
         const userName = (user.name || 'User').toUpperCase();
         dropdown.innerHTML = `
@@ -4873,7 +4881,7 @@ function initNavActions() {
             Logout
           </a>
         `;
-        
+
         dropdown.classList.toggle('active');
 
         // Bind profile click
@@ -5081,64 +5089,68 @@ function initSearch() {
 /* ═══════════════════════════════════════════════════════════════════════
    PRODUCT DETAIL
    ═══════════════════════════════════════════════════════════════════════ */
-
 function initProductDetail() {
   const urlParams = new URLSearchParams(window.location.search);
-  const productId = urlParams.get('id') || 'P01';
-  
-  const p = generateMockProductsForCategory('clothing')[0];
-  p.name = "Premium " + p.name;
-  
-  document.title = `${p.name} — E-Bazaar`;
-  
+  const productId = urlParams.get('id'); // e.g., 'api_350'
+
+  // Use global variable directly which holds the merged data
+  const pool = (window.allProducts && window.allProducts.length > 0) ? window.allProducts : (window.MASTER_PRODUCTS || []);
+
+  // DEBUG: Check if we have enough products
+  console.log("Looking for ID:", productId, "| Pool Size:", pool.length);
+
+  // Agar pool chota hai (yani API load nahi hua), toh 500ms wait karke retry karo
+  if (pool.length < 500) {
+    console.warn("Waiting for API data to merge...");
+    setTimeout(initProductDetail, 500);
+    return;
+  }
+
+  // Flexible ID Matching: Remove 'api_' prefix from both sides
+  const cleanId = String(productId).replace('api_', '');
+  const p = pool.find(item => String(item.id).replace('api_', '') === cleanId);
+
+  if (!p) {
+    console.error("Product NOT FOUND! ID:", productId);
+    document.getElementById('product-container').innerHTML = `<div style="text-align:center; padding: 50px;">Product not found! Check console.</div>`;
+    return;
+  }
+
+  // Layout Logic...
+  document.title = `${p.title || p.name} — E-Bazaar`;
   const container = document.getElementById('product-container');
   if (!container) return;
-  
+
+  const imgSrc = p.image || p.imageUrl || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
+  const pStr = encodeURIComponent(JSON.stringify(p)).replace(/'/g, "%27");
+  const isWished = typeof window.ebWishlist !== 'undefined' && Array.isArray(window.ebWishlist) ? window.ebWishlist.some(item => item.id === p.id) : false;
+
+  container.style.cssText = "display: flex; gap: 40px; padding: 40px; max-width: 1200px; margin: 0 auto; flex-wrap: wrap;";
+
   container.innerHTML = `
-    <div class="product-gallery">
-      <div class="product-image-main">
-        ${makeSVG(p.color, p.shape)}
-      </div>
-      <div class="product-thumbnails">
-        <div class="thumb-img active">${makeSVG(p.color, p.shape)}</div>
-        <div class="thumb-img">${makeSVG('#E0E0E0', p.shape)}</div>
-        <div class="thumb-img">${makeSVG('#D0D0D0', p.shape)}</div>
-      </div>
+    <div class="product-gallery" style="flex: 1; min-width: 350px; background: #fff; padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
+      <img src="${imgSrc}" alt="${p.title}" style="width: 100%; height: auto; object-fit: contain;" onerror="this.src='https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80'">
     </div>
-    <div class="product-info">
-      <div class="pd-brand">${p.brand}</div>
-      <h1 class="pd-title">${p.name}</h1>
-      <div class="pd-rating">
-        <div class="cat-stars">${makeStars(p.rating)}</div>
-        <a href="#reviews" class="pd-reviews">${p.reviews} Reviews</a>
+    <div class="product-info" style="flex: 1; min-width: 350px;">
+      <div style="font-size: 14px; font-weight: 700; color: var(--accent-caramel); text-transform: uppercase; margin-bottom: 8px;">${p.brand || 'E-Bazaar'}</div>
+      <h1 style="font-size: 32px; font-weight: 800; margin: 0 0 16px 0;">${p.title || p.name}</h1>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+        <div style="color: #F59E0B; display: flex;">${makeStars(p.rating || 4.5)}</div>
+        <span style="font-size: 14px; color: var(--text-muted);">${p.reviews || 0} Reviews</span>
       </div>
-      <div class="pd-price-row">
-        <span class="pd-price">${p.price}</span>
-        <span class="pd-orig">${p.orig}</span>
-        <span class="pd-disc">${p.disc} off</span>
+      <div style="margin-bottom: 24px;">
+        <span style="font-size: 32px; font-weight: 800;">₹${(typeof p.price === 'number' ? p.price.toLocaleString('en-IN') : p.price)}</span>
       </div>
-      
-      <div class="pd-section-title">Select Size</div>
-      <div class="size-selector">
-        <button class="size-btn">S</button>
-        <button class="size-btn active">M</button>
-        <button class="size-btn">L</button>
-        <button class="size-btn">XL</button>
+      <div style="margin-bottom: 30px;">
+        <h3 style="font-size: 16px; margin-bottom: 10px;">Description</h3>
+        <p style="color: var(--text-muted); line-height: 1.6; font-size: 15px;">${p.description || 'Premium quality product details coming soon.'}</p>
       </div>
-      
-      <div class="pd-actions">
-        <button class="btn-add-cart" onclick="addToCart('${encodeURIComponent(JSON.stringify(p)).replace(/'/g, "%27")}')">Add to Cart</button>
-        <button class="btn-wishlist ${ebWishlist.some(item => item.id === p.id) ? 'wished' : ''}" onclick="toggleWish('w_pd_${p.id}', '${p.name.replace(/'/g, "\\'")}', '${encodeURIComponent(JSON.stringify(p)).replace(/'/g, "%27")}')" id="w_pd_${p.id}">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${ebWishlist.some(item => item.id === p.id) ? '#E03E3E' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <div style="display: flex; gap: 16px;">
+        <button onclick="addToCart('${pStr}')" style="flex: 2; padding: 18px; border-radius: 12px; background: #000; color: #fff; border: none; font-weight: 700; cursor: pointer; font-size: 16px;">Add to Cart</button>
+        <button onclick="toggleWish('pd-wish', '${String(p.title).replace(/'/g, "\\'")}', '${pStr}')" id="pd-wish" style="flex: 1; padding: 18px; border-radius: 12px; border: 1px solid var(--border); background: #fff; font-weight: 700; cursor: pointer;">
+          ${isWished ? '❤️ Wishlisted' : '🤍 Wishlist'}
         </button>
       </div>
-      
-      <ul class="pd-details-list">
-        <li><span>Material</span><span>100% Premium Cotton</span></li>
-        <li><span>Fit</span><span>Regular Fit</span></li>
-        <li><span>Care</span><span>Machine Wash Cold</span></li>
-        <li><span>SKU</span><span>${productId}</span></li>
-      </ul>
     </div>
   `;
 }
@@ -5154,18 +5166,18 @@ document.addEventListener('DOMContentLoaded', () => {
   HeroSlider.init();
   initHamburger();
   initMegaMenu();
-    // Brand Directory Active State & Initialization
-    if (window.location.pathname.includes('brand-directory.html')) {
-      const brandLink = document.getElementById('link-brand-store');
-      if (brandLink) {
-        brandLink.classList.add('active');
-        brandLink.style.borderBottom = '2px solid #A88C6D';
-        brandLink.style.paddingBottom = '4px';
-      }
-      if (typeof initBrandDirectory === 'function') {
-        initBrandDirectory();
-      }
+  // Brand Directory Active State & Initialization
+  if (window.location.pathname.includes('brand-directory.html')) {
+    const brandLink = document.getElementById('link-brand-store');
+    if (brandLink) {
+      brandLink.classList.add('active');
+      brandLink.style.borderBottom = '2px solid #A88C6D';
+      brandLink.style.paddingBottom = '4px';
     }
+    if (typeof initBrandDirectory === 'function') {
+      initBrandDirectory();
+    }
+  }
   AddressModal.init();
   initTrackArrows();
   initNavActions();
@@ -5198,9 +5210,9 @@ function initWishlist() {
   const countEl = document.getElementById('wishlist-count');
   const emptyState = document.getElementById('wishlist-empty');
   const actions = document.getElementById('wishlist-actions');
-  
+
   if (!grid || !emptyState) return;
-  
+
   if (ebWishlist.length === 0) {
     grid.style.display = 'none';
     if (actions) actions.style.display = 'none';
@@ -5215,7 +5227,7 @@ function initWishlist() {
   }
 }
 
-window.clearWishlist = function() {
+window.clearWishlist = function () {
   ebWishlist = [];
   localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
   window.ebWishlist = ebWishlist;
@@ -5225,10 +5237,10 @@ window.clearWishlist = function() {
   showToast('Wishlist cleared');
 };
 
-window.addAllToCart = function() {
+window.addAllToCart = function () {
   if (ebWishlist.length === 0) return;
   const count = ebWishlist.length;
-  
+
   // Push all wishlist items to ebCart
   ebWishlist.forEach(item => {
     const existing = ebCart.find(c => c.id === item.id);
@@ -5240,14 +5252,14 @@ window.addAllToCart = function() {
       ebCart.push(item);
     }
   });
-  
+
   syncCartBadge();
-  
+
   ebWishlist = [];
   localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
   window.ebWishlist = ebWishlist;
   window.wishlist = ebWishlist;
-  
+
   if (document.body.dataset.page === 'wishlist') {
     initWishlist();
   }
@@ -5292,11 +5304,11 @@ function initOrders() {
           status = 'pending';
         }
       }
-      
+
       if (typeof showToast === 'function') {
         showToast('Generating invoice... Please wait.');
       }
-      
+
       setTimeout(() => {
         window.open('invoice.html?status=' + status + '&print=true', '_blank');
       }, 600);
@@ -5346,19 +5358,19 @@ function initOrders() {
 }
 
 // Global Toast System
-window.showToast = function(msg) {
+window.showToast = function (msg) {
   let container = document.getElementById('toast-container');
   if (!container) {
     container = document.createElement('div');
     container.id = 'toast-container';
     document.body.appendChild(container);
   }
-  
+
   const toast = document.createElement('div');
   toast.className = 'eb-toast';
   toast.innerText = msg;
   container.appendChild(toast);
-  
+
   setTimeout(() => {
     toast.classList.add('fade-out');
     toast.addEventListener('animationend', () => {
@@ -5370,7 +5382,7 @@ window.showToast = function(msg) {
 /* ═══════════════════════════════════════════════════════════════════════
    BRAND DIRECTORY
    ═══════════════════════════════════════════════════════════════════════ */
-window.initBrandDirectory = function() {
+window.initBrandDirectory = function () {
   const sidebar = document.getElementById('dir-sidebar');
   const contentRoot = document.getElementById('dir-content-root');
   if (!sidebar || !contentRoot) return;
@@ -5387,7 +5399,7 @@ window.initBrandDirectory = function() {
   };
 
   const categories = {};
-  
+
   // Parse BRAND_LOGOS
   for (const [brandName, path] of Object.entries(BRAND_LOGOS)) {
     const match = path.match(/images\/logos\/([^\/]+)\//);
@@ -5409,7 +5421,7 @@ window.initBrandDirectory = function() {
 
   for (const cat of Object.values(categories)) {
     sidebarHTML += `<a href="#${cat.slug}">${cat.title}</a>`;
-    
+
     let gridHTML = '';
     for (const brand of cat.brands) {
       gridHTML += `<a href="brand-store.html?brand=${brand.name}" class="brand-card">
@@ -5442,8 +5454,8 @@ window.initBrandDirectory = function() {
       const elementPosition = targetElement.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
       window.scrollTo({
-           top: offsetPosition,
-           behavior: isSmooth ? "smooth" : "auto"
+        top: offsetPosition,
+        behavior: isSmooth ? "smooth" : "auto"
       });
     }
   };
@@ -5453,14 +5465,14 @@ window.initBrandDirectory = function() {
       e.preventDefault();
       const href = link.getAttribute('href');
       const targetId = href.substring(1);
-      
+
       // Update URL without native jump
       if (history.pushState) {
-          history.pushState(null, null, href);
+        history.pushState(null, null, href);
       } else {
-          window.location.hash = href;
+        window.location.hash = href;
       }
-      
+
       scrollToTarget(targetId, true);
     });
   });
@@ -5480,7 +5492,7 @@ window.initBrandDirectory = function() {
         current = sec.getAttribute('id');
       }
     });
-    
+
     links.forEach(link => {
       link.classList.remove('active');
       if (link.getAttribute('href') === `#${current}`) {
