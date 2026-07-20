@@ -290,6 +290,7 @@ html[data-theme="dark"] .toggle-thumb{transform:translateX(18px)}
 }
 .mega-item>a:hover,
 .mega-item.active>a,
+.mega-item>a.active,
 .all-cats-btn:hover,
 .all-cats-item.active .all-cats-btn{
   color:var(--accent);

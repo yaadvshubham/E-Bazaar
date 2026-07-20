@@ -429,18 +429,23 @@
 
 <script>
   // Countdown Timer Logic
-  let time = 4 * 3600 + 23 * 60 + 12; // 4h 23m 12s
-  setInterval(() => {
-    time--;
-    if(time < 0) time = 24 * 3600; // loop back
-    const h = Math.floor(time / 3600);
-    const m = Math.floor((time % 3600) / 60);
-    const s = time % 60;
+  function updateTimer() {
+    const now = new Date();
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0);
+    const diff = Math.floor((midnight - now) / 1000);
+    
+    const h = Math.floor(diff / 3600);
+    const m = Math.floor((diff % 3600) / 60);
+    const s = diff % 60;
     
     document.getElementById('t-hrs').textContent = h.toString().padStart(2, '0');
     document.getElementById('t-min').textContent = m.toString().padStart(2, '0');
     document.getElementById('t-sec').textContent = s.toString().padStart(2, '0');
-  }, 1000);
+  }
+  
+  updateTimer();
+  setInterval(updateTimer, 1000);
 
   // Render Deals
   function renderDeals() {
