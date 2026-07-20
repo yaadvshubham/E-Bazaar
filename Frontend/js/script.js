@@ -3631,14 +3631,44 @@ const MASTER_PRODUCTS = [
 ];
 
 function generateMockProductsForCategory(catId) {
-  if (catId === 'all' || catId === 'trending' || catId === 'new-arrivals') return MASTER_PRODUCTS.slice(0, 36);
-  const filtered = MASTER_PRODUCTS.filter(p => p.category === catId);
-  return filtered.length > 0 ? filtered : MASTER_PRODUCTS.slice(0, 36);
+  const pool = (window.allProducts && window.allProducts.length > 0)
+    ? window.allProducts
+    : (window.MASTER_PRODUCTS || []);
+
+  if (!catId || catId === 'all' || catId === 'trending' || catId === 'new-arrivals') {
+    return pool;
+  }
+
+  const targetCat = String(catId).toLowerCase().trim();
+
+  const catAliases = {
+    'fashion': ['fashion', 'clothing', 'mens-shirts', 'womens-dresses', 'tops', 'bottoms', 'traditional', 'mens-innerwear', 'womens-innerwear', 'office-wear'],
+    'clothing': ['clothing', 'fashion', 'mens-shirts', 'womens-dresses', 'tops', 'bottoms', 'traditional', 'mens-innerwear', 'womens-innerwear', 'office-wear'],
+    'shoes': ['shoes', 'mens-shoes', 'womens-shoes'],
+    'electronics': ['electronics', 'smartphones', 'laptops', 'gadgets', 'appliances', 'mobile-accessories'],
+    'gadgets': ['gadgets', 'electronics', 'smartphones', 'laptops'],
+    'beauty': ['beauty', 'skincare', 'fragrances'],
+    'skincare': ['skincare', 'beauty'],
+    'groceries': ['groceries', 'fmcg'],
+    'home-kitchen': ['home-kitchen', 'kitchen', 'kitchen-accessories', 'appliances'],
+    'kitchen': ['home-kitchen', 'kitchen', 'kitchen-accessories'],
+    'sports': ['sports', 'fitness']
+  };
+
+  const allowedCats = catAliases[targetCat] || [targetCat];
+
+  const filtered = pool.filter(p => {
+    const pCat = (p.category || '').toLowerCase().trim();
+    return allowedCats.includes(pCat);
+  });
+
+  return filtered.length > 0 ? filtered : pool;
 }
 
 function generateBrandProducts(brand, catId) {
-  const filtered = MASTER_PRODUCTS.filter(p => p.brand === brand);
-  return filtered.length > 0 ? filtered : MASTER_PRODUCTS.slice(0, 48);
+  const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.allProducts || window.MASTER_PRODUCTS || []);
+  const filtered = pool.filter(p => (p.brand || '').toLowerCase() === String(brand).toLowerCase());
+  return filtered.length > 0 ? filtered : pool.slice(0, 48);
 }
 
 function makeStars(rating) {
@@ -3717,24 +3747,21 @@ function getBrandLogoSVG(brand) {
 }
 
 function getAllStoreProducts() {
-  const allCats = ['clothing', 'electronics', 'gadgets', 'shoes', 'beauty', 'sports', 'groceries', 'home-kitchen', 'trending', 'new-arrivals', 'deals', 'mens-innerwear', 'bottoms', 'tops', 'womens-dresses'];
-  const generated = [];
-  allCats.forEach(cat => {
-    if (typeof generateMockProductsForCategory === 'function') {
-      try {
-        const prods = generateMockProductsForCategory(cat);
-        if (Array.isArray(prods)) generated.push(...prods);
-      } catch(e) {}
+  const pool = [
+    ...(window.allProducts || []),
+    ...(window.MASTER_PRODUCTS || [])
+  ];
+
+  const map = new Map();
+  pool.forEach(item => {
+    if (!item) return;
+    const key = (item.id || item.title || item.name || '').toString().toLowerCase();
+    if (key && !map.has(key)) {
+      map.set(key, item);
     }
   });
 
-  const pool = [
-    ...(window.MASTER_PRODUCTS || []),
-    ...(window.allProducts || []),
-    ...generated
-  ];
-
-  return Array.from(new Map(pool.map(item => [(item.id || item.title || item.name).toLowerCase(), item])).values());
+  return Array.from(map.values());
 }
 window.getAllStoreProducts = getAllStoreProducts;
 
@@ -3870,21 +3897,31 @@ function initDynamicCategory() {
     parentBC.href = `category.html?cat=${catId}`;
   }
 
-  // Generate Filter Brands Dynamically
+  // Generate Products
+  window.currentCategoryProducts = generateMockProductsForCategory(catId);
+  const products = window.currentCategoryProducts;
+
+  // Generate Filter Brands Dynamically from actual category products
   const brandListEl = document.getElementById('filter-brand-list');
   if (brandListEl) {
-    brandListEl.innerHTML = categoryData.brands.map(brand => `
-      <label class="brand-check">
-        <input type="checkbox" value="${brand}" checked/>
-        <span class="brand-check-name">${brand}</span>
-        <span class="brand-check-count">(${Math.floor(Math.random() * 200) + 20})</span>
-      </label>
-    `).join('');
+    const catBrands = Array.from(new Set(products.map(p => p.brand).filter(Boolean)));
+    const displayBrands = catBrands.length > 0 ? catBrands : (categoryData ? categoryData.brands : []);
+    
+    brandListEl.innerHTML = displayBrands.map(brand => {
+      const count = products.filter(p => p.brand === brand).length;
+      return `
+        <label class="brand-check">
+          <input type="checkbox" value="${brand}" checked/>
+          <span class="brand-check-name">${brand}</span>
+          <span class="brand-check-count">(${count > 0 ? count : Math.floor(Math.random() * 20) + 5})</span>
+        </label>
+      `;
+    }).join('');
   }
   
   // Generate Brand Showcase Row
   const showcaseRow = document.getElementById('brand-showcase-row');
-  if (showcaseRow) {
+  if (showcaseRow && categoryData && categoryData.brands) {
     showcaseRow.innerHTML = categoryData.brands.slice(0, 8).map(brand => `
       <a href="brand-store.html?brand=${brand}&cat=${catId}" class="brand-showcase-card" title="Shop ${brand}">
         ${getBrandLogoSVG(brand)}
@@ -3892,18 +3929,15 @@ function initDynamicCategory() {
     `).join('');
   }
 
-  // Generate Products
   const grid = document.getElementById('main-cat-grid');
   if (grid) {
-    window.currentCategoryProducts = generateMockProductsForCategory(catId);
-    const products = window.currentCategoryProducts;
     grid.innerHTML = products.map(buildCard).join('');
   }
 
   // Update Result Count
   const countEl = document.getElementById('result-count');
   if (countEl) {
-    countEl.innerHTML = `Showing <strong>${categoryData.brands.length * 34} products</strong>`;
+    countEl.innerHTML = `Showing <strong>${products.length} products</strong>`;
   }
 }
 

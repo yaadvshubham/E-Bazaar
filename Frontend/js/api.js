@@ -168,41 +168,19 @@ async function initApiEngine() {
   if (apiProducts.length > 0) {
     mergeApiProducts(apiProducts);
 
-    // Filter and update category page grid if on category page
-    const urlParams = new URLSearchParams(window.location.search);
-    const catParam = urlParams.get('cat') || urlParams.get('category');
-    const brandParam = urlParams.get('brand');
-    const qParam = urlParams.get('q');
+    // Re-initialize home page tracks if on index.html
+    if (typeof populateHomeTracks === 'function' && document.body.dataset.page !== 'category') {
+      populateHomeTracks();
+    }
 
-    if (catParam || brandParam || qParam) {
-      const normalized = apiProducts.map(normaliseApiProduct);
-      let matches = normalized;
-
-      if (catParam) {
-        const targetCat = catParam.trim().toLowerCase();
-        if (targetCat !== 'all') {
-          matches = matches.filter(p => (p.category || '').toLowerCase() === targetCat);
-        }
+    // If on category page or brand store page, trigger refresh
+    if (document.body.dataset.page === 'category' || window.location.pathname.includes('category.html')) {
+      if (typeof initDynamicCategory === 'function') {
+        initDynamicCategory();
       }
-      if (brandParam) {
-        const targetBrand = brandParam.trim().toLowerCase();
-        matches = matches.filter(p => (p.brand || '').toLowerCase() === targetBrand);
-      }
-      if (qParam) {
-        const qLower = qParam.trim().toLowerCase();
-        matches = matches.filter(p =>
-          (p.title || '').toLowerCase().includes(qLower) ||
-          (p.brand || '').toLowerCase().includes(qLower) ||
-          (p.category || '').toLowerCase().includes(qLower)
-        );
-      }
-
-      if (typeof window.renderFilteredProducts === 'function' && window.currentCategoryProducts) {
-        const existingIds = new Set((window.currentCategoryProducts || []).map(p => p.id));
-        const newMatches = matches.filter(p => !existingIds.has(p.id));
-        window.currentCategoryProducts = [...newMatches, ...(window.currentCategoryProducts || [])];
-        window.currentPage = 1;
-        window.renderFilteredProducts();
+    } else if (document.body.dataset.page === 'brand-store' || window.location.pathname.includes('brand-store.html')) {
+      if (typeof initBrandStore === 'function') {
+        initBrandStore();
       }
     }
 
