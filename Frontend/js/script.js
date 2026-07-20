@@ -3626,6 +3626,28 @@ function getBrandLogoSVG(brand) {
     </div>`;
 }
 
+function getAllStoreProducts() {
+  const allCats = ['clothing', 'electronics', 'gadgets', 'shoes', 'beauty', 'sports', 'groceries', 'home-kitchen', 'trending', 'new-arrivals', 'deals', 'mens-innerwear', 'bottoms', 'tops', 'womens-dresses'];
+  const generated = [];
+  allCats.forEach(cat => {
+    if (typeof generateMockProductsForCategory === 'function') {
+      try {
+        const prods = generateMockProductsForCategory(cat);
+        if (Array.isArray(prods)) generated.push(...prods);
+      } catch(e) {}
+    }
+  });
+
+  const pool = [
+    ...(window.MASTER_PRODUCTS || []),
+    ...(window.allProducts || []),
+    ...generated
+  ];
+
+  return Array.from(new Map(pool.map(item => [(item.id || item.title || item.name).toLowerCase(), item])).values());
+}
+window.getAllStoreProducts = getAllStoreProducts;
+
 function initDynamicCategory() {
   const urlParams = new URLSearchParams(window.location.search);
   const qParam = urlParams.get('q');
@@ -3633,12 +3655,19 @@ function initDynamicCategory() {
   if (qParam) {
     const qLower = qParam.trim().toLowerCase();
     const searchWords = qLower.split(/\s+/).filter(Boolean);
-    const allPool = (window.MASTER_PRODUCTS || []).concat(window.allProducts || []);
-    const uniquePool = Array.from(new Map(allPool.map(item => [item.id || item.title, item])).values());
-    const matches = uniquePool.filter(p => {
+    const pool = getAllStoreProducts();
+
+    let matches = pool.filter(p => {
       const haystack = `${p.title || p.name || ''} ${p.brand || ''} ${p.category || ''} ${p.description || p.desc || ''}`.toLowerCase();
       return searchWords.every(w => haystack.includes(w));
     });
+
+    if (matches.length === 0) {
+      matches = pool.filter(p => {
+        const haystack = `${p.title || p.name || ''} ${p.brand || ''} ${p.category || ''}`.toLowerCase();
+        return searchWords.some(w => haystack.includes(w));
+      });
+    }
 
     document.title = `Search Results for "${qParam}" — E-Bazaar`;
     const parentBC = document.getElementById('bc-parent-cat');
@@ -3658,9 +3687,10 @@ function initDynamicCategory() {
       `).join('');
     }
 
+    window.currentCategoryProducts = matches;
+
     const grid = document.getElementById('main-cat-grid');
     if (grid) {
-      window.currentCategoryProducts = matches;
       grid.innerHTML = matches.length 
         ? matches.map(buildCard).join('') 
         : `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted)">
@@ -3813,7 +3843,10 @@ function initCategoryFilters() {
     // Price filter
     if (minInput && maxInput) {
       const minPrice = parseInt(minInput.value || 0);
-      const maxPrice = parseInt(maxInput.value || 1000000);
+      let maxPrice = parseInt(maxInput.value || 1000000);
+      if (maxPrice <= minPrice || maxPrice <= 100) {
+        maxPrice = 1000000;
+      }
       filtered = filtered.filter(p => {
         const priceNum = getNumericPrice(p);
         return priceNum >= minPrice && priceNum <= maxPrice;

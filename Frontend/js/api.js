@@ -249,14 +249,21 @@ async function initApiEngine() {
       const qParam = urlParams.get('q');
       const catId = urlParams.get('cat') || 'clothing';
 
-      if (qParam && window.allProducts) {
-        const qLower = qParam.trim().toLowerCase();
-        const searchMatches = window.allProducts.filter(p =>
-          (p.title || p.name || '').toLowerCase().includes(qLower) ||
-          (p.brand || '').toLowerCase().includes(qLower) ||
-          (p.category || '').toLowerCase().includes(qLower) ||
-          (p.description || '').toLowerCase().includes(qLower)
-        );
+      if (qParam) {
+        const pool = typeof window.getAllStoreProducts === 'function' ? window.getAllStoreProducts() : [...(window.MASTER_PRODUCTS || []), ...(window.allProducts || [])];
+        const searchWords = qParam.trim().toLowerCase().split(/\s+/).filter(Boolean);
+        let searchMatches = pool.filter(p => {
+          const haystack = `${p.title || p.name || ''} ${p.brand || ''} ${p.category || ''} ${p.description || p.desc || ''}`.toLowerCase();
+          return searchWords.every(w => haystack.includes(w));
+        });
+
+        if (searchMatches.length === 0) {
+          searchMatches = pool.filter(p => {
+            const haystack = `${p.title || p.name || ''} ${p.brand || ''} ${p.category || ''}`.toLowerCase();
+            return searchWords.some(w => haystack.includes(w));
+          });
+        }
+
         window.currentCategoryProducts = searchMatches;
         window.currentPage = 1;
         if (typeof renderFilteredProducts === 'function') renderFilteredProducts();
