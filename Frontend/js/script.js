@@ -3939,6 +3939,10 @@ function initDynamicCategory() {
   if (countEl) {
     countEl.innerHTML = `Showing <strong>${products.length} products</strong>`;
   }
+
+  if (typeof renderFilteredProducts === 'function') {
+    renderFilteredProducts();
+  }
 }
 
 function initCategoryFilters() {
@@ -3970,7 +3974,18 @@ function initCategoryFilters() {
     }
   }
 
+  function normStr(s) {
+    return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  }
+
   function renderFilteredProducts() {
+    if (!window.currentCategoryProducts || window.currentCategoryProducts.length === 0) {
+      if (typeof generateMockProductsForCategory === 'function') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const catId = urlParams.get('cat') || urlParams.get('category') || 'all';
+        window.currentCategoryProducts = generateMockProductsForCategory(catId);
+      }
+    }
     if (!window.currentCategoryProducts) return;
     let filtered = [...window.currentCategoryProducts];
     
@@ -3987,13 +4002,13 @@ function initCategoryFilters() {
       return parseInt(String(discStr).replace(/[^\d]/g, '')) || 0;
     };
 
-    // Brand filter — only filter if checked brands overlap with current category pool
-    const checkedBrands = [...document.querySelectorAll('.brand-check input:checked')].map(cb => cb.value);
-    const validPoolBrands = new Set(window.currentCategoryProducts.map(p => p.brand).filter(Boolean));
-    const activeRelevantBrands = checkedBrands.filter(b => validPoolBrands.has(b));
-
-    if (activeRelevantBrands.length > 0) {
-      filtered = filtered.filter(p => activeRelevantBrands.includes(p.brand));
+    // Brand filter — only filter if user has unchecked specific brands
+    const checkedInputs = [...document.querySelectorAll('.brand-check input:checked')];
+    const totalInputs = document.querySelectorAll('.brand-check input');
+    
+    if (checkedInputs.length > 0 && checkedInputs.length < totalInputs.length) {
+      const checkedNorms = new Set(checkedInputs.map(cb => normStr(cb.value)));
+      filtered = filtered.filter(p => checkedNorms.has(normStr(p.brand)));
     }
     
     // Rating filter
@@ -4067,6 +4082,8 @@ function initCategoryFilters() {
     
     renderPaginationControls(totalPages);
   }
+
+  window.renderFilteredProducts = renderFilteredProducts;
 
   window.goToPage = function(page) {
     window.currentPage = page;
