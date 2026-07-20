@@ -477,6 +477,186 @@ function getCategoryForBrand(brand) {
 
 const MASTER_PRODUCTS = [
   {
+    "id": "app_101",
+    "title": "Apple iPhone 15 Pro Max (256GB, Natural Titanium)",
+    "description": "Forged in titanium with A17 Pro chip, customizable Action button, and 5x Telephoto camera.",
+    "price": 159900,
+    "originalPrice": 169900,
+    "discount": "6%",
+    "rating": 4.9,
+    "reviews": 5820,
+    "brand": "Apple",
+    "category": "smartphones",
+    "image": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800",
+    "badge": "hot",
+    "sales": 3200
+  },
+  {
+    "id": "app_102",
+    "title": "Apple MacBook Air M3 15-inch (16GB, 512GB SSD)",
+    "description": "Incredibly thin laptop powered by M3 chip with liquid retina display and up to 18 hours battery life.",
+    "price": 134900,
+    "originalPrice": 144900,
+    "discount": "7%",
+    "rating": 4.8,
+    "reviews": 2450,
+    "brand": "Apple",
+    "category": "laptops",
+    "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800",
+    "badge": "new",
+    "sales": 1500
+  },
+  {
+    "id": "app_103",
+    "title": "Apple AirPods Pro (2nd Generation with USB-C)",
+    "description": "Active Noise Cancellation, Adaptive Audio, Transparency mode, and Personalized Spatial Audio.",
+    "price": 24900,
+    "originalPrice": 26900,
+    "discount": "7%",
+    "rating": 4.8,
+    "reviews": 9400,
+    "brand": "Apple",
+    "category": "electronics",
+    "image": "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=800",
+    "badge": "hot",
+    "sales": 8400
+  },
+  {
+    "id": "app_104",
+    "title": "Apple Watch Series 9 GPS 45mm Midnight Aluminum",
+    "description": "Powerful S9 SiP chip, Double Tap gesture, brighter display, and advanced health sensors.",
+    "price": 44900,
+    "originalPrice": 48900,
+    "discount": "8%",
+    "rating": 4.7,
+    "reviews": 1890,
+    "brand": "Apple",
+    "category": "gadgets",
+    "image": "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=800",
+    "badge": "new",
+    "sales": 1900
+  },
+  {
+    "id": "sam_201",
+    "title": "Samsung Galaxy S24 Ultra 5G (12GB RAM, 512GB)",
+    "description": "Galaxy AI powered flagship phone with 200MP camera, Snapdragon 8 Gen 3, and built-in S Pen.",
+    "price": 129999,
+    "originalPrice": 139999,
+    "discount": "7%",
+    "rating": 4.8,
+    "reviews": 4200,
+    "brand": "Samsung",
+    "category": "smartphones",
+    "image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800",
+    "badge": "hot",
+    "sales": 2900
+  },
+  {
+    "id": "sam_202",
+    "title": "Samsung 55-inch 4K Ultra HD Smart QLED TV",
+    "description": "Quantum Dot color technology, Quantum HDR, AirSlim design, and Tizen OS with Voice Control.",
+    "price": 64990,
+    "originalPrice": 84900,
+    "discount": "23%",
+    "rating": 4.6,
+    "reviews": 1850,
+    "brand": "Samsung",
+    "category": "electronics",
+    "image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800",
+    "badge": "sale",
+    "sales": 1100
+  },
+  {
+    "id": "sony_301",
+    "title": "Sony WH-1000XM5 Wireless Noise Canceling Headphones",
+    "description": "Industry-leading noise cancellation, 30-hour battery life, and crystal clear hands-free calling.",
+    "price": 29990,
+    "originalPrice": 34990,
+    "discount": "14%",
+    "rating": 4.8,
+    "reviews": 6700,
+    "brand": "Sony",
+    "category": "electronics",
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800",
+    "badge": "hot",
+    "sales": 4500
+  },
+  {
+    "id": "nike_501",
+    "title": "Nike Air Jordan 1 Retro High OG Chicago",
+    "description": "Iconic high-top sneaker with premium leather upper, encapsulated Air cushioning, and rubber outsole.",
+    "price": 16995,
+    "originalPrice": 19995,
+    "discount": "15%",
+    "rating": 4.9,
+    "reviews": 8400,
+    "brand": "Nike",
+    "category": "shoes",
+    "image": "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800",
+    "badge": "hot",
+    "sales": 6200
+  },
+  {
+    "id": "nike_502",
+    "title": "Nike Air Max 270 Running Shoes Black/White",
+    "description": "Big Air unit underfoot delivers responsive cushioning while breathable mesh keeps feet cool.",
+    "price": 12995,
+    "originalPrice": 14995,
+    "discount": "13%",
+    "rating": 4.7,
+    "reviews": 5100,
+    "brand": "Nike",
+    "category": "shoes",
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800",
+    "badge": "sale",
+    "sales": 4100
+  },
+  {
+    "id": "adi_601",
+    "title": "Adidas Ultraboost Light Running Shoes",
+    "description": "Lightest Ultraboost ever made with Light BOOST cushioning and Primeknit+ upper.",
+    "price": 15999,
+    "originalPrice": 18999,
+    "discount": "16%",
+    "rating": 4.8,
+    "reviews": 3900,
+    "brand": "Adidas",
+    "category": "shoes",
+    "image": "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=800",
+    "badge": "new",
+    "sales": 2800
+  },
+  {
+    "id": "amul_801",
+    "title": "Amul Pure Cow Ghee 1 Litre Tin",
+    description: "100% pure cow ghee made from fresh cream with rich aroma and granular texture.",
+    "price": 650,
+    "originalPrice": 699,
+    "discount": "7%",
+    "rating": 4.9,
+    "reviews": 14200,
+    "brand": "Amul",
+    "category": "groceries",
+    "image": "https://images.unsplash.com/photo-1589927986089-35812388d1f4?w=800",
+    "badge": "hot",
+    "sales": 12500
+  },
+  {
+    "id": "nestle_901",
+    "title": "Nestle Maggi 2-Minute Masala Noodles (Pack of 12)",
+    description: "India's favorite instant noodles infused with signature aromatic spices.",
+    "price": 168,
+    "originalPrice": 180,
+    "discount": "7%",
+    "rating": 4.8,
+    "reviews": 28000,
+    "brand": "Nestle",
+    "category": "groceries",
+    "image": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=800",
+    "badge": "hot",
+    "sales": 22000
+  },
+  {
     "id": "custom_50",
     "title": "Levi's 511 Slim Fit Jeans",
     "description": "Classic slim fit denim with stretch for everyday comfort and modern style.",
@@ -3452,14 +3632,13 @@ function initDynamicCategory() {
 
   if (qParam) {
     const qLower = qParam.trim().toLowerCase();
+    const searchWords = qLower.split(/\s+/).filter(Boolean);
     const allPool = (window.MASTER_PRODUCTS || []).concat(window.allProducts || []);
     const uniquePool = Array.from(new Map(allPool.map(item => [item.id || item.title, item])).values());
-    const matches = uniquePool.filter(p =>
-      (p.title || p.name || '').toLowerCase().includes(qLower) ||
-      (p.brand || '').toLowerCase().includes(qLower) ||
-      (p.category || '').toLowerCase().includes(qLower) ||
-      (p.description || '').toLowerCase().includes(qLower)
-    );
+    const matches = uniquePool.filter(p => {
+      const haystack = `${p.title || p.name || ''} ${p.brand || ''} ${p.category || ''} ${p.description || p.desc || ''}`.toLowerCase();
+      return searchWords.every(w => haystack.includes(w));
+    });
 
     document.title = `Search Results for "${qParam}" — E-Bazaar`;
     const parentBC = document.getElementById('bc-parent-cat');
@@ -4439,13 +4618,14 @@ function initSearch() {
           return;
         }
 
-        const pool = window.allProducts && window.allProducts.length ? window.allProducts : (window.MASTER_PRODUCTS || []);
-        const matches = pool.filter(p => {
-          const t = (p.title || p.name || '').toLowerCase();
-          const b = (p.brand || '').toLowerCase();
-          const c = (p.category || '').toLowerCase();
-          return t.includes(val) || b.includes(val) || c.includes(val);
-        }).slice(0, 6);
+        const pool = (window.MASTER_PRODUCTS || []).concat(window.allProducts || []);
+        const uniquePool = Array.from(new Map(pool.map(item => [item.id || item.title, item])).values());
+        const searchWords = val.split(/\s+/).filter(Boolean);
+
+        const matches = uniquePool.filter(p => {
+          const haystack = `${p.title || p.name || ''} ${p.brand || ''} ${p.category || ''} ${p.description || p.desc || ''}`.toLowerCase();
+          return searchWords.every(w => haystack.includes(w));
+        }).slice(0, 8);
 
         if (matches.length === 0) {
           autoBox.innerHTML = `
