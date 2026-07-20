@@ -19,52 +19,60 @@
     html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
 
     .acc-container { max-width: var(--max-w, 1200px); margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 280px 1fr; gap: 40px; align-items: start; min-height: 70vh; }
-    .acc-sidebar { background: var(--bg-surface, #ffffff); border: 1px solid var(--border-line, #e2d9cf); border-radius: 16px; padding: 24px; position: sticky; top: 100px; }
-    .acc-user-card { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 24px; border-bottom: 1px solid var(--border-line, #e2d9cf); padding-bottom: 24px; }
-    .acc-avatar-wrap { position: relative; width: 100px; height: 100px; margin-bottom: 16px; border-radius: 50%; border: 4px solid var(--bg-canvas, #faf8f5); overflow: hidden; background: #e3e8ee; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .acc-sidebar { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; position: sticky; top: 100px; }
+    .acc-user-card { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+    .acc-avatar-wrap { position: relative; width: 100px; height: 100px; margin-bottom: 16px; border-radius: 50%; border: 4px solid var(--bg); overflow: hidden; background: #e3e8ee; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .acc-avatar { width: 100%; height: 100%; object-fit: cover; }
     .acc-avatar-edit { position: absolute; inset: 0; background: rgba(0,0,0,0.5); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease; font-size: 12px; font-weight: 600; gap: 4px; }
     .acc-avatar-wrap:hover .acc-avatar-edit { opacity: 1; }
-    .acc-name { font-size: 20px; font-weight: 800; color: var(--text-primary, #111); margin-bottom: 4px; }
-    .acc-email { font-size: 13px; color: var(--text-sub, #666); }
-    .acc-wallet-pill { margin-top: 12px; background: rgba(168, 140, 109, 0.12); border: 1px solid rgba(168, 140, 109, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: var(--accent-caramel, #A88C6D); display: flex; align-items: center; gap: 6px; }
+    .acc-name { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .acc-email { font-size: 13px; color: var(--text-sub); }
+    .acc-wallet-pill { margin-top: 12px; background: rgba(168, 140, 109, 0.12); border: 1px solid rgba(168, 140, 109, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 6px; }
     .acc-nav { display: flex; flex-direction: column; gap: 6px; }
-    .acc-nav-link { padding: 12px 16px; font-size: 14px; font-weight: 600; color: var(--text-sub, #555); border-radius: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 12px; }
-    .acc-nav-link:hover { background: var(--bg-canvas, #faf8f5); color: var(--text-primary, #111); }
-    .acc-nav-link.active { background: var(--accent-caramel, #A88C6D); color: white; }
+    .acc-nav-link { padding: 12px 16px; font-size: 14px; font-weight: 600; color: var(--text-sub); border-radius: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 12px; }
+    .acc-nav-link:hover { background: var(--bg); color: var(--text); }
+    .acc-nav-link.active { background: var(--accent); color: white; }
     
-    .acc-panel { background: var(--bg-surface, #ffffff); border: 1px solid var(--border-line, #e2d9cf); border-radius: 16px; padding: 32px; display: none; }
+    .acc-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; display: none; }
     .acc-panel.active { display: block; animation: fadeUp 0.3s ease; }
     
-    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--border-line, #e2d9cf); padding-bottom: 16px; }
-    .panel-title { font-size: 22px; font-weight: 800; color: var(--text-primary, #111); }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+    .panel-title { font-size: 22px; font-weight: 800; color: var(--text); }
     
     .acc-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .form-group label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; color: var(--text-sub, #555); letter-spacing: 0.5px; }
-    .form-group input { width: 100%; padding: 12px 16px; border: 1px solid var(--border-line, #e2d9cf); border-radius: 8px; font-size: 14px; background: var(--bg-canvas, #faf8f5); color: var(--text-primary, #111); transition: border-color 0.2s ease; outline: none; }
-    .form-group input:focus { border-color: var(--accent-caramel, #A88C6D); }
-    .form-group input[disabled] { background: rgba(0,0,0,0.04); color: var(--text-sub, #777); cursor: not-allowed; }
+    .form-group label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; color: var(--text-sub); letter-spacing: 0.5px; }
+    .form-group input { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: var(--bg); color: var(--text); transition: border-color 0.2s ease; outline: none; }
+    .form-group input:focus { border-color: var(--accent); }
+    .form-group input[disabled] { background: var(--bg); color: var(--text-sub); cursor: not-allowed; }
     
-    .btn-primary-action { background: var(--accent-caramel, #A88C6D); color: #ffffff; border: none; padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-primary-action { background: var(--accent); color: var(--bg); border: none; padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-primary-action:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-danger { background: #fee2e2; color: #dc2626; border: none; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s ease; }
+    .btn-danger { background: rgba(220,38,38,0.1); color: #dc2626; border: none; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s ease; }
     .btn-danger:hover { background: #fca5a5; }
     
     .wallet-card-hero { background: linear-gradient(135deg, #2c251e 0%, #1a1612 100%); color: #fff; border-radius: 16px; padding: 28px; margin-bottom: 28px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.1); }
     .wallet-card-hero::after { content: ''; position: absolute; top: -50%; right: -20%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(168,140,109,0.3) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; pointer-events: none; }
     
-    .address-card { border: 1px solid var(--border-line, #e2d9cf); border-radius: 12px; padding: 20px; margin-bottom: 16px; background: var(--bg-canvas, #faf8f5); }
-    .addr-type { font-weight: 700; font-size: 12px; text-transform: uppercase; margin-bottom: 8px; display: inline-block; background: var(--bg-surface, #fff); border: 1px solid var(--border-line, #e2d9cf); padding: 4px 12px; border-radius: 20px; color: var(--accent-caramel, #A88C6D); }
-    .addr-text { font-size: 14px; color: var(--text-primary, #333); line-height: 1.5; margin-bottom: 16px; }
+    .address-card { border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; background: var(--bg); }
+    .addr-type { font-weight: 700; font-size: 12px; text-transform: uppercase; margin-bottom: 8px; display: inline-block; background: var(--bg-card); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; color: var(--accent); }
+    .addr-text { font-size: 14px; color: var(--text); line-height: 1.5; margin-bottom: 16px; }
     .addr-actions { display: flex; gap: 12px; }
-    .addr-btn { background: none; border: 1px solid var(--border-line, #e2d9cf); padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 6px; color: var(--text-primary); transition: all 0.2s ease; }
-    .addr-btn:hover { background: var(--bg-surface); }
+    .addr-btn { background: none; border: 1px solid var(--border); padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 6px; color: var(--text); transition: all 0.2s ease; }
+    .addr-btn:hover { background: var(--bg-card); }
 
     @media(max-width: 960px) {
       .acc-container { grid-template-columns: 1fr; }
       .acc-form-grid { grid-template-columns: 1fr; }
       .acc-sidebar { position: static; }
     }
+
+    .tx-amt { font-size: 15px; font-weight: 700; }
+    .tx-credit { color: #2e7d32; }
+    .tx-debit { color: #c62828; }
+    html[data-theme="dark"] .tx-credit { color: #4caf50; }
+    html[data-theme="dark"] .tx-debit { color: #ef5350; }
+    .wallet-pill { font-size: 12px; font-weight: 700; color: #2e7d32; background: rgba(46, 125, 50, 0.12); padding: 6px 12px; border-radius: 20px; }
+    html[data-theme="dark"] .wallet-pill { color: #4caf50; background: rgba(76, 175, 80, 0.15); }
   </style>
 </head>
 <body data-page="account">
@@ -222,7 +230,7 @@
       <div class="acc-panel" id="panel-wallet">
         <div class="panel-header">
           <h2 class="panel-title">My E-Bazaar Wallet</h2>
-          <span style="font-size:12px; font-weight:700; color:#2e7d32; background:rgba(46,125,50,0.12); padding:6px 12px; border-radius:20px;">⚡ Instant 1-Click Payments & Refunds</span>
+          <span class="wallet-pill">⚡ Instant 1-Click Payments & Refunds</span>
         </div>
 
         <div class="wallet-card-hero">
@@ -240,27 +248,27 @@
           </div>
         </div>
 
-        <div style="background: var(--bg-canvas, #faf8f5); border: 1px solid var(--border-line, #e2d9cf); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
-          <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px;">Add Money to Wallet</h3>
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+          <h3 style="font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 16px;">Add Money to Wallet</h3>
           
           <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-            <button type="button" class="addr-btn" style="padding: 8px 16px; border-radius: 20px; background: #fff;" onclick="document.getElementById('wallet-add-input').value=500">+ ₹500</button>
-            <button type="button" class="addr-btn" style="padding: 8px 16px; border-radius: 20px; background: #fff;" onclick="document.getElementById('wallet-add-input').value=1000">+ ₹1,000</button>
-            <button type="button" class="addr-btn" style="padding: 8px 16px; border-radius: 20px; background: #fff;" onclick="document.getElementById('wallet-add-input').value=2000">+ ₹2,000</button>
-            <button type="button" class="addr-btn" style="padding: 8px 16px; border-radius: 20px; background: #fff;" onclick="document.getElementById('wallet-add-input').value=5000">+ ₹5,000</button>
+            <button type="button" class="addr-btn" style="padding: 8px 16px; border-radius: 20px; background: var(--bg-card);" onclick="document.getElementById('wallet-add-input').value=500">+ ₹500</button>
+            <button type="button" class="addr-btn" style="padding: 8px 16px; border-radius: 20px; background: var(--bg-card);" onclick="document.getElementById('wallet-add-input').value=1000">+ ₹1,000</button>
+            <button type="button" class="addr-btn" style="padding: 8px 16px; border-radius: 20px; background: var(--bg-card);" onclick="document.getElementById('wallet-add-input').value=2000">+ ₹2,000</button>
+            <button type="button" class="addr-btn" style="padding: 8px 16px; border-radius: 20px; background: var(--bg-card);" onclick="document.getElementById('wallet-add-input').value=5000">+ ₹5,000</button>
           </div>
 
           <form id="wallet-add-form" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
             <div style="position: relative; flex: 1; min-width: 200px;">
               <span style="position: absolute; left: 16px; top: 12px; font-weight: 700; color: var(--text-sub);">₹</span>
-              <input type="number" id="wallet-add-input" placeholder="Enter amount to add" min="100" max="50000" required style="width: 100%; padding: 12px 16px 12px 32px; border: 1px solid var(--border-line); border-radius: 8px; font-size: 15px; font-weight: 600; outline: none; background: #fff;">
+              <input type="number" id="wallet-add-input" placeholder="Enter amount to add" min="100" max="50000" required style="width: 100%; padding: 12px 16px 12px 32px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; font-weight: 600; outline: none; background: var(--bg-card);">
             </div>
             <button type="submit" class="btn-primary-action" style="padding: 12px 24px;">Add Funds Now</button>
           </form>
         </div>
 
         <div>
-          <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px;">Wallet Passbook / Recent Activity</h3>
+          <h3 style="font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 16px;">Wallet Passbook / Recent Activity</h3>
           <div id="wallet-transactions-list" style="display: flex; flex-direction: column; gap: 12px;">
           </div>
         </div>
@@ -408,12 +416,12 @@
     ];
 
     list.innerHTML = txs.map(t => `
-      <div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-line); border-radius: 8px; padding: 14px 18px; background: var(--bg-canvas);">
+      <div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; background: var(--bg);">
         <div>
-          <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">${t.title}</div>
+          <div style="font-size: 14px; font-weight: 600; color: var(--text);">${t.title}</div>
           <div style="font-size: 12px; color: var(--text-sub); margin-top: 2px;">${t.desc} &middot; <span style="font-weight: 500;">${t.date}</span></div>
         </div>
-        <div style="font-size: 15px; font-weight: 700; color: ${t.type === 'credit' ? '#2e7d32' : '#c62828'};">${t.amount}</div>
+        <div class="tx-amt ${t.type === 'credit' ? 'tx-credit' : 'tx-debit'}">${t.amount}</div>
       </div>
     `).join('');
   }

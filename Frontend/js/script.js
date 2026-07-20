@@ -3353,7 +3353,7 @@ const MASTER_PRODUCTS = [
     "price": 2599,
     "originalPrice": 3378.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&q=80",
     "category": "bottoms",
     "brand": "Levis"
   },
@@ -3363,7 +3363,7 @@ const MASTER_PRODUCTS = [
     "price": 1999,
     "originalPrice": 2598.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1602293589930-45aad59ba3ab?w=500&q=80",
     "category": "bottoms",
     "brand": "Wrangler"
   },
@@ -3373,7 +3373,7 @@ const MASTER_PRODUCTS = [
     "price": 1499,
     "originalPrice": 1948.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=500&q=80",
     "category": "bottoms",
     "brand": "H&M"
   },
@@ -3383,7 +3383,7 @@ const MASTER_PRODUCTS = [
     "price": 1799,
     "originalPrice": 2338.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&q=80",
     "category": "bottoms",
     "brand": "Allen Solly"
   },
@@ -3393,7 +3393,7 @@ const MASTER_PRODUCTS = [
     "price": 2999,
     "originalPrice": 3898.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&q=80",
     "category": "mens-shirts",
     "brand": "Zara"
   },
@@ -3403,7 +3403,7 @@ const MASTER_PRODUCTS = [
     "price": 2299,
     "originalPrice": 2988.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&q=80",
     "category": "mens-shirts",
     "brand": "Puma"
   },
@@ -3413,7 +3413,7 @@ const MASTER_PRODUCTS = [
     "price": 3499,
     "originalPrice": 4548.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?w=500&q=80",
     "category": "mens-shirts",
     "brand": "Nike"
   },
@@ -3423,7 +3423,7 @@ const MASTER_PRODUCTS = [
     "price": 1299,
     "originalPrice": 1688.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&q=80",
     "category": "womens-dresses",
     "brand": "Urbanic"
   },
@@ -3433,7 +3433,7 @@ const MASTER_PRODUCTS = [
     "price": 2599,
     "originalPrice": 3378.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=500&q=80",
     "category": "womens-dresses",
     "brand": "Zara"
   },
@@ -3443,7 +3443,7 @@ const MASTER_PRODUCTS = [
     "price": 1999,
     "originalPrice": 2598.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=500&q=80",
     "category": "womens-dresses",
     "brand": "H&M"
   },
@@ -3453,7 +3453,7 @@ const MASTER_PRODUCTS = [
     "price": 3499,
     "originalPrice": 4548.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=500&q=80",
     "category": "womens-dresses",
     "brand": "Mango"
   },
@@ -3463,7 +3463,7 @@ const MASTER_PRODUCTS = [
     "price": 799,
     "originalPrice": 1038.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500&q=80",
     "category": "tops",
     "brand": "Forever 21"
   },
@@ -3473,7 +3473,7 @@ const MASTER_PRODUCTS = [
     "price": 5999,
     "originalPrice": 7798.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1610189013233-5c8c5040e3f2?w=500&q=80",
     "category": "traditional",
     "brand": "FabIndia"
   },
@@ -3483,7 +3483,7 @@ const MASTER_PRODUCTS = [
     "price": 2499,
     "originalPrice": 3248.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1583391733958-d15f0d35a1a1?w=500&q=80",
     "category": "traditional",
     "brand": "Biba"
   },
@@ -3493,7 +3493,7 @@ const MASTER_PRODUCTS = [
     "price": 3999,
     "originalPrice": 5198.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?w=500&q=80",
     "category": "traditional",
     "brand": "Manyavar"
   },
@@ -3503,7 +3503,7 @@ const MASTER_PRODUCTS = [
     "price": 8999,
     "originalPrice": 11698.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80",
     "category": "womens-shoes",
     "brand": "Nike"
   },
@@ -3513,7 +3513,7 @@ const MASTER_PRODUCTS = [
     "price": 7499,
     "originalPrice": 9748.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&q=80",
     "category": "womens-shoes",
     "brand": "Puma"
   },
@@ -3523,7 +3523,7 @@ const MASTER_PRODUCTS = [
     "price": 4599,
     "originalPrice": 5978.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&q=80",
     "category": "womens-shoes",
     "brand": "Steve Madden"
   },
@@ -3533,7 +3533,7 @@ const MASTER_PRODUCTS = [
     "price": 1599,
     "originalPrice": 2078.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?w=500&q=80",
     "category": "office-wear",
     "brand": "Van Heusen"
   },
@@ -3543,7 +3543,7 @@ const MASTER_PRODUCTS = [
     "price": 1899,
     "originalPrice": 2468.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1509631179647-0c37cb502f1a?w=500&q=80",
     "category": "office-wear",
     "brand": "Arrow"
   },
@@ -3553,7 +3553,7 @@ const MASTER_PRODUCTS = [
     "price": 2499,
     "originalPrice": 3248.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1617391654484-cfbe53f01f8f?w=500&q=80",
     "category": "womens-innerwear",
     "brand": "Calvin Klein"
   },
@@ -3563,7 +3563,7 @@ const MASTER_PRODUCTS = [
     "price": 999,
     "originalPrice": 1298.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1617391654516-7fdb6e118804?w=500&q=80",
     "category": "womens-innerwear",
     "brand": "Calvin Klein"
   },
@@ -3573,7 +3573,7 @@ const MASTER_PRODUCTS = [
     "price": 3599,
     "originalPrice": 4678.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1582297125301-3844fbd5f257?w=500&q=80",
     "category": "womens-innerwear",
     "brand": "Victoria Secret"
   },
@@ -3583,7 +3583,7 @@ const MASTER_PRODUCTS = [
     "price": 1299,
     "originalPrice": 1688.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1522047879668-5431c46320a5?w=500&q=80",
     "category": "womens-innerwear",
     "brand": "Victoria Secret"
   },
@@ -3593,7 +3593,7 @@ const MASTER_PRODUCTS = [
     "price": 2999,
     "originalPrice": 3898.7000000000003,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1620803403335-5b43daee8278?w=500&q=80",
     "category": "mens-innerwear",
     "brand": "Calvin Klein"
   },
@@ -3603,7 +3603,7 @@ const MASTER_PRODUCTS = [
     "price": 1499,
     "originalPrice": 1948.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=500&q=80",
     "category": "mens-innerwear",
     "brand": "Calvin Klein"
   },
@@ -3613,7 +3613,7 @@ const MASTER_PRODUCTS = [
     "price": 299,
     "originalPrice": 388.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1563630423918-b58f07336ac9?w=500&q=80",
     "category": "mens-innerwear",
     "brand": "Macho"
   },
@@ -3623,7 +3623,7 @@ const MASTER_PRODUCTS = [
     "price": 249,
     "originalPrice": 323.7,
     "badge": "",
-    "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500&q=80",
+    "image": "https://images.unsplash.com/photo-1579899318854-9457884d5df6?w=500&q=80",
     "category": "mens-innerwear",
     "brand": "Macho"
   },
@@ -3778,7 +3778,7 @@ const MASTER_PRODUCTS = [
 function generateMockProductsForCategory(catId) {
   const pool = (window.allProducts && window.allProducts.length > 0)
     ? window.allProducts
-    : (window.MASTER_PRODUCTS || []);
+    : (MASTER_PRODUCTS || []);
 
   if (!catId || catId === 'all' || catId === 'trending' || catId === 'new-arrivals') {
     return pool;
@@ -3811,8 +3811,9 @@ function generateMockProductsForCategory(catId) {
 }
 
 function generateBrandProducts(brand, catId) {
-  const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.allProducts || window.MASTER_PRODUCTS || []);
-  const filtered = pool.filter(p => (p.brand || '').toLowerCase() === String(brand).toLowerCase());
+  const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.allProducts || MASTER_PRODUCTS || []);
+  const normalize = b => (b || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+  const filtered = pool.filter(p => normalize(p.brand) === normalize(brand));
   return filtered.length > 0 ? filtered : pool.slice(0, 48);
 }
 
@@ -3894,7 +3895,7 @@ function getBrandLogoSVG(brand) {
 function getAllStoreProducts() {
   const pool = [
     ...(window.allProducts || []),
-    ...(window.MASTER_PRODUCTS || [])
+    ...(MASTER_PRODUCTS || [])
   ];
 
   const map = new Map();
@@ -3911,7 +3912,7 @@ function getAllStoreProducts() {
 window.getAllStoreProducts = getAllStoreProducts;
 
 function getAllBrands() {
-  const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.MASTER_PRODUCTS || []);
+  const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (MASTER_PRODUCTS || []);
   const poolBrands = pool.map(p => p.brand).filter(Boolean);
   
   const catBrands = [];
@@ -4637,11 +4638,13 @@ function initBrandStore() {
           alt="${brand} Logo" style="width:100%; height:100%; object-fit:contain; border-radius:50%; background-color:#ffffff;">`;
     }
     
-    const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.MASTER_PRODUCTS || []);
-    let brandProds = pool.filter(p => (p.brand || '').toLowerCase() === brand.toLowerCase());
+    const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (MASTER_PRODUCTS || []);
+    const normalize = b => (b || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+    
+    let brandProds = pool.filter(p => normalize(p.brand) === normalize(brand));
 
     if (brandProds.length === 0) {
-        brandProds = pool.filter(p => (p.title || p.name || '').toLowerCase().includes(brand.toLowerCase()));
+        brandProds = pool.filter(p => normalize(p.title || p.name).includes(normalize(brand)));
     }
     if (brandProds.length === 0) {
         brandProds = generateBrandProducts(brand, cat);
@@ -5004,7 +5007,7 @@ function initSearch() {
           return;
         }
 
-        const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (window.MASTER_PRODUCTS || []);
+        const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (MASTER_PRODUCTS || []);
         const searchWords = val.split(/\s+/).filter(Boolean);
 
         // Check if val matches a known brand in the store

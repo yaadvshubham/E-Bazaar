@@ -474,10 +474,16 @@
       const container = document.getElementById(containerId);
       if(!container) return;
       
-      let wl = JSON.parse(localStorage.getItem('eb_wishlist') || '[]');
+      let wl = [];
+      try {
+        wl = JSON.parse(localStorage.getItem('eb_wishlist') || '[]');
+        if (!Array.isArray(wl)) wl = [];
+      } catch(e) {
+        wl = [];
+      }
       
       container.innerHTML = arr.map(p => {
-        const pStr = encodeURIComponent(JSON.stringify(p));
+        const pStr = encodeURIComponent(JSON.stringify(p)).replace(/'/g, "%27");
         const inWl = wl.some(w => w.id === p.id);
         const stroke = inWl ? 'none' : 'currentColor';
         const fill = inWl ? '#ef4444' : 'none';
@@ -504,10 +510,12 @@
     generateCards(homeDeals, 'home-deals-grid');
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    // Wait for script.js functions (toggleWishlist, addToCart) to be ready
-    setTimeout(renderDeals, 100);
-  });
+  // Render immediately since DOM elements are already parsed above this script
+  try {
+    renderDeals();
+  } catch(e) {
+    console.error("Error rendering deals:", e);
+  }
 </script>
 </main>
 
