@@ -596,7 +596,7 @@ function buildCard(p) {
   const isWished = ebWishlist.some(item => item.id === p.id);
   const stroke = isWished ? '#E03E3E' : '#999';
   const wishCls = isWished ? 'cat-wish-btn wished' : 'cat-wish-btn';
-  const pStr = encodeURIComponent(JSON.stringify(p));
+  const pStr = encodeURIComponent(JSON.stringify(p)).replace(/'/g, "%27");
   return `<article class="cat-card" role="listitem">
     <a href="product-detail.html?id=${p.id}" class="cat-img" style="display:block; text-decoration:none;">${makeSVG(p.color,p.shape)}${p.badge?`<span class="card-badge ${bCls}">${bLbl}</span>`:''}</a>
     <button class="${wishCls}" style="position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:var(--bg-white);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;z-index:2;" aria-label="Add to wishlist" onclick="toggleWish('w_${p.id}', '${p.name.replace(/'/g, "\\'")}', '${pStr}')" id="w_${p.id}">
@@ -1195,8 +1195,8 @@ function initProductDetail() {
       </div>
       
       <div class="pd-actions">
-        <button class="btn-add-cart" onclick="addToCart('${encodeURIComponent(JSON.stringify(p))}')">Add to Cart</button>
-        <button class="btn-wishlist ${ebWishlist.some(item => item.id === p.id) ? 'wished' : ''}" onclick="toggleWish('w_pd_${p.id}', '${p.name.replace(/'/g, "\\'")}', '${encodeURIComponent(JSON.stringify(p))}')" id="w_pd_${p.id}">
+        <button class="btn-add-cart" onclick="addToCart('${encodeURIComponent(JSON.stringify(p)).replace(/'/g, "%27")}')">Add to Cart</button>
+        <button class="btn-wishlist ${ebWishlist.some(item => item.id === p.id) ? 'wished' : ''}" onclick="toggleWish('w_pd_${p.id}', '${p.name.replace(/'/g, "\\'")}', '${encodeURIComponent(JSON.stringify(p)).replace(/'/g, "%27")}')" id="w_pd_${p.id}">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${ebWishlist.some(item => item.id === p.id) ? '#E03E3E' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
       </div>

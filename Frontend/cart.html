@@ -557,8 +557,8 @@
 
       container.innerHTML = ebCart.map((item, index) => {
         // Parse prices (remove ₹ and commas)
-        const pPrice = parseInt(item.price.replace(/[^\d]/g, ''));
-        const oPrice = parseInt(item.orig.replace(/[^\d]/g, ''));
+        const pPrice = parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
+        const oPrice = parseInt(String(item.orig).replace(/[^\d]/g, '')) || 0;
         const qty = item.qty || 1;
 
         subtotal += oPrice * qty;
@@ -583,7 +583,7 @@
               <button class="qty-btn" onclick="updateCartQty('${item.id}', 1)">+</button>
             </div>
             <div style="display:flex; gap: 16px; border-left: 1px solid var(--border); padding-left: 16px; margin-left: 16px;">
-              <button class="cart-remove-btn" onclick="moveToWishlist('${item.id}', '${encodeURIComponent(JSON.stringify(item))}')">Move to Wishlist</button>
+              <button class="cart-remove-btn" onclick="moveToWishlist('${item.id}', '${encodeURIComponent(JSON.stringify(item)).replace(/'/g, "%27")}')">Move to Wishlist</button>
               <button class="cart-remove-btn" onclick="removeFromCart('${item.id}')">Remove</button>
             </div>
           </div>
