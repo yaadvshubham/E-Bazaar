@@ -5,6 +5,7 @@ const jwt     = require('jsonwebtoken');
 const User    = require('../models/User');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_TFkHWivdCZCZeK',
@@ -25,6 +26,12 @@ function signToken(user) {
 }
 
 function safeUser(user) {
+  let addresses = [];
+  try {
+    addresses = JSON.parse(user.addresses || '[]');
+  } catch (err) {
+    addresses = [];
+  }
   return {
     id: user.id,
     name: user.name,
@@ -32,7 +39,8 @@ function safeUser(user) {
     phone: user.phone || '',
     profilePic: user.profilePic || null,
     walletBalance: typeof user.walletBalance === 'number' ? user.walletBalance : 150.00,
-    withdrawableBalance: typeof user.withdrawableBalance === 'number' ? user.withdrawableBalance : 0.00
+    withdrawableBalance: typeof user.withdrawableBalance === 'number' ? user.withdrawableBalance : 0.00,
+    addresses: addresses
   };
 }
 
@@ -312,6 +320,218 @@ router.post('/wallet/withdraw', async (req, res) => {
   } catch (err) {
     console.error('[Auth] Wallet withdraw error:', err);
     return res.status(500).json({ error: 'Failed to process withdrawal.' });
+  }
+});
+
+/* ── GET /api/auth/addresses — Get all addresses for user ───────────────────── */
+router.get('/addresses', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    let addresses = [];
+    try {
+      addresses = JSON.parse(user.addresses || '[]');
+    } catch (e) {
+      addresses = [];
+    }
+
+    return res.json({ addresses });
+  } catch (err) {
+    console.error('[Auth] Fetch addresses error:', err.message);
+    return res.status(500).json({ error: 'Failed to retrieve addresses.' });
+  }
+});
+
+/* ── POST /api/auth/addresses — Add a new address ───────────────────────────── */
+router.post('/addresses', authMiddleware, async (req, res) => {
+  try {
+    const { fname, lname, line1, line2, city, pin, state, phone, type, isDefault } = req.body;
+
+    if (!fname || !lname || !line1 || !city || !pin || !phone) {
+      return res.status(400).json({ error: 'Missing required address fields.' });
+    }
+
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    let addresses = [];
+    try {
+      addresses = JSON.parse(user.addresses || '[]');
+    } catch (e) {
+      addresses = [];
+    }
+
+    const newAddress = {
+      id: Date.now().toString(),
+      fname: fname.trim(),
+      lname: lname.trim(),
+      line1: line1.trim(),
+      line2: line2 ? line2.trim() : '',
+      city: city.trim(),
+      pin: pin.trim(),
+      state: state || '',
+      phone: phone.trim(),
+      type: type || 'Home',
+      isDefault: addresses.length === 0 ? true : !!isDefault
+    };
+
+    if (newAddress.isDefault) {
+      addresses.forEach(a => a.isDefault = false);
+    }
+
+    addresses.push(newAddress);
+    user.addresses = JSON.stringify(addresses);
+    await user.save();
+
+    return res.status(201).json({
+      message: 'Address added successfully',
+      addresses,
+      address: newAddress
+    });
+  } catch (err) {
+    console.error('[Auth] Add address error:', err.message);
+    return res.status(500).json({ error: 'Failed to add address.' });
+  }
+});
+
+/* ── PUT /api/auth/addresses/:id — Edit an existing address ─────────────────── */
+router.put('/addresses/:id', authMiddleware, async (req, res) => {
+  try {
+    const { fname, lname, line1, line2, city, pin, state, phone, type, isDefault } = req.body;
+    const addressId = req.params.id;
+
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    let addresses = [];
+    try {
+      addresses = JSON.parse(user.addresses || '[]');
+    } catch (e) {
+      addresses = [];
+    }
+
+    const index = addresses.findIndex(a => a.id === addressId);
+    if (index === -1) {
+      return res.status(404).json({ error: 'Address not found.' });
+    }
+
+    const updatedAddress = {
+      ...addresses[index],
+      fname: fname !== undefined ? fname.trim() : addresses[index].fname,
+      lname: lname !== undefined ? lname.trim() : addresses[index].lname,
+      line1: line1 !== undefined ? line1.trim() : addresses[index].line1,
+      line2: line2 !== undefined ? (line2 ? line2.trim() : '') : addresses[index].line2,
+      city: city !== undefined ? city.trim() : addresses[index].city,
+      pin: pin !== undefined ? pin.trim() : addresses[index].pin,
+      state: state !== undefined ? state : addresses[index].state,
+      phone: phone !== undefined ? phone.trim() : addresses[index].phone,
+      type: type !== undefined ? type : addresses[index].type,
+    };
+
+    if (isDefault !== undefined) {
+      updatedAddress.isDefault = !!isDefault;
+    }
+
+    if (updatedAddress.isDefault) {
+      addresses.forEach(a => a.isDefault = false);
+    }
+
+    addresses[index] = updatedAddress;
+
+    // Ensure at least one address is default if there are addresses
+    if (addresses.length > 0 && !addresses.some(a => a.isDefault)) {
+      addresses[0].isDefault = true;
+    }
+
+    user.addresses = JSON.stringify(addresses);
+    await user.save();
+
+    return res.json({
+      message: 'Address updated successfully',
+      addresses,
+      address: updatedAddress
+    });
+  } catch (err) {
+    console.error('[Auth] Edit address error:', err.message);
+    return res.status(500).json({ error: 'Failed to update address.' });
+  }
+});
+
+/* ── DELETE /api/auth/addresses/:id — Delete an address ─────────────────────── */
+router.delete('/addresses/:id', authMiddleware, async (req, res) => {
+  try {
+    const addressId = req.params.id;
+
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    let addresses = [];
+    try {
+      addresses = JSON.parse(user.addresses || '[]');
+    } catch (e) {
+      addresses = [];
+    }
+
+    const index = addresses.findIndex(a => a.id === addressId);
+    if (index === -1) {
+      return res.status(404).json({ error: 'Address not found.' });
+    }
+
+    const wasDefault = addresses[index].isDefault;
+    addresses.splice(index, 1);
+
+    if (wasDefault && addresses.length > 0) {
+      addresses[0].isDefault = true;
+    }
+
+    user.addresses = JSON.stringify(addresses);
+    await user.save();
+
+    return res.json({
+      message: 'Address deleted successfully',
+      addresses
+    });
+  } catch (err) {
+    console.error('[Auth] Delete address error:', err.message);
+    return res.status(500).json({ error: 'Failed to delete address.' });
+  }
+});
+
+/* ── PATCH /api/auth/addresses/:id/default — Set address as default ─────────── */
+router.patch('/addresses/:id/default', authMiddleware, async (req, res) => {
+  try {
+    const addressId = req.params.id;
+
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    let addresses = [];
+    try {
+      addresses = JSON.parse(user.addresses || '[]');
+    } catch (e) {
+      addresses = [];
+    }
+
+    const index = addresses.findIndex(a => a.id === addressId);
+    if (index === -1) {
+      return res.status(404).json({ error: 'Address not found.' });
+    }
+
+    addresses.forEach(a => a.isDefault = false);
+    addresses[index].isDefault = true;
+
+    user.addresses = JSON.stringify(addresses);
+    await user.save();
+
+    return res.json({
+      message: 'Default address updated successfully',
+      addresses,
+      defaultAddress: addresses[index]
+    });
+  } catch (err) {
+    console.error('[Auth] Set default address error:', err.message);
+    return res.status(500).json({ error: 'Failed to set default address.' });
   }
 });
 

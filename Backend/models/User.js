@@ -40,6 +40,11 @@ const User = sequelize.define('User', {
     allowNull: false,
     defaultValue: 0.00,
   },
+  addresses: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    defaultValue: '[]',
+  },
 }, {
   tableName: 'users',
   timestamps: true,

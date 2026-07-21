@@ -439,7 +439,7 @@
             </div>
           </div>
 
-          <button class="btn-checkout" id="btn-proceed-pay" style="margin-top: 16px;" onclick="proceedToPayment()">Proceed to Pay</button>
+          <button class="btn-checkout" id="btn-proceed-pay" style="margin-top: 16px;" onclick="proceedToPayment()">Place Order</button>
         </div>
       </div>
     </div>
@@ -770,8 +770,115 @@
       }
     }
 
-    function proceedToPayment() {
-      window.open('payment.html', '_blank');
+    async function proceedToPayment() {
+      const isLoggedIn = window.AuthSession && window.AuthSession.isLoggedIn();
+      if (!isLoggedIn) {
+        showToast('🔒 Please sign in to place your order.');
+        setTimeout(() => {
+          window.location.href = 'auth.html';
+        }, 1200);
+        return;
+      }
+
+      if (!ebCart || ebCart.length === 0) {
+        showToast('⚠️ Your cart is empty.');
+        return;
+      }
+
+      const btnPay = document.getElementById('btn-proceed-pay');
+      if (btnPay) {
+        btnPay.disabled = true;
+        btnPay.innerHTML = 'Placing Order...';
+        btnPay.style.opacity = '0.7';
+      }
+
+      try {
+        const token = window.AuthSession ? window.AuthSession.getToken() : null;
+        
+        // Format items to match what orders page expects
+        const formattedItems = ebCart.map(item => {
+          const priceNum = parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
+          return {
+            id: item.id,
+            title: item.name || item.title || 'Product Item',
+            price: priceNum,
+            qty: item.qty || 1,
+            image: item.image || item.imageUrl || 'images/placeholder.png'
+          };
+        });
+
+        const totalAmt = parseInt(localStorage.getItem('checkout_total')) || 0;
+        const walletUsed = parseInt(localStorage.getItem('wallet_applied')) || 0;
+
+        const addressText = document.getElementById('selected-address-text')?.innerText || '';
+
+        // Decide payment method
+        let paymentMethod = 'COD';
+        if (walletUsed > 0 && totalAmt === 0) {
+          paymentMethod = 'Wallet';
+        } else if (walletUsed > 0) {
+          paymentMethod = 'Wallet + COD';
+        }
+
+        const response = await fetch('http://localhost:5000/api/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            items: formattedItems,
+            totalAmount: totalAmt,
+            paymentMethod: paymentMethod,
+            deliveryAddress: addressText
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Clear cart
+          ebCart = [];
+          localStorage.setItem('cart', '[]');
+          localStorage.setItem('eb_cart_items', '[]');
+          localStorage.setItem('eb-cart-items', '[]');
+          localStorage.setItem('eb-cart', '0');
+          localStorage.removeItem('checkout_total');
+          localStorage.removeItem('wallet_applied');
+
+          // Update header wallet balance locally if wallet was applied
+          if (walletUsed > 0) {
+            const user = window.AuthSession ? window.AuthSession.getUser() : null;
+            if (user && typeof user.walletBalance === 'number') {
+              user.walletBalance = Math.max(0, user.walletBalance - walletUsed);
+              localStorage.setItem('eb_user', JSON.stringify(user));
+            }
+          }
+
+          syncCartBadge();
+          renderCart();
+
+          showToast('🎉 Order placed successfully!');
+          setTimeout(() => {
+            window.location.href = 'orders.html';
+          }, 1500);
+        } else {
+          showToast('❌ Failed to place order: ' + (data.error || 'Unknown error'));
+          if (btnPay) {
+            btnPay.disabled = false;
+            btnPay.innerHTML = 'Place Order';
+            btnPay.style.opacity = '1';
+          }
+        }
+      } catch (err) {
+        console.error('Error placing order:', err);
+        showToast('❌ Network error. Please try again.');
+        if (btnPay) {
+          btnPay.disabled = false;
+          btnPay.innerHTML = 'Place Order';
+          btnPay.style.opacity = '1';
+        }
+      }
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
@@ -794,19 +901,6 @@
 
       // Re-render after a slight delay to ensure scripts are loaded if needed
       setTimeout(renderCart, 100);
-
-      // Listen for payment success from child window
-      window.addEventListener('message', (event) => {
-        if (event.data === 'PAYMENT_SUCCESS') {
-          ebCart = [];
-          syncCartBadge();
-          renderCart();
-          showToast('✅ Payment successful! Order placed.');
-          setTimeout(() => {
-            window.location.href = 'orders.html';
-          }, 2000);
-        }
-      });
     });
   </script>
   <script src="js/auth.js"></script>

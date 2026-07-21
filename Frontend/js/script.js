@@ -151,68 +151,59 @@ function initHamburger() {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   MEGA-MENU
-   ═══════════════════════════════════════════════════════════════════════ */
-function initMegaMenu() {
-  const items = document.querySelectorAll('.mega-item');
-  let activeItem = null;
-  let closeTimer = null;
+/* ══════════════════════════════════�const AddressModal = (() => {
+  let currentAddresses = [];
+  const API_URL = 'http://localhost:5000/api/auth/addresses';
 
-  function activate(item) {
-    if (activeItem && activeItem !== item) deactivate(activeItem);
-    item.classList.add('active');
-    try {
-      item.querySelector(':scope > a')?.setAttribute('aria-expanded', 'true');
-    } catch (e) { }
-    activeItem = item;
-  }
-  function deactivate(item) {
-    item.classList.remove('active');
-    try {
-      item.querySelector(':scope > a')?.setAttribute('aria-expanded', 'false');
-    } catch (e) { }
-    if (activeItem === item) activeItem = null;
-  }
-
-  items.forEach(item => {
-    item.addEventListener('mouseenter', () => {
-      clearTimeout(closeTimer);
-      activate(item);
-    });
-    item.addEventListener('mouseleave', () => {
-      closeTimer = setTimeout(() => deactivate(item), 250);
-    });
-    const drop = item.querySelector('.mega-drop');
-    if (drop) {
-      drop.addEventListener('mouseenter', () => clearTimeout(closeTimer));
-      drop.addEventListener('mouseleave', () => {
-        closeTimer = setTimeout(() => deactivate(item), 250);
-      });
-    }
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   ADDRESS MODAL
-   ═══════════════════════════════════════════════════════════════════════ */
-const AddressModal = (() => {
   const ADDRESS_MODAL_HTML = `
-  <div class="modal-card">
-    <div class="modal-head"><h2 class="modal-title">Manage Delivery Addresses</h2><button class="modal-close" id="modal-close-btn" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
-    <div class="modal-body">
-      <div class="addr-list" id="global-addr-list">
-        <div class="addr-item is-default" data-type="Home"><div class="addr-item-top"><span class="addr-name">Aryan Verma</span><span class="addr-type">Home ✓</span></div><p class="addr-line">47, Sector 18, DLF Phase 3<br>New Delhi, Delhi — 110001</p><p class="addr-phone">+91 98765 43210</p><div class="addr-actions"><button class="addr-act-btn set-default-btn">Set as Default</button><button class="addr-act-btn edit-btn">&#9998; Edit</button><button class="addr-act-btn secondary delete-btn">&#128465; Delete</button></div></div>
-        <div class="addr-item" data-type="Work"><div class="addr-item-top"><span class="addr-name">Aryan Verma</span><span class="addr-type">Work</span></div><p class="addr-line">E-Bazaar HQ, Tower B, Cyber City<br>Gurugram, Haryana — 122002</p><p class="addr-phone">+91 98765 43210</p><div class="addr-actions"><button class="addr-act-btn set-default-btn">Set as Default</button><button class="addr-act-btn edit-btn">&#9998; Edit</button><button class="addr-act-btn secondary delete-btn">&#128465; Delete</button></div></div>
+  <div class="modal-card" style="max-width: 600px; width: 100%; border-radius: 16px; background: var(--bg-surface);">
+    <div class="modal-head" style="border-bottom: 1px solid var(--border); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;">
+      <h2 class="modal-title" style="font-size: 18px; font-weight: 700; color: var(--text-primary);">Manage Delivery Addresses</h2>
+      <button class="modal-close" id="modal-close-btn" aria-label="Close" style="background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" style="padding: 20px; position: relative;">
+      <div id="addr-loading" style="text-align: center; padding: 30px 0; display: none;">
+        <div style="display: inline-block; border: 3px solid var(--border); border-radius: 50%; border-top: 3px solid var(--primary); width: 28px; height: 28px; animation: spin 1s linear infinite; margin-bottom: 10px;"></div>
+        <p style="font-size: 13px; color: var(--text-sub);">Loading delivery addresses...</p>
       </div>
-      <button class="add-addr-btn" id="add-addr-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add New Address</button>
-      <form class="addr-form" id="new-addr-form" novalidate>
-        <div class="form-row"><div class="form-group"><label for="f-name">First Name</label><input type="text" id="f-name" placeholder="Aryan" required/></div><div class="form-group"><label for="f-lname">Last Name</label><input type="text" id="f-lname" placeholder="Verma" required/></div></div>
-        <div class="form-group full"><label for="f-line1">Address Line 1</label><input type="text" id="f-line1" placeholder="House no., Street, Area" required/></div>
-        <div class="form-group full"><label for="f-line2">Address Line 2 (Optional)</label><input type="text" id="f-line2" placeholder="Landmark, Apartment"/></div>
-        <div class="form-row"><div class="form-group"><label for="f-city">City</label><input type="text" id="f-city" placeholder="New Delhi" required/></div><div class="form-group"><label for="f-pin">PIN Code</label><input type="text" id="f-pin" placeholder="110001" maxlength="6" required/></div></div>
-        <div class="form-row"><div class="form-group"><label for="f-state">State</label><select id="f-state" required><option value="">Select State</option><option value="Delhi">Delhi</option><option value="Haryana">Haryana</option><option value="UP">UP</option><option value="Maharashtra">Maharashtra</option><option value="Karnataka">Karnataka</option></select></div><div class="form-group"><label for="f-phone">Mobile</label><input type="tel" id="f-phone" placeholder="+91 XXXXX XXXXX" required/></div></div>
-        <div style="display:flex;gap:16px"><button type="submit" class="form-submit" style="flex:1">Save Address</button><button type="button" id="addr-form-cancel" class="addr-act-btn secondary" style="height:48px;padding:0 24px;border-radius:14px">Cancel</button></div>
+      <div class="addr-list" id="global-addr-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 280px; overflow-y: auto; margin-bottom: 16px; padding-right: 4px;">
+        <!-- Injected dynamically -->
+      </div>
+      <button class="add-addr-btn" id="add-addr-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border: 1.5px dashed var(--border); border-radius: 10px; background: none; color: var(--text-primary); font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: inherit;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add New Address
+      </button>
+      
+      <form class="addr-form" id="new-addr-form" style="display: none; flex-direction: column; gap: 12px; border-top: 1px solid var(--border); padding-top: 16px; margin-top: 16px;" novalidate>
+        <h3 id="addr-form-title" style="font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--accent, #A88C6D); margin-bottom: 4px;">Add New Address</h3>
+        <input type="hidden" id="f-addr-id" value="" />
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group" style="flex: 1;"><label for="f-name" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">First Name</label><input type="text" id="f-name" placeholder="Aryan" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+          <div class="form-group" style="flex: 1;"><label for="f-lname" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Last Name</label><input type="text" id="f-lname" placeholder="Verma" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+        </div>
+        <div class="form-group full"><label for="f-line1" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Address Line 1</label><input type="text" id="f-line1" placeholder="House no., Street, Area" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+        <div class="form-group full"><label for="f-line2" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Address Line 2 (Optional)</label><input type="text" id="f-line2" placeholder="Landmark, Apartment" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group" style="flex: 1;"><label for="f-city" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">City</label><input type="text" id="f-city" placeholder="New Delhi" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+          <div class="form-group" style="flex: 1;"><label for="f-pin" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">PIN Code</label><input type="text" id="f-pin" placeholder="110001" maxlength="6" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+        </div>
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group" style="flex: 1;"><label for="f-state" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">State</label><input type="text" id="f-state" placeholder="Delhi" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+          <div class="form-group" style="flex: 1;"><label for="f-phone" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Mobile</label><input type="tel" id="f-phone" placeholder="9876543210" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+        </div>
+        <div class="form-group"><label for="f-type" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Address Type</label>
+          <select id="f-type" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; cursor: pointer; font-family: inherit; font-size: 13px;">
+            <option value="Home">Home</option>
+            <option value="Work">Work</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:12px; margin-top: 8px;">
+          <button type="submit" class="form-submit" style="flex:1; padding: 12px; border-radius: 10px; background: var(--primary, #A88C6D); color: #fff; border: none; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit;">Save Address</button>
+          <button type="button" id="addr-form-cancel" class="addr-act-btn secondary" style="padding: 0 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-surface); color: var(--text-primary); cursor: pointer; font-family: inherit; font-size: 13px;">Cancel</button>
+        </div>
       </form>
     </div>
   </div>`;
@@ -228,19 +219,30 @@ const AddressModal = (() => {
       overlay.setAttribute('aria-label', 'Manage delivery addresses');
       overlay.innerHTML = ADDRESS_MODAL_HTML;
       document.body.appendChild(overlay);
+      bindModalBaseEvents(overlay);
     }
     return overlay;
   }
 
   function open() {
+    const isLoggedIn = window.AuthSession && window.AuthSession.isLoggedIn();
+    if (!isLoggedIn) {
+      if (typeof showToast === 'function') showToast('🔒 Please sign in to manage delivery addresses.');
+      setTimeout(() => { window.location.href = 'auth.html'; }, 1000);
+      return;
+    }
+
     const overlay = injectModalIfNeeded();
     if (!overlay) return;
 
-    // Rebind events just in case it was freshly injected
-    bindModalEvents(overlay);
-
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+    
+    // Reset form states
+    hideAddForm();
+    
+    // Load and render addresses from server
+    loadAddresses();
   }
 
   function close() {
@@ -251,94 +253,331 @@ const AddressModal = (() => {
     hideAddForm();
   }
 
-  function showAddForm() {
+  function showAddForm(title = 'Add New Address', prefill = null) {
     const form = document.getElementById('new-addr-form');
     const btn = document.getElementById('add-addr-btn');
-    if (form) form.classList.add('visible');
+    const titleEl = document.getElementById('addr-form-title');
+    
+    if (titleEl) titleEl.textContent = title;
+    
+    if (prefill) {
+      document.getElementById('f-addr-id').value = prefill.id || '';
+      document.getElementById('f-name').value = prefill.fname || '';
+      document.getElementById('f-lname').value = prefill.lname || '';
+      document.getElementById('f-line1').value = prefill.line1 || '';
+      document.getElementById('f-line2').value = prefill.line2 || '';
+      document.getElementById('f-city').value = prefill.city || '';
+      document.getElementById('f-pin').value = prefill.pin || '';
+      document.getElementById('f-state').value = prefill.state || '';
+      document.getElementById('f-phone').value = prefill.phone || '';
+      document.getElementById('f-type').value = prefill.type || 'Home';
+    } else {
+      document.getElementById('f-addr-id').value = '';
+      if (form) form.reset();
+    }
+    
+    if (form) form.style.display = 'flex';
     if (btn) btn.style.display = 'none';
   }
 
   function hideAddForm() {
     const form = document.getElementById('new-addr-form');
     const btn = document.getElementById('add-addr-btn');
-    if (form) { form.classList.remove('visible'); form.reset?.(); }
-    if (btn) btn.style.display = '';
+    if (form) {
+      form.style.display = 'none';
+      form.reset();
+    }
+    if (btn) btn.style.display = 'flex';
+    document.getElementById('f-addr-id').value = '';
   }
 
-  function bindAddressItemEvents(item) {
-    const defaultBtn = item.querySelector('.set-default-btn');
-    if (defaultBtn) {
-      defaultBtn.addEventListener('click', () => {
-        document.querySelectorAll('.addr-item').forEach(el => {
-          el.classList.remove('is-default');
-          const t = el.querySelector('.addr-type');
-          if (t) t.textContent = el.dataset.type || 'Address';
-        });
-        item.classList.add('is-default');
-        const typeEl = item.querySelector('.addr-type');
-        if (typeEl) typeEl.textContent = (item.dataset.type || 'Address') + ' ✓';
-        if (typeof showToast === 'function') showToast('✅ Default address updated');
-      });
-    }
+  async function loadAddresses() {
+    const loadingEl = document.getElementById('addr-loading');
+    const listEl = document.getElementById('global-addr-list');
+    
+    if (loadingEl) loadingEl.style.display = 'block';
+    if (listEl) listEl.style.display = 'none';
 
-    const deleteBtn = item.querySelector('.delete-btn');
-    if (deleteBtn) {
-      deleteBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to delete this address?')) {
-          item.remove();
-          if (typeof showToast === 'function') showToast('🗑️ Address deleted');
+    try {
+      const token = window.AuthSession ? window.AuthSession.getToken() : null;
+      const res = await fetch(API_URL, {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
       });
-    }
+      const data = await res.json();
+      
+      if (res.ok) {
+        currentAddresses = data.addresses || [];
+        
+        // Cache addresses on current cached user profile
+        let user = window.AuthSession ? window.AuthSession.getUser() : null;
+        if (user) {
+          user.addresses = currentAddresses;
+          localStorage.setItem('ebazaar_user', JSON.stringify(user));
+        }
 
-    const editBtn = item.querySelector('.edit-btn');
-    if (editBtn) {
-      editBtn.addEventListener('click', () => {
-        showAddForm();
-        document.getElementById('new-addr-form').scrollIntoView({ behavior: 'smooth' });
-      });
+        renderAddresses(currentAddresses);
+        updateNavbarAndCartUI(currentAddresses);
+      } else {
+        console.error('Failed to load addresses:', data.error);
+        if (listEl) listEl.innerHTML = `<p style="text-align: center; color: #c0392b; padding: 20px;">Error: ${data.error || 'Could not load addresses'}</p>`;
+      }
+    } catch (err) {
+      console.error('Error fetching addresses:', err);
+      if (listEl) listEl.innerHTML = `<p style="text-align: center; color: #c0392b; padding: 20px;">Failed to connect to address server.</p>`;
+    } finally {
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (listEl) listEl.style.display = 'flex';
     }
   }
 
-  let eventsBound = false;
-  function bindModalEvents(overlay) {
-    if (eventsBound) return;
+  function renderAddresses(addresses) {
+    const listEl = document.getElementById('global-addr-list');
+    if (!listEl) return;
 
+    if (addresses.length === 0) {
+      listEl.innerHTML = `<p style="text-align: center; color: var(--text-sub); padding: 30px 10px; font-size: 13px;">No saved addresses found. Please add a delivery address below.</p>`;
+      return;
+    }
+
+    listEl.innerHTML = addresses.map(addr => {
+      const defaultBadge = addr.isDefault ? `<span class="addr-type" style="background: rgba(46, 125, 50, 0.12); color: #2e7d32; font-weight: 600; font-size: 11px; padding: 2px 6px; border-radius: 4px;">Default ✓</span>` : '';
+      const defaultBtn = !addr.isDefault ? `<button class="addr-act-btn set-default-btn" data-id="${addr.id}" style="padding: 4px 8px; font-size: 12px; font-family: inherit; font-weight: 500; cursor: pointer; border-radius: 6px; border: 1.5px solid var(--border); background: var(--bg-surface); color: var(--text-primary);">Set as Default</button>` : '';
+      
+      return `
+      <div class="addr-item ${addr.isDefault ? 'is-default' : ''}" style="border: 1.5px solid ${addr.isDefault ? 'var(--primary, #A88C6D)' : 'var(--border)'}; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; background: var(--bg-surface); transition: border-color 0.2s;">
+        <div class="addr-item-top" style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="addr-name" style="font-weight: 700; color: var(--text-primary); font-size: 14px;">${addr.fname} ${addr.lname} <span style="font-weight: 500; font-size: 11px; padding: 2px 6px; border-radius: 4px; background: var(--bg-canvas); color: var(--text-sub); margin-left: 6px;">${addr.type}</span></span>
+          ${defaultBadge}
+        </div>
+        <p class="addr-line" style="font-size: 13px; color: var(--text-sub); line-height: 1.4; margin: 0;">${addr.line1}${addr.line2 ? ', ' + addr.line2 : ''}<br>${addr.city}, ${addr.state} — ${addr.pin}</p>
+        <p class="addr-phone" style="font-size: 12px; color: var(--text-muted); margin: 0;">Mobile: ${addr.phone}</p>
+        <div class="addr-actions" style="display: flex; gap: 10px; margin-top: 4px; border-top: 1px dashed var(--border); padding-top: 10px;">
+          ${defaultBtn}
+          <button class="addr-act-btn edit-btn" data-id="${addr.id}" style="padding: 4px 8px; font-size: 12px; font-family: inherit; font-weight: 500; cursor: pointer; border-radius: 6px; border: 1.5px solid var(--border); background: var(--bg-surface); color: var(--text-primary);">&#9998; Edit</button>
+          <button class="addr-act-btn secondary delete-btn" data-id="${addr.id}" style="padding: 4px 8px; font-size: 12px; font-family: inherit; font-weight: 500; cursor: pointer; border-radius: 6px; border: 1.5px solid var(--border); background: var(--bg-canvas); color: #c0392b; margin-left: auto;">&#128465; Delete</button>
+        </div>
+      </div>
+      `;
+    }).join('');
+
+    // Bind event handlers
+    listEl.querySelectorAll('.set-default-btn').forEach(btn => {
+      btn.addEventListener('click', () => setDefaultAddress(btn.dataset.id));
+    });
+
+    listEl.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteAddress(btn.dataset.id));
+    });
+
+    listEl.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const addr = addresses.find(a => a.id === btn.dataset.id);
+        if (addr) {
+          showAddForm('Edit Address', addr);
+          document.getElementById('new-addr-form').scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  }
+
+  async function setDefaultAddress(addrId) {
+    if (typeof showToast === 'function') showToast('Updating default address...');
+    try {
+      const token = window.AuthSession ? window.AuthSession.getToken() : null;
+      const res = await fetch(`${API_URL}/${addrId}/default`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        currentAddresses = data.addresses || [];
+        
+        let user = window.AuthSession ? window.AuthSession.getUser() : null;
+        if (user) {
+          user.addresses = currentAddresses;
+          localStorage.setItem('ebazaar_user', JSON.stringify(user));
+        }
+
+        renderAddresses(currentAddresses);
+        updateNavbarAndCartUI(currentAddresses);
+        if (typeof showToast === 'function') showToast('✅ Default address updated');
+      } else {
+        if (typeof showToast === 'function') showToast('❌ ' + (data.error || 'Failed to update default address'));
+      }
+    } catch (err) {
+      console.error(err);
+      if (typeof showToast === 'function') showToast('❌ Connection error');
+    }
+  }
+
+  async function deleteAddress(addrId) {
+    if (!confirm('Are you sure you want to delete this address?')) return;
+    if (typeof showToast === 'function') showToast('Deleting address...');
+    
+    try {
+      const token = window.AuthSession ? window.AuthSession.getToken() : null;
+      const res = await fetch(`${API_URL}/${addrId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        currentAddresses = data.addresses || [];
+        
+        let user = window.AuthSession ? window.AuthSession.getUser() : null;
+        if (user) {
+          user.addresses = currentAddresses;
+          localStorage.setItem('ebazaar_user', JSON.stringify(user));
+        }
+
+        renderAddresses(currentAddresses);
+        updateNavbarAndCartUI(currentAddresses);
+        if (typeof showToast === 'function') showToast('🗑️ Address deleted');
+      } else {
+        if (typeof showToast === 'function') showToast('❌ ' + (data.error || 'Failed to delete address'));
+      }
+    } catch (err) {
+      console.error(err);
+      if (typeof showToast === 'function') showToast('❌ Connection error');
+    }
+  }
+
+  function bindModalBaseEvents(overlay) {
     const closeBtn = document.getElementById('modal-close-btn');
     if (closeBtn) closeBtn.addEventListener('click', close);
 
-    if (overlay) overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) close(); });
 
     const addBtn = document.getElementById('add-addr-btn');
-    if (addBtn) addBtn.addEventListener('click', showAddForm);
+    if (addBtn) addBtn.addEventListener('click', () => showAddForm('Add New Address', null));
 
     const cancelBtn = document.getElementById('addr-form-cancel');
     if (cancelBtn) cancelBtn.addEventListener('click', hideAddForm);
 
-    document.querySelectorAll('.addr-item').forEach(bindAddressItemEvents);
-
     const form = document.getElementById('new-addr-form');
     if (form) {
-      form.addEventListener('submit', e => {
+      form.addEventListener('submit', async e => {
         e.preventDefault();
 
-        const fname = document.getElementById('f-name').value;
-        const lname = document.getElementById('f-lname').value;
-        const line1 = document.getElementById('f-line1').value;
-        const line2 = document.getElementById('f-line2').value;
-        const city = document.getElementById('f-city').value;
-        const pin = document.getElementById('f-pin').value;
-        const phone = document.getElementById('f-phone').value;
+        const addrId = document.getElementById('f-addr-id').value;
+        const fname = document.getElementById('f-name').value.trim();
+        const lname = document.getElementById('f-lname').value.trim();
+        const line1 = document.getElementById('f-line1').value.trim();
+        const line2 = document.getElementById('f-line2').value.trim();
+        const city = document.getElementById('f-city').value.trim();
+        const pin = document.getElementById('f-pin').value.trim();
+        const state = document.getElementById('f-state').value.trim();
+        const phone = document.getElementById('f-phone').value.trim();
+        const type = document.getElementById('f-type').value;
 
-        const newAddr = {
-          type: 'Custom',
-          fname, lname, line1, line2, city, pin, phone
-        };
+        if (!fname || !lname || !line1 || !city || !pin || !state || !phone) {
+          if (typeof showToast === 'function') showToast('⚠️ Please fill in all required fields.');
+          return;
+        }
 
-        let user = JSON.parse(localStorage.getItem('eb_user'));
-        if (user) {
-          if (!user.addresses) user.addresses = [];
+        if (pin.length !== 6 || isNaN(pin)) {
+          if (typeof showToast === 'function') showToast('⚠️ PIN Code must be a 6-digit number.');
+          return;
+        }
+
+        const payload = { fname, lname, line1, line2, city, pin, state, phone, type };
+        const isEdit = !!addrId;
+        const method = isEdit ? 'PUT' : 'POST';
+        const targetUrl = isEdit ? `${API_URL}/${addrId}` : API_URL;
+
+        if (typeof showToast === 'function') showToast(isEdit ? 'Saving edits...' : 'Adding address...');
+
+        try {
+          const token = window.AuthSession ? window.AuthSession.getToken() : null;
+          const res = await fetch(targetUrl, {
+            method,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (res.ok) {
+            currentAddresses = data.addresses || [];
+            
+            let user = window.AuthSession ? window.AuthSession.getUser() : null;
+            if (user) {
+              user.addresses = currentAddresses;
+              localStorage.setItem('ebazaar_user', JSON.stringify(user));
+            }
+
+            renderAddresses(currentAddresses);
+            updateNavbarAndCartUI(currentAddresses);
+            hideAddForm();
+            
+            if (typeof showToast === 'function') showToast(isEdit ? '✅ Address details updated!' : '🏠 New address saved!');
+          } else {
+            if (typeof showToast === 'function') showToast('❌ ' + (data.error || 'Failed to save address.'));
+          }
+        } catch (err) {
+          console.error(err);
+          if (typeof showToast === 'function') showToast('❌ Connection error. Try again.');
+        }
+      });
+    }
+  }
+
+  function updateNavbarAndCartUI(addresses) {
+    const defaultAddr = addresses.find(a => a.isDefault) || addresses[0];
+    
+    // Update Navbar Address Display
+    const navValueEl = document.querySelector('.nav-address .addr-value');
+    if (navValueEl) {
+      if (defaultAddr) {
+        navValueEl.textContent = `${defaultAddr.fname} · ${defaultAddr.city} ${defaultAddr.pin}`;
+      } else {
+        navValueEl.textContent = 'Set Address';
+      }
+    }
+
+    // Update Cart Page Checkout Summary Address Display (if on cart.html)
+    const cartAddrType = document.getElementById('selected-address-type');
+    const cartAddrText = document.getElementById('selected-address-text');
+    if (cartAddrType && cartAddrText) {
+      if (defaultAddr) {
+        cartAddrType.textContent = defaultAddr.type || 'Home';
+        cartAddrText.innerHTML = `${defaultAddr.fname} ${defaultAddr.lname}, ${defaultAddr.line1}${defaultAddr.line2 ? '<br>' + defaultAddr.line2 : ''}<br>${defaultAddr.city}, ${defaultAddr.state} — ${defaultAddr.pin}`;
+      } else {
+        cartAddrType.textContent = 'No Address';
+        cartAddrText.innerHTML = '<span style="color: #c0392b;">Please add a delivery address to place your order.</span>';
+      }
+    }
+  }
+
+  function init() {
+    const triggers = document.querySelectorAll('#addr-trigger, .nav-address');
+    triggers.forEach(trigger => {
+      trigger.addEventListener('click', open);
+    });
+
+    // Auto-update navbar delivery address on page load
+    const user = window.AuthSession ? window.AuthSession.getUser() : null;
+    if (user && user.addresses) {
+      updateNavbarAndCartUI(user.addresses);
+    }
+  }
+
+  return {
+    init,
+    open,
+    close,
+    updateNavbarAndCartUI
+  };
+})();
+window.AddressModal = AddressModal;resses = [];
           user.addresses.push(newAddr);
           localStorage.setItem('eb_user', JSON.stringify(user));
         }

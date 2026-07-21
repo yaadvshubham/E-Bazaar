@@ -868,22 +868,41 @@
       })
       .then(orders => {
         window.currentOrders = orders;
+
         // Group orders by status
-        const activeOrders = [];
-        const pastOrders = [];
-        const returnedOrders = [];
+        // NOTE: 'Pending' = incomplete Razorpay session (user dismissed modal without paying)
+        //       These should NEVER be shown to the user — they are server-side payment sessions.
+        const activeOrders   = [];  // In-progress: Confirmed, Paid, Shipped, Out for Delivery
+        const pastOrders     = [];  // Completed history: Delivered orders only
+        const returnedOrders = [];  // Returns / refunds
 
         orders.forEach(order => {
-          // All orders belong to full Order History
-          pastOrders.push(order);
+          const s = order.status;
 
-          if (order.status === 'Pending' || order.status === 'Confirmed' || order.status === 'Paid' || order.status === 'Shipped' || order.status === 'Out for Delivery' || !order.status) {
-            activeOrders.push(order);
-          }
-          
-          if (order.status === 'Returned' || order.status === 'Refunded' || order.status === 'Cancelled' || order.status === 'Replacement Requested' || order.returnDetails) {
+          // Skip bare Pending orders — they are incomplete payment sessions
+          if (s === 'Pending') return;
+
+          // Returns & refunds tab
+          if (s === 'Returned' || s === 'Refunded' || s === 'Cancelled' || s === 'Replacement Requested') {
             returnedOrders.push(order);
+            pastOrders.push(order);  // also in history for reference
+            return;
           }
+
+          // Delivered → history only
+          if (s === 'Delivered') {
+            pastOrders.push(order);
+            return;
+          }
+
+          // Confirmed / Paid / Shipped / Out for Delivery → active only
+          if (s === 'Confirmed' || s === 'Paid' || s === 'Shipped' || s === 'Out for Delivery') {
+            activeOrders.push(order);
+            return;
+          }
+
+          // Fallback for any unknown status — put in history
+          pastOrders.push(order);
         });
 
         // Update counts on tabs
