@@ -3,6 +3,13 @@ const router  = express.Router();
 const bcrypt  = require('bcryptjs');
 const jwt     = require('jsonwebtoken');
 const User    = require('../models/User');
+const Razorpay = require('razorpay');
+const crypto = require('crypto');
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_TFkHWivdCZCZeK',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'm2cTmfkpWRIXmSfVOWtGOjTs'
+});
 
 const JWT_SECRET  = process.env.JWT_SECRET  || 'ebazaar_super_secret_jwt_key_2025';
 const JWT_EXPIRES = process.env.JWT_EXPIRES  || '7d';
@@ -24,7 +31,8 @@ function safeUser(user) {
     email: user.email,
     phone: user.phone || '',
     profilePic: user.profilePic || null,
-    walletBalance: typeof user.walletBalance === 'number' ? user.walletBalance : 1500.00
+    walletBalance: typeof user.walletBalance === 'number' ? user.walletBalance : 150.00,
+    withdrawableBalance: typeof user.withdrawableBalance === 'number' ? user.withdrawableBalance : 0.00
   };
 }
 
@@ -56,7 +64,7 @@ router.post('/register', async (req, res) => {
       email:    email.toLowerCase().trim(),
       password: hashedPassword,
       phone:    phone || null,
-      walletBalance: 1500.00
+      walletBalance: 150.00
     });
 
     const token = signToken(user);
@@ -180,6 +188,130 @@ router.post('/wallet/add', async (req, res) => {
   } catch (err) {
     console.error('[Auth] Wallet add error:', err.message);
     return res.status(500).json({ error: 'Failed to add funds to wallet: ' + err.message });
+  }
+});
+/* ── POST /api/auth/wallet/order — Create Razorpay Order for Top-up ──────── */
+router.post('/wallet/order', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Authorization required.' });
+    }
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findByPk(decoded.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    const amount = parseFloat(req.body.amount);
+    if (isNaN(amount) || amount <= 0) {
+      return res.status(400).json({ error: 'Please enter a valid amount.' });
+    }
+
+    const rzpOrder = await razorpay.orders.create({
+      amount: Math.round(amount * 100),
+      currency: "INR",
+      receipt: `wallet_topup_${Date.now()}`
+    });
+
+    return res.status(201).json({
+      order_id: rzpOrder.id,
+      amount: rzpOrder.amount,
+      currency: rzpOrder.currency,
+      key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_TFkHWivdCZCZeK'
+    });
+  } catch (err) {
+    console.error('[Auth] Wallet order error:', err);
+    return res.status(500).json({ error: 'Failed to create Razorpay order for wallet.' });
+  }
+});
+
+/* ── POST /api/auth/wallet/verify — Verify Top-up Payment ────────────────── */
+router.post('/wallet/verify', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Authorization required.' });
+    }
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findByPk(decoded.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, amount } = req.body;
+
+    if (!razorpay_payment_id || !razorpay_order_id) {
+      return res.status(400).json({ error: 'Missing required Razorpay parameters.' });
+    }
+
+    let isSignatureValid = false;
+    if (razorpay_signature) {
+      const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'm2cTmfkpWRIXmSfVOWtGOjTs');
+      hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+      const generated_signature = hmac.digest('hex');
+      isSignatureValid = (generated_signature === razorpay_signature);
+    } else {
+      isSignatureValid = true;
+    }
+
+    if (!isSignatureValid) {
+      return res.status(400).json({ error: 'Razorpay signature verification failed.' });
+    }
+
+    const addedAmount = parseFloat(amount);
+    if (isNaN(addedAmount) || addedAmount <= 0) {
+      return res.status(400).json({ error: 'Invalid amount verified.' });
+    }
+
+    user.walletBalance = (user.walletBalance || 0) + addedAmount;
+    user.withdrawableBalance = (user.withdrawableBalance || 0) + addedAmount;
+    await user.save();
+
+    return res.json({
+      message: `Successfully added ₹${addedAmount.toLocaleString('en-IN')} to your wallet!`,
+      walletBalance: user.walletBalance,
+      withdrawableBalance: user.withdrawableBalance,
+      user: safeUser(user)
+    });
+  } catch (err) {
+    console.error('[Auth] Wallet verify error:', err);
+    return res.status(500).json({ error: 'Failed to verify payment.' });
+  }
+});
+
+/* ── POST /api/auth/wallet/withdraw — Withdraw Funds ─────────────────────── */
+router.post('/wallet/withdraw', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Authorization required.' });
+    }
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findByPk(decoded.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    const amount = parseFloat(req.body.amount);
+    if (isNaN(amount) || amount <= 0) {
+      return res.status(400).json({ error: 'Please enter a valid amount.' });
+    }
+
+    if (amount > (user.withdrawableBalance || 0)) {
+      return res.status(400).json({ error: 'Insufficient withdrawable balance. Promotional coins cannot be withdrawn.' });
+    }
+
+    user.walletBalance = (user.walletBalance || 0) - amount;
+    user.withdrawableBalance = (user.withdrawableBalance || 0) - amount;
+    await user.save();
+
+    return res.json({
+      message: `Successfully requested withdrawal of ₹${amount.toLocaleString('en-IN')}. Funds will be transferred to your bank soon.`,
+      walletBalance: user.walletBalance,
+      withdrawableBalance: user.withdrawableBalance,
+      user: safeUser(user)
+    });
+  } catch (err) {
+    console.error('[Auth] Wallet withdraw error:', err);
+    return res.status(500).json({ error: 'Failed to process withdrawal.' });
   }
 });
 

@@ -82,6 +82,10 @@ router.post('/create', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Total amount is required.' });
     }
 
+    if (parseFloat(totalAmount) > 500000) {
+      return res.status(400).json({ error: 'Order amount exceeds the Razorpay test mode limit (₹5,00,000). Please remove some items from your cart to test the payment gateway.' });
+    }
+
     const amountInPaise = Math.round(parseFloat(totalAmount) * 100);
 
     // Call Razorpay orders API
@@ -111,7 +115,11 @@ router.post('/create', authMiddleware, async (req, res) => {
     });
   } catch (err) {
     console.error('[Orders Route] Razorpay Order Creation error:', err);
-    return res.status(500).json({ error: 'Failed to create Razorpay order: ' + err.message });
+    let errorMsg = err.message || 'Unknown error occurred.';
+    if (err.error && err.error.description) {
+      errorMsg = err.error.description;
+    }
+    return res.status(500).json({ error: 'Failed to create Razorpay order: ' + errorMsg });
   }
 });
 
@@ -148,6 +156,17 @@ router.post('/verify', authMiddleware, async (req, res) => {
     order.status = 'Paid';
     order.razorpayPaymentId = razorpay_payment_id;
     order.razorpaySignature = razorpay_signature || '';
+    
+    // Deduct wallet balance if walletUsed is passed
+    const { walletUsed } = req.body;
+    if (walletUsed && !isNaN(walletUsed) && walletUsed > 0) {
+      const user = await require('../models/User').findByPk(req.user.id);
+      if (user && user.walletBalance >= walletUsed) {
+        user.walletBalance -= walletUsed;
+        await user.save();
+      }
+    }
+    
     await order.save();
 
     return res.json({
