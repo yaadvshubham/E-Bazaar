@@ -3,6 +3,11 @@
    Razorpay Test Gateway & Checkout Orchestrator
    ═══════════════════════════════════════════════════════════════════════ */
 
+// Dynamic API Base
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:5000/api'
+  : 'http://localhost:5000/api'; // Fallback
+
 // Calculate total from cart supporting both 'cart' and 'eb_cart_items' keys
 let total = 0;
 let items = [];
@@ -11,12 +16,12 @@ try {
   const cart = JSON.parse(rawCart);
   let subtotal = 0;
   let totalDiscount = 0;
-  
+
   cart.forEach(item => {
-    const pPrice = parseInt(String(item.price || item.pPrice || '0').replace(/[^\d]/g, '')) || 0;
-    const oPrice = parseInt(String(item.orig || item.price || item.oPrice || '0').replace(/[^\d]/g, '')) || 0;
+    const pPrice = parseFloat(String(item.price || item.pPrice || '0').replace(/,/g, '')) || 0;
+    const oPrice = parseFloat(String(item.orig || item.price || item.oPrice || '0').replace(/,/g, '')) || 0;
     const qty = parseInt(item.qty || item.quantity || 1) || 1;
-    
+
     subtotal += oPrice * qty;
     totalDiscount += (oPrice - pPrice) * qty;
 
@@ -28,8 +33,13 @@ try {
       image: item.image || item.img
     });
   });
-  
-  total = subtotal - totalDiscount;
+
+  const checkoutTotal = localStorage.getItem('checkout_total');
+  if (checkoutTotal && !isNaN(parseInt(checkoutTotal))) {
+    total = parseInt(checkoutTotal);
+  } else {
+    total = subtotal - totalDiscount;
+  }
 } catch (e) {
   console.error('[Payment JS] Error calculating cart total:', e);
 }
@@ -40,9 +50,9 @@ try {
   const userObj = JSON.parse(localStorage.getItem('eb_user'));
   if (userObj && userObj.addresses && userObj.addresses.length > 0) {
     const addr = userObj.addresses[0];
-    deliveryAddress = `${addr.fname} ${addr.lname}, ${addr.line1}, ${addr.line2 ? addr.line2 + ', ' : ''}${addr.city} - ${addr.pin}. Phone: ${addr.phone}`;
+    deliveryAddress = `${addr.fname || ''} ${addr.lname || ''}, ${addr.line1 || ''}, ${addr.line2 ? addr.line2 + ', ' : ''}${addr.city || ''} - ${addr.pin || ''}. Phone: ${addr.phone || ''}`;
   } else if (userObj) {
-    deliveryAddress = `${userObj.name}, No address saved. Email: ${userObj.email}`;
+    deliveryAddress = `${userObj.name || 'User'}, No address saved. Email: ${userObj.email || ''}`;
   }
 } catch (err) {
   console.error('[Payment JS] Error reading user address:', err);
@@ -61,11 +71,11 @@ function checkLoginState() {
     const user = window.AuthSession.getUser();
     const emailField = document.getElementById('card-email');
     if (emailField && user) {
-      emailField.value = user.email;
+      emailField.value = user.email || '';
     }
     const nameField = document.getElementById('card-name');
     if (nameField && user) {
-      nameField.value = user.name;
+      nameField.value = user.name || '';
     }
   } else {
     if (formBody) formBody.style.display = 'none';
@@ -77,7 +87,7 @@ function checkLoginState() {
 document.addEventListener('DOMContentLoaded', () => {
   // Update amounts in UI
   const displayAmountEl = document.getElementById('display-amount');
-  
+
   if (displayAmountEl) {
     displayAmountEl.textContent = '₹' + total.toLocaleString('en-IN');
   }
@@ -91,7 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Razorpay test button listener
   const rzpButton = document.getElementById('rzp-button1');
   if (rzpButton) {
-    rzpButton.addEventListener('click', async () => {
+    rzpButton.addEventListener('click', async (e) => {
+      e.preventDefault(); // Ensure no form submission happens
+
       if (!window.AuthSession || !window.AuthSession.isLoggedIn()) {
         alert('Please log in to secure this transaction.');
         checkLoginState();
@@ -102,13 +114,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      if (typeof Razorpay === 'undefined') {
+        alert('Razorpay SDK is not loaded. Please disable your adblocker or check your internet connection.');
+        return;
+      }
+
       rzpButton.disabled = true;
-      const originalText = rzpButton.textContent;
+      const originalHTML = rzpButton.innerHTML; // preserve SVG
       rzpButton.innerHTML = 'Contacting Payment Gateway... <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>';
 
       try {
         const token = window.AuthSession.getToken();
-        const res = await fetch('http://localhost:5000/api/orders/create', {
+        const res = await fetch(`${API_BASE}/orders/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -120,6 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
             deliveryAddress
           })
         });
+
+        if (res.status === 401) {
+          if (window.AuthSession && window.AuthSession.clear) {
+            window.AuthSession.clear();
+          }
+          alert("Your session has expired or is invalid. Please log in again.");
+          window.location.reload();
+          return;
+        }
 
         if (!res.ok) {
           const errData = await res.json();
@@ -138,8 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
           order_id: rzpData.order_id,
           handler: async function (response) {
             try {
-              rzpButton.textContent = 'Verifying Transaction...';
-              const verifyRes = await fetch('http://localhost:5000/api/orders/verify', {
+              rzpButton.innerHTML = 'Verifying Transaction... <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>';
+              const verifyRes = await fetch(`${API_BASE}/orders/verify`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -148,7 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({
                   razorpay_payment_id: response.razorpay_payment_id,
                   razorpay_order_id: response.razorpay_order_id,
-                  razorpay_signature: response.razorpay_signature
+                  razorpay_signature: response.razorpay_signature,
+                  walletUsed: parseFloat(localStorage.getItem('wallet_applied') || '0')
                 })
               });
 
@@ -161,12 +188,16 @@ document.addEventListener('DOMContentLoaded', () => {
               localStorage.setItem('cart', '[]');
               localStorage.setItem('eb_cart_items', '[]');
               localStorage.setItem('eb-cart', '0');
+              localStorage.removeItem('checkout_total');
+              localStorage.removeItem('wallet_applied');
 
               // Signal parent window
               if (window.opener && !window.opener.closed) {
                 try {
                   window.opener.postMessage('PAYMENT_SUCCESS', '*');
-                } catch (e) {}
+                } catch (err) {
+                  console.warn('Could not post message to opener', err);
+                }
               }
 
               // UI Transition to Success
@@ -174,36 +205,47 @@ document.addEventListener('DOMContentLoaded', () => {
               if (formBody) formBody.style.display = 'none';
               const cardFooter = document.getElementById('card-footer');
               if (cardFooter) cardFooter.style.display = 'none';
-              document.getElementById('success-body').style.display = 'block';
+              const successBody = document.getElementById('success-body');
+              if (successBody) successBody.style.display = 'block';
 
             } catch (err) {
+              console.error(err);
               alert('Payment Verification Failed: ' + err.message);
               rzpButton.disabled = false;
-              rzpButton.textContent = originalText;
+              rzpButton.innerHTML = originalHTML;
             }
           },
           prefill: {
-            name: window.AuthSession.getUser()?.name || '',
-            email: window.AuthSession.getUser()?.email || '',
+            name: (window.AuthSession.getUser() && window.AuthSession.getUser().name) ? window.AuthSession.getUser().name : '',
+            email: (window.AuthSession.getUser() && window.AuthSession.getUser().email) ? window.AuthSession.getUser().email : '',
+            contact: (window.AuthSession.getUser() && window.AuthSession.getUser().phone) ? window.AuthSession.getUser().phone : ''
           },
           theme: {
             color: '#3399cc'
           },
           modal: {
-            ondismiss: function() {
+            ondismiss: function () {
               rzpButton.disabled = false;
-              rzpButton.innerHTML = originalText;
+              rzpButton.innerHTML = originalHTML;
             }
           }
         };
 
         const rzp1 = new Razorpay(options);
+
+        rzp1.on('payment.failed', function (response) {
+          alert("Payment Failed. Reason: " + (response.error ? response.error.description : 'Unknown Error'));
+          rzpButton.disabled = false;
+          rzpButton.innerHTML = originalHTML;
+        });
+
         rzp1.open();
 
       } catch (err) {
+        console.error(err);
         alert('Order setup failed: ' + err.message);
         rzpButton.disabled = false;
-        rzpButton.innerHTML = originalText;
+        rzpButton.innerHTML = originalHTML;
       }
     });
   }

@@ -393,12 +393,23 @@
       <div class="cart-right">
         <div class="cart-summary-card">
           <h3>Order Summary</h3>
-          <div class="summary-row"><span>Subtotal</span><span id="summ-subtotal">₹0</span></div>
+          <div id="summ-price-breakdown"></div>
+          <div class="summary-row"><span id="summ-price-label">Price (0 items)</span><span id="summ-subtotal">₹0</span></div>
+          <div class="summary-row"><span>GST (Calculated)</span><span id="summ-gst">₹0</span></div>
           <div class="summary-row"><span>Delivery Fee</span><span id="summ-delivery">Free</span></div>
-          <div class="summary-row"><span>Discount</span><span id="summ-discount"
-              style="color:var(--accent-green)">-₹0</span></div>
+          <div class="summary-row"><span>Discount</span><span id="summ-discount" style="color:var(--accent-green)">-₹0</span></div>
+          <div class="summary-row" id="wallet-used-row" style="display:none; color:var(--accent-green);"><span>Wallet Used</span><span id="summ-wallet">-₹0</span></div>
           <hr class="summary-divider" />
           <div class="summary-row total"><span>Total</span><span id="summ-total">₹0</span></div>
+
+          <div class="delivery-options-section" style="margin-top: 24px;">
+            <h4 style="margin-bottom: 12px; font-size: 14px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px;">Delivery Options</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size: 14px;"><input type="radio" name="delivery_opt" value="0" checked onchange="calculateCartTotals()"> Standard (3-5 Days) - Free</label>
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size: 14px;"><input type="radio" name="delivery_opt" value="99" onchange="calculateCartTotals()"> Express (1-2 Days) - ₹99</label>
+              <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size: 14px;"><input type="radio" name="delivery_opt" value="199" onchange="calculateCartTotals()"> Same Day (Metro) - ₹199</label>
+            </div>
+          </div>
 
           <div class="address-section" style="margin-top: 24px;">
             <h4
@@ -417,7 +428,18 @@
             </div>
           </div>
 
-          <button class="btn-checkout" id="btn-proceed-pay" onclick="proceedToPayment()">Proceed to Pay</button>
+          <div class="wallet-section" style="margin-top: 16px; padding: 12px; border: 1px dashed var(--border); border-radius: var(--r-sm);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+              <span style="font-weight: 600; font-size: 13px;">Wallet Balance:</span>
+              <span id="display-wallet-balance" style="font-weight: 700; color: var(--accent-green);">₹0</span>
+            </div>
+            <div style="display:flex; gap: 8px;">
+              <input type="number" id="wallet-input" placeholder="Amount to use" style="flex:1; padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px;" min="0">
+              <button class="addr-act-btn edit-btn" style="padding: 8px 12px; border-radius: 4px;" onclick="applyWallet()">Apply</button>
+            </div>
+          </div>
+
+          <button class="btn-checkout" id="btn-proceed-pay" style="margin-top: 16px;" onclick="proceedToPayment()">Proceed to Pay</button>
         </div>
       </div>
     </div>
@@ -554,20 +576,37 @@
       let subtotal = 0;
       let totalDiscount = 0;
       let totalQty = 0;
+      let totalGST = 0;
+      let breakdownHtml = '';
 
       container.innerHTML = ebCart.map((item, index) => {
         // Parse prices (remove ₹ and commas)
         const pPrice = parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
         const oPrice = parseInt(String(item.orig).replace(/[^\d]/g, '')) || 0;
         const qty = item.qty || 1;
+        const gstRate = item.gstRate !== undefined ? item.gstRate : 18;
 
+        // Inclusive GST Logic (back-calculated)
+        const basePrice = (pPrice * qty) / (1 + (gstRate / 100));
+        const itemGST = (pPrice * qty) - basePrice;
+        
         subtotal += oPrice * qty;
         totalDiscount += (oPrice - pPrice) * qty;
         totalQty += qty;
+        totalGST += itemGST;
+        
+        breakdownHtml += `
+          <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); margin-bottom:8px;">
+            <span>${qty} &times; ${item.name.substring(0, 20)}${item.name.length > 20 ? '...' : ''}</span>
+            <span>₹${(oPrice * qty).toLocaleString('en-IN')}</span>
+          </div>
+        `;
 
         return `
       <div class="cart-item">
-        <a href="product-detail.html?id=${item.id}" class="cart-item-img">${makeSVG(item.color, item.shape)}</a>
+        <a href="product-detail.html?id=${item.id}" class="cart-item-img">
+          <img src="${item.image || item.imageUrl || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80'}" alt="${item.name}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+        </a>
         <div class="cart-item-details">
           <span class="cart-item-brand">${item.brand}</span>
           <a href="product-detail.html?id=${item.id}" class="cart-item-name">${item.name}</a>
@@ -575,6 +614,7 @@
             <span class="cart-item-price">${item.price}</span>
             <span class="cart-item-orig">${item.orig}</span>
             <span class="cart-item-disc">${item.disc} off</span>
+            <span style="font-size: 11px; color: var(--text-muted); margin-left: 8px;">(Incl. ${gstRate}% GST)</span>
           </div>
           <div class="cart-item-actions">
             <div class="qty-control">
@@ -593,11 +633,107 @@
       }).join('');
 
       countEl.textContent = `(${totalQty} items)`;
-      subEl.textContent = '₹' + subtotal.toLocaleString('en-IN');
-      discEl.textContent = '-₹' + totalDiscount.toLocaleString('en-IN');
-      totEl.textContent = '₹' + (subtotal - totalDiscount).toLocaleString('en-IN');
+      window.cartCalculations = { subtotal, totalDiscount, totalGST, totalQty, breakdownHtml };
+      
+      calculateCartTotals();
+
       btnPay.disabled = false;
       btnPay.style.opacity = '1';
+    }
+
+    let walletApplied = 0;
+
+    function calculateCartTotals() {
+      if (!window.cartCalculations) return;
+      const { subtotal, totalDiscount, totalGST, totalQty, breakdownHtml } = window.cartCalculations;
+      
+      const deliveryOpt = document.querySelector('input[name="delivery_opt"]:checked');
+      const deliveryFee = deliveryOpt ? parseInt(deliveryOpt.value) : 0;
+      
+      // We will show the MRP sum as the subtotal line, and explicitly list the discount.
+      // This is standard e-commerce logic (Flipkart, Amazon India).
+      
+      let finalTotal = (subtotal - totalDiscount) + deliveryFee;
+      
+      if (walletApplied > finalTotal) {
+        walletApplied = finalTotal;
+      }
+      
+      finalTotal -= walletApplied;
+      
+      // Setup the breakdown
+      if (breakdownHtml) {
+        document.getElementById('summ-price-breakdown').innerHTML = breakdownHtml + `<div style="border-bottom: 1px dashed var(--border); margin: 8px 0 12px 0;"></div>`;
+      } else {
+        document.getElementById('summ-price-breakdown').innerHTML = '';
+      }
+      
+      document.getElementById('summ-price-label').textContent = `Price (${totalQty} items)`;
+      document.getElementById('summ-subtotal').textContent = '₹' + subtotal.toLocaleString('en-IN');
+      
+      // Calculate average discount percentage
+      const discPercent = subtotal > 0 ? Math.round((totalDiscount / subtotal) * 100) : 0;
+      
+      const discountRow = document.getElementById('summ-discount').parentElement;
+      if (totalDiscount > 0) {
+        if (discountRow) discountRow.style.display = 'flex';
+        document.getElementById('summ-discount').textContent = `-₹${totalDiscount.toLocaleString('en-IN')} (${discPercent}% off)`;
+      } else {
+        if (discountRow) discountRow.style.display = 'none';
+      }
+
+      document.getElementById('summ-gst').textContent = '(Included) ₹' + Math.round(totalGST).toLocaleString('en-IN');
+      document.getElementById('summ-delivery').textContent = deliveryFee === 0 ? 'Free' : '₹' + deliveryFee;
+      
+      if (walletApplied > 0) {
+        document.getElementById('wallet-used-row').style.display = 'flex';
+        document.getElementById('summ-wallet').textContent = '-₹' + Math.round(walletApplied).toLocaleString('en-IN');
+      } else {
+        document.getElementById('wallet-used-row').style.display = 'none';
+      }
+      
+      document.getElementById('summ-total').textContent = '₹' + Math.round(finalTotal).toLocaleString('en-IN');
+      localStorage.setItem('checkout_total', Math.round(finalTotal));
+      localStorage.setItem('wallet_applied', Math.round(walletApplied));
+    }
+
+    async function applyWallet() {
+      const input = document.getElementById('wallet-input');
+      const amount = parseFloat(input.value);
+      
+      if (isNaN(amount) || amount < 0) {
+        showToast('❌ Enter a valid wallet amount');
+        return;
+      }
+      
+      let balance = 0;
+      const token = localStorage.getItem('ebazaar_token');
+      if (token && token !== 'ebazaar_demo_token') {
+        try {
+          const res = await fetch('http://localhost:5000/api/auth/me', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          const data = await res.json();
+          if (data.user) {
+            balance = data.user.walletBalance || 0;
+          }
+        } catch (e) {
+           const user = window.AuthSession ? window.AuthSession.getUser() : null;
+           balance = user ? (user.walletBalance || 0) : 0;
+        }
+      } else {
+         const user = window.AuthSession ? window.AuthSession.getUser() : null;
+         balance = user ? (user.walletBalance || 0) : 0;
+      }
+      
+      if (amount > balance) {
+        showToast(`❌ You only have ₹${balance} in your wallet`);
+        return;
+      }
+      
+      walletApplied = amount;
+      calculateCartTotals();
+      showToast(`✅ Applied ₹${amount} from wallet!`);
     }
 
     function updateCartQty(id, delta) {
@@ -638,7 +774,24 @@
       window.open('payment.html', '_blank');
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Fetch wallet balance if logged in
+      const token = localStorage.getItem('ebazaar_token');
+      if (token && token !== 'ebazaar_demo_token') {
+        try {
+          const res = await fetch('http://localhost:5000/api/auth/me', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          const data = await res.json();
+          if (data.user) {
+            document.getElementById('display-wallet-balance').textContent = '₹' + (data.user.walletBalance || 0);
+          }
+        } catch(e) {}
+      } else {
+         const user = window.AuthSession ? window.AuthSession.getUser() : null;
+         if (user) document.getElementById('display-wallet-balance').textContent = '₹' + (user.walletBalance || 0);
+      }
+
       // Re-render after a slight delay to ensure scripts are loaded if needed
       setTimeout(renderCart, 100);
 

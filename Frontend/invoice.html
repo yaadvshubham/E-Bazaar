@@ -339,9 +339,9 @@
           <tr>
             <th>Product Description</th>
             <th class="text-right">Qty</th>
-            <th class="text-right">Unit Price</th>
-            <th class="text-right">Tax (18%)</th>
-            <th class="text-right">Total</th>
+            <th class="text-right">Base Price</th>
+            <th class="text-right">Tax (GST)</th>
+            <th class="text-right">Final Total</th>
           </tr>
         </thead>
         <tbody id="invoice-items">
@@ -383,6 +383,20 @@
         <div class="signature-line"></div>
         Authorized Signatory
       </div>
+    </div>
+    </div>
+
+    <!-- GST Appendix -->
+    <div style="margin-top: 40px; border-top: 1px dashed var(--border-color); padding-top: 24px; font-size: 11px; color: var(--text-sub);">
+      <strong>Appendix A: E-Bazaar GST Classification Logic</strong><br>
+      As per the Indian Goods and Services Tax (GST) framework and Tax Collection at Source (TCS) norms, GST rates are determined by the product category/HSN code. All prices shown on our website are inclusive of the applicable GST rate below.<br><br>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 8px;">
+        <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 4px;"><strong>Category</strong></td><td style="padding: 4px;"><strong>GST Rate</strong></td></tr>
+        <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 4px;">Apparel & Clothing (Under ₹1000)</td><td style="padding: 4px;">5%</td></tr>
+        <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 4px;">Apparel & Shoes (Above ₹1000)</td><td style="padding: 4px;">12%</td></tr>
+        <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 4px;">Electronics, Gadgets & Beauty</td><td style="padding: 4px;">18%</td></tr>
+        <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 4px;">Essential Groceries & Books</td><td style="padding: 4px;">0% - 5%</td></tr>
+      </table>
     </div>
 
   </div>
@@ -466,11 +480,20 @@
       }
       if (!Array.isArray(items)) items = [];
 
+      let overallSubtotal = 0;
+      let overallGST = 0;
+
       itemsTbody.innerHTML = items.map(item => {
         const qty = item.qty || 1;
-        const total = (parseFloat(String(item.price).replace(/[^\d]/g, '')) || 0) * qty;
-        const sub = Math.round((total / 1.18) * 100) / 100;
+        const finalPrice = parseFloat(String(item.price).replace(/[^\d]/g, '')) || 0;
+        const total = finalPrice * qty;
+        
+        const gstRate = item.gstRate !== undefined ? item.gstRate : 18;
+        const sub = Math.round((total / (1 + (gstRate / 100))) * 100) / 100;
         const gst = Math.round((total - sub) * 100) / 100;
+        
+        overallSubtotal += sub;
+        overallGST += gst;
 
         return `
           <tr>
@@ -480,23 +503,24 @@
             </td>
             <td class="text-right">${qty}</td>
             <td class="text-right">₹${sub.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-            <td class="text-right">₹${gst.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            <td class="text-right">₹${gst.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <br><span style="font-size:10px; color:#888;">(${gstRate}%)</span></td>
             <td class="text-right">₹${total.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
           </tr>
         `;
       }).join('');
 
       const grandTotal = order.totalAmount;
-      const subtotal = Math.round((grandTotal / 1.18) * 100) / 100;
-      const gstTotal = Math.round((grandTotal - subtotal) * 100) / 100;
+      // Use exact sum of item components for overall totals, so they match exactly
+      const subtotal = overallSubtotal;
+      const gstTotal = overallGST;
 
       document.querySelector('.totals-box').innerHTML = `
         <div class="total-row">
-          <span class="info-label">Subtotal:</span>
+          <span class="info-label">Base Subtotal:</span>
           <span class="info-val">₹${subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
         </div>
         <div class="total-row">
-          <span class="info-label">GST (18%):</span>
+          <span class="info-label">Total GST:</span>
           <span class="info-val">₹${gstTotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
         </div>
         <div class="total-row">
@@ -587,11 +611,11 @@
         `;
         document.querySelector('.totals-box').innerHTML = `
             <div class="total-row">
-              <span class="info-label">Subtotal:</span>
+              <span class="info-label">Base Subtotal:</span>
               <span class="info-val">₹3,643.22</span>
             </div>
             <div class="total-row">
-              <span class="info-label">GST (18%):</span>
+              <span class="info-label">Total GST (18%):</span>
               <span class="info-val">₹655.78</span>
             </div>
             <div class="total-row">
@@ -612,7 +636,7 @@
             </td>
             <td class="text-right">1</td>
             <td class="text-right">₹59,237.29</td>
-            <td class="text-right">₹10,662.71</td>
+            <td class="text-right">₹10,662.71 <br><span style="font-size:10px; color:#888;">(18%)</span></td>
             <td class="text-right">₹69,900.00</td>
           </tr>
         `;

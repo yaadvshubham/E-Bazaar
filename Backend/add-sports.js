@@ -27,7 +27,7 @@ const coreSportsProducts = [
     rating: 4.8,
     reviews: 14200,
     sales: "45k+ bought",
-    imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=800&q=80",
     description: "5U ultralight (77g) frame delivering lightning-fast racquet speed and rapid backhand drives."
   },
   {
@@ -40,7 +40,7 @@ const coreSportsProducts = [
     rating: 4.7,
     reviews: 8900,
     sales: "25k+ bought",
-    imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80",
     description: "Muscle Power frame locks string into rounded archways to eliminate stress friction and fatigue."
   },
   {
@@ -53,7 +53,7 @@ const coreSportsProducts = [
     rating: 4.9,
     reviews: 38000,
     sales: "90k+ bought",
-    imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80",
     description: "Precision engineered nylon shuttles designed to closely match flight performance of feather shuttles."
   },
   {
@@ -66,7 +66,7 @@ const coreSportsProducts = [
     rating: 4.8,
     reviews: 16500,
     sales: "40k+ bought",
-    imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=800&q=80",
     description: "Wing Ribbon technology allows air flow through skirt to create fast recovery and stable trajectory."
   },
   {
@@ -79,7 +79,7 @@ const coreSportsProducts = [
     rating: 4.9,
     reviews: 21000,
     sales: "60k+ bought",
-    imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800&q=80",
     description: "Tacky feel overgrip absorbing moisture and sweat to provide supreme racquet handling confidence."
   },
   {
@@ -92,7 +92,7 @@ const coreSportsProducts = [
     rating: 4.7,
     reviews: 6400,
     sales: "20k+ bought",
-    imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80",
     description: "High tension carbon fiber frame supporting string tension up to 30 lbs for powerful smashes."
   },
   {
@@ -131,7 +131,7 @@ const coreSportsProducts = [
     rating: 4.5,
     reviews: 11200,
     sales: "30k+ bought",
-    imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=800&q=80",
     description: "Durable aluminum shaft twin racquet kit with carrying cover ideal for casual outdoor recreation."
   },
   {
@@ -144,7 +144,7 @@ const coreSportsProducts = [
     rating: 4.9,
     reviews: 18900,
     sales: "50k+ bought",
-    imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1555315051-7140e94f1cc8?w=800&q=80",
     description: "0.70mm thick braided nylon fiber construction providing soft feel and long-lasting durability."
   },
   {
@@ -901,7 +901,7 @@ yonexModels.forEach((m, idx) => {
     rating: 4.8,
     reviews: Math.floor(Math.random() * 6000) + 1500,
     sales: `${Math.floor(Math.random() * 30) + 10}k+ bought`,
-    imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80",
     description: `Isometric head shape frame delivering expanded sweet spot and head light maneuverability.`
   });
 });

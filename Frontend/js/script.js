@@ -3862,8 +3862,8 @@ function buildCard(p) {
   const imgSrc = p.image || p.imageUrl || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
   const salesDisplay = p.sales ? (String(p.sales).includes('bought') ? p.sales : `${p.sales} bought in past month`) : '';
 
-  const numPrice = typeof p.price === 'number' ? p.price : (parseInt(String(p.price || 0).replace(/[^\d]/g, '')) || 0);
-  const numOrig = typeof p.originalPrice === 'number' ? p.originalPrice : (parseInt(String(p.originalPrice || numPrice).replace(/[^\d]/g, '')) || numPrice);
+  const numPrice = typeof p.price === 'number' ? p.price : (parseFloat(String(p.price || 0).replace(/,/g, '')) || 0);
+  const numOrig = typeof p.originalPrice === 'number' ? p.originalPrice : (parseFloat(String(p.originalPrice || numPrice).replace(/,/g, '')) || numPrice);
   const discText = p.discount || p.disc || '0%';
 
   return `<article class="cat-card" role="listitem">
@@ -4159,7 +4159,7 @@ function initCategoryFilters() {
     const getNumericPrice = (p) => {
       if (typeof p.price === 'number') return p.price;
       if (!p.price) return 0;
-      return parseInt(String(p.price).replace(/[^\d]/g, '')) || 0;
+      return parseFloat(String(p.price).replace(/,/g, '')) || 0;
     };
 
     // Helper to safely extract discount percentage
@@ -4423,12 +4423,24 @@ function normalizeProduct(p) {
   normalized.title = p.title || p.name || '';
   normalized.name = p.title || p.name || '';
 
-  const rawPrice = p.price;
-  const rawOrig = p.originalPrice || p.orig || p.price || 0;
+  let rawPrice = p.price;
+  let rawOrig = p.originalPrice || p.orig || p.price || 0;
+
+  if (typeof rawPrice === 'number' && rawPrice % 1 !== 0) {
+    rawPrice = Math.round(rawPrice * 100);
+  } else if (typeof rawPrice === 'string' && rawPrice.match(/^₹?[\d,]+\.\d{1,2}$/)) {
+    rawPrice = Math.round(parseFloat(rawPrice.replace(/[^\d.]/g, '')) * 100);
+  }
+
+  if (typeof rawOrig === 'number' && rawOrig % 1 !== 0) {
+    rawOrig = Math.round(rawOrig * 100);
+  } else if (typeof rawOrig === 'string' && rawOrig.match(/^₹?[\d,]+\.\d{1,2}$/)) {
+    rawOrig = Math.round(parseFloat(rawOrig.replace(/[^\d.]/g, '')) * 100);
+  }
 
   normalized.price = typeof rawPrice === 'number' ? `₹${rawPrice.toLocaleString('en-IN')}` : rawPrice;
   normalized.orig = typeof rawOrig === 'number' ? `₹${rawOrig.toLocaleString('en-IN')}` : rawOrig;
-  normalized.originalPrice = typeof rawOrig === 'number' ? rawOrig : (parseInt(String(rawOrig).replace(/[^\d]/g, '')) || 0);
+  normalized.originalPrice = typeof rawOrig === 'number' ? rawOrig : (parseFloat(String(rawOrig).replace(/,/g, '')) || 0);
 
   normalized.disc = p.discount || p.disc || '0%';
   normalized.discount = p.discount || p.disc || '0%';
@@ -4506,7 +4518,13 @@ function toggleWish(btnId, title, pStrEncoded) {
   const btn = document.getElementById(btnId);
   const on = btn ? btn.classList.toggle('wished') : true;
   if (btn) {
-    btn.querySelector('svg')?.setAttribute('stroke', on ? '#E03E3E' : '#999');
+    const svg = btn.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('stroke', on ? '#E03E3E' : '#999');
+      svg.setAttribute('fill', on ? '#E03E3E' : 'none');
+    } else if (btn.id === 'pd-wish') {
+      btn.innerHTML = on ? '❤️ Wishlisted' : '🤍 Wishlist';
+    }
   }
 
   if (pStrEncoded) {
@@ -5055,7 +5073,7 @@ function initSearch() {
 
         autoBox.innerHTML = brandStoreHTML + matches.map(p => {
           const title = p.title || p.name || 'Product';
-          const priceNum = typeof p.price === 'number' ? p.price : (parseInt(String(p.price || 0).replace(/[^\d]/g, '')) || 0);
+          const priceNum = typeof p.price === 'number' ? p.price : (parseFloat(String(p.price || 0).replace(/,/g, '')) || 0);
           const price = `₹${priceNum.toLocaleString('en-IN')}`;
           const img = p.image || p.imageUrl || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
           const link = p.id ? `product-detail.html?id=${p.id}` : `category.html?q=${encodeURIComponent(title)}`;
@@ -5145,15 +5163,97 @@ function initProductDetail() {
         <h3 style="font-size: 16px; margin-bottom: 10px;">Description</h3>
         <p style="color: var(--text-muted); line-height: 1.6; font-size: 15px;">${p.description || 'Premium quality product details coming soon.'}</p>
       </div>
+      <style>
+        .pd-wish-btn {
+          flex: 1; 
+          padding: 18px; 
+          border-radius: 12px; 
+          border: 1px solid var(--border); 
+          background: #fff; 
+          font-weight: 700; 
+          cursor: pointer;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          color: var(--text);
+        }
+        .pd-wish-btn:hover {
+          border-color: #A88C6D;
+          background: #fdfaf7;
+        }
+        .pd-wish-btn:active {
+          transform: scale(0.96);
+        }
+        .pd-cart-btn {
+          flex: 2; 
+          padding: 18px; 
+          border-radius: 12px; 
+          background: #000; 
+          color: #fff; 
+          border: none; 
+          font-weight: 700; 
+          cursor: pointer; 
+          font-size: 16px;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .pd-cart-btn:hover {
+          background: #222;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .pd-cart-btn:active {
+          transform: scale(0.97) translateY(0);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        html[data-theme="dark"] .pd-wish-btn {
+          background: var(--bg-card);
+          border-color: var(--border);
+          color: var(--text);
+        }
+        html[data-theme="dark"] .pd-wish-btn:hover {
+          background: #2a2a2a;
+          border-color: #C9B397;
+        }
+        html[data-theme="dark"] .pd-cart-btn {
+          background: #fff;
+          color: #000;
+        }
+        html[data-theme="dark"] .pd-cart-btn:hover {
+          background: #e5e5e5;
+        }
+      </style>
       <div style="display: flex; gap: 16px;">
-        <button onclick="addToCart('${pStr}')" style="flex: 2; padding: 18px; border-radius: 12px; background: #000; color: #fff; border: none; font-weight: 700; cursor: pointer; font-size: 16px;">Add to Cart</button>
-        <button onclick="toggleWish('pd-wish', '${String(p.title).replace(/'/g, "\\'")}', '${pStr}')" id="pd-wish" style="flex: 1; padding: 18px; border-radius: 12px; border: 1px solid var(--border); background: #fff; font-weight: 700; cursor: pointer;">
+        <button onclick="toggleWish('pd-wish', '${String(p.title).replace(/'/g, "\\'")}', '${pStr}')" id="pd-wish" class="pd-wish-btn">
           ${isWished ? '❤️ Wishlisted' : '🤍 Wishlist'}
+        </button>
+        <button onclick="handleAddToCartClick(this, '${pStr}')" class="pd-cart-btn">
+          Add to Cart
         </button>
       </div>
     </div>
   `;
 }
+
+window.handleAddToCartClick = function(btn, pStr) {
+  addToCart(pStr);
+  if (btn.cartTimeout) clearTimeout(btn.cartTimeout);
+  btn.innerHTML = '✅ Added to Cart';
+  btn.style.background = '#10B981';
+  btn.style.color = '#fff';
+  // Remove hover style so it stays green
+  btn.cartTimeout = setTimeout(() => {
+    btn.innerHTML = 'Add to Cart';
+    btn.style.background = '';
+    btn.style.color = '';
+  }, 1000); // reduced delay to 1 second
+};
 
 /* ═══════════════════════════════════════════════════════════════════════
    BOOT

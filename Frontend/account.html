@@ -185,6 +185,10 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           Addresses
         </div>
+        <div class="acc-nav-link" onclick="switchPanel('bank-accounts', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Bank Accounts
+        </div>
         <div class="acc-nav-link" onclick="window.location.href='orders.html'">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg>
           My Orders
@@ -237,14 +241,17 @@
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
             <div>
               <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7);">TOTAL WALLET BALANCE</span>
-              <div style="font-size: 36px; font-weight: 800; color: #fff; margin-top: 4px; letter-spacing: -0.5px;" id="wallet-balance-display">₹1,500.00</div>
+              <div style="font-size: 36px; font-weight: 800; color: #fff; margin-top: 4px; letter-spacing: -0.5px;" id="wallet-balance-display">₹150.00</div>
+              <div style="font-size: 14px; color: rgba(255,255,255,0.85); margin-top: 8px;">
+                Withdrawable (Added Funds): <strong id="wallet-withdrawable-display" style="color: #4caf50;">₹0.00</strong>
+              </div>
             </div>
             <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center;">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
             </div>
           </div>
           <div style="font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.5;">
-            Use your E-Bazaar wallet to pay instantly at checkout, or receive immediate refunds when returning items!
+            Use your E-Bazaar wallet to pay instantly at checkout. <em>Note: Promotional signup bonus coins cannot be withdrawn to bank.</em>
           </div>
         </div>
 
@@ -261,9 +268,33 @@
           <form id="wallet-add-form" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
             <div style="position: relative; flex: 1; min-width: 200px;">
               <span style="position: absolute; left: 16px; top: 12px; font-weight: 700; color: var(--text-sub);">₹</span>
-              <input type="number" id="wallet-add-input" placeholder="Enter amount to add" min="100" max="50000" required style="width: 100%; padding: 12px 16px 12px 32px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; font-weight: 600; outline: none; background: var(--bg-card);">
+              <input type="number" id="wallet-add-input" placeholder="Enter amount to add" min="50" max="50000" required style="width: 100%; padding: 12px 16px 12px 32px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; font-weight: 600; outline: none; background: var(--bg-card);">
             </div>
-            <button type="submit" class="btn-primary-action" style="padding: 12px 24px;">Add Funds Now</button>
+            <button type="submit" class="btn-primary-action" id="wallet-add-btn" style="padding: 12px 24px;">Add Funds Now</button>
+          </form>
+        </div>
+
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+          <h3 style="font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Withdraw to Bank</h3>
+          <p style="font-size: 13px; color: var(--text-sub); margin-bottom: 16px;">Withdraw your added funds to your bank account. Note: Only user-deposited money is eligible for withdrawal.</p>
+          
+          <form id="wallet-withdraw-form" style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 200px;">
+                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:6px;">Select Bank Account</label>
+                <select id="wallet-withdraw-bank" required style="width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-weight: 500; outline: none; background: var(--bg-card); color: var(--text);">
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+              <div style="flex: 1; min-width: 200px;">
+                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:6px;">Amount to Withdraw</label>
+                <div style="position: relative;">
+                  <span style="position: absolute; left: 16px; top: 12px; font-weight: 700; color: var(--text-sub);">₹</span>
+                  <input type="number" id="wallet-withdraw-input" placeholder="0.00" required style="width: 100%; padding: 12px 16px 12px 32px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; font-weight: 600; outline: none; background: var(--bg-card);">
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn-primary-action" style="align-self: flex-start; padding: 12px 24px; background: rgba(168, 140, 109, 0.12); color: var(--accent); border: 1px solid rgba(168, 140, 109, 0.3);">Withdraw Funds</button>
           </form>
         </div>
 
@@ -282,6 +313,17 @@
         </div>
         
         <div id="acc-address-list">
+        </div>
+      </div>
+      
+      <!-- Panel 4: Bank Accounts -->
+      <div class="acc-panel" id="panel-bank-accounts">
+        <div class="panel-header">
+          <h2 class="panel-title">Saved Bank Accounts</h2>
+          <button class="btn-primary-action" onclick="BankAccountModal.open()">+ Add New Bank</button>
+        </div>
+        
+        <div id="acc-bank-list">
         </div>
       </div>
       
@@ -310,8 +352,37 @@
 <button id="btt" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg></button>
 <div id="toast" role="alert" aria-live="polite"><div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span></div>
 
+<!-- Bank Account Modal -->
+<div class="modal-overlay" id="bank-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+  <div class="modal-content" style="background:var(--bg); padding:24px; border-radius:12px; width:90%; max-width:400px; position:relative;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h3 style="margin:0; font-size:18px;">Add Bank Account</h3>
+      <button onclick="BankAccountModal.close()" style="background:none; border:none; cursor:pointer;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <form id="bank-form" style="display:flex; flex-direction:column; gap:16px;">
+      <div>
+        <label style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:6px; display:block;">Bank Name</label>
+        <input type="text" id="bank-name" placeholder="e.g. HDFC Bank" required style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; background:var(--bg-card);">
+      </div>
+      <div>
+        <label style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:6px; display:block;">Account Number</label>
+        <input type="text" id="bank-acc-no" placeholder="Enter Account Number" required style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; background:var(--bg-card);">
+      </div>
+      <div>
+        <label style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:6px; display:block;">IFSC Code</label>
+        <input type="text" id="bank-ifsc" placeholder="e.g. HDFC0001234" required style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; background:var(--bg-card);">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
+        <button type="button" onclick="BankAccountModal.close()" style="padding:10px 16px; border-radius:6px; background:transparent; border:1px solid var(--border); cursor:pointer;">Cancel</button>
+        <button type="submit" class="btn-primary-action" style="padding:10px 16px; border-radius:6px; border:none;">Save Account</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script src="js/script.js"></script>
 <script src="js/auth.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   let currentUser = JSON.parse(localStorage.getItem('eb_user') || 'null');
   
@@ -345,7 +416,7 @@
         name: 'Shubham Yadav',
         email: 'shubham@example.com',
         phone: '+91 98765 43210',
-        walletBalance: 1500,
+        walletBalance: 150,
         addresses: [
           { type: 'Home (Default)', line1: '47, Sector 18, DLF Phase 3', line2: 'New Delhi, Delhi — 110001' }
         ]
@@ -360,9 +431,16 @@
     // Populate Sidebar
     document.getElementById('sidebar-name').textContent = currentUser.name || 'User Name';
     document.getElementById('sidebar-email').textContent = currentUser.email || '';
-    const balance = typeof currentUser.walletBalance === 'number' ? currentUser.walletBalance : 1500;
+    const balance = typeof currentUser.walletBalance === 'number' ? currentUser.walletBalance : 150;
+    const withdrawable = typeof currentUser.withdrawableBalance === 'number' ? currentUser.withdrawableBalance : 0;
+    
     document.getElementById('sidebar-wallet').textContent = `₹${balance.toLocaleString('en-IN')}`;
     document.getElementById('wallet-balance-display').textContent = `₹${balance.toLocaleString('en-IN')}.00`;
+    document.getElementById('wallet-withdrawable-display').textContent = `₹${withdrawable.toLocaleString('en-IN')}.00`;
+
+    // Also update max on withdraw input
+    const withdrawInput = document.getElementById('wallet-withdraw-input');
+    if (withdrawInput) withdrawInput.max = withdrawable;
 
     if (currentUser.profilePic) {
       document.getElementById('sidebar-avatar').src = currentUser.profilePic;
@@ -373,6 +451,47 @@
       document.getElementById('sidebar-avatar-placeholder').style.display = 'block';
     }
     
+    // Auto-fix 1750 issue or legacy balance discrepancy
+    let txs = currentUser.walletTransactions || [];
+    let calcSum = 150; // default signup bonus
+    txs.forEach(t => {
+      if (t.title !== 'Welcome Signup Bonus Credit' && t.title !== 'Account Balance Adjustment') {
+        const amtStr = t.amount.replace(/[^0-9.-]+/g, "");
+        const amt = parseFloat(amtStr) || 0;
+        if (t.type === 'debit') {
+          calcSum -= Math.abs(amt);
+        } else {
+          calcSum += Math.abs(amt);
+        }
+      }
+    });
+
+    if (calcSum !== balance) {
+      // Balance is out of sync. Let's add an adjustment transaction to fix math.
+      const diff = balance - calcSum;
+      const adjustTx = {
+        title: 'Account Balance Adjustment',
+        desc: 'Legacy wallet state alignment',
+        amount: `${diff >= 0 ? '+' : '-'} ₹${Math.abs(diff).toLocaleString('en-IN')}.00`,
+        date: 'Jul 20, 2026',
+        type: diff >= 0 ? 'credit' : 'debit'
+      };
+      
+      // Keep Welcome Signup Bonus of 150 at the bottom
+      const welcomeTx = { title: 'Welcome Signup Bonus Credit', desc: 'Promotional E-Bazaar wallet credit', amount: '+ ₹150.00', date: 'Jul 20, 2026', type: 'credit' };
+      
+      const realTxs = txs.filter(t => t.title !== 'Welcome Signup Bonus Credit' && t.title !== 'Account Balance Adjustment');
+      realTxs.push(adjustTx);
+      realTxs.push(welcomeTx);
+      currentUser.walletTransactions = realTxs;
+      localStorage.setItem('eb_user', JSON.stringify(currentUser));
+    } else if (txs.length === 0) {
+      currentUser.walletTransactions = [
+        { title: 'Welcome Signup Bonus Credit', desc: 'Promotional E-Bazaar wallet credit', amount: '+ ₹150.00', date: 'Jul 20, 2026', type: 'credit' }
+      ];
+      localStorage.setItem('eb_user', JSON.stringify(currentUser));
+    }
+    
     // Populate Profile Form
     document.getElementById('prof-name').value = currentUser.name || '';
     document.getElementById('prof-email').value = currentUser.email || '';
@@ -381,6 +500,7 @@
     // Render Addresses & Wallet ledger
     renderAddresses();
     renderWalletTransactions();
+    renderBankAccounts();
   }
 
   function renderAddresses() {
@@ -410,20 +530,88 @@
     const list = document.getElementById('wallet-transactions-list');
     if (!list) return;
 
-    const txs = currentUser.walletTransactions || [
-      { title: 'Welcome Signup Bonus Credit', desc: 'Promotional E-Bazaar wallet credit', amount: '+ ₹1,500.00', date: 'Jul 20, 2026', type: 'credit' },
-      { title: 'Instant Refund Credit', desc: 'Refund for order #EB-4', amount: '+ ₹499.00', date: 'Jul 19, 2026', type: 'credit' }
-    ];
+    const txs = currentUser.walletTransactions || [];
 
     list.innerHTML = txs.map(t => `
-      <div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; background: var(--bg);">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;">
         <div>
           <div style="font-size: 14px; font-weight: 600; color: var(--text);">${t.title}</div>
-          <div style="font-size: 12px; color: var(--text-sub); margin-top: 2px;">${t.desc} &middot; <span style="font-weight: 500;">${t.date}</span></div>
+          <div style="font-size: 12px; color: var(--text-sub); margin-top: 4px;">${t.desc} &middot; ${t.date}</div>
         </div>
-        <div class="tx-amt ${t.type === 'credit' ? 'tx-credit' : 'tx-debit'}">${t.amount}</div>
+        <div style="font-size: 14px; font-weight: 700; color: ${t.type === 'credit' ? '#4caf50' : '#c62828'};">
+          ${t.amount}
+        </div>
       </div>
     `).join('');
+  }
+
+  // --- BANK ACCOUNTS MANAGEMENT ---
+  const BankAccountModal = {
+    open: function() {
+      document.getElementById('bank-modal').style.display = 'flex';
+      document.getElementById('bank-form').reset();
+    },
+    close: function() {
+      document.getElementById('bank-modal').style.display = 'none';
+    }
+  };
+
+  document.getElementById('bank-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const bankName = document.getElementById('bank-name').value.trim();
+    const accNo = document.getElementById('bank-acc-no').value.trim();
+    const ifsc = document.getElementById('bank-ifsc').value.trim();
+    
+    if (!currentUser.bankAccounts) currentUser.bankAccounts = [];
+    currentUser.bankAccounts.push({ bankName, accNo, ifsc });
+    localStorage.setItem('eb_user', JSON.stringify(currentUser));
+    
+    BankAccountModal.close();
+    renderBankAccounts();
+    if (typeof showToast === 'function') showToast('🏦 Bank Account added!');
+  });
+
+  function renderBankAccounts() {
+    const list = document.getElementById('acc-bank-list');
+    const select = document.getElementById('wallet-withdraw-bank');
+    
+    if (!currentUser.bankAccounts) currentUser.bankAccounts = [];
+    
+    if (list) {
+      if (currentUser.bankAccounts.length === 0) {
+        list.innerHTML = '<div class="empty-state">No bank accounts saved yet.</div>';
+      } else {
+        list.innerHTML = currentUser.bankAccounts.map((b, idx) => `
+          <div class="addr-card">
+            <h4 style="margin-top:0">${b.bankName}</h4>
+            <p>Account: •••• ${b.accNo.slice(-4)}</p>
+            <p>IFSC: ${b.ifsc}</p>
+            <div style="margin-top:12px;">
+              <button class="btn-danger" style="padding:6px 12px; font-size:12px;" onclick="deleteBankAccount(${idx})">Delete</button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+    
+    if (select) {
+      if (currentUser.bankAccounts.length === 0) {
+        select.innerHTML = '<option value="" disabled selected>No bank accounts saved</option>';
+      } else {
+        select.innerHTML = currentUser.bankAccounts.map((b, idx) => 
+          `<option value="${idx}">${b.bankName} (•••• ${b.accNo.slice(-4)})</option>`
+        ).join('');
+      }
+    }
+  }
+
+  window.deleteBankAccount = function(idx) {
+    if (confirm('Delete this bank account?')) {
+      currentUser.bankAccounts.splice(idx, 1);
+      localStorage.setItem('eb_user', JSON.stringify(currentUser));
+      renderBankAccounts();
+      if (typeof showToast === 'function') showToast('🗑️ Bank account deleted');
+    }
   }
 
   function switchPanel(panelId, tabEl) {
@@ -472,52 +660,159 @@
     if (typeof showToast === 'function') showToast('✅ Profile saved!');
   });
 
-  // Wallet Add Funds Listener (Synced with Backend API)
+  // Wallet Add Funds Listener (Razorpay)
   document.getElementById('wallet-add-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const amountVal = parseFloat(document.getElementById('wallet-add-input').value);
     if (isNaN(amountVal) || amountVal <= 0) return;
 
     const token = getAuthToken();
+    if (!token) {
+      if (typeof showToast === 'function') showToast('❌ Please log in to add funds.');
+      return;
+    }
+
+    const btn = document.getElementById('wallet-add-btn');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+
+    try {
+      // 1. Create Razorpay order
+      const orderRes = await fetch('http://localhost:5000/api/auth/wallet/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ amount: amountVal })
+      });
+      const orderData = await orderRes.json();
+      if (!orderRes.ok) throw new Error(orderData.error || 'Failed to create order');
+
+      // 2. Open Razorpay Checkout
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'E-Bazaar',
+        description: 'Wallet Top-up',
+        order_id: orderData.order_id,
+        handler: async function (response) {
+          try {
+            btn.textContent = 'Verifying...';
+            // 3. Verify payment
+            const verifyRes = await fetch('http://localhost:5000/api/auth/wallet/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+              body: JSON.stringify({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                amount: amountVal
+              })
+            });
+            const verifyData = await verifyRes.json();
+            if (!verifyRes.ok) throw new Error(verifyData.error || 'Verification failed');
+
+            // 4. Update UI
+            currentUser.walletBalance = verifyData.walletBalance;
+            currentUser.withdrawableBalance = verifyData.withdrawableBalance;
+            
+            if (!currentUser.walletTransactions) currentUser.walletTransactions = [];
+            currentUser.walletTransactions.unshift({
+              title: 'Wallet Top-up Deposit',
+              desc: `Payment ID: ${response.razorpay_payment_id.slice(0,8)}...`,
+              amount: `+ ₹${amountVal.toLocaleString('en-IN')}.00`,
+              date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+              type: 'credit'
+            });
+            
+            localStorage.setItem('eb_user', JSON.stringify(currentUser));
+            initAccountUI();
+            document.getElementById('wallet-add-input').value = '';
+            
+            if (typeof showToast === 'function') showToast(`✅ Added ₹${amountVal.toLocaleString('en-IN')} to wallet!`);
+          } catch(err) {
+            alert('Payment Verification Failed: ' + err.message);
+          } finally {
+            btn.disabled = false;
+            btn.textContent = originalText;
+          }
+        },
+        prefill: {
+          name: currentUser.name || '',
+          email: currentUser.email || '',
+        },
+        theme: { color: '#A88C6D' },
+        modal: {
+          ondismiss: function() {
+            btn.disabled = false;
+            btn.textContent = originalText;
+          }
+        }
+      };
+
+      const rzp1 = new Razorpay(options);
+      rzp1.open();
+    } catch(err) {
+      console.error('[Account] Add funds error:', err);
+      alert('Error initiating payment: ' + err.message);
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  });
+
+  // Wallet Withdraw Form Listener
+  document.getElementById('wallet-withdraw-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const amountVal = parseFloat(document.getElementById('wallet-withdraw-input').value);
+    const bankSelect = document.getElementById('wallet-withdraw-bank');
+    let bankDesc = 'linked bank account';
+    
+    if (bankSelect && bankSelect.options.length > 0 && bankSelect.selectedIndex >= 0) {
+       bankDesc = bankSelect.options[bankSelect.selectedIndex].text;
+    }
+
+    if (isNaN(amountVal) || amountVal <= 0) return;
+
+    const withdrawable = typeof currentUser.withdrawableBalance === 'number' ? currentUser.withdrawableBalance : 0;
+    if (amountVal > withdrawable) {
+      alert(`You can only withdraw up to ₹${withdrawable}. Bonus coins cannot be withdrawn.`);
+      return;
+    }
+
+    const token = getAuthToken();
     if (token) {
       try {
-        const res = await fetch('http://localhost:5000/api/auth/wallet/add', {
+        const res = await fetch('http://localhost:5000/api/auth/wallet/withdraw', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify({ amount: amountVal })
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to add funds');
+        if (!res.ok) throw new Error(data.error || 'Withdrawal failed');
 
         currentUser.walletBalance = data.walletBalance;
+        currentUser.withdrawableBalance = data.withdrawableBalance;
+        
         if (!currentUser.walletTransactions) currentUser.walletTransactions = [];
         currentUser.walletTransactions.unshift({
-          title: 'Wallet Top-up Deposit',
-          desc: 'Direct deposit added to wallet',
-          amount: `+ ₹${amountVal.toLocaleString('en-IN')}.00`,
+          title: 'Bank Withdrawal Request',
+          desc: `Processing transfer to ${bankDesc}`,
+          amount: `- ₹${amountVal.toLocaleString('en-IN')}.00`,
           date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
-          type: 'credit'
+          type: 'debit'
         });
 
         localStorage.setItem('eb_user', JSON.stringify(currentUser));
         initAccountUI();
-        document.getElementById('wallet-add-input').value = '';
-        if (typeof showToast === 'function') showToast(`💳 Added ₹${amountVal.toLocaleString('en-IN')} to E-Bazaar wallet!`);
-        return;
+        document.getElementById('wallet-withdraw-input').value = '';
+        if (typeof showToast === 'function') showToast(data.message || `💸 Withdrawn ₹${amountVal.toLocaleString('en-IN')} to bank`);
       } catch(err) {
-        console.error('[Account] Add funds error:', err);
+        console.error('[Account] Withdraw error:', err);
+        alert(err.message);
       }
+    } else {
+      if (typeof showToast === 'function') showToast('❌ Please log in to withdraw.');
     }
-
-    // Local fallback
-    currentUser.walletBalance = (currentUser.walletBalance || 1500) + amountVal;
-    localStorage.setItem('eb_user', JSON.stringify(currentUser));
-    initAccountUI();
-    document.getElementById('wallet-add-input').value = '';
-    if (typeof showToast === 'function') showToast(`💳 Added ₹${amountVal.toLocaleString('en-IN')} to wallet!`);
   });
 
   // Avatar upload with Canvas compression
