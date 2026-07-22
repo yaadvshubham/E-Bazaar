@@ -7,6 +7,7 @@ const sequelize = require('./config/database');
 require('./models/Product');
 require('./models/User');
 require('./models/Order');
+require('./models/WalletTransaction');
 
 const app = express();
 const PORT = process.env.PORT || 5000;

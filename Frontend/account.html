@@ -538,6 +538,7 @@
     renderAddresses();
     renderWalletTransactions();
     renderBankAccounts();
+    fetchWalletPassbook();
   }
 
   function renderAddresses() {
@@ -582,6 +583,45 @@
         </div>
       </div>
     `).join('');
+  }
+
+  async function fetchWalletPassbook() {
+    const token = localStorage.getItem('ebazaar_token') || localStorage.getItem('eb_user');
+    if (token && token !== 'ebazaar_demo_token') {
+      try {
+        const response = await fetch('http://localhost:5000/api/auth/wallet/passbook', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data && Array.isArray(data.transactions)) {
+            // Map backend transactions to passbook card items
+            const formattedTxs = data.transactions.map(tx => {
+              const formattedDate = new Date(tx.createdAt).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+              });
+              return {
+                title: tx.type === 'credit' ? 'Wallet Credited' : 'Wallet Debited',
+                desc: tx.description,
+                amount: `${tx.type === 'credit' ? '+' : '-'} ₹${tx.amount.toLocaleString('en-IN')}.00`,
+                date: formattedDate,
+                type: tx.type
+              };
+            });
+            
+            currentUser.walletTransactions = formattedTxs;
+            localStorage.setItem('eb_user', JSON.stringify(currentUser));
+            renderWalletTransactions();
+          }
+        }
+      } catch (err) {
+        console.error('[Account] Failed to fetch passbook:', err.message);
+      }
+    }
   }
 
   // --- BANK ACCOUNTS MANAGEMENT ---

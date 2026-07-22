@@ -96,6 +96,15 @@ router.post('/register', async (req, res) => {
       walletBalance: 150.00
     });
 
+    // Create Welcome Bonus passbook transaction record
+    const WalletTransaction = require('../models/WalletTransaction');
+    await WalletTransaction.create({
+      userId: user.id,
+      amount: 150.00,
+      type: 'credit',
+      description: 'Welcome Sign-up Bonus'
+    });
+
     const token = signToken(user);
 
     return res.status(201).json({
@@ -209,6 +218,15 @@ router.post('/wallet/add', async (req, res) => {
     user.walletBalance = (user.walletBalance || 0) + amount;
     await user.save();
 
+    // Create wallet transaction record
+    const WalletTransaction = require('../models/WalletTransaction');
+    await WalletTransaction.create({
+      userId: user.id,
+      amount: amount,
+      type: 'credit',
+      description: 'Wallet Top-up (Manual Deposit)'
+    });
+
     return res.json({
       message: `Successfully added ₹${amount.toLocaleString('en-IN')} to your wallet!`,
       walletBalance: user.walletBalance,
@@ -295,6 +313,15 @@ router.post('/wallet/verify', async (req, res) => {
     user.withdrawableBalance = (user.withdrawableBalance || 0) + addedAmount;
     await user.save();
 
+    // Create wallet transaction record
+    const WalletTransaction = require('../models/WalletTransaction');
+    await WalletTransaction.create({
+      userId: user.id,
+      amount: addedAmount,
+      type: 'credit',
+      description: `Wallet Top-up via Razorpay (Ref: ${razorpay_payment_id})`
+    });
+
     return res.json({
       message: `Successfully added ₹${addedAmount.toLocaleString('en-IN')} to your wallet!`,
       walletBalance: user.walletBalance,
@@ -332,6 +359,15 @@ router.post('/wallet/withdraw', async (req, res) => {
     user.withdrawableBalance = (user.withdrawableBalance || 0) - amount;
     await user.save();
 
+    // Create wallet transaction record
+    const WalletTransaction = require('../models/WalletTransaction');
+    await WalletTransaction.create({
+      userId: user.id,
+      amount: amount,
+      type: 'debit',
+      description: 'Wallet Bank Withdrawal'
+    });
+
     return res.json({
       message: `Successfully requested withdrawal of ₹${amount.toLocaleString('en-IN')}. Funds will be transferred to your bank soon.`,
       walletBalance: user.walletBalance,
@@ -341,6 +377,21 @@ router.post('/wallet/withdraw', async (req, res) => {
   } catch (err) {
     console.error('[Auth] Wallet withdraw error:', err);
     return res.status(500).json({ error: 'Failed to process withdrawal.' });
+  }
+});
+
+/* ── GET /api/auth/wallet/passbook — Get wallet transaction passbook history ── */
+router.get('/wallet/passbook', authMiddleware, async (req, res) => {
+  try {
+    const WalletTransaction = require('../models/WalletTransaction');
+    const transactions = await WalletTransaction.findAll({
+      where: { userId: req.user.id },
+      order: [['createdAt', 'DESC']],
+    });
+    return res.json({ transactions });
+  } catch (err) {
+    console.error('[Auth] Get passbook error:', err.message);
+    return res.status(500).json({ error: 'Failed to retrieve wallet passbook history.' });
   }
 });
 

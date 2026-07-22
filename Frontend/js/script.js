@@ -4211,8 +4211,8 @@ function buildCard(p) {
   const imgSrc = p.image || p.imageUrl || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
   const salesDisplay = p.sales ? (String(p.sales).includes('bought') ? p.sales : `${p.sales} bought in past month`) : '';
 
-  const numPrice = typeof p.price === 'number' ? p.price : (parseFloat(String(p.price || 0).replace(/,/g, '')) || 0);
-  const numOrig = typeof p.originalPrice === 'number' ? p.originalPrice : (parseFloat(String(p.originalPrice || numPrice).replace(/,/g, '')) || numPrice);
+  const numPrice = typeof p.price === 'number' ? p.price : (parseFloat(String(p.price || 0).replace(/[^\d.]/g, '')) || 0);
+  const numOrig = typeof p.originalPrice === 'number' ? p.originalPrice : (parseFloat(String(p.originalPrice || numPrice).replace(/[^\d.]/g, '')) || numPrice);
   const discText = p.discount || p.disc || '0%';
 
   return `<article class="cat-card" role="listitem">
@@ -4508,7 +4508,7 @@ function initCategoryFilters() {
     const getNumericPrice = (p) => {
       if (typeof p.price === 'number') return p.price;
       if (!p.price) return 0;
-      return parseFloat(String(p.price).replace(/,/g, '')) || 0;
+      return parseFloat(String(p.price).replace(/[^\d.]/g, '')) || 0;
     };
 
     // Helper to safely extract discount percentage
@@ -4789,7 +4789,7 @@ function normalizeProduct(p) {
 
   normalized.price = typeof rawPrice === 'number' ? `₹${rawPrice.toLocaleString('en-IN')}` : rawPrice;
   normalized.orig = typeof rawOrig === 'number' ? `₹${rawOrig.toLocaleString('en-IN')}` : rawOrig;
-  normalized.originalPrice = typeof rawOrig === 'number' ? rawOrig : (parseFloat(String(rawOrig).replace(/,/g, '')) || 0);
+  normalized.originalPrice = typeof rawOrig === 'number' ? rawOrig : (parseFloat(String(rawOrig).replace(/[^\d.]/g, '')) || 0);
 
   normalized.disc = p.discount || p.disc || '0%';
   normalized.discount = p.discount || p.disc || '0%';
@@ -5455,7 +5455,7 @@ function initSearch() {
 
         autoBox.innerHTML = brandStoreHTML + matches.map(p => {
           const title = p.title || p.name || 'Product';
-          const priceNum = typeof p.price === 'number' ? p.price : (parseFloat(String(p.price || 0).replace(/,/g, '')) || 0);
+          const priceNum = typeof p.price === 'number' ? p.price : (parseFloat(String(p.price || 0).replace(/[^\d.]/g, '')) || 0);
           const price = `₹${priceNum.toLocaleString('en-IN')}`;
           const img = p.image || p.imageUrl || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
           const link = p.id ? `product-detail.html?id=${p.id}` : `category.html?q=${encodeURIComponent(title)}`;

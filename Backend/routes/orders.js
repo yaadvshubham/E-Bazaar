@@ -61,16 +61,40 @@ router.post('/', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Total amount is required.' });
     }
 
+    const amt = parseFloat(totalAmount);
+
+    // Deduct wallet if that is the chosen payment method
+    if (paymentMethod === 'Wallet') {
+      const User = require('../models/User');
+      const user = await User.findByPk(req.user.id);
+      if (!user || (user.walletBalance || 0) < amt) {
+        return res.status(400).json({ error: 'Insufficient wallet balance to complete purchase.' });
+      }
+      user.walletBalance = (user.walletBalance || 0) - amt;
+      await user.save();
+    }
+
     const order = await Order.create({
       userId: req.user.id,
       items: JSON.stringify(items),
-      totalAmount: parseFloat(totalAmount),
+      totalAmount: amt,
       paymentMethod: paymentMethod || 'UPI',
       status: 'Confirmed',
       deliveryAddress: typeof deliveryAddress === 'object'
         ? JSON.stringify(deliveryAddress)
         : (deliveryAddress || ''),
     });
+
+    // Create Wallet passbook transaction entry
+    if (paymentMethod === 'Wallet') {
+      const WalletTransaction = require('../models/WalletTransaction');
+      await WalletTransaction.create({
+        userId: req.user.id,
+        amount: amt,
+        type: 'debit',
+        description: `Order Payment for EB-${order.id}`
+      });
+    }
 
     const plainOrder = order.get({ plain: true });
     plainOrder.items = items;
@@ -198,6 +222,15 @@ router.post('/verify', authMiddleware, async (req, res) => {
       if (user && user.walletBalance >= parseFloat(walletUsed)) {
         user.walletBalance -= parseFloat(walletUsed);
         await user.save();
+
+        // Create passbook record for user wallet use
+        const WalletTransaction = require('../models/WalletTransaction');
+        await WalletTransaction.create({
+          userId: user.id,
+          amount: parseFloat(walletUsed),
+          type: 'debit',
+          description: `Order Payment for EB-${order.id}`
+        });
       }
     }
 
