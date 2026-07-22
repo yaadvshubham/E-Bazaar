@@ -3998,6 +3998,8 @@ const MASTER_PRODUCTS = [
   }
 ];
 
+window.MASTER_PRODUCTS = MASTER_PRODUCTS;
+
 function generateMockProductsForCategory(catId) {
   const pool = (window.allProducts && window.allProducts.length > 0)
     ? window.allProducts
@@ -4938,23 +4940,29 @@ function renderBrandPage() {
 function populateHomeTracks() {
   if (document.body.dataset.page === 'category') return; // Skip if on category page
 
+  const pool = (window.allProducts && window.allProducts.length > 0) ? window.allProducts : (window.MASTER_PRODUCTS || MASTER_PRODUCTS);
+
   const nr = document.getElementById('tr-new');
-  if (nr) nr.innerHTML = [...MASTER_PRODUCTS].sort(() => 0.5 - Math.random()).slice(0, 36).map(buildCard).join('');
+  if (nr) nr.innerHTML = [...pool].sort(() => 0.5 - Math.random()).slice(0, 36).map(buildCard).join('');
 
   const tr = document.getElementById('tr-trend');
   if (tr) {
     const trendCats = ['smartphones', 'laptops', 'mens-shirts', 'womens-dresses', 'fragrances'];
-    const trendProds = MASTER_PRODUCTS.filter(p => trendCats.includes(p.category)).sort(() => 0.5 - Math.random());
-    const otherProds = MASTER_PRODUCTS.filter(p => !trendCats.includes(p.category)).sort(() => 0.5 - Math.random());
+    const trendProds = pool.filter(p => trendCats.includes(p.category) || p.category === 'electronics' || p.category === 'gadgets').sort(() => 0.5 - Math.random());
+    const otherProds = pool.filter(p => !trendCats.includes(p.category) && p.category !== 'electronics' && p.category !== 'gadgets').sort(() => 0.5 - Math.random());
     tr.innerHTML = [...trendProds, ...otherProds].slice(0, 36).map(buildCard).join('');
   }
 
   ['row1', 'row2', 'row3'].forEach((k, i) => {
     const el = document.getElementById(`disc-row-${i + 1}`);
     if (el) {
-      const catMap = [['smartphones', 'laptops', 'motorcycle', 'gadgets', 'appliances'], ['mens-shoes', 'womens-shoes', 'mens-shirts', 'womens-dresses', 'tops', 'mens-watches', 'womens-watches', 'bottoms', 'traditional'], ['smartphones', 'laptops', 'gadgets', 'appliances']];
-      const prods = MASTER_PRODUCTS.filter(p => catMap[i].includes(p.category)).sort(() => 0.5 - Math.random());
-      const fb = MASTER_PRODUCTS.sort(() => 0.5 - Math.random());
+      const catMap = [
+        ['smartphones', 'laptops', 'motorcycle', 'gadgets', 'appliances', 'electronics'],
+        ['mens-shoes', 'womens-shoes', 'mens-shirts', 'womens-dresses', 'tops', 'mens-watches', 'womens-watches', 'bottoms', 'traditional', 'clothing', 'shoes'],
+        ['smartphones', 'laptops', 'gadgets', 'appliances', 'electronics']
+      ];
+      const prods = pool.filter(p => catMap[i].includes(p.category)).sort(() => 0.5 - Math.random());
+      const fb = pool.sort(() => 0.5 - Math.random());
       el.innerHTML = (prods.length > 0 ? prods : fb).slice(0, 36).map(buildCard).join('');
     }
   });
@@ -5348,23 +5356,23 @@ function initProductDetail() {
   // Use global variable directly which holds the merged data
   const pool = (window.allProducts && window.allProducts.length > 0) ? window.allProducts : (window.MASTER_PRODUCTS || []);
 
-  // DEBUG: Check if we have enough products
-  console.log("Looking for ID:", productId, "| Pool Size:", pool.length);
+  // Flexible ID Matching: Remove 'api_' prefix from both sides
+  const cleanId = String(productId || '').replace('api_', '');
+  const p = pool.find(item => String(item.id).replace('api_', '') === cleanId);
 
-  // Agar pool chota hai (yani API load nahi hua), toh 500ms wait karke retry karo
-  if (pool.length < 500) {
-    console.warn("Waiting for API data to merge...");
-    setTimeout(initProductDetail, 500);
+  // If product not found yet, and API is not ready, wait and retry
+  if (!p && !window._apiReady) {
+    console.warn("Product not found yet, waiting for API data to merge...");
+    setTimeout(initProductDetail, 200);
     return;
   }
 
-  // Flexible ID Matching: Remove 'api_' prefix from both sides
-  const cleanId = String(productId).replace('api_', '');
-  const p = pool.find(item => String(item.id).replace('api_', '') === cleanId);
-
   if (!p) {
     console.error("Product NOT FOUND! ID:", productId);
-    document.getElementById('product-container').innerHTML = `<div style="text-align:center; padding: 50px;">Product not found! Check console.</div>`;
+    const container = document.getElementById('product-container');
+    if (container) {
+      container.innerHTML = `<div style="text-align:center; padding: 50px; font-weight: 600; color: var(--text-muted);">⚠️ Product not found! Check console or try browsing our categories.</div>`;
+    }
     return;
   }
 

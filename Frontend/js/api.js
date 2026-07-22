@@ -39,8 +39,8 @@ function normaliseApiProduct(p) {
     title: p.title || 'Unnamed Product',
     name: p.title || 'Unnamed Product',
     description: p.description || '',
-    price: Math.round((p.price || 0) * 100),
-    originalPrice: Math.round((p.originalPrice || p.price || 0) * 100),
+    price: Math.round(p.price || 0),
+    originalPrice: Math.round(p.originalPrice || p.price || 0),
     discount: p.discount || '0%',
     rating: p.rating || 4.0,
     reviews: p.reviews || 0,
@@ -61,13 +61,13 @@ function mergeApiProducts(apiProducts) {
 
   if (!window.MASTER_PRODUCTS) window.MASTER_PRODUCTS = [];
 
-  const existingIds = new Set(MASTER_PRODUCTS.map(p => p.id));
+  const existingIds = new Set(window.MASTER_PRODUCTS.map(p => p.id));
   const newApiProducts = normalisedApiProducts.filter(p => !existingIds.has(p.id));
 
-  MASTER_PRODUCTS.unshift(...newApiProducts);
-  window.allProducts = [...MASTER_PRODUCTS];
+  window.MASTER_PRODUCTS.unshift(...newApiProducts);
+  window.allProducts = [...window.MASTER_PRODUCTS];
   window._apiReady = true;
-  console.log(`[E-Bazaar API] Merged ${newApiProducts.length} backend products. Total: ${MASTER_PRODUCTS.length}`);
+  console.log(`[E-Bazaar API] Merged ${newApiProducts.length} backend products. Total: ${window.MASTER_PRODUCTS.length}`);
 }
 
 /* ─── Apply URL Parameter Filtering (Case-Insensitive) ────────────────────── */
@@ -175,31 +175,35 @@ async function initApiEngine() {
 
   if (apiProducts.length > 0) {
     mergeApiProducts(apiProducts);
-
-    // Add renderProducts call for testing as requested
-    // renderProducts(apiProducts);
-
-    // Re-initialize home page tracks if on index.html
-    if (typeof populateHomeTracks === 'function' && document.body.dataset.page !== 'category') {
-      populateHomeTracks();
-    }
-
-    // If on category page or brand store page, trigger refresh
-    if (document.body.dataset.page === 'category' || window.location.pathname.includes('category.html')) {
-      if (typeof initDynamicCategory === 'function') {
-        initDynamicCategory();
-      }
-    } else if (document.body.dataset.page === 'brand-store' || window.location.pathname.includes('brand-store.html')) {
-      if (typeof initBrandStore === 'function') {
-        initBrandStore();
-      }
-    }
-
-    console.log(`[E-Bazaar API] ✅ ${apiProducts.length} live products loaded from backend.`);
   } else {
     console.info('[E-Bazaar API] Running with local data.');
     window.allProducts = [...(window.MASTER_PRODUCTS || [])];
+    window._apiReady = true;
   }
+
+  // Route-aware initialization to render products immediately without hard refreshes
+  const page = document.body.dataset.page;
+  const path = window.location.pathname;
+
+  if (page === 'category' || path.includes('category.html')) {
+    if (typeof initDynamicCategory === 'function') {
+      initDynamicCategory();
+    }
+  } else if (page === 'brand-store' || path.includes('brand-store.html')) {
+    if (typeof initBrandStore === 'function') {
+      initBrandStore();
+    }
+  } else if (page === 'product-detail' || path.includes('product-detail.html')) {
+    if (typeof initProductDetail === 'function') {
+      initProductDetail();
+    }
+  } else {
+    if (typeof populateHomeTracks === 'function') {
+      populateHomeTracks();
+    }
+  }
+
+  console.log(`[E-Bazaar API] Engine initialised. Ready: ${window._apiReady} | Products Pool Size: ${window.allProducts.length}`);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
