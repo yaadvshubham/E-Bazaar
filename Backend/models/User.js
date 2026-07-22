@@ -27,7 +27,7 @@ const User = sequelize.define('User', {
     allowNull: true,
   },
   profilePic: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: true,
   },
   walletBalance: {
