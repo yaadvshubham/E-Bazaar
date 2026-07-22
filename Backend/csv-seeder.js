@@ -8,7 +8,7 @@ const Product = require('./models/Product');
 const CATEGORY_KEYWORDS = {
   electronics: ['phone', 'laptop', 'television', 'watch', 'camera', 'earbuds', 'headphone', 'printer', 'screen', 'keyboard', 'computer', 'cable', 'electronics', 'tech', 'digital', 'charger'],
   clothing: ['shoe', 'shirt', 't-shirt', 'pants', 'tunic', 'dress', 'clothing', 'apparel', 'vest', 'jacket', 'coat', 'jeans', 'wallet', 'purse', 'bag', 'wear'],
-  'home-kitchen': ['organizer', 'mug', 'cup', 'cushion', 'chair', 'desk', 'home', 'kitchen', 'furniture', 'decor', 'curtain', 'bed', 'sheet', 'pillow', 'cook', 'oven', 'pan', 'glass'],
+  'home-kitchen': ['organizer', 'mug', 'cup', 'cushion', 'chair', 'desk', 'home', 'kitchen', 'furniture', 'decor', 'curtain', 'bed', 'sheet', 'pillow', 'cook', 'oven', 'pan', 'glass', 'cabinet', 'dohar', 'quilt', 'comforter', 'duvet'],
   beauty: ['serum', 'wash', 'face', 'skin', 'beauty', 'makeup', 'cream', 'lotion', 'lipstick', 'eye', 'hair', 'shampoo', 'perfume', 'fragrance'],
   sports: ['yoga', 'dumbbell', 'backpack', 'sports', 'fitness', 'exercise', 'mat', 'gym', 'hiking', 'camping', 'outdoor', 'run', 'athletic', 'ball'],
   groceries: ['honey', 'cashew', 'nut', 'food', 'groceries', 'snack', 'drink', 'tea', 'coffee', 'fruit', 'vegetable', 'spice', 'organic']
@@ -26,11 +26,21 @@ const FALLBACK_IMAGES = {
   groceries: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&auto=format&fit=crop&q=80'
 };
 
+// Dynamic helper to resolve values from rows with alternative column headers
+function getValueByKeys(row, keys) {
+  for (const k of keys) {
+    if (k in row) return row[k];
+    // Case-insensitive search on trimmed keys
+    const match = Object.keys(row).find(rk => rk.toLowerCase().trim() === k.toLowerCase().trim());
+    if (match) return row[match];
+  }
+  return '';
+}
+
 // Function to clean and parse float numbers from price strings
 function parsePriceValue(priceStr) {
   if (!priceStr) return 0;
-  // Strip quotes, commas, spaces and currency symbols
-  const cleaned = priceStr.replace(/[^\d.-]/g, '');
+  const cleaned = String(priceStr).replace(/[^\d.-]/g, '');
   const val = parseFloat(cleaned);
   return isNaN(val) ? 0 : val;
 }
@@ -49,17 +59,23 @@ function parseReviewsValue(reviewsStr) {
   return isNaN(val) || val <= 0 ? Math.floor(10 + Math.random() * 200) : val;
 }
 
+// Detect separator (delimiter) dynamically by reading first chunk of file
+function detectSeparator(filePath) {
+  try {
+    const chunk = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' }).slice(0, 1000);
+    if (chunk.includes('|')) return '|';
+  } catch (e) {
+    console.error(`[CSV Seeder] Error detecting separator for ${filePath}:`, e.message);
+  }
+  return ',';
+}
+
 // Determine category based on title, description, or breadcrumbs
 function determineCategory(row, fileName) {
   const textToCheck = [
-    row.title || '',
-    row.product_name || '',
-    row.description || '',
-    row.product_description || '',
-    row['Product Description'] || '',
-    row.categories || '',
-    row.breadcrumb || '',
-    row.breadcrumbs || ''
+    getValueByKeys(row, ['title', 'product_name', 'productname', 'product_title', 'name', 'Product Name']),
+    getValueByKeys(row, ['description', 'product_description', 'productdescription', 'Product Description', 'features', 'desc']),
+    getValueByKeys(row, ['categories', 'category_url', 'category_tree', 'breadcrumbs', 'breadcrumb', 'root_category', 'category'])
   ].join(' ').toLowerCase();
 
   for (const cat of CATEGORIES_LIST) {
@@ -70,11 +86,12 @@ function determineCategory(row, fileName) {
     }
   }
 
-  // File name based matching
+  // File name based matching fallback
   if (fileName.includes('amazon')) return 'electronics';
   if (fileName.includes('walmart')) return 'home-kitchen';
   if (fileName.includes('lazada')) return 'electronics';
   if (fileName.includes('shopee')) return 'clothing';
+  if (fileName.includes('meesho') || fileName.includes('shein')) return 'clothing';
 
   // Fallback to rotating categories
   return CATEGORIES_LIST[Math.floor(Math.random() * CATEGORIES_LIST.length)];
@@ -82,11 +99,11 @@ function determineCategory(row, fileName) {
 
 // Clean and extract the image URL from row
 function extractImageUrl(row, category) {
-  let imgStr = row.image_url || row.main_image || row.image || row.image_urls || '';
+  let imgStr = getValueByKeys(row, ['main_image', 'image_url', 'imageurl', 'image', 'image_urls', 'searchImage', 'searchimage', 'Image link']);
   if (!imgStr) return FALLBACK_IMAGES[category];
 
-  // If it's a JSON array format (common in Shopee, Walmart, Lazada)
-  if (imgStr.startsWith('[') || imgStr.startsWith('{')) {
+  // If it's a JSON array format (common in Shopee, Walmart, Lazada, Shein)
+  if (String(imgStr).startsWith('[') || String(imgStr).startsWith('{')) {
     try {
       const parsed = JSON.parse(imgStr);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -96,7 +113,7 @@ function extractImageUrl(row, category) {
       }
     } catch (e) {
       // Not a valid JSON, try to extract using regex/string split
-      const matches = imgStr.match(/https?:\/\/[^\s"',\]\}]+/g);
+      const matches = String(imgStr).match(/https?:\/\/[^\s"',\]\}]+/g);
       if (matches && matches.length > 0) {
         imgStr = matches[0];
       }
@@ -104,7 +121,7 @@ function extractImageUrl(row, category) {
   }
 
   // Remove surrounding quotes or extra spaces
-  imgStr = imgStr.trim().replace(/^["']|["']$/g, '');
+  imgStr = String(imgStr).trim().replace(/^["']|["']$/g, '');
 
   if (!imgStr || !imgStr.startsWith('http')) {
     return FALLBACK_IMAGES[category];
@@ -122,19 +139,20 @@ function extractImageUrl(row, category) {
 function processCSVFile(filePath) {
   return new Promise((resolve, reject) => {
     const fileName = path.basename(filePath).toLowerCase();
+    const separator = detectSeparator(filePath);
     const rowsBatch = [];
     let successfullySeeded = 0;
     let totalProcessed = 0;
 
-    console.log(`[CSV Seeder] Opening stream for ${fileName}...`);
+    console.log(`[CSV Seeder] Opening stream for ${fileName} with separator="${separator}"...`);
 
     fs.createReadStream(filePath)
-      .pipe(csvParser())
+      .pipe(csvParser({ separator }))
       .on('data', (row) => {
         totalProcessed++;
         
         // 1. Extract Title
-        const title = (row.title || row.product_name || row.product_title || 'E-Bazaar Premium Product').trim();
+        const title = getValueByKeys(row, ['title', 'product_name', 'productname', 'product_title', 'name', 'Product Name']).trim();
         if (!title || title.toLowerCase() === 'title' || title.toLowerCase() === 'product_name') {
           return; // Skip headers/empty rows
         }
@@ -143,21 +161,24 @@ function processCSVFile(filePath) {
         const category = determineCategory(row, fileName);
 
         // 3. Extract Detailed Description
-        let description = row.description || row.product_description || row['Product Description'] || row.features || '';
-        description = description.trim().replace(/^["']|["']$/g, '');
-        if (!description) {
+        let description = getValueByKeys(row, ['description', 'product_description', 'productdescription', 'Product Description', 'features', 'desc']);
+        description = String(description).trim().replace(/^["']|["']$/g, '');
+        if (!description || description.toLowerCase() === 'null') {
           description = `${title}. Premium addition to our ${category} catalog. Sourced with the highest quality standards.`;
         }
 
         // 4. Currency and Price formatting strictly to INR (₹)
-        const currency = (row.currency || '').toUpperCase();
-        let rawFinalPrice = parsePriceValue(row.final_price);
-        let rawInitialPrice = parsePriceValue(row.initial_price);
+        const currency = String(getValueByKeys(row, ['currency', 'country_code'])).toUpperCase();
+        let rawFinalPrice = parsePriceValue(getValueByKeys(row, ['final_price', 'price', 'finalprice', 'Price', 'value']));
+        let rawInitialPrice = parsePriceValue(getValueByKeys(row, ['initial_price', 'initialprice', 'original_price', 'originalprice', 'Price']));
 
-        // Multipliers based on currency or origin file
+        // Multipliers based on currency, file, or domain
+        const urlStr = String(getValueByKeys(row, ['url', 'domain'])).toLowerCase();
         let multiplier = 1.0;
         if (currency === 'USD') {
           multiplier = 83.0;
+        } else if (currency === 'INR' || urlStr.includes('.in') || urlStr.includes('meesho.com') || urlStr.includes('flipkart.com')) {
+          multiplier = 1.0;
         } else if (currency === 'EUR') {
           multiplier = 90.0;
         } else if (currency === 'VND') {
@@ -184,30 +205,28 @@ function processCSVFile(filePath) {
           multiplier = 0.09;
         } else {
           // Default fallbacks based on file origin and URL domain
-          if (fileName.includes('amazon') || fileName.includes('walmart')) {
-            multiplier = 83.0;
+          if (fileName.includes('amazon') || fileName.includes('walmart') || fileName.includes('shein')) {
+            multiplier = 83.0; // Assume USD for these global platforms
           } else if (fileName.includes('lazada')) {
-            const domain = (row.domain || row.url || '').toLowerCase();
-            if (domain.includes('.id')) multiplier = 0.0053;
-            else if (domain.includes('.vn')) multiplier = 0.0034;
-            else if (domain.includes('.my')) multiplier = 18.0;
-            else if (domain.includes('.ph')) multiplier = 1.45;
-            else if (domain.includes('.sg')) multiplier = 62.0;
-            else if (domain.includes('.th')) multiplier = 2.3;
+            if (urlStr.includes('.id')) multiplier = 0.0053;
+            else if (urlStr.includes('.vn')) multiplier = 0.0034;
+            else if (urlStr.includes('.my')) multiplier = 18.0;
+            else if (urlStr.includes('.ph')) multiplier = 1.45;
+            else if (urlStr.includes('.sg')) multiplier = 62.0;
+            else if (urlStr.includes('.th')) multiplier = 2.3;
             else multiplier = 0.0053; // default Lazada IDR
           } else if (fileName.includes('shopee')) {
-            const domain = (row.domain || row.url || '').toLowerCase();
-            if (domain.includes('.vn')) multiplier = 0.0034;
-            else if (domain.includes('.mx')) multiplier = 4.9;
-            else if (domain.includes('.my')) multiplier = 18.0;
-            else if (domain.includes('.sg')) multiplier = 62.0;
-            else if (domain.includes('.id')) multiplier = 0.0053;
-            else if (domain.includes('.ph')) multiplier = 1.45;
-            else if (domain.includes('.th')) multiplier = 2.3;
-            else if (domain.includes('.tw')) multiplier = 2.6;
-            else if (domain.includes('.br')) multiplier = 15.0;
-            else if (domain.includes('.co')) multiplier = 0.021;
-            else if (domain.includes('.cl')) multiplier = 0.09;
+            if (urlStr.includes('.vn')) multiplier = 0.0034;
+            else if (urlStr.includes('.mx')) multiplier = 4.9;
+            else if (urlStr.includes('.my')) multiplier = 18.0;
+            else if (urlStr.includes('.sg')) multiplier = 62.0;
+            else if (urlStr.includes('.id')) multiplier = 0.0053;
+            else if (urlStr.includes('.ph')) multiplier = 1.45;
+            else if (urlStr.includes('.th')) multiplier = 2.3;
+            else if (urlStr.includes('.tw')) multiplier = 2.6;
+            else if (urlStr.includes('.br')) multiplier = 15.0;
+            else if (urlStr.includes('.co')) multiplier = 0.021;
+            else if (urlStr.includes('.cl')) multiplier = 0.09;
             else multiplier = 4.9; // default Shopee MXN
           }
         }
@@ -224,7 +243,7 @@ function processCSVFile(filePath) {
         }
 
         // 5. Discount Percentage Label
-        let discount = row.discount || '';
+        let discount = getValueByKeys(row, ['discount', 'disc']) || '';
         if (!discount || discount.toLowerCase() === 'null') {
           const discountPct = Math.round(((originalPrice - price) / originalPrice) * 100);
           discount = discountPct > 0 ? `${discountPct}% OFF` : '';
@@ -234,15 +253,19 @@ function processCSVFile(filePath) {
         const imageUrl = extractImageUrl(row, category);
 
         // 7. Rating and Reviews mapping
-        const rating = parseFloat(parseRatingValue(row.rating || row.rating_stars).toFixed(1));
-        const reviews = parseReviewsValue(row.reviews || row.review_count || row.reviews_count);
+        const rating = parseFloat(parseRatingValue(getValueByKeys(row, ['rating', 'rating_stars'])).toFixed(1));
+        const reviews = parseReviewsValue(getValueByKeys(row, ['reviews', 'reviews_count', 'review_count', 'ratingCount', 'Review Count']));
 
         // 8. Brand mapping
-        let brand = (row.brand || row.manufacturer || 'E-Bazaar').trim();
-        if (brand.toLowerCase() === 'null' || !brand) brand = 'E-Bazaar';
+        let brand = String(getValueByKeys(row, ['brand', 'manufacturer'])).trim();
+        if (brand.toLowerCase() === 'null' || !brand) {
+          if (fileName.includes('meesho')) brand = 'Meesho';
+          else if (fileName.includes('shein')) brand = 'SHEIN';
+          else brand = 'E-Bazaar';
+        }
 
         // 9. Mock Badge
-        let badge = row.badge || '';
+        let badge = getValueByKeys(row, ['badge']) || '';
         if (!badge || badge.toLowerCase() === 'null') {
           if (rating >= 4.7) badge = 'Top Rated';
           else if (reviews > 400) badge = 'Best Seller';
@@ -258,7 +281,7 @@ function processCSVFile(filePath) {
           discount: discount.slice(0, 250),
           rating,
           reviews,
-          sales: (row.sold || row.sales || `${Math.floor(50 + Math.random() * 950)}+ sold`).toString().slice(0, 250),
+          sales: (getValueByKeys(row, ['sold', 'sales']) || `${Math.floor(50 + Math.random() * 950)}+ sold`).toString().slice(0, 250),
           badge: badge ? badge.slice(0, 250) : null,
           imageUrl: imageUrl.slice(0, 490),
           description,
