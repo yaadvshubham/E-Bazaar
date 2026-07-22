@@ -8,6 +8,7 @@ require('./models/Product');
 require('./models/User');
 require('./models/Order');
 require('./models/WalletTransaction');
+require('./models/WishlistItem');
 
 const app = express();
 const PORT = process.env.PORT || 5000;

@@ -649,16 +649,15 @@ router.post('/cart', authMiddleware, async (req, res) => {
 /* ── GET /api/auth/wishlist — Get wishlist for user ───────────────────────── */
 router.get('/wishlist', authMiddleware, async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.id);
-    if (!user) return res.status(404).json({ error: 'User not found.' });
-
-    let wishlist = [];
-    try {
-      wishlist = JSON.parse(user.wishlist || '[]');
-    } catch (e) {
-      wishlist = [];
-    }
-
+    const WishlistItem = require('../models/WishlistItem');
+    const items = await WishlistItem.findAll({ where: { userId: req.user.id } });
+    const wishlist = items.map(item => {
+      try {
+        return JSON.parse(item.productData);
+      } catch (e) {
+        return { id: item.productId };
+      }
+    });
     return res.json({ wishlist });
   } catch (err) {
     console.error('[Auth] Fetch wishlist error:', err.message);
@@ -669,15 +668,26 @@ router.get('/wishlist', authMiddleware, async (req, res) => {
 /* ── POST /api/auth/wishlist — Update wishlist for user ────────────────────── */
 router.post('/wishlist', authMiddleware, async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.id);
-    if (!user) return res.status(404).json({ error: 'User not found.' });
+    const WishlistItem = require('../models/WishlistItem');
+    const wishlist = req.body.wishlist || [];
 
-    user.wishlist = JSON.stringify(req.body.wishlist || []);
-    await user.save();
+    // Relational transaction: Clear existing and sync new items
+    const sequelize = require('../config/database');
+    await sequelize.transaction(async (t) => {
+      await WishlistItem.destroy({ where: { userId: req.user.id } }, { transaction: t });
+      if (wishlist.length > 0) {
+        const insertArray = wishlist.map(item => ({
+          userId: req.user.id,
+          productId: String(item.id),
+          productData: JSON.stringify(item)
+        }));
+        await WishlistItem.bulkCreate(insertArray, { transaction: t });
+      }
+    });
 
     return res.json({
       message: 'Wishlist updated successfully',
-      wishlist: req.body.wishlist || []
+      wishlist: wishlist
     });
   } catch (err) {
     console.error('[Auth] Save wishlist error:', err.message);
