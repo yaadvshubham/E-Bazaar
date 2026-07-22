@@ -157,7 +157,30 @@ function injectLoader() {
   document.body.appendChild(overlay);
 }
 
+function isProductUIVisible() {
+  const selectors = [
+    '#main-cat-grid',
+    '.products-grid',
+    '.tr-grid',
+    '#tr-trend',
+    '.product-card'
+  ];
+  for (const selector of selectors) {
+    const el = document.querySelector(selector);
+    if (el && (el.children.length > 0 || el.classList.contains('product-card'))) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function showBrandedLoader() {
+  // If products are already visible in the UI (mock products or previous load), skip loader overlay
+  if (isProductUIVisible()) {
+    console.log('[E-Bazaar API] Products already visible in UI. Bypassing loader overlay.');
+    return;
+  }
+
   // Bypassing back-forward navigation caches and instant cached state restores
   const navEntries = performance.getEntriesByType('navigation');
   if (navEntries.length > 0 && navEntries[0].type === 'back_forward') {
