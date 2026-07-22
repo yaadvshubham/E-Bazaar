@@ -18,8 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 const productRoutes = require('./routes/products');
-const authRoutes    = require('./routes/auth');
-const orderRoutes   = require('./routes/orders');
+const authRoutes = require('./routes/auth');
+const orderRoutes = require('./routes/orders');
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
@@ -54,7 +54,7 @@ app.use((err, req, res, next) => {
 // ── DB Sync & Start ───────────────────────────────────────────────────────────
 sequelize.authenticate()
   .then(() => {
-    console.log('[DB] SQLite connection established.');
+    console.log('[DB] Supabase PostgreSQL connection established.');
     return sequelize.sync({ alter: true });
   })
   .then(() => {
