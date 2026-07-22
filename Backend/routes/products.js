@@ -3,11 +3,62 @@ const router = express.Router();
 const Product = require('../models/Product');
 const { Op } = require('sequelize');
 
-// GET /api/products — list all products from SQLite database
+// GET /api/products — list and filter products from database
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.findAll({ order: [['id', 'ASC']] });
-    console.log("Frontend requested products. Total sent:", products.length);
+    const { category, cat, brand, q } = req.query;
+    const where = {};
+
+    // Dynamic case-insensitive operator based on database dialect (PostgreSQL vs SQLite)
+    const dialect = Product.sequelize.getDialect();
+    const likeOp = dialect === 'postgres' ? Op.iLike : Op.like;
+
+    // Type-safe category filter
+    let targetCategory = category || cat;
+    if (Array.isArray(targetCategory)) {
+      targetCategory = targetCategory[0];
+    }
+    if (typeof targetCategory === 'string') {
+      const cleaned = targetCategory.toLowerCase().trim();
+      if (cleaned && cleaned !== 'all' && cleaned !== 'trending') {
+        where.category = cleaned;
+      }
+    }
+
+    // Type-safe brand filter
+    let targetBrand = brand;
+    if (Array.isArray(targetBrand)) {
+      targetBrand = targetBrand[0];
+    }
+    if (typeof targetBrand === 'string') {
+      const cleaned = targetBrand.trim();
+      if (cleaned) {
+        where.brand = cleaned;
+      }
+    }
+
+    // Type-safe and dialect-aware search query
+    let targetQ = q;
+    if (Array.isArray(targetQ)) {
+      targetQ = targetQ[0];
+    }
+    if (typeof targetQ === 'string') {
+      const cleanQ = targetQ.trim();
+      if (cleanQ) {
+        where[Op.or] = [
+          { title: { [likeOp]: `%${cleanQ}%` } },
+          { description: { [likeOp]: `%${cleanQ}%` } },
+          { brand: { [likeOp]: `%${cleanQ}%` } }
+        ];
+      }
+    }
+
+    const products = await Product.findAll({
+      where,
+      order: [['id', 'ASC']]
+    });
+
+    console.log(`[Products API] Returned ${products.length} products for filters: cat=${targetCategory || ''}, brand=${brand || ''}, q=${q || ''}`);
 
     res.json({
       total: products.length,

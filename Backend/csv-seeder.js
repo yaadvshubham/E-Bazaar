@@ -158,18 +158,57 @@ function processCSVFile(filePath) {
         let multiplier = 1.0;
         if (currency === 'USD') {
           multiplier = 83.0;
+        } else if (currency === 'EUR') {
+          multiplier = 90.0;
+        } else if (currency === 'VND') {
+          multiplier = 0.0034;
         } else if (currency === 'IDR') {
           multiplier = 0.0053;
         } else if (currency === 'MXN') {
           multiplier = 4.9;
+        } else if (currency === 'MYR') {
+          multiplier = 18.0;
+        } else if (currency === 'PHP') {
+          multiplier = 1.45;
+        } else if (currency === 'THB') {
+          multiplier = 2.3;
+        } else if (currency === 'SGD') {
+          multiplier = 62.0;
+        } else if (currency === 'TWD') {
+          multiplier = 2.6;
+        } else if (currency === 'BRL') {
+          multiplier = 15.0;
+        } else if (currency === 'COP') {
+          multiplier = 0.021;
+        } else if (currency === 'CLP') {
+          multiplier = 0.09;
         } else {
-          // Default fallbacks based on file origin
+          // Default fallbacks based on file origin and URL domain
           if (fileName.includes('amazon') || fileName.includes('walmart')) {
             multiplier = 83.0;
           } else if (fileName.includes('lazada')) {
-            multiplier = 0.0053;
+            const domain = (row.domain || row.url || '').toLowerCase();
+            if (domain.includes('.id')) multiplier = 0.0053;
+            else if (domain.includes('.vn')) multiplier = 0.0034;
+            else if (domain.includes('.my')) multiplier = 18.0;
+            else if (domain.includes('.ph')) multiplier = 1.45;
+            else if (domain.includes('.sg')) multiplier = 62.0;
+            else if (domain.includes('.th')) multiplier = 2.3;
+            else multiplier = 0.0053; // default Lazada IDR
           } else if (fileName.includes('shopee')) {
-            multiplier = 4.9;
+            const domain = (row.domain || row.url || '').toLowerCase();
+            if (domain.includes('.vn')) multiplier = 0.0034;
+            else if (domain.includes('.mx')) multiplier = 4.9;
+            else if (domain.includes('.my')) multiplier = 18.0;
+            else if (domain.includes('.sg')) multiplier = 62.0;
+            else if (domain.includes('.id')) multiplier = 0.0053;
+            else if (domain.includes('.ph')) multiplier = 1.45;
+            else if (domain.includes('.th')) multiplier = 2.3;
+            else if (domain.includes('.tw')) multiplier = 2.6;
+            else if (domain.includes('.br')) multiplier = 15.0;
+            else if (domain.includes('.co')) multiplier = 0.021;
+            else if (domain.includes('.cl')) multiplier = 0.09;
+            else multiplier = 4.9; // default Shopee MXN
           }
         }
 
