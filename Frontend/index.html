@@ -3,6 +3,13 @@
 
 <head>
   <meta charset="UTF-8" />
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('eb-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.documentElement.classList.add('no-transitions');
+    })();
+  </script>
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>E-Bazaar — Your everyday and everything store.</title>
   <meta name="description"

@@ -5707,6 +5707,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   ThemeEngine.init();
+  setTimeout(() => {
+    if (document.documentElement && document.documentElement.classList) {
+      document.documentElement.classList.remove('no-transitions');
+    }
+  }, 120);
   syncCartBadge();
   if (typeof initWishlistBadge === 'function') initWishlistBadge();
   populateHomeTracks();

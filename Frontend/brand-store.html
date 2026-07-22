@@ -2,6 +2,13 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8"/>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('eb-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.documentElement.classList.add('no-transitions');
+    })();
+  </script>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title id="page-title">Brand-Store — E-Bazaar</title>
   <meta name="description" content="Browse thousands of products across categories on E-Bazaar. Filter by brand, price, size, and more."/>

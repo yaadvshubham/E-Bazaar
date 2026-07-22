@@ -2,6 +2,12 @@
    E-BAZAAR — styles.css  v4 (Luxury Minimalist Light Brown & Alabaster)
    ═══════════════════════════════════════════════════════════════════════ */
 
+/* Prevent transition flashes on page load */
+.no-transitions, .no-transitions * {
+  transition: none !important;
+  animation: none !important;
+}
+
 /* ── Reset ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
