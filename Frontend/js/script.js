@@ -4768,14 +4768,16 @@ function toggleWish(btnId, title, pStrEncoded) {
       if (on) {
         if (!ebWishlist.some(item => item.id === p.id)) {
           ebWishlist.push(p);
+          window.ebWishlist = ebWishlist;
+          window.wishlist = ebWishlist;
           localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
           if (typeof syncWishlistToDb === 'function') syncWishlistToDb();
         }
       } else {
         ebWishlist = ebWishlist.filter(item => item.id !== p.id);
-        localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
         window.ebWishlist = ebWishlist;
         window.wishlist = ebWishlist;
+        localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
         if (typeof syncWishlistToDb === 'function') syncWishlistToDb();
         if (document.body.dataset.page === 'wishlist') {
           initWishlist();
@@ -4792,6 +4794,16 @@ function toggleWish(btnId, title, pStrEncoded) {
   if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
 }
 window.toggleWish = toggleWish;
+
+// Bridge wrapper for toggleWishlist(this, pStr) called from other pages
+function toggleWishlist(btn, pStrEncoded) {
+  if (btn && !btn.id) {
+    btn.id = 'wl_btn_' + Math.random().toString(36).substr(2, 9);
+  }
+  const btnId = btn ? btn.id : null;
+  toggleWish(btnId, '', pStrEncoded);
+}
+window.toggleWishlist = toggleWishlist;
 
 function syncWishlistBadge() {
   if (window.ebWishlist) ebWishlist = window.ebWishlist;

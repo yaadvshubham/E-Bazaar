@@ -266,3 +266,57 @@ hr {
         margin: 20px auto;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CUSTOM LUXURY DARK THEME OVERRIDES (Deep Space Navy & Amber Gold)
+   ═══════════════════════════════════════════════════════════════════════ */
+html[data-theme="dark"] {
+    --bg: #090D16;            /* Deep Space Navy/Black */
+    --bg-white: #111827;      /* Rich Slate Canvas */
+    --bg-alt: #1E293B;        /* Muted Blue Slate */
+    --bg-card: #1E293B;
+    
+    --text: #F8FAFC;          /* Clean Cool Off-White */
+    --text-sub: #E2E8F0;      /* Soft Light Slate */
+    --text-muted: #94A3B8;    /* Slate Gray Muted */
+    
+    --accent: #F59E0B;        /* Rich Gold Accent */
+    --accent-dim: #D97706;    /* Amber Dim Gold */
+    --accent-tint: rgba(245, 158, 11, 0.15);
+    
+    --border: #334155;        /* Deep Slate Borders */
+    --border-strong: #475569;
+}
+
+/* Element adjustments for luxury theme */
+html[data-theme="dark"] .social-btn {
+    background: #1E293B !important;
+    border-color: #334155 !important;
+}
+html[data-theme="dark"] .social-btn:hover {
+    background: #334155 !important;
+}
+html[data-theme="dark"] #site-header {
+    background: #111827 !important;
+    border-bottom-color: #334155 !important;
+}
+html[data-theme="dark"] footer {
+    background: #111827 !important;
+    border-top-color: #334155 !important;
+}
+html[data-theme="dark"] .amount-container {
+    background: rgba(30, 41, 59, 0.5) !important;
+    border-color: #475569 !important;
+}
+html[data-theme="dark"] hr {
+    background: #334155 !important;
+}
+html[data-theme="dark"] .sidebar-card h3 {
+    border-bottom-color: #334155 !important;
+}
+html[data-theme="dark"] .qr-container img {
+    border-color: #334155 !important;
+    background: #ffffff !important; /* Keep QR code background white for scannability */
+    padding: 10px;
+}
+
