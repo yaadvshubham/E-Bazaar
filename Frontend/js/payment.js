@@ -90,6 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Set loading state on button
             setButtonLoading(true);
 
+            // Show premium logo preloader during transaction creation
+            if (typeof Preloader !== 'undefined') {
+                Preloader.init();
+            }
+
             try {
                 // Step 1: Create pending order in the backend database
                 const formattedItems = cart.map(item => {
@@ -140,11 +145,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     handler: async function (response) {
                         // Payment succeeds on Razorpay - verify cryptographic signature in backend
+                        if (typeof Preloader !== 'undefined') {
+                            Preloader.init(); // Show loading while verifying cryptographic signature
+                        }
                         showToast('🔄 Verifying signature... Please wait.');
                         await verifyPayment(response);
                     },
                     modal: {
                         ondismiss: function () {
+                            if (typeof Preloader !== 'undefined') {
+                                Preloader.hide();
+                            }
                             showToast('❌ Payment cancelled or closed.');
                             setButtonLoading(false);
                         }
@@ -152,10 +163,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 const rzp = new Razorpay(options);
+                
+                // Hide preloader right before Razorpay opens to avoid overlap
+                if (typeof Preloader !== 'undefined') {
+                    Preloader.hide();
+                }
+
                 rzp.open();
 
             } catch (err) {
                 console.error('[Payment Error]:', err.message);
+                if (typeof Preloader !== 'undefined') {
+                    Preloader.hide();
+                }
                 showToast(`❌ Error: ${err.message}`);
                 setButtonLoading(false);
             }
@@ -219,8 +239,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             showToast('🎉 Order placed successfully!');
 
+            if (typeof Preloader !== 'undefined') {
+                Preloader.hide();
+            }
+
         } catch (err) {
             console.error('[Verification Error]:', err.message);
+            if (typeof Preloader !== 'undefined') {
+                Preloader.hide();
+            }
             showToast(`❌ Verification Failed: ${err.message}`);
             setButtonLoading(false);
         }

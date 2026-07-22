@@ -8,6 +8,127 @@
 /* ═══════════════════════════════════════════════════════════════════════
    THEME ENGINE — Dark / Light with localStorage
    ═══════════════════════════════════════════════════════════════════════ */
+// --- E-BAZAAR LUXURY PRELOADER ---
+const Preloader = (() => {
+  function init() {
+    if (document.getElementById('eb-preloader')) return;
+
+    const style = document.createElement('style');
+    style.id = 'eb-preloader-style';
+    style.innerText = `
+      #eb-preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--bg);
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+      }
+      #eb-preloader.fade-out {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .preloader-logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: preloaderPulse 2s infinite ease-in-out;
+      }
+      .preloader-logo-svg {
+        width: 72px;
+        height: 72px;
+        margin-bottom: 15px;
+      }
+      .preloader-title {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text);
+        margin-bottom: 6px;
+        letter-spacing: -0.02em;
+      }
+      .preloader-title em {
+        color: var(--accent);
+        font-style: italic;
+      }
+      .preloader-tagline {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 500;
+        opacity: 0;
+        animation: preloaderFadeIn 0.8s forwards 0.3s;
+      }
+      @keyframes preloaderPulse {
+        0%, 100% { transform: scale(0.98); opacity: 0.95; }
+        50% { transform: scale(1.02); opacity: 1; }
+      }
+      @keyframes preloaderFadeIn {
+        to { opacity: 1; transform: translateY(0); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    const div = document.createElement('div');
+    div.id = 'eb-preloader';
+    div.innerHTML = `
+      <div class="preloader-logo-container">
+        <svg class="preloader-logo-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="preloaderBagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#A88C6D" />
+              <stop offset="100%" stop-color="#856B4D" />
+            </linearGradient>
+          </defs>
+          <rect x="12" y="28" width="56" height="44" rx="7" fill="url(#preloaderBagGrad)" />
+          <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#preloaderBagGrad)" stroke-width="4.5" stroke-linecap="round" />
+          <polyline fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50" />
+        </svg>
+        <div class="preloader-title">E-<em>Bazaar</em></div>
+        <div class="preloader-tagline">Your everyday and everything store.</div>
+      </div>
+    `;
+
+    const savedTheme = localStorage.getItem('eb-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    document.body.appendChild(div);
+  }
+
+  function hide() {
+    const el = document.getElementById('eb-preloader');
+    if (el) {
+      el.classList.add('fade-out');
+      setTimeout(() => {
+        el.remove();
+        const style = document.getElementById('eb-preloader-style');
+        if (style) style.remove();
+      }, 400);
+    }
+  }
+
+  return { init, hide };
+})();
+window.Preloader = Preloader;
+
+// Trigger preloader immediately if document body exists, or wait for DOM parse
+if (document.body) {
+  Preloader.init();
+} else {
+  document.addEventListener('DOMContentLoaded', () => {
+    Preloader.init();
+  });
+}
+
 const ThemeEngine = (() => {
   const KEY = 'eb-theme';
   const root = document.documentElement;
@@ -29,6 +150,13 @@ const ThemeEngine = (() => {
     apply(saved || (prefersDark ? 'dark' : 'light'));
     const btn = document.getElementById('theme-toggle');
     if (btn) btn.addEventListener('click', toggle);
+
+    // Cross-tab real-time theme synchronization
+    window.addEventListener('storage', (e) => {
+      if (e.key === KEY && e.newValue) {
+        apply(e.newValue);
+      }
+    });
   }
 
   return { init, toggle };
@@ -5572,6 +5700,11 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (document.body.dataset.page === 'wishlist') {
     initWishlist();
   }
+
+  // Smoothly fade out brand preloader once DOM init completes
+  setTimeout(() => {
+    if (typeof Preloader !== 'undefined') Preloader.hide();
+  }, 200);
 });
 
 
