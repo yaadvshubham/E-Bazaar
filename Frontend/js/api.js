@@ -9,8 +9,119 @@ var API_BASE = 'http://localhost:5000/api';
 window.allProducts = [];
 window._apiReady = false;
 
-/* ─── Fetch Engine ────────────────────────────────────────────────────────── */
-async function fetchProducts() {
+/* ─── Loader & Caching Utility ────────────────────────────────────────────────── */
+function injectLoader() {
+  if (document.getElementById('ebazaar-loader-overlay')) return;
+
+  const style = document.createElement('style');
+  style.id = 'ebazaar-loader-style';
+  style.textContent = `
+    #ebazaar-loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #FAF8F5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100000;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+    }
+    #ebazaar-loader-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    html[data-theme="dark"] #ebazaar-loader-overlay {
+      background: #12100e;
+    }
+    .loader-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .loader-logo {
+      width: 72px;
+      height: 72px;
+      animation: pulseLogo 2s infinite ease-in-out;
+    }
+    .loader-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1612;
+      margin: 12px 0 4px 0;
+    }
+    html[data-theme="dark"] .loader-title {
+      color: #f3efe9;
+    }
+    .loader-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #685e53;
+      margin: 0 0 24px 0;
+      letter-spacing: 0.5px;
+    }
+    html[data-theme="dark"] .loader-tagline {
+      color: #a89f95;
+    }
+    .loader-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(168, 140, 109, 0.2);
+      border-top: 3px solid #A88C6D;
+      border-radius: 50%;
+      animation: spinLoader 0.8s linear infinite;
+    }
+    @keyframes spinLoader {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes pulseLogo {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+  `;
+  document.head.appendChild(style);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'ebazaar-loader-overlay';
+  overlay.innerHTML = `
+    <div class="loader-content">
+      <svg class="loader-logo" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="loaderBagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#A88C6D"/><stop offset="100%" stop-color="#856B4D"/>
+          </linearGradient>
+        </defs>
+        <rect x="12" y="28" width="56" height="44" rx="7" fill="url(#loaderBagGrad)"/>
+        <path d="M28 28V20C28 13.37 33.37 8 40 8C46.63 8 52 13.37 52 20V28" stroke="url(#loaderBagGrad)" stroke-width="6" fill="none"/>
+      </svg>
+      <h2 class="loader-title">E-Bazaar</h2>
+      <p class="loader-tagline">Your everyday and everything store.</p>
+      <div class="loader-spinner"></div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function showBrandedLoader() {
+  injectLoader();
+  const overlay = document.getElementById('ebazaar-loader-overlay');
+  if (overlay) overlay.classList.add('show');
+}
+
+function hideBrandedLoader() {
+  const overlay = document.getElementById('ebazaar-loader-overlay');
+  if (overlay) overlay.classList.remove('show');
+}
+
+/* ─── Fetch Engine (With Client-Side SWR Caching & Loader) ───────────────────── */
+async function fetchProductsFromNetwork() {
   const ts = new Date().getTime();
   const endpoints = [
     `http://127.0.0.1:5000/api/products?t=${ts}`,
@@ -30,6 +141,89 @@ async function fetchProducts() {
     }
   }
   return [];
+}
+
+async function fetchProducts() {
+  const cacheKey = 'eb_products_cache';
+  const cacheExpiry = 5 * 60 * 1000; // 5 minutes cache expiry
+  const ts = Date.now();
+
+  let cachedData = null;
+  try {
+    const raw = localStorage.getItem(cacheKey);
+    if (raw) cachedData = JSON.parse(raw);
+  } catch (e) {
+    console.warn('[E-Bazaar API] Failed to parse local storage cache:', e.message);
+  }
+
+  // If we have cached products, return them instantly
+  if (cachedData && Array.isArray(cachedData.products) && cachedData.products.length > 0) {
+    const age = ts - (cachedData.timestamp || 0);
+    console.log(`[E-Bazaar API] Serving ${cachedData.products.length} products from cache (Age: ${Math.round(age/1000)}s)`);
+
+    // SWR: If cache is stale (older than 5 minutes), revalidate in background
+    if (age >= cacheExpiry) {
+      console.log('[E-Bazaar API] Cache stale. Revalidating in background...');
+      revalidateCacheBackground();
+    }
+    return cachedData.products;
+  }
+
+  // Cold load: Show branded loader, fetch synchronously
+  showBrandedLoader();
+  const startTime = Date.now();
+
+  const items = await fetchProductsFromNetwork();
+
+  if (items && items.length > 0) {
+    try {
+      localStorage.setItem(cacheKey, JSON.stringify({
+        timestamp: Date.now(),
+        products: items
+      }));
+    } catch (e) {
+      console.warn('[E-Bazaar API] Failed to write cache to local storage:', e.message);
+    }
+  }
+
+  // Guarantee loader displays for at least 350ms to prevent visual flickering
+  const elapsed = Date.now() - startTime;
+  const delay = Math.max(0, 350 - elapsed);
+  setTimeout(hideBrandedLoader, delay);
+
+  return items;
+}
+
+async function revalidateCacheBackground() {
+  try {
+    const items = await fetchProductsFromNetwork();
+    if (items && items.length > 0) {
+      localStorage.setItem('eb_products_cache', JSON.stringify({
+        timestamp: Date.now(),
+        products: items
+      }));
+      mergeApiProducts(items);
+      triggerUIReload();
+      console.log('[E-Bazaar API] Background cache revalidation complete.');
+    }
+  } catch (err) {
+    console.warn('[E-Bazaar API] Background revalidation failed:', err.message);
+  }
+}
+
+function triggerUIReload() {
+  const page = document.body.dataset.page;
+  const path = window.location.pathname;
+
+  if (page === 'category' || path.includes('category.html')) {
+    if (typeof initDynamicCategory === 'function') initDynamicCategory();
+  } else if (page === 'brand-store' || path.includes('brand-store.html')) {
+    if (typeof initBrandStore === 'function') initBrandStore();
+  } else if (page === 'product-detail' || path.includes('product-detail.html')) {
+    if (typeof initProductDetail === 'function') initProductDetail();
+  } else {
+    if (typeof populateHomeTracks === 'function') populateHomeTracks();
+  }
 }
 
 /* ─── Normalise a backend product → same shape as MASTER_PRODUCTS ─────────── */

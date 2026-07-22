@@ -57,6 +57,11 @@ const Product = sequelize.define('Product', {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  stock: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 50,
+  },
   gstRate: {
     type: DataTypes.FLOAT,
     allowNull: false,
