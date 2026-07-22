@@ -31,9 +31,6 @@ body {
     box-shadow: var(--shadow-md);
     border: 1px solid var(--border);
     transition: background var(--ease), border var(--ease);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
 .checkout-sidebar {
