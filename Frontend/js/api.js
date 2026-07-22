@@ -24,7 +24,9 @@ function injectLoader() {
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: #FAF8F5;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -37,14 +39,18 @@ function injectLoader() {
       opacity: 1;
       visibility: visible;
     }
-    html[data-theme="dark"] #ebazaar-loader-overlay {
-      background: #12100e;
-    }
     .loader-content {
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
+      background: rgba(26, 22, 18, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 32px 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .loader-logo {
       width: 90px;
@@ -64,41 +70,32 @@ function injectLoader() {
       50% { stroke-dashoffset: 0; }
     }
     @keyframes pulseLogo {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.03)); }
-      50% { transform: scale(1.04); filter: drop-shadow(0 8px 16px rgba(168,140,109,0.1)); }
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1)); }
+      50% { transform: scale(1.04); filter: drop-shadow(0 8px 16px rgba(168,140,109,0.3)); }
     }
     .loader-wordmark {
       font-family: 'Playfair Display', serif;
       font-size: 32px;
       font-weight: 800;
-      color: #1a1612;
+      color: #FAF8F5;
       margin: 16px 0 2px 0;
       letter-spacing: -0.5px;
     }
     .loader-wordmark em {
       font-style: italic;
-      color: #A88C6D;
-    }
-    html[data-theme="dark"] .loader-wordmark {
-      color: #FAF8F5;
-    }
-    html[data-theme="dark"] .loader-wordmark em {
       color: #C9B397;
     }
     .loader-tagline {
       font-family: 'Inter', sans-serif;
       font-size: 13px;
-      color: #685e53;
+      color: #a89f95;
       margin: 0 0 20px 0;
       letter-spacing: 0.5px;
-    }
-    html[data-theme="dark"] .loader-tagline {
-      color: #a89f95;
     }
     .loader-progress-track {
       width: 140px;
       height: 3px;
-      background: rgba(168, 140, 109, 0.15);
+      background: rgba(168, 140, 109, 0.25);
       border-radius: 2px;
       overflow: hidden;
       margin-top: 4px;
@@ -106,7 +103,7 @@ function injectLoader() {
     .loader-progress-bar {
       width: 100%;
       height: 100%;
-      background: #A88C6D;
+      background: #C9B397;
       border-radius: 2px;
       transform: translateX(-100%);
       animation: fillBar 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
@@ -150,6 +147,13 @@ function injectLoader() {
 }
 
 function showBrandedLoader() {
+  // Bypassing back-forward navigation caches and instant cached state restores
+  const navEntries = performance.getEntriesByType('navigation');
+  if (navEntries.length > 0 && navEntries[0].type === 'back_forward') {
+    console.log('[E-Bazaar API] Back-forward navigation detected. Bypassing loader.');
+    return;
+  }
+
   injectLoader();
   if (loaderTimeout) clearTimeout(loaderTimeout);
   

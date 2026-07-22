@@ -10,7 +10,9 @@
    ═══════════════════════════════════════════════════════════════════════ */
 // --- E-BAZAAR LUXURY PRELOADER ---
 const Preloader = (() => {
-  function init() {
+  let preloadTimeout = null;
+
+  function injectPreloaderMarkup() {
     if (document.getElementById('eb-preloader')) return;
 
     const style = document.createElement('style');
@@ -22,10 +24,11 @@ const Preloader = (() => {
         left: 0;
         width: 100vw;
         height: 100vh;
-        background-color: var(--bg);
-        z-index: 99999;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 100000;
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
         transition: opacity 0.4s ease, visibility 0.4s ease;
@@ -39,6 +42,14 @@ const Preloader = (() => {
         display: flex;
         flex-direction: column;
         align-items: center;
+        background: rgba(26, 22, 18, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 32px 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        text-align: center;
         animation: preloaderPulse 2s infinite ease-in-out;
       }
       .preloader-logo-svg {
@@ -50,18 +61,18 @@ const Preloader = (() => {
         font-family: 'Playfair Display', Georgia, serif;
         font-size: 2rem;
         font-weight: 800;
-        color: var(--text);
+        color: #FAF8F5;
         margin-bottom: 6px;
         letter-spacing: -0.02em;
       }
       .preloader-title em {
-        color: var(--accent);
+        color: #C9B397;
         font-style: italic;
       }
       .preloader-tagline {
         font-family: 'Inter', sans-serif;
         font-size: 0.8rem;
-        color: var(--text-muted);
+        color: #a89f95;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         font-weight: 500;
@@ -80,6 +91,7 @@ const Preloader = (() => {
 
     const div = document.createElement('div');
     div.id = 'eb-preloader';
+    div.className = 'fade-out'; // Start hidden, fade in if timeout fires
     div.innerHTML = `
       <div class="preloader-logo-container">
         <svg class="preloader-logo-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
@@ -104,7 +116,27 @@ const Preloader = (() => {
     document.body.appendChild(div);
   }
 
+  function init() {
+    if (preloadTimeout) clearTimeout(preloadTimeout);
+
+    // 300ms conditional delay threshold to completely bypass loader during fast cached navigations
+    preloadTimeout = setTimeout(() => {
+      let el = document.getElementById('eb-preloader');
+      if (!el) {
+        injectPreloaderMarkup();
+        el = document.getElementById('eb-preloader');
+      }
+      if (el) {
+        el.classList.remove('fade-out');
+      }
+    }, 300);
+  }
+
   function hide() {
+    if (preloadTimeout) {
+      clearTimeout(preloadTimeout);
+      preloadTimeout = null;
+    }
     const el = document.getElementById('eb-preloader');
     if (el) {
       el.classList.add('fade-out');
