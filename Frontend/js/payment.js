@@ -273,3 +273,17 @@ function showToast(msg, duration = 3000) {
         toast.classList.remove('show');
     }, duration);
 }
+
+// Clipboard copy helper for UPI ID
+function copyUPI() {
+    const upiEl = document.getElementById('upi-id');
+    if (!upiEl) return;
+    const text = upiEl.textContent || upiEl.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('📋 UPI ID copied to clipboard!');
+    }).catch(err => {
+        console.error('Failed to copy UPI ID:', err);
+        showToast('❌ Copy failed. Please select and copy manually.');
+    });
+}
+window.copyUPI = copyUPI;

@@ -169,6 +169,8 @@ hr {
 }
 
 .qr-container img {
+    display: block;
+    margin: 0 auto;
     width: 140px;
     height: 140px;
     object-fit: contain;
@@ -177,6 +179,18 @@ hr {
     padding: 8px;
     background: #ffffff;
     box-shadow: var(--shadow-xs);
+}
+
+.sandbox-warning {
+    background-color: rgba(217, 119, 6, 0.06);
+    border-left: 4px solid #D97706;
+    padding: 16px 20px;
+    border-radius: var(--r-sm);
+    margin-bottom: 24px;
+    font-size: 0.92rem;
+    color: #78350F;
+    line-height: 1.6;
+    font-weight: 600;
 }
 
 .social-links {
@@ -318,5 +332,10 @@ html[data-theme="dark"] .qr-container img {
     border-color: #334155 !important;
     background: #ffffff !important; /* Keep QR code background white for scannability */
     padding: 10px;
+}
+html[data-theme="dark"] .sandbox-warning {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+    color: #FBBF24 !important; /* Premium Amber warning text */
+    border-color: #D97706 !important;
 }
 
