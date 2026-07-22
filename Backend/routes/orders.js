@@ -231,6 +231,7 @@ router.post('/:id/return', authMiddleware, async (req, res) => {
       action: action || 'refund',
       items: items || [],
       pickupAddress: pickupAddress || '',
+      bankAccount: req.body.bankAccount || null,
       requestDate: new Date().toISOString(),
     });
 

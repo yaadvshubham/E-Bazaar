@@ -68,6 +68,12 @@ input,textarea,select{font-family:inherit}
   /* Motion */
   --ease:        0.3s ease-in-out;
   --ease-slow:   0.4s ease-in-out;
+
+  /* Legacy/Compatibility Theme Variables mapping */
+  --bg-canvas:    var(--bg);
+  --bg-surface:   var(--bg-white);
+  --text-primary: var(--text);
+  --border-line:  var(--border);
 }
 
 /* ─────────────────────────────────────────────
@@ -103,6 +109,12 @@ html[data-theme="dark"]{
   --shadow-sm: 0 4px 12px rgba(0,0,0,.50);
   --shadow-md: 0 10px 30px rgba(0,0,0,.60);
   --shadow-lg: 0 20px 40px rgba(0,0,0,.70);
+
+  /* Legacy/Compatibility Theme Variables mapping */
+  --bg-canvas:    var(--bg);
+  --bg-surface:   var(--bg-white);
+  --text-primary: var(--text);
+  --border-line:  var(--border);
 }
 
 html{transition:background-color var(--ease-slow),color var(--ease-slow)}

@@ -29,6 +29,7 @@ function safeUser(user) {
   let addresses = [];
   let cart = [];
   let wishlist = [];
+  let bankAccounts = [];
   try {
     addresses = JSON.parse(user.addresses || '[]');
   } catch (err) {
@@ -44,6 +45,11 @@ function safeUser(user) {
   } catch (err) {
     wishlist = [];
   }
+  try {
+    bankAccounts = JSON.parse(user.bankAccounts || '[]');
+  } catch (err) {
+    bankAccounts = [];
+  }
   return {
     id: user.id,
     name: user.name,
@@ -54,7 +60,8 @@ function safeUser(user) {
     withdrawableBalance: typeof user.withdrawableBalance === 'number' ? user.withdrawableBalance : 0.00,
     addresses: addresses,
     cart: cart,
-    wishlist: wishlist
+    wishlist: wishlist,
+    bankAccounts: bankAccounts
   };
 }
 
@@ -624,6 +631,45 @@ router.post('/wishlist', authMiddleware, async (req, res) => {
   } catch (err) {
     console.error('[Auth] Save wishlist error:', err.message);
     return res.status(500).json({ error: 'Failed to update wishlist.' });
+  }
+});
+
+/* ── GET /api/auth/bank-accounts — Get bank accounts list for user ──────────────── */
+router.get('/bank-accounts', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    let bankAccounts = [];
+    try {
+      bankAccounts = JSON.parse(user.bankAccounts || '[]');
+    } catch (e) {
+      bankAccounts = [];
+    }
+
+    return res.json({ bankAccounts });
+  } catch (err) {
+    console.error('[Auth] Fetch bank accounts error:', err.message);
+    return res.status(500).json({ error: 'Failed to retrieve bank accounts.' });
+  }
+});
+
+/* ── POST /api/auth/bank-accounts — Save/Update bank accounts list for user ─────── */
+router.post('/bank-accounts', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    user.bankAccounts = JSON.stringify(req.body.bankAccounts || []);
+    await user.save();
+
+    return res.json({
+      message: 'Bank accounts updated successfully',
+      bankAccounts: req.body.bankAccounts || []
+    });
+  } catch (err) {
+    console.error('[Auth] Save bank accounts error:', err.message);
+    return res.status(500).json({ error: 'Failed to update bank accounts.' });
   }
 });
 

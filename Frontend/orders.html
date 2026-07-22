@@ -747,6 +747,22 @@
                 <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size: 14px; font-weight: 500; color: var(--text-primary);">
                   <input type="radio" name="ret-action" value="refund-wallet" style="width:16px; height:16px; accent-color: var(--accent);" /> Refund to E-Bazaar Wallet (Instant)
                 </label>
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size: 14px; font-weight: 500; color: var(--text-primary);">
+                  <input type="radio" name="ret-action" value="refund-bank" style="width:16px; height:16px; accent-color: var(--accent);" /> Refund to Bank Account
+                </label>
+              </div>
+
+              <div id="ret-bank-selection-container" style="display: none; margin-top: 12px; background: rgba(168, 140, 109, 0.08); padding: 16px; border-radius: 12px; border: 1px solid rgba(168, 140, 109, 0.2);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size:11px; font-weight:600; color:var(--accent, #A88C6D); text-transform:uppercase; letter-spacing:0.5px;">Select Refund Bank Account</span>
+                  <button type="button" id="btn-add-refund-bank" style="background:none; border:none; color:var(--accent, #A88C6D); font-size:12px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:4px; font-family:var(--font-primary);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add Bank Account
+                  </button>
+                </div>
+                <select id="return-bank-select" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-line); font-size:13px; font-family:var(--font-primary); background:var(--bg-canvas); color:var(--text-primary); outline:none; cursor:pointer;">
+                  <!-- Populated dynamically -->
+                </select>
               </div>
             </div>
 
@@ -780,6 +796,45 @@
           </div>
         </form>
       </div>
+    </div>
+  </div>
+
+  <!-- ORDERS BANK MODAL (Secondary Add Bank Account Modal) -->
+  <div class="modal-overlay" id="orders-bank-modal" style="z-index:10000;">
+    <div class="modal-card" style="max-width: 400px; width: 100%; border-radius: 12px; background: var(--bg-surface); padding: 24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom: 1px solid var(--border-line); padding-bottom: 12px;">
+        <h3 style="margin:0; font-size:18px; color: var(--text-primary);">Add Bank Account</h3>
+        <button onclick="closeOrdersBankModal()" style="background:none; border:none; cursor:pointer; color: var(--text-primary);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <form id="orders-bank-form" style="display:flex; flex-direction:column; gap:16px;">
+        <div>
+          <label style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:6px; display:block;">Account Holder Name</label>
+          <input type="text" id="orders-bank-holder-name" placeholder="Enter Account Holder Name" required style="width:100%; padding:10px; border:1px solid var(--border-line); border-radius:6px; background:var(--bg-canvas); color:var(--text-primary); outline: none;">
+        </div>
+        <div>
+          <label style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:6px; display:block;">Bank Name</label>
+          <input type="text" id="orders-bank-name" placeholder="e.g. HDFC Bank" required style="width:100%; padding:10px; border:1px solid var(--border-line); border-radius:6px; background:var(--bg-canvas); color:var(--text-primary); outline: none;">
+        </div>
+        <div>
+          <label style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:6px; display:block;">Account Number</label>
+          <input type="text" id="orders-bank-acc-no" placeholder="Enter Account Number" required style="width:100%; padding:10px; border:1px solid var(--border-line); border-radius:6px; background:var(--bg-canvas); color:var(--text-primary); outline: none;">
+        </div>
+        <div>
+          <label style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:6px; display:block;">Account Type</label>
+          <select id="orders-bank-acc-type" required style="width:100%; padding:10px; border:1px solid var(--border-line); border-radius:6px; background:var(--bg-canvas); color:var(--text-primary); outline: none; height: 40px;">
+            <option value="Savings">Savings Account</option>
+            <option value="Current">Current Account</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:13px; font-weight:600; color:var(--text-sub); margin-bottom:6px; display:block;">IFSC Code</label>
+          <input type="text" id="orders-bank-ifsc" placeholder="e.g. HDFC0001234" required style="width:100%; padding:10px; border:1px solid var(--border-line); border-radius:6px; background:var(--bg-canvas); color:var(--text-primary); outline: none;">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
+          <button type="button" onclick="closeOrdersBankModal()" style="padding:10px 16px; border-radius:6px; background:transparent; border:1px solid var(--border-line); color: var(--text-primary); cursor:pointer;">Cancel</button>
+          <button type="submit" class="btn-primary-action" style="padding:10px 16px; border-radius:6px; border:none; background: var(--primary, #A88C6D); color: #fff; cursor: pointer;">Save Account</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -1439,6 +1494,64 @@
       }, 600);
     };
 
+    function populateRefundBankAccountsSelect() {
+      const bankSelect = document.getElementById('return-bank-select');
+      if (bankSelect) {
+        const user = JSON.parse(localStorage.getItem('eb_user') || '{}');
+        const bankAccounts = user.bankAccounts || [];
+        if (bankAccounts.length === 0) {
+          bankSelect.innerHTML = '<option value="" disabled selected>No bank accounts saved. Click Add Bank Account to save one.</option>';
+        } else {
+          bankSelect.innerHTML = bankAccounts.map((b, idx) => `
+            <option value="${idx}">${b.bankName} (•••• ${b.accNo.slice(-4)}) - Holder: ${b.holderName || 'N/A'}</option>
+          `).join('');
+        }
+      }
+    }
+    window.populateRefundBankAccountsSelect = populateRefundBankAccountsSelect;
+
+    window.openOrdersBankModal = function() {
+      const modal = document.getElementById('orders-bank-modal');
+      if (modal) modal.classList.add('open');
+      document.getElementById('orders-bank-form')?.reset();
+    };
+
+    window.closeOrdersBankModal = function() {
+      const modal = document.getElementById('orders-bank-modal');
+      if (modal) modal.classList.remove('open');
+    };
+
+    // Form submission inside orders-bank-modal
+    document.addEventListener('DOMContentLoaded', () => {
+      const ordersBankForm = document.getElementById('orders-bank-form');
+      if (ordersBankForm) {
+        ordersBankForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const holderName = document.getElementById('orders-bank-holder-name').value.trim();
+          const bankName = document.getElementById('orders-bank-name').value.trim();
+          const accNo = document.getElementById('orders-bank-acc-no').value.trim();
+          const accType = document.getElementById('orders-bank-acc-type').value;
+          const ifsc = document.getElementById('orders-bank-ifsc').value.trim();
+
+          const user = JSON.parse(localStorage.getItem('eb_user') || '{}');
+          if (!user.bankAccounts) user.bankAccounts = [];
+          user.bankAccounts.push({ holderName, bankName, accNo, accType, ifsc });
+          localStorage.setItem('eb_user', JSON.stringify(user));
+          localStorage.setItem('eb_bank_accounts', JSON.stringify(user.bankAccounts));
+
+          if (typeof syncBankAccountsToDb === 'function') {
+            await syncBankAccountsToDb();
+          }
+
+          closeOrdersBankModal();
+          populateRefundBankAccountsSelect();
+          if (typeof showToast === 'function') {
+            showToast('🏦 Bank Account saved and linked!');
+          }
+        });
+      }
+    });
+
     window.initiateReturn = function(orderId) {
       const returnModal = document.getElementById('return-modal');
       if (returnModal) {
@@ -1537,6 +1650,17 @@
               }
             };
           }
+
+          // Populate bank accounts select
+          populateRefundBankAccountsSelect();
+
+          // Wire add refund bank button inside return modal
+          const addRefundBankBtn = document.getElementById('btn-add-refund-bank');
+          if (addRefundBankBtn) {
+            addRefundBankBtn.onclick = () => {
+              window.openOrdersBankModal();
+            };
+          }
         }
       }
     };
@@ -1546,19 +1670,36 @@
       const returnModal = document.getElementById('return-modal');
       const closeBtn = document.getElementById('return-close-btn');
       const cancelBtn = document.getElementById('return-form-cancel');
-
       const trackModal = document.getElementById('track-modal');
       const trackCloseBtn = document.getElementById('track-close-btn');
-      
+
+      const bankSelectionContainer = document.getElementById('ret-bank-selection-container');
+
       const closeModal = () => {
         if (returnModal) returnModal.classList.remove('open');
         if (trackModal) trackModal.classList.remove('open');
         document.body.style.overflow = '';
+        if (bankSelectionContainer) bankSelectionContainer.style.display = 'none';
       };
 
       if (closeBtn) closeBtn.addEventListener('click', closeModal);
       if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
       if (trackCloseBtn) trackCloseBtn.addEventListener('click', closeModal);
+
+      // Listen for resolution radio toggle
+      const resolutionRadios = document.querySelectorAll('input[name="ret-action"]');
+      if (resolutionRadios && bankSelectionContainer) {
+        resolutionRadios.forEach(radio => {
+          radio.addEventListener('change', (e) => {
+            if (e.target.value === 'refund-bank') {
+              bankSelectionContainer.style.display = 'block';
+              populateRefundBankAccountsSelect();
+            } else {
+              bankSelectionContainer.style.display = 'none';
+            }
+          });
+        });
+      }
 
       if (returnModal) {
         returnModal.addEventListener('click', (e) => {
@@ -1607,6 +1748,21 @@
             return;
           }
 
+          let bankAccount = null;
+          if (action === 'refund-bank') {
+            const bankSelectEl = document.getElementById('return-bank-select');
+            const bankIndex = bankSelectEl ? bankSelectEl.value : "";
+            const user = JSON.parse(localStorage.getItem('eb_user') || '{}');
+            const bankAccounts = user.bankAccounts || [];
+            if (bankIndex === "" || !bankAccounts[bankIndex]) {
+              if (typeof showToast === 'function') {
+                showToast('⚠️ Please select or add a bank account for refund.');
+              }
+              return;
+            }
+            bankAccount = bankAccounts[bankIndex];
+          }
+
           if (typeof showToast === 'function') {
             showToast('Submitting return request...');
           }
@@ -1617,7 +1773,7 @@
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ reason, comments, action, items: selectedItems, pickupAddress })
+            body: JSON.stringify({ reason, comments, action, items: selectedItems, pickupAddress, bankAccount })
           })
           .then(async res => {
             const data = await res.json();

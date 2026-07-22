@@ -28,6 +28,9 @@ const AuthSession = {
         window.wishlist = window.ebWishlist;
       }
     }
+    if (user.bankAccounts) {
+      localStorage.setItem('eb_bank_accounts', JSON.stringify(user.bankAccounts));
+    }
 
     // Also write legacy eb_user key so existing account.html / nav code works
     localStorage.setItem('eb_user', JSON.stringify({
@@ -37,14 +40,15 @@ const AuthSession = {
       addresses: user.addresses || [],
       profilePic: user.profilePic || null,
       walletBalance: typeof user.walletBalance === 'number' ? user.walletBalance : 150.00,
-      withdrawableBalance: typeof user.withdrawableBalance === 'number' ? user.withdrawableBalance : 0.00
+      withdrawableBalance: typeof user.withdrawableBalance === 'number' ? user.withdrawableBalance : 0.00,
+      bankAccounts: user.bankAccounts || []
     }));
 
     if (typeof syncCartBadge === 'function') syncCartBadge();
     if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
   },
   clear() {
-    ['ebazaar_token', 'ebazaar_user', 'eb_user', 'eb_cart_items', 'cart', 'eb_wishlist', 'checkout_total', 'wallet_applied'].forEach(k => localStorage.removeItem(k));
+    ['ebazaar_token', 'ebazaar_user', 'eb_user', 'eb_cart_items', 'cart', 'eb_wishlist', 'eb_bank_accounts', 'checkout_total', 'wallet_applied'].forEach(k => localStorage.removeItem(k));
     window.ebCart = [];
     window.ebWishlist = [];
     window.cart = [];

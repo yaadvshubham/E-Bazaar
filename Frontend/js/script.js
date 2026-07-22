@@ -5895,15 +5895,38 @@ async function syncWishlistToDb() {
 }
 window.syncWishlistToDb = syncWishlistToDb;
 
+async function syncBankAccountsToDb() {
+  const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
+  if (token && token !== 'ebazaar_demo_token') {
+    try {
+      const accounts = JSON.parse(localStorage.getItem('eb_bank_accounts') || '[]');
+      await fetch('http://localhost:5000/api/auth/bank-accounts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ bankAccounts: accounts })
+      });
+    } catch (e) {
+      console.error('[Sync] Error saving bank accounts to backend:', e);
+    }
+  }
+}
+window.syncBankAccountsToDb = syncBankAccountsToDb;
+
 async function syncUserDataOnLoad() {
   const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
   if (token && token !== 'ebazaar_demo_token') {
     try {
-      const [cartRes, wishRes] = await Promise.all([
+      const [cartRes, wishRes, bankRes] = await Promise.all([
         fetch('http://localhost:5000/api/auth/cart', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
         fetch('http://localhost:5000/api/auth/wishlist', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('http://localhost:5000/api/auth/bank-accounts', {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
@@ -5936,8 +5959,23 @@ async function syncUserDataOnLoad() {
           initWishlist();
         }
       }
+
+      if (bankRes.ok) {
+        const bankData = await bankRes.json();
+        const serverBanks = bankData.bankAccounts || [];
+        localStorage.setItem('eb_bank_accounts', JSON.stringify(serverBanks));
+
+        // Update eb_user to contain server banks
+        let currentUser = JSON.parse(localStorage.getItem('eb_user') || '{}');
+        currentUser.bankAccounts = serverBanks;
+        localStorage.setItem('eb_user', JSON.stringify(currentUser));
+
+        if (typeof renderBankAccounts === 'function') {
+          renderBankAccounts();
+        }
+      }
     } catch (e) {
-      console.error('[Sync On Load] Failed to fetch cart/wishlist from server:', e);
+      console.error('[Sync On Load] Failed to fetch user data from server:', e);
     }
   }
 }
