@@ -15,7 +15,7 @@ body {
 
 .checkout-wrapper {
     display: flex;
-    max-width: var(--max-w);
+    max-width: 1050px;
     margin: 40px auto;
     gap: 30px;
     padding: 0 var(--side-pad);
@@ -38,6 +38,9 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    position: sticky;
+    top: 30px;
+    align-self: flex-start;
 }
 
 .sidebar-card {
@@ -47,6 +50,22 @@ body {
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border);
     transition: background var(--ease), border var(--ease);
+}
+
+/* Custom Scrollbar for Order Summary */
+#order-summary-items::-webkit-scrollbar {
+    width: 6px;
+}
+#order-summary-items::-webkit-scrollbar-track {
+    background: var(--bg-alt);
+    border-radius: 3px;
+}
+#order-summary-items::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 3px;
+}
+#order-summary-items::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
 }
 
 .sidebar-card h3 {
