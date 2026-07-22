@@ -44,6 +44,34 @@ document.addEventListener('DOMContentLoaded', () => {
         displayAmtEl.textContent = `₹${totalAmount.toLocaleString('en-IN')}`;
     }
 
+    // Render Dynamic Order Summary Items List
+    const summaryContainer = document.getElementById('order-summary-items');
+    if (summaryContainer && cart.length > 0) {
+        summaryContainer.innerHTML = cart.map(item => {
+            const priceNum = parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
+            const itemTotal = priceNum * (item.qty || 1);
+            const titleText = item.name || item.title || 'Product Item';
+            return `
+                <div class="summary-item-row">
+                    <div style="display: flex; gap: 10px; align-items: center; max-width: 70%;">
+                        <div style="width: 36px; height: 36px; border-radius: 4px; border: 1px solid var(--border); overflow: hidden; display: flex; align-items: center; justify-content: center; background: #ffffff; flex-shrink: 0;">
+                            <img src="${item.image || item.imageUrl || 'images/placeholder.png'}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
+                        <div style="overflow: hidden;">
+                            <div style="font-weight: 600; font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${titleText}">${titleText}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Qty: ${item.qty || 1} &nbsp;&middot;&nbsp; ₹${priceNum.toLocaleString('en-IN')} each</div>
+                        </div>
+                    </div>
+                    <div style="font-weight: 700; color: var(--text); font-size: 0.9rem;">
+                        ₹${itemTotal.toLocaleString('en-IN')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } else if (summaryContainer) {
+        summaryContainer.innerHTML = `<div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.9rem;">No items in cart.</div>`;
+    }
+
     // Disable button if amount is invalid/cart empty
     if (totalAmount <= 0 || cart.length === 0) {
         showToast('⚠️ Your shopping cart is empty.');
