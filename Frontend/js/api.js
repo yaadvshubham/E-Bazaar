@@ -10,6 +10,8 @@ window.allProducts = [];
 window._apiReady = false;
 
 /* ─── Loader & Caching Utility ────────────────────────────────────────────────── */
+let loaderTimeout = null;
+
 function injectLoader() {
   if (document.getElementById('ebazaar-loader-overlay')) return;
 
@@ -45,45 +47,74 @@ function injectLoader() {
       align-items: center;
     }
     .loader-logo {
-      width: 72px;
-      height: 72px;
-      animation: pulseLogo 2s infinite ease-in-out;
+      width: 90px;
+      height: 90px;
+      animation: pulseLogo 2.5s infinite ease-in-out;
     }
-    .loader-title {
+    .logo-bag-body {
+      fill: url(#loaderBagGrad);
+    }
+    .loader-heartbeat {
+      stroke-dasharray: 150;
+      stroke-dashoffset: 150;
+      animation: drawHeartbeat 1.8s ease-in-out infinite;
+    }
+    @keyframes drawHeartbeat {
+      0%, 100% { stroke-dashoffset: 150; }
+      50% { stroke-dashoffset: 0; }
+    }
+    @keyframes pulseLogo {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.03)); }
+      50% { transform: scale(1.04); filter: drop-shadow(0 8px 16px rgba(168,140,109,0.1)); }
+    }
+    .loader-wordmark {
       font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      font-weight: 700;
+      font-size: 32px;
+      font-weight: 800;
       color: #1a1612;
-      margin: 12px 0 4px 0;
+      margin: 16px 0 2px 0;
+      letter-spacing: -0.5px;
     }
-    html[data-theme="dark"] .loader-title {
-      color: #f3efe9;
+    .loader-wordmark em {
+      font-style: italic;
+      color: #A88C6D;
+    }
+    html[data-theme="dark"] .loader-wordmark {
+      color: #FAF8F5;
+    }
+    html[data-theme="dark"] .loader-wordmark em {
+      color: #C9B397;
     }
     .loader-tagline {
       font-family: 'Inter', sans-serif;
-      font-size: 14px;
+      font-size: 13px;
       color: #685e53;
-      margin: 0 0 24px 0;
+      margin: 0 0 20px 0;
       letter-spacing: 0.5px;
     }
     html[data-theme="dark"] .loader-tagline {
       color: #a89f95;
     }
-    .loader-spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid rgba(168, 140, 109, 0.2);
-      border-top: 3px solid #A88C6D;
-      border-radius: 50%;
-      animation: spinLoader 0.8s linear infinite;
+    .loader-progress-track {
+      width: 140px;
+      height: 3px;
+      background: rgba(168, 140, 109, 0.15);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 4px;
     }
-    @keyframes spinLoader {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .loader-progress-bar {
+      width: 100%;
+      height: 100%;
+      background: #A88C6D;
+      border-radius: 2px;
+      transform: translateX(-100%);
+      animation: fillBar 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
     }
-    @keyframes pulseLogo {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    @keyframes fillBar {
+      0% { transform: translateX(-100%); }
+      50% { transform: translateX(0%); }
+      100% { transform: translateX(100%); }
     }
   `;
   document.head.appendChild(style);
@@ -92,18 +123,27 @@ function injectLoader() {
   overlay.id = 'ebazaar-loader-overlay';
   overlay.innerHTML = `
     <div class="loader-content">
-      <svg class="loader-logo" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <svg class="loader-logo" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="E-Bazaar logo">
         <defs>
           <linearGradient id="loaderBagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#A88C6D"/><stop offset="100%" stop-color="#856B4D"/>
           </linearGradient>
+          <linearGradient id="loaderArrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#E2CDAF"/><stop offset="100%" stop-color="#FAF5E1"/>
+          </linearGradient>
         </defs>
-        <rect x="12" y="28" width="56" height="44" rx="7" fill="url(#loaderBagGrad)"/>
-        <path d="M28 28V20C28 13.37 33.37 8 40 8C46.63 8 52 13.37 52 20V28" stroke="url(#loaderBagGrad)" stroke-width="6" fill="none"/>
+        <rect class="logo-bag-body" x="12" y="28" width="56" height="44" rx="7" />
+        <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#loaderBagGrad)" stroke-width="4.5" stroke-linecap="round" />
+        <polyline class="loader-heartbeat" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50" />
+        <path fill="none" stroke="url(#loaderArrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62" />
+        <line stroke="url(#loaderArrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30" />
+        <polygon fill="url(#loaderArrowGrad)" points="54,29 63,29 63,38" />
       </svg>
-      <h2 class="loader-title">E-Bazaar</h2>
+      <div class="loader-wordmark">E-<em>Bazaar</em></div>
       <p class="loader-tagline">Your everyday and everything store.</p>
-      <div class="loader-spinner"></div>
+      <div class="loader-progress-track">
+        <div class="loader-progress-bar"></div>
+      </div>
     </div>
   `;
   document.body.appendChild(overlay);
@@ -111,11 +151,20 @@ function injectLoader() {
 
 function showBrandedLoader() {
   injectLoader();
-  const overlay = document.getElementById('ebazaar-loader-overlay');
-  if (overlay) overlay.classList.add('show');
+  if (loaderTimeout) clearTimeout(loaderTimeout);
+  
+  // 300ms conditional delay threshold to completely bypass loader if response is instant (from cache)
+  loaderTimeout = setTimeout(() => {
+    const overlay = document.getElementById('ebazaar-loader-overlay');
+    if (overlay) overlay.classList.add('show');
+  }, 300);
 }
 
 function hideBrandedLoader() {
+  if (loaderTimeout) {
+    clearTimeout(loaderTimeout);
+    loaderTimeout = null;
+  }
   const overlay = document.getElementById('ebazaar-loader-overlay');
   if (overlay) overlay.classList.remove('show');
 }
