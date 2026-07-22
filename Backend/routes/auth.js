@@ -27,10 +27,22 @@ function signToken(user) {
 
 function safeUser(user) {
   let addresses = [];
+  let cart = [];
+  let wishlist = [];
   try {
     addresses = JSON.parse(user.addresses || '[]');
   } catch (err) {
     addresses = [];
+  }
+  try {
+    cart = JSON.parse(user.cart || '[]');
+  } catch (err) {
+    cart = [];
+  }
+  try {
+    wishlist = JSON.parse(user.wishlist || '[]');
+  } catch (err) {
+    wishlist = [];
   }
   return {
     id: user.id,
@@ -40,7 +52,9 @@ function safeUser(user) {
     profilePic: user.profilePic || null,
     walletBalance: typeof user.walletBalance === 'number' ? user.walletBalance : 150.00,
     withdrawableBalance: typeof user.withdrawableBalance === 'number' ? user.withdrawableBalance : 0.00,
-    addresses: addresses
+    addresses: addresses,
+    cart: cart,
+    wishlist: wishlist
   };
 }
 
@@ -532,6 +546,84 @@ router.patch('/addresses/:id/default', authMiddleware, async (req, res) => {
   } catch (err) {
     console.error('[Auth] Set default address error:', err.message);
     return res.status(500).json({ error: 'Failed to set default address.' });
+  }
+});
+
+/* ── GET /api/auth/cart — Get cart for user ──────────────────────────────── */
+router.get('/cart', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    let cart = [];
+    try {
+      cart = JSON.parse(user.cart || '[]');
+    } catch (e) {
+      cart = [];
+    }
+
+    return res.json({ cart });
+  } catch (err) {
+    console.error('[Auth] Fetch cart error:', err.message);
+    return res.status(500).json({ error: 'Failed to retrieve cart.' });
+  }
+});
+
+/* ── POST /api/auth/cart — Update cart for user ───────────────────────────── */
+router.post('/cart', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    user.cart = JSON.stringify(req.body.cart || []);
+    await user.save();
+
+    return res.json({
+      message: 'Cart updated successfully',
+      cart: req.body.cart || []
+    });
+  } catch (err) {
+    console.error('[Auth] Save cart error:', err.message);
+    return res.status(500).json({ error: 'Failed to update cart.' });
+  }
+});
+
+/* ── GET /api/auth/wishlist — Get wishlist for user ───────────────────────── */
+router.get('/wishlist', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    let wishlist = [];
+    try {
+      wishlist = JSON.parse(user.wishlist || '[]');
+    } catch (e) {
+      wishlist = [];
+    }
+
+    return res.json({ wishlist });
+  } catch (err) {
+    console.error('[Auth] Fetch wishlist error:', err.message);
+    return res.status(500).json({ error: 'Failed to retrieve wishlist.' });
+  }
+});
+
+/* ── POST /api/auth/wishlist — Update wishlist for user ────────────────────── */
+router.post('/wishlist', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    user.wishlist = JSON.stringify(req.body.wishlist || []);
+    await user.save();
+
+    return res.json({
+      message: 'Wishlist updated successfully',
+      wishlist: req.body.wishlist || []
+    });
+  } catch (err) {
+    console.error('[Auth] Save wishlist error:', err.message);
+    return res.status(500).json({ error: 'Failed to update wishlist.' });
   }
 });
 

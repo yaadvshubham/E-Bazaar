@@ -45,6 +45,16 @@ const User = sequelize.define('User', {
     allowNull: false,
     defaultValue: '[]',
   },
+  cart: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    defaultValue: '[]',
+  },
+  wishlist: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    defaultValue: '[]',
+  },
 }, {
   tableName: 'users',
   timestamps: true,

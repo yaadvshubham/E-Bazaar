@@ -151,7 +151,7 @@ function initHamburger() {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
 }
 
-/* ══════════════════════════════════�const AddressModal = (() => {
+const AddressModal = (() => {
   let currentAddresses = [];
   const API_URL = 'http://localhost:5000/api/auth/addresses';
 
@@ -518,6 +518,10 @@ function initHamburger() {
             updateNavbarAndCartUI(currentAddresses);
             hideAddForm();
             
+            if (typeof AddressModal.onSave === 'function') {
+              AddressModal.onSave(payload);
+            }
+
             if (typeof showToast === 'function') showToast(isEdit ? '✅ Address details updated!' : '🏠 New address saved!');
           } else {
             if (typeof showToast === 'function') showToast('❌ ' + (data.error || 'Failed to save address.'));
@@ -557,16 +561,49 @@ function initHamburger() {
     }
   }
 
-  function init() {
+  async function init() {
     const triggers = document.querySelectorAll('#addr-trigger, .nav-address');
     triggers.forEach(trigger => {
       trigger.addEventListener('click', open);
     });
 
-    // Auto-update navbar delivery address on page load
-    const user = window.AuthSession ? window.AuthSession.getUser() : null;
-    if (user && user.addresses) {
-      updateNavbarAndCartUI(user.addresses);
+    const isLoggedIn = window.AuthSession && window.AuthSession.isLoggedIn();
+    if (isLoggedIn) {
+      // Render cached values immediately to avoid delay
+      const user = window.AuthSession.getUser();
+      if (user && user.addresses) {
+        updateNavbarAndCartUI(user.addresses);
+      } else {
+        const navValueEl = document.querySelector('.nav-address .addr-value');
+        if (navValueEl) navValueEl.textContent = 'Set Address';
+      }
+
+      // Fetch latest values from database
+      try {
+        const token = window.AuthSession.getToken();
+        const res = await fetch(API_URL, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          currentAddresses = data.addresses || [];
+          
+          if (user) {
+            user.addresses = currentAddresses;
+            localStorage.setItem('ebazaar_user', JSON.stringify(user));
+          }
+          updateNavbarAndCartUI(currentAddresses);
+        }
+      } catch (err) {
+        console.error('[AddressModal] Failed to load fresh addresses on page load:', err);
+      }
+    } else {
+      const navValueEl = document.querySelector('.nav-address .addr-value');
+      if (navValueEl) {
+        navValueEl.textContent = 'Set Address';
+      }
     }
   }
 
@@ -574,69 +611,12 @@ function initHamburger() {
     init,
     open,
     close,
-    updateNavbarAndCartUI
-  };
-})();
-window.AddressModal = AddressModal;resses = [];
-          user.addresses.push(newAddr);
-          localStorage.setItem('eb_user', JSON.stringify(user));
-        }
-
-        const list = document.getElementById('global-addr-list') || document.querySelector('.addr-list');
-        if (list) {
-          const newItem = document.createElement('div');
-          newItem.className = 'addr-item';
-          newItem.dataset.type = 'Custom';
-          newItem.innerHTML = `
-            <div class="addr-item-top">
-              <span class="addr-name">${fname} ${lname}</span>
-              <span class="addr-type">Custom</span>
-            </div>
-            <p class="addr-line">${line1}<br>${line2 ? line2 + ', ' : ''}${city} — ${pin}</p>
-            <p class="addr-phone">${phone}</p>
-            <div class="addr-actions">
-              <button class="addr-act-btn set-default-btn">Set as Default</button>
-              <button class="addr-act-btn edit-btn">&#9998; Edit</button>
-              <button class="addr-act-btn secondary delete-btn">&#128465; Delete</button>
-            </div>
-          `;
-          list.appendChild(newItem);
-          bindAddressItemEvents(newItem);
-        }
-
-        if (typeof AddressModal.onSave === 'function') {
-          AddressModal.onSave(newAddr);
-        }
-
-        if (typeof showToast === 'function') showToast('🏠 New address saved!');
-        hideAddForm();
-      });
-    }
-    eventsBound = true;
-  }
-
-  function init() {
-    // Only bind the trigger on init. Modal injection happens lazily on open.
-    // However, if the modal happens to be hardcoded on the page already, we can bind it now.
-    const overlay = document.getElementById('addr-modal');
-    if (overlay) {
-      bindModalEvents(overlay);
-    }
-
-    const triggers = document.querySelectorAll('#addr-trigger, .nav-address');
-    triggers.forEach(trigger => {
-      trigger.addEventListener('click', open);
-    });
-  }
-
-  return {
-    init,
-    open,
-    close,
+    updateNavbarAndCartUI,
     onSave: null
   };
 })();
 window.AddressModal = AddressModal;
+
 
 /* ═══════════════════════════════════════════════════════════════════════
    PRODUCT DATA & DYNAMIC ROUTING (Category Page)
@@ -4730,11 +4710,18 @@ function syncCartBadge() {
   localStorage.setItem('eb_cart_items', JSON.stringify(ebCart));
   localStorage.setItem('cart', JSON.stringify(ebCart));
   if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
+  if (typeof syncCartToDb === 'function') syncCartToDb();
 }
 window.syncCartBadge = syncCartBadge;
 
 
 function addToCart(pStrEncoded) {
+  const isLoggedIn = window.AuthSession && window.AuthSession.isLoggedIn();
+  if (!isLoggedIn) {
+    if (typeof showToast === 'function') showToast('🔒 Please sign in to add items to cart.');
+    setTimeout(() => { window.location.href = 'auth.html'; }, 1000);
+    return;
+  }
   try {
     const rawP = JSON.parse(decodeURIComponent(pStrEncoded));
     const p = normalizeProduct(rawP);
@@ -4754,6 +4741,12 @@ function addToCart(pStrEncoded) {
 window.addToCart = addToCart;
 
 function toggleWish(btnId, title, pStrEncoded) {
+  const isLoggedIn = window.AuthSession && window.AuthSession.isLoggedIn();
+  if (!isLoggedIn) {
+    if (typeof showToast === 'function') showToast('🔒 Please sign in to manage your wishlist.');
+    setTimeout(() => { window.location.href = 'auth.html'; }, 1000);
+    return;
+  }
   const btn = document.getElementById(btnId);
   const on = btn ? btn.classList.toggle('wished') : true;
   if (btn) {
@@ -4774,12 +4767,14 @@ function toggleWish(btnId, title, pStrEncoded) {
         if (!ebWishlist.some(item => item.id === p.id)) {
           ebWishlist.push(p);
           localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
+          if (typeof syncWishlistToDb === 'function') syncWishlistToDb();
         }
       } else {
         ebWishlist = ebWishlist.filter(item => item.id !== p.id);
         localStorage.setItem('eb_wishlist', JSON.stringify(ebWishlist));
         window.ebWishlist = ebWishlist;
         window.wishlist = ebWishlist;
+        if (typeof syncWishlistToDb === 'function') syncWishlistToDb();
         if (document.body.dataset.page === 'wishlist') {
           initWishlist();
         }
@@ -5498,6 +5493,19 @@ window.handleAddToCartClick = function(btn, pStr) {
    BOOT
    ═══════════════════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+  // Centralized authentication guards for secure pages
+  const isGuardedPage = ['wishlist', 'orders', 'account', 'cart'].includes(document.body.dataset.page) || 
+                        window.location.pathname.includes('wishlist.html') || 
+                        window.location.pathname.includes('orders.html') || 
+                        window.location.pathname.includes('account.html') || 
+                        window.location.pathname.includes('cart.html');
+  
+  const isLoggedIn = window.AuthSession ? window.AuthSession.isLoggedIn() : (localStorage.getItem('ebazaar_token') || localStorage.getItem('eb_user'));
+  if (isGuardedPage && !isLoggedIn) {
+    window.location.href = 'auth.html';
+    return;
+  }
+
   ThemeEngine.init();
   syncCartBadge();
   if (typeof initWishlistBadge === 'function') initWishlistBadge();
@@ -5505,6 +5513,11 @@ document.addEventListener('DOMContentLoaded', () => {
   HeroSlider.init();
   initHamburger();
   initMegaMenu();
+
+  if (isLoggedIn) {
+    syncUserDataOnLoad();
+  }
+
   // Brand Directory Active State & Initialization
   if (window.location.pathname.includes('brand-directory.html')) {
     const brandLink = document.getElementById('link-brand-store');
@@ -5573,6 +5586,7 @@ window.clearWishlist = function () {
   window.wishlist = ebWishlist;
   initWishlist();
   if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
+  if (typeof syncWishlistToDb === 'function') syncWishlistToDb();
   showToast('Wishlist cleared');
 };
 
@@ -5603,6 +5617,7 @@ window.addAllToCart = function () {
     initWishlist();
   }
   if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
+  if (typeof syncWishlistToDb === 'function') syncWishlistToDb();
   showToast(`🛒 Moved ${count} items to cart!`);
 };
 
@@ -5840,4 +5855,130 @@ window.initBrandDirectory = function () {
     });
   }, { passive: true });
 };
+
+// Database Sync Helpers for Logged-in Users
+async function syncCartToDb() {
+  const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
+  if (token && token !== 'ebazaar_demo_token') {
+    try {
+      await fetch('http://localhost:5000/api/auth/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ cart: window.ebCart || [] })
+      });
+    } catch (e) {
+      console.error('[Sync] Error saving cart to backend:', e);
+    }
+  }
+}
+window.syncCartToDb = syncCartToDb;
+
+async function syncWishlistToDb() {
+  const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
+  if (token && token !== 'ebazaar_demo_token') {
+    try {
+      await fetch('http://localhost:5000/api/auth/wishlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ wishlist: window.ebWishlist || [] })
+      });
+    } catch (e) {
+      console.error('[Sync] Error saving wishlist to backend:', e);
+    }
+  }
+}
+window.syncWishlistToDb = syncWishlistToDb;
+
+async function syncUserDataOnLoad() {
+  const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
+  if (token && token !== 'ebazaar_demo_token') {
+    try {
+      const [cartRes, wishRes] = await Promise.all([
+        fetch('http://localhost:5000/api/auth/cart', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('http://localhost:5000/api/auth/wishlist', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+
+      if (cartRes.ok) {
+        const cartData = await cartRes.json();
+        const serverCart = cartData.cart || [];
+        window.ebCart = serverCart.map(normalizeProduct);
+        window.cart = window.ebCart;
+        localStorage.setItem('eb_cart_items', JSON.stringify(window.ebCart));
+        localStorage.setItem('cart', JSON.stringify(window.ebCart));
+        
+        // Update cart badge UI
+        const cartCount = window.ebCart.reduce((sum, item) => sum + (item.qty || 1), 0);
+        window.cartCount = cartCount;
+        document.querySelectorAll('.cart-count-el').forEach(el => el.textContent = cartCount);
+        
+        if (typeof renderCart === 'function') renderCart();
+      }
+
+      if (wishRes.ok) {
+        const wishData = await wishRes.json();
+        const serverWish = wishData.wishlist || [];
+        window.ebWishlist = serverWish.map(normalizeProduct);
+        window.wishlist = window.ebWishlist;
+        localStorage.setItem('eb_wishlist', JSON.stringify(window.ebWishlist));
+        
+        if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
+        if (typeof initWishlist === 'function' && document.body.dataset.page === 'wishlist') {
+          initWishlist();
+        }
+      }
+    } catch (e) {
+      console.error('[Sync On Load] Failed to fetch cart/wishlist from server:', e);
+    }
+  }
+}
+window.syncUserDataOnLoad = syncUserDataOnLoad;
+
+function initMegaMenu() {
+  const megaItems = document.querySelectorAll('.mega-item');
+  megaItems.forEach(item => {
+    const link = item.querySelector('a');
+    if (link) {
+      link.addEventListener('click', (e) => {
+        if (window.innerWidth <= 1024) {
+          const isExpanded = link.getAttribute('aria-expanded') === 'true';
+          if (!isExpanded) {
+            e.preventDefault();
+            megaItems.forEach(other => {
+              const otherLink = other.querySelector('a');
+              if (otherLink) {
+                otherLink.setAttribute('aria-expanded', 'false');
+                other.classList.remove('active');
+              }
+            });
+            link.setAttribute('aria-expanded', 'true');
+            item.classList.add('active');
+          }
+        }
+      });
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.mega-item')) {
+      megaItems.forEach(item => {
+        const link = item.querySelector('a');
+        if (link) {
+          link.setAttribute('aria-expanded', 'false');
+          item.classList.remove('active');
+        }
+      });
+    }
+  });
+}
+window.initMegaMenu = initMegaMenu;
 

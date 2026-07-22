@@ -11,21 +11,51 @@ const AuthSession = {
   save(token, user) {
     localStorage.setItem('ebazaar_token', token);
     localStorage.setItem('ebazaar_user',  JSON.stringify(user));
+    
+    // Load cart and wishlist from user data returned by backend
+    if (user.cart) {
+      localStorage.setItem('eb_cart_items', JSON.stringify(user.cart));
+      localStorage.setItem('cart', JSON.stringify(user.cart));
+      if (window.normalizeProduct) {
+        window.ebCart = user.cart.map(window.normalizeProduct);
+        window.cart = window.ebCart;
+      }
+    }
+    if (user.wishlist) {
+      localStorage.setItem('eb_wishlist', JSON.stringify(user.wishlist));
+      if (window.normalizeProduct) {
+        window.ebWishlist = user.wishlist.map(window.normalizeProduct);
+        window.wishlist = window.ebWishlist;
+      }
+    }
+
     // Also write legacy eb_user key so existing account.html / nav code works
     localStorage.setItem('eb_user', JSON.stringify({
       name:     user.name,
       email:    user.email,
       phone:    user.phone || '',
-      addresses: [],
-      profilePic: null,
+      addresses: user.addresses || [],
+      profilePic: user.profilePic || null,
+      walletBalance: typeof user.walletBalance === 'number' ? user.walletBalance : 150.00,
+      withdrawableBalance: typeof user.withdrawableBalance === 'number' ? user.withdrawableBalance : 0.00
     }));
+
+    if (typeof syncCartBadge === 'function') syncCartBadge();
+    if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
   },
   clear() {
-    ['ebazaar_token', 'ebazaar_user', 'eb_user'].forEach(k => localStorage.removeItem(k));
+    ['ebazaar_token', 'ebazaar_user', 'eb_user', 'eb_cart_items', 'cart', 'eb_wishlist', 'checkout_total', 'wallet_applied'].forEach(k => localStorage.removeItem(k));
+    window.ebCart = [];
+    window.ebWishlist = [];
+    window.cart = [];
+    window.wishlist = [];
+    if (typeof syncCartBadge === 'function') syncCartBadge();
+    if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
   },
   getUser() {
     try {
-      return JSON.parse(localStorage.getItem('ebazaar_user')) || JSON.parse(localStorage.getItem('eb_user')) || null;
+      const u = localStorage.getItem('ebazaar_user') || localStorage.getItem('eb_user');
+      return u ? JSON.parse(u) : null;
     } catch { return null; }
   },
   getToken() {
@@ -34,6 +64,37 @@ const AuthSession = {
   isLoggedIn() {
     return !!(localStorage.getItem('ebazaar_token') || localStorage.getItem('eb_user'));
   },
+};
+
+// Keep ebazaar_user and eb_user keys synchronized in localStorage
+const originalSetItem = localStorage.setItem;
+localStorage.setItem = function(key, value) {
+  originalSetItem.apply(this, arguments);
+  if (key === 'eb_user') {
+    try {
+      const parsed = JSON.parse(value);
+      if (parsed && typeof parsed === 'object') {
+        originalSetItem.call(this, 'ebazaar_user', value);
+      }
+    } catch (e) {}
+  } else if (key === 'ebazaar_user') {
+    try {
+      const parsed = JSON.parse(value);
+      if (parsed && typeof parsed === 'object') {
+        originalSetItem.call(this, 'eb_user', value);
+      }
+    } catch (e) {}
+  }
+};
+
+const originalRemoveItem = localStorage.removeItem;
+localStorage.removeItem = function(key) {
+  originalRemoveItem.apply(this, arguments);
+  if (key === 'eb_user') {
+    originalRemoveItem.call(this, 'ebazaar_user');
+  } else if (key === 'ebazaar_user') {
+    originalRemoveItem.call(this, 'eb_user');
+  }
 };
 
 /* ─── UI Helpers ─────────────────────────────────────────────────────────── */
