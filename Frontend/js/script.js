@@ -24,14 +24,17 @@ const Preloader = (() => {
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
+        background: rgba(250, 248, 245, 0.6);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         z-index: 100000;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: opacity 0.4s ease, visibility 0.4s ease;
+      }
+      html[data-theme="dark"] #eb-preloader {
+        background: rgba(18, 16, 14, 0.6);
       }
       #eb-preloader.fade-out {
         opacity: 0;
@@ -42,46 +45,48 @@ const Preloader = (() => {
         display: flex;
         flex-direction: column;
         align-items: center;
-        background: rgba(26, 22, 18, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 32px 40px;
-        border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
         text-align: center;
         animation: preloaderPulse 2s infinite ease-in-out;
       }
       .preloader-logo-svg {
-        width: 72px;
-        height: 72px;
+        width: 90px;
+        height: 90px;
         margin-bottom: 15px;
       }
       .preloader-title {
         font-family: 'Playfair Display', Georgia, serif;
-        font-size: 2rem;
+        font-size: 2.2rem;
         font-weight: 800;
-        color: #FAF8F5;
+        color: #1a1612;
         margin-bottom: 6px;
         letter-spacing: -0.02em;
       }
+      html[data-theme="dark"] .preloader-title {
+        color: #FAF8F5;
+      }
       .preloader-title em {
-        color: #C9B397;
+        color: #A88C6D;
         font-style: italic;
+      }
+      html[data-theme="dark"] .preloader-title em {
+        color: #C9B397;
       }
       .preloader-tagline {
         font-family: 'Inter', sans-serif;
         font-size: 0.8rem;
-        color: #a89f95;
+        color: #685e53;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         font-weight: 500;
         opacity: 0;
         animation: preloaderFadeIn 0.8s forwards 0.3s;
       }
+      html[data-theme="dark"] .preloader-tagline {
+        color: #a89f95;
+      }
       @keyframes preloaderPulse {
-        0%, 100% { transform: scale(0.98); opacity: 0.95; }
-        50% { transform: scale(1.02); opacity: 1; }
+        0%, 100% { transform: scale(0.98); }
+        50% { transform: scale(1.02); }
       }
       @keyframes preloaderFadeIn {
         to { opacity: 1; transform: translateY(0); }
@@ -152,13 +157,28 @@ const Preloader = (() => {
 })();
 window.Preloader = Preloader;
 
-// Trigger preloader immediately if document body exists, or wait for DOM parse
-if (document.body) {
-  Preloader.init();
-} else {
-  document.addEventListener('DOMContentLoaded', () => {
+// Trigger preloader immediately if document body exists and products cache is not present, or wait for DOM parse
+const hasProductsCache = (() => {
+  try {
+    const cache = localStorage.getItem('eb_products_cache');
+    if (cache) {
+      const parsed = JSON.parse(cache);
+      return (parsed && Array.isArray(parsed.products) && parsed.products.length > 0);
+    }
+  } catch (e) {}
+  return false;
+})();
+
+if (!hasProductsCache) {
+  if (document.body) {
     Preloader.init();
-  });
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      Preloader.init();
+    });
+  }
+} else {
+  console.log('[E-Bazaar Preloader] Products cache present. Skipping automatic preloader trigger.');
 }
 
 const ThemeEngine = (() => {
