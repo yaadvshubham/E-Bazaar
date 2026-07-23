@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                 });
 
-                const response = await fetch('http://localhost:5000/api/orders/create', {
+                const response = await fetch('https://e-bazaar-kajv.onrender.com/api/orders/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const walletUsed = parseInt(localStorage.getItem('wallet_applied')) || 0;
 
-            const response = await fetch('http://localhost:5000/api/orders/verify', {
+            const response = await fetch('https://e-bazaar-kajv.onrender.com/api/orders/verify', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

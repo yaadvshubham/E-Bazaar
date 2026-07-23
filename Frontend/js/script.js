@@ -397,7 +397,7 @@ function initHamburger() {
 
 const AddressModal = (() => {
   let currentAddresses = [];
-  const API_URL = 'http://localhost:5000/api/auth/addresses';
+  const API_URL = 'https://e-bazaar-kajv.onrender.com/api/auth/addresses';
 
   const ADDRESS_MODAL_HTML = `
   <div class="modal-card" style="max-width: 600px; width: 100%; border-radius: 16px; background: var(--bg-surface);">
@@ -5002,7 +5002,7 @@ function updateFilterTags() {
   });
 }
 
-//const API_BASE = 'http://localhost:5000/api';
+//const API_BASE = 'https://e-bazaar-kajv.onrender.com/api';
 
 async function fetchProducts(params = {}) {
   try {
@@ -6357,7 +6357,7 @@ async function syncCartToDb() {
   const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
   if (token && token !== 'ebazaar_demo_token') {
     try {
-      await fetch('http://localhost:5000/api/auth/cart', {
+      await fetch('https://e-bazaar-kajv.onrender.com/api/auth/cart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -6376,7 +6376,7 @@ async function syncWishlistToDb() {
   const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
   if (token && token !== 'ebazaar_demo_token') {
     try {
-      await fetch('http://localhost:5000/api/auth/wishlist', {
+      await fetch('https://e-bazaar-kajv.onrender.com/api/auth/wishlist', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -6396,7 +6396,7 @@ async function syncBankAccountsToDb() {
   if (token && token !== 'ebazaar_demo_token') {
     try {
       const accounts = JSON.parse(localStorage.getItem('eb_bank_accounts') || '[]');
-      await fetch('http://localhost:5000/api/auth/bank-accounts', {
+      await fetch('https://e-bazaar-kajv.onrender.com/api/auth/bank-accounts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -6416,13 +6416,13 @@ async function syncUserDataOnLoad() {
   if (token && token !== 'ebazaar_demo_token') {
     try {
       const [cartRes, wishRes, bankRes] = await Promise.all([
-        fetch('http://localhost:5000/api/auth/cart', {
+        fetch('https://e-bazaar-kajv.onrender.com/api/auth/cart', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/auth/wishlist', {
+        fetch('https://e-bazaar-kajv.onrender.com/api/auth/wishlist', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/auth/bank-accounts', {
+        fetch('https://e-bazaar-kajv.onrender.com/api/auth/bank-accounts', {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);

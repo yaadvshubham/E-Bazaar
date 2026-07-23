@@ -376,7 +376,7 @@
     const token = localStorage.getItem('ebazaar_token');
 
     if (orderId && token) {
-      fetch('http://localhost:5000/api/orders', {
+      fetch('https://e-bazaar-kajv.onrender.com/api/orders', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`

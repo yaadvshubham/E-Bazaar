@@ -1,10 +1,10 @@
 /* ═══════════════════════════════════════════════════════════════════════
    E-BAZAAR — api.js
    Backend API Integration & Dynamic Rendering Engine
-   Connects to http://localhost:5000 and enriches the frontend with
+   Connects to https://e-bazaar-kajv.onrender.com and enriches the frontend with
    live database products with cache-busting and case-insensitive matching.
    ═══════════════════════════════════════════════════════════════════════ */
-var API_BASE = 'http://localhost:5000/api';
+var API_BASE = 'https://e-bazaar-kajv.onrender.com/api';
 // Global state — backend products are merged into this
 window.allProducts = [];
 window._apiReady = false;
@@ -239,7 +239,7 @@ async function fetchProductsFromNetwork() {
   const ts = new Date().getTime();
   const endpoints = [
     `http://127.0.0.1:5000/api/products?t=${ts}`,
-    `http://localhost:5000/api/products?t=${ts}`
+    `https://e-bazaar-kajv.onrender.com/api/products?t=${ts}`
   ];
 
   for (const url of endpoints) {

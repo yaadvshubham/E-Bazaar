@@ -4,7 +4,7 @@
    Connects frontend forms to /api/auth/register & /api/auth/login
    ═══════════════════════════════════════════════════════════════════════ */
 
-const AUTH_API = 'http://localhost:5000/api/auth';
+const AUTH_API = 'https://e-bazaar-kajv.onrender.com/api/auth';
 
 /* ─── Token & Session Helpers ────────────────────────────────────────────── */
 const AuthSession = {

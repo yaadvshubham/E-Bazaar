@@ -1078,7 +1078,7 @@
         }, 300);
       }
 
-      fetch('http://localhost:5000/api/orders', {
+      fetch('https://e-bazaar-kajv.onrender.com/api/orders', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -1490,7 +1490,7 @@
               confirmBtn.innerText = 'Updating status...';
               try {
                 const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
-                const res = await fetch(`http://localhost:5000/api/orders/${order.id}/deliver`, {
+                const res = await fetch(`https://e-bazaar-kajv.onrender.com/api/orders/${order.id}/deliver`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
@@ -1691,7 +1691,7 @@
                 btnPickup.innerText = 'Updating status...';
                 try {
                   const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
-                  const res = await fetch(`http://localhost:5000/api/orders/${order.id}/return-pickup`, {
+                  const res = await fetch(`https://e-bazaar-kajv.onrender.com/api/orders/${order.id}/return-pickup`, {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
@@ -1728,7 +1728,7 @@
               clearInterval(window.returnQCInterval);
               try {
                 const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
-                const res = await fetch(`http://localhost:5000/api/orders/${order.id}/return-complete`, {
+                const res = await fetch(`https://e-bazaar-kajv.onrender.com/api/orders/${order.id}/return-complete`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
@@ -1810,7 +1810,7 @@
 
     async function syncMockImages() {
       try {
-        const host = 'http://localhost:5000';
+        const host = 'https://e-bazaar-kajv.onrender.com';
         
         // Sync Puma Image
         const resPuma = await fetch(`${host}/api/products?q=Puma+RS-X`);
@@ -2122,7 +2122,7 @@
             showToast('Submitting return request...');
           }
 
-          fetch(`http://localhost:5000/api/orders/${orderId}/return`, {
+          fetch(`https://e-bazaar-kajv.onrender.com/api/orders/${orderId}/return`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
