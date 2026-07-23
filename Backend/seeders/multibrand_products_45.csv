@@ -1,0 +1,46 @@
+id,brand,name,category,price_inr,description,display,processor,ram,storage,camera,battery,charging,image
+1,Apple,iPhone 16 Pro,Smartphone,119900,Flagship iPhone,6.3 OLED 120Hz,Apple A18 Pro,8GB,256GB,48MP Triple,3582mAh,27W,https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16-pro.jpg
+2,Apple,iPhone 16 Pro Max,Smartphone,144900,Largest flagship,6.9 OLED 120Hz,Apple A18 Pro,8GB,256GB,48MP Triple,4685mAh,27W,https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16-pro-max.jpg
+3,Apple,iPhone 16,Smartphone,79900,Latest iPhone,6.1 OLED,Apple A18,8GB,128GB,48MP Dual,3561mAh,25W,https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16.jpg
+4,Apple,AirPods Pro 2,Earbuds,24900,ANC earbuds,-,H2,-,-,-,30h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/apple-airpods-pro-2.jpg
+5,Apple,Apple Watch Series 10,Smartwatch,46900,Premium smartwatch,1.96 OLED,S10,2GB,64GB,-,18h,Wireless,https://fdn2.gsmarena.com/vv/bigpic/apple-watch-series10.jpg
+6,Apple,iPad Air 13 (2025),Tablet,79900,Powerful tablet,13 IPS,Apple M3,8GB,128GB,12MP,9705mAh,30W,https://fdn2.gsmarena.com/vv/bigpic/apple-ipad-air-13-2025.jpg
+7,Samsung,Galaxy S25 Ultra,Smartphone,129999,Ultra flagship,6.9 AMOLED,Snapdragon 8 Elite,12GB,256GB,200MP Quad,5000mAh,45W,https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s25-ultra.jpg
+8,Samsung,Galaxy S25+,Smartphone,99999,Premium flagship,6.7 AMOLED,Snapdragon 8 Elite,12GB,256GB,50MP Triple,4900mAh,45W,https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s25-plus.jpg
+9,Samsung,Galaxy S25,Smartphone,80999,Compact flagship,6.2 AMOLED,Snapdragon 8 Elite,12GB,256GB,50MP Triple,4000mAh,25W,https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s25.jpg
+10,Samsung,Galaxy Z Fold7,Foldable,174999,Foldable flagship,8 Fold AMOLED,Snapdragon 8 Elite,12GB,512GB,200MP Triple,4400mAh,25W,https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-z-fold7.jpg
+11,Samsung,Galaxy Buds3 Pro,Earbuds,19999,ANC earbuds,-,-,-,-,-,30h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-buds3-pro.jpg
+12,Samsung,Galaxy Watch Ultra,Smartwatch,59999,Outdoor watch,1.5 AMOLED,Exynos W1000,2GB,32GB,-,100h,Wireless,https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-watch-ultra.jpg
+13,Vivo,Vivo X200 Pro,Smartphone,94999,Camera flagship,6.78 AMOLED,Dimensity 9400,16GB,512GB,200MP Triple,6000mAh,90W,https://fdn2.gsmarena.com/vv/bigpic/vivo-x200-pro.jpg
+14,Vivo,Vivo X200,Smartphone,65999,Flagship,6.67 AMOLED,Dimensity 9400,12GB,256GB,50MP Triple,5800mAh,90W,https://fdn2.gsmarena.com/vv/bigpic/vivo-x200.jpg
+15,Vivo,Vivo V50,Smartphone,36999,Mid-range,6.77 AMOLED,Snapdragon 7 Gen 3,8GB,256GB,50MP Dual,6000mAh,90W,https://fdn2.gsmarena.com/vv/bigpic/vivo-v50.jpg
+16,Vivo,Vivo T4,Smartphone,22999,Affordable,6.67 AMOLED,Snapdragon 7s Gen3,8GB,256GB,50MP Dual,7300mAh,90W,https://fdn2.gsmarena.com/vv/bigpic/vivo-t4.jpg
+17,Vivo,Vivo Watch GT,Smartwatch,14999,Fitness watch,1.85 AMOLED,-,-,-,-,21d,-,https://fdn2.gsmarena.com/vv/bigpic/vivo-watch-gt.jpg
+18,Vivo,Vivo TWS 3e,Earbuds,1999,Budget earbuds,-,-,-,-,-,36h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/vivo-tws-3e.jpg
+19,OPPO,OPPO Find X8 Ultra,Smartphone,99999,Camera flagship,6.82 AMOLED,Snapdragon 8 Elite,16GB,512GB,50MP Quad,6100mAh,100W,https://fdn2.gsmarena.com/vv/bigpic/oppo-find-x8-ultra.jpg
+20,OPPO,OPPO Find X8,Smartphone,69999,Flagship,6.59 AMOLED,Dimensity 9400,12GB,256GB,50MP Triple,5630mAh,80W,https://fdn2.gsmarena.com/vv/bigpic/oppo-find-x8.jpg
+21,OPPO,OPPO Reno14 Pro,Smartphone,49999,Premium midrange,6.83 AMOLED,Dimensity 8450,12GB,256GB,50MP Triple,6200mAh,80W,https://fdn2.gsmarena.com/vv/bigpic/oppo-reno14-pro.jpg
+22,OPPO,OPPO Reno14,Smartphone,37999,Stylish phone,6.59 AMOLED,Dimensity 8350,8GB,256GB,50MP Dual,6000mAh,80W,https://fdn2.gsmarena.com/vv/bigpic/oppo-reno14.jpg
+23,OPPO,OPPO Enco Air4 Pro,Earbuds,4999,ANC earbuds,-,-,-,-,-,44h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/oppo-enco-air4-pro.jpg
+24,OPPO,OPPO Watch X2,Smartwatch,24999,WearOS watch,1.5 AMOLED,Snapdragon W5,2GB,32GB,-,100h,Wireless,https://fdn2.gsmarena.com/vv/bigpic/oppo-watch-x2.jpg
+25,Nothing,Nothing Phone (3),Smartphone,79999,Glyph flagship,6.67 AMOLED,Snapdragon 8s Gen4,12GB,256GB,50MP Triple,5150mAh,65W,https://fdn2.gsmarena.com/vv/bigpic/nothing-phone-3.jpg
+26,Nothing,Nothing Phone (3a) Pro,Smartphone,34999,Midrange,6.77 AMOLED,Snapdragon 7s Gen3,12GB,256GB,50MP Triple,5000mAh,50W,https://fdn2.gsmarena.com/vv/bigpic/nothing-phone-3a-pro.jpg
+27,Nothing,Nothing Phone (3a),Smartphone,27999,Affordable,6.77 AMOLED,Snapdragon 7s Gen3,8GB,128GB,50MP Dual,5000mAh,50W,https://fdn2.gsmarena.com/vv/bigpic/nothing-phone-3a.jpg
+28,Nothing,CMF Phone 2 Pro,Smartphone,19999,Budget,6.77 AMOLED,Dimensity 7300,8GB,128GB,50MP Triple,5000mAh,33W,https://fdn2.gsmarena.com/vv/bigpic/cmf-phone-2-pro.jpg
+29,Nothing,Nothing Ear,Earbuds,11999,Premium ANC,-,-,-,-,-,40h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/nothing-ear-2024.jpg
+30,Nothing,CMF Buds Pro 2,Earbuds,4299,ANC,-,-,-,-,-,43h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/cmf-buds-pro-2.jpg
+31,Sony,Xperia 1 VII,Smartphone,139999,Photography flagship,6.5 OLED 120Hz,Snapdragon 8 Elite,12GB,256GB,48MP Triple,5000mAh,30W,https://fdn2.gsmarena.com/vv/bigpic/sony-xperia-1-vii.jpg
+32,Sony,Xperia 10 VI,Smartphone,44999,Compact midrange,6.1 OLED,Snapdragon 6 Gen1,8GB,128GB,48MP Dual,5000mAh,30W,https://fdn2.gsmarena.com/vv/bigpic/sony-xperia-10-vi.jpg
+33,Sony,WH-1000XM6,Headphones,39999,Flagship ANC headphones,-,QN3,-,-,-,30h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/sony-wh-1000xm6.jpg
+34,Sony,WF-1000XM5,Earbuds,24999,Premium earbuds,-,-,-,-,-,24h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/sony-wf-1000xm5.jpg
+35,Sony,Bravia 8 II 55,TV,189999,OLED TV,55 OLED,XR,4GB,64GB,-,-,-,
+36,Sony,DualSense Edge,Accessory,18999,Gaming controller,-,-,-,-,-,-,USB-C,
+37,Xiaomi,Xiaomi 15 Ultra,Smartphone,109999,Leica flagship,6.73 AMOLED,Snapdragon 8 Elite,16GB,512GB,200MP Quad,5410mAh,90W,https://fdn2.gsmarena.com/vv/bigpic/xiaomi-15-ultra.jpg
+38,Xiaomi,Xiaomi 15,Smartphone,69999,Compact flagship,6.36 AMOLED,Snapdragon 8 Elite,12GB,256GB,50MP Triple,5240mAh,90W,https://fdn2.gsmarena.com/vv/bigpic/xiaomi-15.jpg
+39,Xiaomi,Redmi Note 14 Pro+,Smartphone,32999,Popular midrange,6.67 AMOLED,Snapdragon 7s Gen3,12GB,256GB,200MP Triple,5110mAh,120W,https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-note-14-pro-plus.jpg
+40,Xiaomi,POCO F7,Smartphone,31999,Gaming phone,6.83 AMOLED,Snapdragon 8s Gen4,12GB,256GB,50MP Dual,6500mAh,90W,https://fdn2.gsmarena.com/vv/bigpic/xiaomi-poco-f7.jpg
+41,Xiaomi,Xiaomi Pad 7 Pro,Tablet,39999,Android tablet,11.2 LCD,Snapdragon 8s Gen3,12GB,256GB,50MP,8850mAh,67W,https://fdn2.gsmarena.com/vv/bigpic/xiaomi-pad7-pro.jpg
+42,Xiaomi,Redmi Buds 6 Pro,Earbuds,6999,ANC earbuds,-,-,-,-,-,36h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/redmi-buds-6-pro.jpg
+43,Apple,Apple Official USB-C Charger,Accessory,2999,Official fast charger,-,-,-,-,-,-,65W,
+44,Samsung,Samsung Official USB-C Charger,Accessory,2999,Official fast charger,-,-,-,-,-,-,65W,
+45,Vivo,Vivo Official USB-C Charger,Accessory,2999,Official fast charger,-,-,-,-,-,-,65W,

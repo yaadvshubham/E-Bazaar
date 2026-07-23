@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <script>
     (function() {
-      const savedTheme = localStorage.getItem('eb-theme') || 'light';
+      const savedTheme = localStorage.getItem('eb-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', savedTheme);
       document.documentElement.classList.add('no-transitions');
     })();
@@ -366,7 +366,7 @@
           <div class="order-card-body">
             <div class="order-split">
               <div class="order-left">
-                <div class="item-img-box">
+                <div class="item-img-box" id="mock-img-puma">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                     stroke-linejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -442,7 +442,7 @@
           <div class="order-card-body">
             <div class="order-split">
               <div class="order-left">
-                <div class="item-img-box">
+                <div class="item-img-box" id="mock-img-iphone">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                     stroke-linejoin="round" style="width:32px;height:32px;">
                     <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
@@ -507,57 +507,22 @@
           </div>
 
           <div class="order-card-body">
-            <div class="order-split">
-              <div class="order-left">
-                <div class="item-img-box">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                    stroke-linejoin="round" style="width:32px;height:32px;">
-                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-                  </svg>
+            <div class="order-split" style="border-bottom: 1px dashed var(--border-line); padding-bottom: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <div class="order-left" style="display:flex; align-items:center; flex: 1; min-width: 0;">
+                <div class="item-img-box" id="mock-img-zara" style="width: 72px; height: 72px; border-radius: 8px; border: 1px solid var(--border-line); overflow: hidden; padding: 4px; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80" style="max-width:100%; max-height:100%; object-fit:contain;" alt="Zara Oversized Cotton Shirt">
                 </div>
-                <div class="item-details">
-                  <div class="item-title">Zara Oversized Cotton Shirt</div>
-                  <div class="item-meta">Qty: 1 | Size: L</div>
-                  <div class="item-meta" style="margin-top:4px; font-weight:600; color:var(--text-primary);">₹2,199
-                  </div>
+                <div class="item-details" style="margin-left: 16px; min-width: 0;">
+                  <div class="item-title" style="font-weight: 600; color: var(--text-primary); font-size:15px;">Zara Oversized Cotton Shirt</div>
+                  <div class="item-meta" style="font-size: 13px; color: var(--text-sub); margin-top: 4px;">Qty: 1 | Size: L</div>
+                  <div class="item-meta" style="margin-top:4px; font-weight:600; color:var(--text-primary);">₹2,199</div>
                 </div>
               </div>
 
-              <div class="order-right actions-stack">
+              <div class="order-right actions-stack" style="display: flex; gap: 8px; align-items: center;">
                 <button class="btn-primary-outline"
-                  style="border-color:var(--border-line); color:var(--text-primary);">View Return Status</button>
-                <button class="btn-text-link">Download Return Label</button>
-              </div>
-            </div>
-
-            <div
-              style="padding:16px; background:var(--bg-canvas); border-radius:8px; border:1px solid var(--border-line); display:flex; align-items:center; gap:12px;">
-              <div
-                style="width:40px;height:40px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;color:#c62828;border:1px solid rgba(198,40,40,0.2);">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <path d="M12 18v-6" />
-                  <path d="M9 15l3 3 3-3" />
-                </svg>
-              </div>
-              <div>
-                <div style="font-weight:600;color:var(--text-primary);font-size:14px;">Refund Completed on May 12, 2026
-                </div>
-                <div style="color:var(--text-sub);font-size:13px;margin-top:2px;">Funds have been credited to your bank
-                  account. (Txn ID: UPI982374)</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-              <div class="order-right actions-stack">
-                <button class="btn-primary-outline"
-                  style="border-color:var(--border-line); color:var(--text-primary);">View Return Status</button>
-                <button class="btn-text-link">Download Return Label</button>
+                  style="border-color:var(--border-line); color:var(--text-primary); padding: 6px 14px; font-size: 12px; width: auto;" onclick="trackReturn(999)">View Return & Refund Status</button>
+                <button class="btn-text-link" style="font-size: 12px;">Download Return Label</button>
               </div>
             </div>
 
@@ -898,6 +863,50 @@
     </div>
   </div>
 
+  <!-- RETURN TRACKING MODAL -->
+  <div class="modal-overlay" id="return-track-modal" role="dialog" aria-modal="true" aria-label="Track Return Package">
+    <div class="modal-card" style="max-width: 600px; width: 100%; border-radius: 16px;">
+      <div class="modal-head">
+        <div>
+          <h2 class="modal-title" id="ret-track-modal-title">Track Return & Refund</h2>
+          <div style="font-size: 13px; color: var(--text-sub); margin-top: 2px;" id="ret-track-courier-info">Delhivery Reverse Logistics &middot; AWB: RET982736451</div>
+        </div>
+        <button class="modal-close" id="ret-track-close-btn" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 24px 32px 32px;">
+        <!-- POLICY BANNER -->
+        <div style="background: rgba(168, 140, 109, 0.08); padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(168, 140, 109, 0.2); margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span style="font-size: 11px; font-weight: 700; color: var(--accent-caramel, #A88C6D); text-transform: uppercase; letter-spacing: 0.5px;">PICKUP GUARANTEE POLICY</span>
+            <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-top: 2px;">Our delivery partner will receive the product in 6 hours in working time.</div>
+          </div>
+          <span style="font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 20px; background: rgba(168, 140, 109, 0.15); color: var(--accent-caramel, #A88C6D); text-transform: uppercase;" id="ret-track-status-pill">Return Requested</span>
+        </div>
+
+        <!-- PROGRESS BAR -->
+        <div style="margin-bottom: 32px;" id="ret-track-progress-wrapper">
+          <!-- Dynamically injected return progress timeline -->
+        </div>
+
+        <!-- LIVE EVENT LOGS -->
+        <div style="border-top: 1px solid var(--border-line); padding-top: 20px;">
+          <h3 style="font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--text-sub); letter-spacing: 0.5px; margin-bottom: 16px;">Return Logs & Updates</h3>
+          <div id="ret-track-logs-container" style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- Return logs injected here -->
+          </div>
+        </div>
+
+        <!-- DYNAMIC ACTIONS SECTION -->
+        <div id="ret-track-actions-container" style="margin-top: 24px;"></div>
+      </div>
+    </div>
+  </div>
+
   <script src="js/script.js"></script>
   <script src="js/auth.js"></script>
   <script>
@@ -941,62 +950,40 @@
 
       // Fetch Orders from REST API
       const token = window.AuthSession.getToken();
-      
-      // Show loading skeletons or spinner inside panels
-      const loadingHtml = `
-        <div style="text-align: center; padding: 60px 24px;">
-          <div style="display: inline-block; border: 4px solid var(--border-line); border-radius: 50%; border-top: 4px solid var(--primary); width: 36px; height: 36px; animation: spin 1s linear infinite; margin-bottom: 12px;"></div>
-          <p style="color: var(--text-sub); font-size: 14px;">Loading your orders...</p>
-        </div>
-      `;
-      panels.forEach(p => p.innerHTML = loadingHtml);
 
-      fetch('http://localhost:5000/api/orders', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
+      // Render cached orders instantly if present
+      let cachedOrders = null;
+      try {
+        const cachedRaw = localStorage.getItem('eb_orders_cache');
+        if (cachedRaw) {
+          cachedOrders = JSON.parse(cachedRaw);
         }
-      })
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to retrieve orders');
-        return res.json();
-      })
-      .then(orders => {
-        window.currentOrders = orders;
+      } catch (e) {
+        console.warn('[Orders Cache] Failed to parse cached orders', e);
+      }
 
-        // Group orders by status
-        // NOTE: 'Pending' = incomplete Razorpay session (user dismissed modal without paying)
-        //       These should NEVER be shown to the user — they are server-side payment sessions.
-        const activeOrders   = [];  // In-progress: Confirmed, Paid, Shipped, Out for Delivery
-        const pastOrders     = [];  // Completed history: Delivered orders only
-        const returnedOrders = [];  // Returns / refunds
+      const renderOrdersList = (orders) => {
+        window.currentOrders = orders;
+        const activeOrders   = [];
+        const pastOrders     = [];
+        const returnedOrders = [];
 
         orders.forEach(order => {
           const s = order.status;
-
-          // Skip bare Pending orders — they are incomplete payment sessions
           if (s === 'Pending') return;
-
-          // Returns & refunds tab
           if (s === 'Returned' || s === 'Refunded' || s === 'Cancelled' || s === 'Replacement Requested') {
             returnedOrders.push(order);
-            pastOrders.push(order);  // also in history for reference
+            pastOrders.push(order);
             return;
           }
-
-          // Delivered → history only
           if (s === 'Delivered') {
             pastOrders.push(order);
             return;
           }
-
-          // Confirmed / Paid / Shipped / Out for Delivery → active only
           if (s === 'Confirmed' || s === 'Paid' || s === 'Shipped' || s === 'Out for Delivery') {
             activeOrders.push(order);
             return;
           }
-
-          // Fallback for any unknown status — put in history
           pastOrders.push(order);
         });
 
@@ -1013,7 +1000,6 @@
             btn.innerHTML = `Return & Refund <span class="count">(${returnedOrders.length})</span>`;
           }
           
-          // Wire dynamic tab switching
           btn.onclick = () => {
             tabButtons.forEach(t => t.classList.remove('active'));
             panels.forEach(p => p.classList.remove('active'));
@@ -1024,7 +1010,6 @@
           };
         });
 
-        // Render active orders panel
         const activePanel = document.getElementById('active-orders');
         if (activePanel) {
           if (activeOrders.length === 0) {
@@ -1038,7 +1023,6 @@
           }
         }
 
-        // Render past orders panel
         const pastPanel = document.getElementById('past-orders');
         if (pastPanel) {
           if (pastOrders.length === 0) {
@@ -1052,7 +1036,6 @@
           }
         }
 
-        // Render returns/refunds panel
         const returnedPanel = document.getElementById('returns-refunds');
         if (returnedPanel) {
           if (returnedOrders.length === 0) {
@@ -1065,16 +1048,71 @@
             returnedPanel.innerHTML = returnedOrders.map(buildOrderCard).join('');
           }
         }
+      };
+
+      if (cachedOrders && Array.isArray(cachedOrders)) {
+        console.log('[Orders Cache] Serving orders from client cache instantly.');
+        renderOrdersList(cachedOrders);
+      }
+
+      // Fetch fresh orders from REST API
+      let requestFinished = false;
+      let loaderTimeout = null;
+
+      // Show spinner only if request takes > 300ms and cache is not present
+      if (!cachedOrders) {
+        loaderTimeout = setTimeout(() => {
+          if (!requestFinished) {
+            const loadingHtml = `
+              <div style="text-align: center; padding: 60px 24px;">
+                <div style="display: inline-block; border: 4px solid var(--border-line); border-radius: 50%; border-top: 4px solid var(--primary); width: 36px; height: 36px; animation: spin 1s linear infinite; margin-bottom: 12px;"></div>
+                <p style="color: var(--text-sub); font-size: 14px;">Loading your orders...</p>
+              </div>
+            `;
+            panels.forEach(p => {
+              if (p.innerHTML === '' || p.innerHTML.includes('Loading your orders...')) {
+                p.innerHTML = loadingHtml;
+              }
+            });
+          }
+        }, 300);
+      }
+
+      fetch('http://localhost:5000/api/orders', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        requestFinished = true;
+        if (loaderTimeout) clearTimeout(loaderTimeout);
+        if (!res.ok) throw new Error('Failed to retrieve orders');
+        return res.json();
+      })
+      .then(orders => {
+        const cachedRaw = localStorage.getItem('eb_orders_cache');
+        if (JSON.stringify(orders) !== cachedRaw) {
+          localStorage.setItem('eb_orders_cache', JSON.stringify(orders));
+          renderOrdersList(orders);
+          console.log('[Orders Cache] Orders cache updated and UI refreshed silently.');
+        } else {
+          console.log('[Orders Cache] Orders cache is up to date.');
+        }
       })
       .catch(err => {
+        requestFinished = true;
+        if (loaderTimeout) clearTimeout(loaderTimeout);
         console.error('[Orders] Error loading orders:', err);
-        panels.forEach(p => {
-          p.innerHTML = `
-            <div style="text-align: center; padding: 48px 24px; color: #c0392b;">
-              <p style="font-size: 15px; font-weight: 500;">Failed to load orders. Please try again later.</p>
-            </div>
-          `;
-        });
+        if (!cachedOrders) {
+          panels.forEach(p => {
+            p.innerHTML = `
+              <div style="text-align: center; padding: 48px 24px; color: #c0392b;">
+                <p style="font-size: 15px; font-weight: 500;">Failed to load orders. Please try again later.</p>
+              </div>
+            `;
+          });
+        }
       });
     }
 
@@ -1102,13 +1140,13 @@
 
       const itemsHtml = items.map((item, itemIdx) => {
         const itemPrice = typeof item.price === 'number' ? `₹${item.price.toLocaleString('en-IN')}` : (item.price || '₹0');
-        const imageSrc = item.image || item.img || 'images/placeholder.png';
+        const imageSrc = item.image || item.imageUrl || item.img || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
         const itemAwb = item.awb || `DEL${order.id}0${itemIdx + 1}9827`;
         const courier = item.courier || (itemIdx % 2 === 0 ? 'Delhivery Express' : 'BlueDart Air');
 
         return `
           <div class="order-split" style="border-bottom: 1px dashed var(--border-line); padding-bottom: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-            <div class="order-left" style="display:flex; align-items:center; flex: 1; min-width: 250px;">
+            <div class="order-left" style="display:flex; align-items:center; flex: 1; min-width: 0;">
               <div class="item-img-box" style="width: 72px; height: 72px; border-radius: 8px; border: 1px solid var(--border-line); overflow: hidden; padding: 4px; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                 <img src="${imageSrc}" style="max-width:100%; max-height:100%; object-fit:contain;" alt="${item.title || 'Product'}">
               </div>
@@ -1204,14 +1242,13 @@
         `;
       } else if (order.status === 'Refunded' || order.status === 'Returned' || order.status === 'Cancelled' || order.status === 'Replacement Requested') {
         actionButtonsHtml = `
-          <button class="btn-primary-outline" style="border-color:var(--border-line); color:var(--text-primary);" onclick="initiateReturn(${order.id})">View Return Status</button>
+          <button class="btn-primary-outline" style="border-color:var(--border-line); color:var(--text-primary);" onclick="trackReturn(${order.id})">View Return & Refund Status</button>
           <button class="btn-text-link btn-invoice" onclick="downloadInvoice(${order.id}, 'delivered')">Download Invoice</button>
         `;
       } else {
         actionButtonsHtml = `
           <button class="btn-primary-outline" onclick="trackOrder(${order.id})">Track All Packages</button>
           <button class="btn-text-link btn-invoice" onclick="downloadInvoice(${order.id}, 'pending')">Download Invoice</button>
-          <button class="btn-text-link btn-return-trigger" onclick="initiateReturn(${order.id})">Return or Replace Items</button>
         `;
       }
 
@@ -1287,7 +1324,20 @@
       }
     };
 
+    window.trackingInterval = null;
+    window.returnQCInterval = null;
+
     window.trackItem = function(orderId, itemIdx) {
+      window.startLiveTracking(orderId, itemIdx);
+    };
+
+    window.trackOrder = function(orderId) {
+      window.startLiveTracking(orderId, null);
+    };
+
+    window.startLiveTracking = function(orderId, itemIdx) {
+      if (window.trackingInterval) clearInterval(window.trackingInterval);
+      
       const trackModal = document.getElementById('track-modal');
       if (!trackModal) return;
 
@@ -1296,199 +1346,440 @@
 
       let items = order.items;
       if (typeof items === 'string') { try { items = JSON.parse(items); } catch(e){ items = []; } }
-      const item = (items && items[itemIdx]) ? items[itemIdx] : { title: `Item #${itemIdx + 1}` };
-      const courier = (itemIdx % 2 === 0 ? 'Delhivery Express' : 'BlueDart Air');
-      const itemAwb = `DEL${order.id}0${itemIdx + 1}9827`;
+      
+      const isSingleItem = (itemIdx !== null && itemIdx !== undefined);
+      const item = isSingleItem ? items[itemIdx] : null;
+      const courier = isSingleItem ? (itemIdx % 2 === 0 ? 'Delhivery Express' : 'BlueDart Air') : 'Delhivery Air Priority';
+      const itemAwb = isSingleItem ? `DEL${order.id}0${itemIdx + 1}9827` : `DEL${order.id}908234`;
 
-      document.getElementById('track-modal-title').innerText = `Track Item — ${item.title}`;
-      document.getElementById('track-courier-info').innerText = `Package #${itemIdx + 1} &middot; ${courier} &middot; AWB: ${itemAwb}`;
+      document.getElementById('track-modal-title').innerText = isSingleItem ? `Track Item — ${item.title}` : `Track Package — Order #EB-${order.id}`;
+      document.getElementById('track-courier-info').innerHTML = `${courier} &middot; AWB: ${itemAwb}`;
 
-      const statuses = ['Confirmed', 'Shipped', 'Out for Delivery', 'Delivered'];
-      let currentIdx = 0;
-      if (order.status === 'Shipped') currentIdx = 1;
-      else if (order.status === 'Out for Delivery') currentIdx = 2;
-      else if (order.status === 'Delivered') currentIdx = 3;
-
-      let progressWidth = 0;
-      if (currentIdx === 1) progressWidth = 33.3;
-      else if (currentIdx === 2) progressWidth = 66.6;
-      else if (currentIdx >= 3) progressWidth = 100;
-
-      // Render Modal Progress Bar
-      const milestones = statuses.map((status, idx) => {
-        let mClass = 'pending';
-        let indicator = idx + 1;
-        if (idx < currentIdx) {
-          mClass = 'completed';
-          indicator = '✓';
-        } else if (idx === currentIdx) {
-          mClass = 'completed';
-          indicator = '✓';
+      const runUpdate = () => {
+        let currentIdx = 0;
+        let progressWidth = 0;
+        let elapsed = (Date.now() - new Date(order.createdAt).getTime()) / 1000;
+        if (elapsed < 0) elapsed = 0;
+        
+        let duration = 300; // Standard: 5 mins
+        if (order.shippingType === 'Same Day') duration = 120; // Same Day: 2 mins
+        else if (order.shippingType === 'Express') duration = 240; // Express: 4 mins
+        
+        const isDelivered = order.status === 'Delivered';
+        
+        if (isDelivered) {
+          currentIdx = 3;
+          progressWidth = 100;
+        } else {
+          progressWidth = Math.min(100, (elapsed / duration) * 100);
+          if (progressWidth >= 100) {
+            currentIdx = 3;
+          } else if (progressWidth >= 75) {
+            currentIdx = 2; // Out for delivery
+          } else if (progressWidth >= 35) {
+            currentIdx = 1; // Shipped
+          } else {
+            currentIdx = 0; // Confirmed
+          }
         }
-        return `
-          <div class="milestone ${mClass}">
-            <div class="node-indicator">${indicator}</div>
-            <div class="node-label">${status}</div>
-          </div>
-        `;
-      }).join('');
 
-      const progressWrapper = document.getElementById('track-progress-wrapper');
-      if (progressWrapper) {
-        progressWrapper.innerHTML = `
-          <div class="timeline-container" style="padding: 16px 0;">
-            <div class="timeline-track">
-              <div class="timeline-track-progress" style="width: ${progressWidth}%;"></div>
+        const statuses = ['Confirmed', 'Shipped', 'Out for Delivery', 'Delivered'];
+        const milestones = statuses.map((statusName, idx) => {
+          let mClass = 'pending';
+          let indicator = idx + 1;
+          
+          if (idx < currentIdx || (idx === currentIdx && progressWidth >= 100)) {
+            mClass = 'completed';
+            indicator = '✓';
+          } else if (idx === currentIdx) {
+            mClass = 'active';
+            indicator = '●';
+          }
+          
+          return `
+            <div class="milestone ${mClass}">
+              <div class="node-indicator">${indicator}</div>
+              <div class="node-label">${statusName}</div>
             </div>
-            ${milestones}
-          </div>
-        `;
-      }
+          `;
+        }).join('');
 
-      // Update ETA text and Status Pill
-      let orderDate = new Date();
-      try { if (order.createdAt) orderDate = new Date(order.createdAt); } catch(e){}
-      
-      const etaDate = new Date(orderDate);
-      etaDate.setDate(etaDate.getDate() + 3);
-      const etaStr = etaDate.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
-      
-      const etaEl = document.getElementById('track-eta');
-      if (etaEl) etaEl.innerText = order.status === 'Delivered' ? `Delivered on ${orderDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : `Arriving by ${etaStr}, 8:00 PM`;
-
-      const pillEl = document.getElementById('track-status-pill');
-      if (pillEl) {
-        pillEl.innerText = order.status === 'Delivered' ? 'Delivered' : 'On Schedule';
-        pillEl.style.background = order.status === 'Delivered' ? 'rgba(46, 125, 50, 0.12)' : 'rgba(168, 140, 109, 0.15)';
-        pillEl.style.color = order.status === 'Delivered' ? '#2e7d32' : 'var(--accent, #A88C6D)';
-      }
-
-      // Render Travel Logs
-      const logsContainer = document.getElementById('track-logs-container');
-      if (logsContainer) {
-        const time1 = orderDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-        const date1 = orderDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-
-        const logs = [
-          { title: 'Out for Delivery', desc: `Package #${itemIdx + 1} assigned to delivery executive Rakesh Sharma (+91 98765 00112)`, time: `${date1}, ${time1}`, done: currentIdx >= 2 },
-          { title: `In Transit — ${courier} Hub`, desc: `Item [${item.title}] arrived at sorting hub & dispatched`, time: `${date1}, 04:15 PM`, done: currentIdx >= 1 },
-          { title: 'Item Packed & Manifested', desc: `Seller packed [${item.title}] & generated AWB ${itemAwb}`, time: `${date1}, 11:30 AM`, done: currentIdx >= 0 },
-          { title: 'Order Confirmed', desc: 'Payment verified & order recorded', time: `${date1}, ${time1}`, done: true }
-        ];
-
-        logsContainer.innerHTML = logs.map(log => `
-          <div style="display: flex; gap: 14px; opacity: ${log.done ? '1' : '0.45'};">
-            <div style="width: 12px; height: 12px; border-radius: 50%; background: ${log.done ? 'var(--accent, #A88C6D)' : 'var(--border-line)'}; margin-top: 4px; flex-shrink: 0;"></div>
-            <div>
-              <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">${log.title}</div>
-              <div style="font-size: 12px; color: var(--text-sub); margin-top: 2px;">${log.desc} &middot; <span style="font-weight: 500;">${log.time}</span></div>
+        const progressWrapper = document.getElementById('track-progress-wrapper');
+        if (progressWrapper) {
+          progressWrapper.innerHTML = `
+            <div class="timeline-container" style="padding: 16px 0;">
+              <div class="timeline-track">
+                <div class="timeline-track-progress" style="width: ${progressWidth}%;"></div>
+              </div>
+              ${milestones}
             </div>
-          </div>
-        `).join('');
-      }
+          `;
+        }
+
+        const etaEl = document.getElementById('track-eta');
+        const pillEl = document.getElementById('track-status-pill');
+        
+        let orderDate = new Date(order.createdAt);
+        if (isNaN(orderDate.getTime())) orderDate = new Date();
+        
+        const etaDate = new Date(orderDate);
+        etaDate.setDate(etaDate.getDate() + (order.shippingType === 'Same Day' ? 0 : 3));
+        const etaStr = etaDate.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
+
+        if (isDelivered) {
+          if (etaEl) etaEl.innerText = `Delivered on ${orderDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+          if (pillEl) {
+            pillEl.innerText = 'Delivered';
+            pillEl.style.background = 'rgba(46, 125, 50, 0.12)';
+            pillEl.style.color = '#2e7d32';
+          }
+        } else if (progressWidth >= 100) {
+          if (etaEl) etaEl.innerText = 'Arrived at destination';
+          if (pillEl) {
+            pillEl.innerText = 'Arrived';
+            pillEl.style.background = 'rgba(46, 125, 50, 0.12)';
+            pillEl.style.color = '#2e7d32';
+          }
+        } else {
+          if (etaEl) etaEl.innerText = order.shippingType === 'Same Day' ? `Arriving Today by 8:00 PM` : `Arriving by ${etaStr}, 8:00 PM`;
+          if (pillEl) {
+            pillEl.innerText = 'In Transit';
+            pillEl.style.background = 'rgba(168, 140, 109, 0.15)';
+            pillEl.style.color = 'var(--accent, #A88C6D)';
+          }
+        }
+
+        const logsContainer = document.getElementById('track-logs-container');
+        if (logsContainer) {
+          const time1 = orderDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+          const date1 = orderDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+          
+          const title = isSingleItem ? item.title : 'order items';
+
+          const logs = [
+            { title: 'Delivered', desc: `Package handed over to resident & signed`, time: `Just now`, done: isDelivered },
+            { title: 'Out for Delivery', desc: `Package assigned to delivery executive Rakesh Sharma (+91 98765 00112)`, time: `${date1}, ${time1}`, done: currentIdx >= 2 },
+            { title: `In Transit — ${courier} Hub`, desc: `Item dispatched from sorting hub`, time: `${date1}, 04:15 PM`, done: currentIdx >= 1 },
+            { title: 'Item Packed & Manifested', desc: `Seller prepared shipping label for [${title.substring(0, 30)}]`, time: `${date1}, 11:30 AM`, done: currentIdx >= 0 },
+            { title: 'Order Confirmed', desc: 'Payment verified & order recorded', time: `${date1}, ${time1}`, done: true }
+          ];
+
+          const activeLogs = isDelivered ? logs : logs.slice(1);
+
+          logsContainer.innerHTML = activeLogs.map(log => `
+            <div style="display: flex; gap: 14px; opacity: ${log.done ? '1' : '0.45'};">
+              <div style="width: 12px; height: 12px; border-radius: 50%; background: ${log.done ? 'var(--accent, #A88C6D)' : 'var(--border-line)'}; margin-top: 4px; flex-shrink: 0;"></div>
+              <div>
+                <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">${log.title}</div>
+                <div style="font-size: 12px; color: var(--text-sub); margin-top: 2px;">${log.desc} &middot; <span style="font-weight: 500;">${log.time}</span></div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        let confirmBtn = document.getElementById('btn-confirm-delivery');
+        if (progressWidth >= 100 && !isDelivered) {
+          if (!confirmBtn) {
+            confirmBtn = document.createElement('button');
+            confirmBtn.id = 'btn-confirm-delivery';
+            confirmBtn.className = 'form-submit';
+            confirmBtn.style.cssText = 'width: 100%; margin-top: 16px; height: 44px; font-weight: 700; background: #2e7d32; border-color: #2e7d32; color: #fff; border-radius: 10px; cursor: pointer;';
+            confirmBtn.innerText = '✓ Confirm Delivery Received';
+            confirmBtn.onclick = async () => {
+              confirmBtn.disabled = true;
+              confirmBtn.innerText = 'Updating status...';
+              try {
+                const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
+                const res = await fetch(`http://localhost:5000/api/orders/${order.id}/deliver`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  }
+                });
+                if (res.ok) {
+                  showToast('🎉 Delivery confirmed!');
+                  clearInterval(window.trackingInterval);
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 1200);
+                } else {
+                  showToast('❌ Failed to update status.');
+                  confirmBtn.disabled = false;
+                  confirmBtn.innerText = '✓ Confirm Delivery Received';
+                }
+              } catch(e) {
+                showToast('❌ Network error.');
+                confirmBtn.disabled = false;
+                confirmBtn.innerText = '✓ Confirm Delivery Received';
+              }
+            };
+            logsContainer.parentNode.appendChild(confirmBtn);
+          }
+        } else {
+          if (confirmBtn) confirmBtn.remove();
+        }
+      };
+
+      runUpdate();
+      window.trackingInterval = setInterval(runUpdate, 1000);
 
       trackModal.classList.add('open');
       document.body.style.overflow = 'hidden';
     };
 
-    window.trackOrder = function(orderId) {
-      const trackModal = document.getElementById('track-modal');
-      if (!trackModal) return;
+    window.trackReturn = function(orderId) {
+      if (window.trackingInterval) clearInterval(window.trackingInterval);
+      if (window.returnQCInterval) clearInterval(window.returnQCInterval);
 
-      const order = (window.currentOrders || []).find(o => String(o.id) === String(orderId));
-      if (!order) {
-        if (typeof showToast === 'function') showToast(`📍 Tracking package for order #EB-${orderId}...`);
-        return;
+      const retModal = document.getElementById('return-track-modal');
+      if (!retModal) return;
+
+      let order = (window.currentOrders || []).find(o => String(o.id) === String(orderId));
+      if (!order && String(orderId) === '999') {
+        order = {
+          id: 999,
+          status: 'Refunded',
+          createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+          returnDetails: JSON.stringify({
+            reason: 'Size does not fit',
+            comments: 'Need a larger size next time.',
+            action: 'refund',
+            pickupAddress: 'SHUBHAM YADAV, 541 gALI nO-2 SARASWATI COLONEY, SAHIABAD, GHAZIABAD, Uttar Pradesh — 201010',
+            requestDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+            returnStep: 4
+          })
+        };
+      }
+      if (!order) return;
+
+      let returnDetails = {};
+      if (order.returnDetails) {
+        try { returnDetails = JSON.parse(order.returnDetails); } catch(e){}
       }
 
-      document.getElementById('track-modal-title').innerText = `Track Package — Order #EB-${order.id}`;
-      document.getElementById('track-courier-info').innerText = `Delhivery Air Priority &middot; AWB: DEL${order.id}908234`;
+      let step = returnDetails.returnStep || 1;
+      
+      const runReturnUpdate = () => {
+        let routeProgress = 0;
+        let c1 = { bg: 'var(--bg-canvas, #faf8f5)', border: 'var(--border-line, #EBE6DD)' };
+        let c2 = { bg: 'var(--bg-canvas, #faf8f5)', border: 'var(--border-line, #EBE6DD)' };
+        let c3 = { bg: 'var(--bg-canvas, #faf8f5)', border: 'var(--border-line, #EBE6DD)' };
+        let c4 = { bg: 'var(--bg-canvas, #faf8f5)', border: 'var(--border-line, #EBE6DD)' };
 
-      const statuses = ['Confirmed', 'Shipped', 'Out for Delivery', 'Delivered'];
-      let currentIdx = 0;
-      if (order.status === 'Shipped') currentIdx = 1;
-      else if (order.status === 'Out for Delivery') currentIdx = 2;
-      else if (order.status === 'Delivered') currentIdx = 3;
-
-      let progressWidth = 0;
-      if (currentIdx === 1) progressWidth = 33.3;
-      else if (currentIdx === 2) progressWidth = 66.6;
-      else if (currentIdx >= 3) progressWidth = 100;
-
-      // Render Modal Progress Bar
-      const milestones = statuses.map((status, idx) => {
-        let mClass = 'pending';
-        let indicator = idx + 1;
-        if (idx < currentIdx) {
-          mClass = 'completed';
-          indicator = '✓';
-        } else if (idx === currentIdx) {
-          mClass = 'active';
-          indicator = (status === 'Delivered') ? '✓' : '●';
+        if (step === 1) {
+          routeProgress = 10;
+          c1 = { bg: 'rgba(198, 40, 40, 0.08)', border: 'var(--accent-red, #c62828)' };
+        } else if (step === 2) {
+          routeProgress = 60;
+          c1 = { bg: 'var(--accent-red, #c62828)', border: 'var(--accent-red, #c62828)' };
+          c2 = { bg: 'var(--accent-red, #c62828)', border: 'var(--accent-red, #c62828)' };
+          c3 = { bg: 'rgba(198, 40, 40, 0.08)', border: 'var(--accent-red, #c62828)' };
+        } else if (step >= 4) {
+          routeProgress = 100;
+          c1 = { bg: 'var(--accent-red, #c62828)', border: 'var(--accent-red, #c62828)' };
+          c2 = { bg: 'var(--accent-red, #c62828)', border: 'var(--accent-red, #c62828)' };
+          c3 = { bg: 'var(--accent-red, #c62828)', border: 'var(--accent-red, #c62828)' };
+          c4 = { bg: 'var(--accent-red, #c62828)', border: 'var(--accent-red, #c62828)' };
         }
-        return `
-          <div class="milestone ${mClass}">
-            <div class="node-indicator">${indicator}</div>
-            <div class="node-label">${status}</div>
-          </div>
-        `;
-      }).join('');
 
-      const progressWrapper = document.getElementById('track-progress-wrapper');
-      if (progressWrapper) {
-        progressWrapper.innerHTML = `
-          <div class="timeline-container" style="padding: 16px 0;">
-            <div class="timeline-track">
-              <div class="timeline-track-progress" style="width: ${progressWidth}%;"></div>
+        const progressWrapper = document.getElementById('ret-track-progress-wrapper');
+        if (progressWrapper) {
+          progressWrapper.innerHTML = `
+            <div style="background: var(--bg-surface, #fff); border: 1px solid var(--border-line, #EBE6DD); border-radius: 12px; padding: 24px 16px; margin: 10px 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; position: relative;">
+                <!-- Route line background -->
+                <div style="position: absolute; left: 12%; right: 12%; height: 3px; background: var(--border-line, #EBE6DD); z-index: 1;"></div>
+                <!-- Active fill line -->
+                <div style="position: absolute; left: 12%; width: ${routeProgress === 10 ? '0%' : (routeProgress === 60 ? '38%' : '76%')}; height: 3px; background: var(--accent-red, #c62828); z-index: 2; transition: width 0.6s ease;"></div>
+                
+                <!-- Node 1: Customer (Home) -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 3; width: 24%;">
+                  <div style="width: 42px; height: 42px; border-radius: 50%; background: ${c1.bg}; border: 2.5px solid ${c1.border}; display: flex; align-items: center; justify-content: center; font-size: 18px; color: ${step >= 2 ? '#fff' : 'inherit'}; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">🏠</div>
+                  <span style="font-size: 11.5px; font-weight: 700; color: var(--text-primary);">Customer</span>
+                  <span style="font-size: 9.5px; color: var(--text-sub); text-align: center;">Pickup Point</span>
+                </div>
+
+                <!-- Node 2: Delhivery Courier -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 3; width: 24%;">
+                  <div style="width: 42px; height: 42px; border-radius: 50%; background: ${c2.bg}; border: 2.5px solid ${c2.border}; display: flex; align-items: center; justify-content: center; font-size: 18px; color: ${step >= 4 ? '#fff' : 'inherit'}; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">🚚</div>
+                  <span style="font-size: 11.5px; font-weight: 700; color: var(--text-primary);">Transit Hub</span>
+                  <span style="font-size: 9.5px; color: var(--text-sub); text-align: center;">In Reverse</span>
+                </div>
+
+                <!-- Node 3: Warehouse QC -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 3; width: 24%;">
+                  <div style="width: 42px; height: 42px; border-radius: 50%; background: ${c3.bg}; border: 2.5px solid ${c3.border}; display: flex; align-items: center; justify-content: center; font-size: 18px; color: ${step >= 4 ? '#fff' : 'inherit'}; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">🏭</div>
+                  <span style="font-size: 11.5px; font-weight: 700; color: var(--text-primary);">QC Center</span>
+                  <span style="font-size: 9.5px; color: var(--text-sub); text-align: center;">Quality Check</span>
+                </div>
+
+                <!-- Node 4: Refund Disbursed -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 3; width: 24%;">
+                  <div style="width: 42px; height: 42px; border-radius: 50%; background: ${c4.bg}; border: 2.5px solid ${c4.border}; display: flex; align-items: center; justify-content: center; font-size: 18px; color: ${step >= 4 ? '#fff' : 'inherit'}; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">💰</div>
+                  <span style="font-size: 11.5px; font-weight: 700; color: var(--text-primary);">Refunded</span>
+                  <span style="font-size: 9.5px; color: var(--text-sub); text-align: center;">Wallet/Bank</span>
+                </div>
+
+              </div>
             </div>
-            ${milestones}
-          </div>
-        `;
-      }
+          `;
+        }
 
-      // Update ETA text and Status Pill
-      let orderDate = new Date();
-      try { if (order.createdAt) orderDate = new Date(order.createdAt); } catch(e){}
-      
-      const etaDate = new Date(orderDate);
-      etaDate.setDate(etaDate.getDate() + 3);
-      const etaStr = etaDate.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
-      
-      const etaEl = document.getElementById('track-eta');
-      if (etaEl) etaEl.innerText = order.status === 'Delivered' ? `Delivered on ${orderDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : `Arriving by ${etaStr}, 8:00 PM`;
+        const pillEl = document.getElementById('ret-track-status-pill');
+        if (pillEl) {
+          if (step === 1) {
+            pillEl.innerText = 'Pickup Scheduled';
+            pillEl.style.background = 'rgba(198, 40, 40, 0.08)';
+            pillEl.style.color = 'var(--accent-red, #c62828)';
+          } else if (step === 2) {
+            pillEl.innerText = 'In Quality Check';
+            pillEl.style.background = 'rgba(217, 119, 6, 0.12)';
+            pillEl.style.color = '#d97706';
+          } else {
+            pillEl.innerText = 'Refund Credited';
+            pillEl.style.background = 'rgba(46, 125, 50, 0.12)';
+            pillEl.style.color = '#2e7d32';
+          }
+        }
 
-      const pillEl = document.getElementById('track-status-pill');
-      if (pillEl) {
-        pillEl.innerText = order.status === 'Delivered' ? 'Delivered' : 'On Schedule';
-        pillEl.style.background = order.status === 'Delivered' ? 'rgba(46, 125, 50, 0.12)' : 'rgba(168, 140, 109, 0.15)';
-        pillEl.style.color = order.status === 'Delivered' ? '#2e7d32' : 'var(--accent, #A88C6D)';
-      }
+        const logsContainer = document.getElementById('ret-track-logs-container');
+        if (logsContainer) {
+          const reqDate = returnDetails.requestDate ? new Date(returnDetails.requestDate) : new Date(order.updatedAt);
+          const reqDateStr = reqDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+          const reqTimeStr = reqDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
-      // Render Travel Logs
-      const logsContainer = document.getElementById('track-logs-container');
-      if (logsContainer) {
-        const time1 = orderDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-        const date1 = orderDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+          const logs = [
+            { title: 'Refund Disbursed', desc: `Refund of ₹${order.totalAmount} credited to ${returnDetails.action === 'refund-wallet' ? 'E-Bazaar Wallet' : 'Original Payment Method'}.`, time: 'Completed', done: step >= 4 },
+            { title: 'Quality Control Check Passed', desc: 'Item condition verified at regional fulfillment center.', time: step >= 4 ? 'QC Passed' : 'In Progress', done: step >= 4 },
+            { title: 'Item Picked Up', desc: 'Package collected by executive Rakesh Sharma.', time: returnDetails.pickupDate ? new Date(returnDetails.pickupDate).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : '', done: step >= 2 },
+            { title: 'Reverse Pickup Scheduled', desc: 'Delivery partner Delhivery Express dispatched for collection.', time: `${reqDateStr}, ${reqTimeStr}`, done: true },
+            { title: 'Return Request Approved', desc: `Reason: ${returnDetails.reason}. Comments: "${returnDetails.comments || 'None'}"`, time: `${reqDateStr}, ${reqTimeStr}`, done: true }
+          ];
 
-        const logs = [
-          { title: 'Out for Delivery', desc: 'Package with delivery executive Rakesh Sharma (+91 98765 00112)', time: `${date1}, ${time1}`, done: currentIdx >= 2 },
-          { title: 'In Transit — Delhi NCR Hub', desc: 'Arrived at sorting facility & dispatched for delivery hub', time: `${date1}, 04:15 PM`, done: currentIdx >= 1 },
-          { title: 'Item Packed & Manifested', desc: 'Seller created courier shipping manifest (Delhivery Express)', time: `${date1}, 11:30 AM`, done: currentIdx >= 0 },
-          { title: 'Order Confirmed', desc: 'Payment verified & order recorded', time: `${date1}, ${time1}`, done: true }
-        ];
+          let filteredLogs = logs;
+          if (step === 1) filteredLogs = logs.slice(2);
+          else if (step === 2) filteredLogs = logs.slice(1);
 
-        logsContainer.innerHTML = logs.map(log => `
-          <div style="display: flex; gap: 14px; opacity: ${log.done ? '1' : '0.45'};">
-            <div style="width: 12px; height: 12px; border-radius: 50%; background: ${log.done ? 'var(--accent, #A88C6D)' : 'var(--border-line)'}; margin-top: 4px; flex-shrink: 0;"></div>
-            <div>
-              <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">${log.title}</div>
-              <div style="font-size: 12px; color: var(--text-sub); margin-top: 2px;">${log.desc} &middot; <span style="font-weight: 500;">${log.time}</span></div>
+          logsContainer.innerHTML = filteredLogs.map(log => `
+            <div style="display: flex; gap: 14px; opacity: ${log.done ? '1' : '0.55'};">
+              <div style="width: 12px; height: 12px; border-radius: 50%; background: ${log.done ? 'var(--accent-red, #c62828)' : 'var(--border-line)'}; margin-top: 4px; flex-shrink: 0;"></div>
+              <div>
+                <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">${log.title}</div>
+                <div style="font-size: 12px; color: var(--text-sub); margin-top: 2px;">${log.desc} ${log.time ? `&middot; <span style="font-weight: 500;">${log.time}</span>` : ''}</div>
+              </div>
             </div>
-          </div>
-        `).join('');
-      }
+          `).join('');
+        }
 
-      trackModal.classList.add('open');
+        const actionsContainer = document.getElementById('ret-track-actions-container');
+        if (actionsContainer) {
+          if (step === 1) {
+            actionsContainer.innerHTML = `
+              <div style="background: var(--bg-canvas); padding: 16px; border-radius: 12px; border: 1px solid var(--border-line); display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center;">
+                <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">Has the delivery executive picked up your package?</div>
+                <button type="button" class="form-submit" id="btn-confirm-pickup" style="width: 100%; height: 40px; font-weight: 700; background: var(--accent-red, #c62828); border-color: var(--accent-red); color: #fff; border-radius: 8px; cursor: pointer;">
+                  Yes, Confirm Picked
+                </button>
+              </div>
+            `;
+            
+            const btnPickup = document.getElementById('btn-confirm-pickup');
+            if (btnPickup) {
+              btnPickup.onclick = async () => {
+                btnPickup.disabled = true;
+                btnPickup.innerText = 'Updating status...';
+                try {
+                  const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
+                  const res = await fetch(`http://localhost:5000/api/orders/${order.id}/return-pickup`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${token}`
+                    }
+                  });
+                  if (res.ok) {
+                    showToast('📦 Pickup confirmed! Quality check is now starting.');
+                    step = 2; 
+                    runReturnUpdate();
+                  } else {
+                    showToast('❌ Failed to confirm pickup.');
+                    btnPickup.disabled = false;
+                    btnPickup.innerText = 'Yes, Confirm Picked';
+                  }
+                } catch(e) {
+                  showToast('❌ Network error.');
+                  btnPickup.disabled = false;
+                  btnPickup.innerText = 'Yes, Confirm Picked';
+                }
+              };
+            }
+          } else if (step === 2) {
+            let secondsLeft = 10;
+            actionsContainer.innerHTML = `
+              <div style="background: var(--bg-canvas); padding: 16px; border-radius: 12px; border: 1px solid var(--border-line); display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center;">
+                <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">Quality Check & Verification In Progress</div>
+                <div style="font-size: 13px; color: var(--text-sub);">Performing HSN quality validation. Auto-crediting refund in <strong id="qc-countdown" style="color:var(--accent-red);">${secondsLeft}s</strong>...</div>
+                <button type="button" class="btn-primary-outline" id="btn-skip-qc" style="width: 100%; height: 36px; font-size: 12px; border-color: var(--accent-red); color: var(--accent-red);">Skip to Credit Refund</button>
+              </div>
+            `;
+            
+            const triggerQCComplete = async () => {
+              clearInterval(window.returnQCInterval);
+              try {
+                const token = window.AuthSession ? window.AuthSession.getToken() : localStorage.getItem('ebazaar_token');
+                const res = await fetch(`http://localhost:5000/api/orders/${order.id}/return-complete`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  }
+                });
+                if (res.ok) {
+                  showToast('💳 Refund credited to your account!');
+                  step = 4; 
+                  runReturnUpdate();
+                  
+                  setTimeout(() => {
+                    initOrders();
+                  }, 1000);
+                } else {
+                  showToast('❌ Failed to complete return.');
+                }
+              } catch(e) {
+                showToast('❌ Network error completing return.');
+              }
+            };
+            
+            const skipBtn = document.getElementById('btn-skip-qc');
+            if (skipBtn) {
+              skipBtn.onclick = triggerQCComplete;
+            }
+            
+            window.returnQCInterval = setInterval(() => {
+              secondsLeft--;
+              const countEl = document.getElementById('qc-countdown');
+              if (countEl) countEl.innerText = `${secondsLeft}s`;
+              if (secondsLeft <= 0) {
+                triggerQCComplete();
+              }
+            }, 1000);
+          } else {
+            actionsContainer.innerHTML = `
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <a href="return-report.html?id=${order.id}" target="_blank" class="form-submit" style="display: block; text-align: center; text-decoration: none; line-height: 44px; font-weight: 700; background: #2e7d32; border-color: #2e7d32; color: #fff; border-radius: 10px; cursor: pointer;">
+                  📄 Download Return Report (Credit Note)
+                </a>
+                <button type="button" class="btn-primary-outline" onclick="document.getElementById('return-track-modal').classList.remove('open'); document.body.style.overflow='';" style="width: 100%; height: 40px; font-size:13px;">Close Tracker</button>
+              </div>
+            `;
+          }
+        }
+      };
+
+      runReturnUpdate();
+      
+      retModal.classList.add('open');
       document.body.style.overflow = 'hidden';
     };
 
@@ -1516,6 +1807,57 @@
       }
     }
     window.populateRefundBankAccountsSelect = populateRefundBankAccountsSelect;
+
+    async function syncMockImages() {
+      try {
+        const host = 'http://localhost:5000';
+        
+        // Sync Puma Image
+        const resPuma = await fetch(`${host}/api/products?q=Puma+RS-X`);
+        if (resPuma.ok) {
+          const data = await resPuma.json();
+          const prod = data.products && data.products[0];
+          if (prod) {
+            const imgUrl = prod.imageUrl || prod.image;
+            const box = document.getElementById('mock-img-puma');
+            if (box && imgUrl) {
+              box.innerHTML = `<img src="${imgUrl}" style="max-width:100%; max-height:100%; object-fit:contain;" alt="${prod.title}">`;
+            }
+          }
+        }
+
+        // Sync iPhone Image
+        const resIphone = await fetch(`${host}/api/products?q=iPhone`);
+        if (resIphone.ok) {
+          const data = await resIphone.json();
+          const prod = data.products && data.products.find(p => p.brand === 'Apple' || p.title.toLowerCase().includes('iphone'));
+          if (prod) {
+            const imgUrl = prod.imageUrl || prod.image;
+            const box = document.getElementById('mock-img-iphone');
+            if (box && imgUrl) {
+              box.innerHTML = `<img src="${imgUrl}" style="max-width:100%; max-height:100%; object-fit:contain;" alt="${prod.title}">`;
+            }
+          }
+        }
+
+        // Sync Zara Image
+        const resZara = await fetch(`${host}/api/products?q=Zara`);
+        if (resZara.ok) {
+          const data = await resZara.json();
+          const prod = data.products && data.products[0];
+          if (prod) {
+            const imgUrl = prod.imageUrl || prod.image;
+            const box = document.getElementById('mock-img-zara');
+            if (box && imgUrl) {
+              box.innerHTML = `<img src="${imgUrl}" style="max-width:100%; max-height:100%; object-fit:contain;" alt="${prod.title}">`;
+            }
+          }
+        }
+      } catch (err) {
+        console.error('[Orders] Failed to sync mock images from DB:', err);
+      }
+    }
+    window.syncMockImages = syncMockImages;
 
     window.openOrdersBankModal = function() {
       const modal = document.getElementById('orders-bank-modal');
@@ -1583,7 +1925,7 @@
           const listContainer = document.getElementById('return-items-list');
           if (listContainer) {
             listContainer.innerHTML = items.map(item => {
-              const imageSrc = item.image || item.img || 'images/placeholder.png';
+              const imageSrc = item.image || item.imageUrl || item.img || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
               const price = typeof item.price === 'number' ? item.price : (parseFloat(String(item.price).replace(/[^\d]/g, '')) || 0);
               return `
                 <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-line); border-radius: 8px; padding: 12px; background: var(--bg-canvas);">
@@ -1683,8 +2025,12 @@
       const bankSelectionContainer = document.getElementById('ret-bank-selection-container');
 
       const closeModal = () => {
+        if (window.trackingInterval) clearInterval(window.trackingInterval);
+        if (window.returnQCInterval) clearInterval(window.returnQCInterval);
         if (returnModal) returnModal.classList.remove('open');
         if (trackModal) trackModal.classList.remove('open');
+        const retTrackModal = document.getElementById('return-track-modal');
+        if (retTrackModal) retTrackModal.classList.remove('open');
         document.body.style.overflow = '';
         if (bankSelectionContainer) bankSelectionContainer.style.display = 'none';
       };
@@ -1692,6 +2038,8 @@
       if (closeBtn) closeBtn.addEventListener('click', closeModal);
       if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
       if (trackCloseBtn) trackCloseBtn.addEventListener('click', closeModal);
+      const retTrackCloseBtn = document.getElementById('ret-track-close-btn');
+      if (retTrackCloseBtn) retTrackCloseBtn.addEventListener('click', closeModal);
 
       // Listen for resolution radio toggle
       const resolutionRadios = document.querySelectorAll('input[name="ret-action"]');
@@ -1792,10 +2140,30 @@
             if (typeof showToast === 'function') {
               showToast(`✅ Return request for order #EB-${orderId} submitted! (${action})`);
             }
-            // Re-fetch to update screen
-            setTimeout(() => {
-              initOrders();
-            }, 1000);
+            
+            // Instantly update the order in memory
+            if (window.currentOrders) {
+              const orderIdx = window.currentOrders.findIndex(o => String(o.id) === String(orderId));
+              if (orderIdx !== -1) {
+                window.currentOrders[orderIdx].status = (action === 'replace') ? 'Replacement Requested' : 'Refunded';
+                window.currentOrders[orderIdx].returnDetails = JSON.stringify({
+                  reason: reason || 'Not specified',
+                  comments: comments || '',
+                  action: action || 'refund',
+                  items: selectedItems,
+                  pickupAddress: pickupAddress || '',
+                  bankAccount: bankAccount,
+                  requestDate: new Date().toISOString(),
+                  returnStep: 1
+                });
+                
+                // Update local storage cache
+                localStorage.setItem('eb_orders_cache', JSON.stringify(window.currentOrders));
+              }
+            }
+            
+            // Re-render UI instantly from updated cache, then sync in background
+            initOrders();
           })
           .catch(err => {
             console.error('Error submitting return:', err);
@@ -1805,6 +2173,10 @@
           });
         });
       }
+      
+      // Sync dynamic orders and mock product images from database on page load
+      initOrders();
+      syncMockImages();
     });
   </script>
 </body>

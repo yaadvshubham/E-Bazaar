@@ -174,7 +174,23 @@ function isProductUIVisible() {
   return false;
 }
 
+let loaderStartTime = Date.now();
+
 function showBrandedLoader() {
+  // Only show loader if we are on a page that actually displays catalog products.
+  const page = document.body ? document.body.dataset.page : null;
+  const path = window.location.pathname;
+  
+  const needsCatalogProducts = page === 'category' || path.includes('category.html') ||
+                               page === 'brand-store' || path.includes('brand-store.html') ||
+                               page === 'product-detail' || path.includes('product-detail.html') ||
+                               (!page && (path.includes('index.html') || path.endsWith('/') || path.endsWith('/index.html') || path === '' || !path.includes('.html')));
+
+  if (!needsCatalogProducts) {
+    console.log('[E-Bazaar API] Catalog products not required on this page. Bypassing loader overlay.');
+    return;
+  }
+
   // If products are already visible in the UI (mock products or previous load), skip loader overlay
   if (isProductUIVisible()) {
     console.log('[E-Bazaar API] Products already visible in UI. Bypassing loader overlay.');
@@ -188,6 +204,7 @@ function showBrandedLoader() {
     return;
   }
 
+  loaderStartTime = Date.now();
   injectLoader();
   if (loaderTimeout) clearTimeout(loaderTimeout);
   
@@ -204,7 +221,17 @@ function hideBrandedLoader() {
     loaderTimeout = null;
   }
   const overlay = document.getElementById('ebazaar-loader-overlay');
-  if (overlay) overlay.classList.remove('show');
+  if (overlay) {
+    const elapsed = Date.now() - loaderStartTime;
+    if (elapsed <= 300) {
+      overlay.classList.remove('show');
+    } else {
+      const delay = Math.max(0, 650 - elapsed);
+      setTimeout(() => {
+        overlay.classList.remove('show');
+      }, delay);
+    }
+  }
 }
 
 /* ─── Fetch Engine (With Client-Side SWR Caching & Loader) ───────────────────── */
@@ -258,7 +285,6 @@ async function fetchProducts() {
 
   // Cold load: Show branded loader, fetch synchronously
   showBrandedLoader();
-  const startTime = Date.now();
 
   const items = await fetchProductsFromNetwork();
 
@@ -273,10 +299,7 @@ async function fetchProducts() {
     }
   }
 
-  // Guarantee loader displays for at least 350ms to prevent visual flickering
-  const elapsed = Date.now() - startTime;
-  const delay = Math.max(0, 350 - elapsed);
-  setTimeout(hideBrandedLoader, delay);
+  hideBrandedLoader();
 
   return items;
 }
@@ -452,6 +475,22 @@ function patchBuildCard() {
 async function initApiEngine() {
   patchBuildCard();
 
+  const page = document.body ? document.body.dataset.page : null;
+  const path = window.location.pathname;
+  
+  const needsCatalogProducts = page === 'category' || path.includes('category.html') ||
+                               page === 'brand-store' || path.includes('brand-store.html') ||
+                               page === 'product-detail' || path.includes('product-detail.html') ||
+                               (!page && (path.includes('index.html') || path.endsWith('/') || path.endsWith('/index.html') || path === '' || !path.includes('.html')));
+
+  if (!needsCatalogProducts) {
+    console.log('[E-Bazaar API] Catalog products not required on this page. Bypassing fetch and loader.');
+    window.allProducts = [...(window.MASTER_PRODUCTS || [])];
+    window._apiReady = true;
+    console.log(`[E-Bazaar API] Engine initialised (Bypassed). Ready: ${window._apiReady}`);
+    return;
+  }
+
   const apiProducts = await fetchProducts();
 
   if (apiProducts.length > 0) {
@@ -463,9 +502,6 @@ async function initApiEngine() {
   }
 
   // Route-aware initialization to render products immediately without hard refreshes
-  const page = document.body.dataset.page;
-  const path = window.location.pathname;
-
   if (page === 'category' || path.includes('category.html')) {
     if (typeof initDynamicCategory === 'function') {
       initDynamicCategory();

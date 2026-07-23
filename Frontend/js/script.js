@@ -8,9 +8,63 @@
 /* ═══════════════════════════════════════════════════════════════════════
    THEME ENGINE — Dark / Light with localStorage
    ═══════════════════════════════════════════════════════════════════════ */
+// Helper: Check if relevant data is already cached for the current page
+const isDataCachedForPage = () => {
+  try {
+    const page = document.body ? document.body.dataset.page : null;
+    const path = window.location.pathname;
+
+    // Wishlist page: check wishlist cache
+    if (page === 'wishlist' || path.includes('wishlist.html')) {
+      const wish = localStorage.getItem('eb_wishlist');
+      return wish !== null; // cached state exists (even if empty list)
+    }
+
+    // Cart page: check cart cache
+    if (page === 'cart' || path.includes('cart.html')) {
+      const cart = localStorage.getItem('eb_cart_items') || localStorage.getItem('cart');
+      return cart !== null;
+    }
+
+    // Orders page: check orders cache
+    if (page === 'orders' || path.includes('orders.html')) {
+      const orders = localStorage.getItem('eb_orders_cache');
+      return orders !== null;
+    }
+
+    // Auth, contact, privacy, returns, shipping, faq, about-creator pages: don't show preloader at all
+    const staticPages = ['auth', 'contact', 'privacy', 'returns', 'shipping', 'faq', 'about-creator'];
+    const isStatic = staticPages.includes(page) || staticPages.some(p => path.includes(p + '.html'));
+    if (isStatic) {
+      return true; // pretend it's cached so we don't show the preloader
+    }
+
+    // Otherwise (home, category, brand-store, product-detail): check catalog cache
+    const cache = localStorage.getItem('eb_products_cache');
+    if (cache) {
+      const parsed = JSON.parse(cache);
+      return (parsed && Array.isArray(parsed.products) && parsed.products.length > 0);
+    }
+  } catch (e) {}
+  return false;
+};
+
+// Helper: Check if two product arrays are equal
+const areProductListsEqual = (listA, listB) => {
+  if (!Array.isArray(listA) || !Array.isArray(listB)) return false;
+  if (listA.length !== listB.length) return false;
+  for (let i = 0; i < listA.length; i++) {
+    if (!listA[i] || !listB[i]) return false;
+    if (listA[i].id !== listB[i].id || (listA[i].qty || 1) !== (listB[i].qty || 1)) return false;
+  }
+  return true;
+};
+window.areProductListsEqual = areProductListsEqual;
+
 // --- E-BAZAAR LUXURY PRELOADER ---
 const Preloader = (() => {
   let preloadTimeout = null;
+  let preloaderStartTime = Date.now();
 
   function injectPreloaderMarkup() {
     if (document.getElementById('eb-preloader')) return;
@@ -122,6 +176,7 @@ const Preloader = (() => {
   }
 
   function init() {
+    preloaderStartTime = Date.now();
     if (preloadTimeout) clearTimeout(preloadTimeout);
 
     // 300ms conditional delay threshold to completely bypass loader during fast cached navigations
@@ -144,12 +199,22 @@ const Preloader = (() => {
     }
     const el = document.getElementById('eb-preloader');
     if (el) {
-      el.classList.add('fade-out');
-      setTimeout(() => {
+      const elapsed = Date.now() - preloaderStartTime;
+      if (elapsed <= 300) {
         el.remove();
         const style = document.getElementById('eb-preloader-style');
         if (style) style.remove();
-      }, 400);
+      } else {
+        const delay = Math.max(0, 650 - elapsed);
+        setTimeout(() => {
+          el.classList.add('fade-out');
+          setTimeout(() => {
+            el.remove();
+            const style = document.getElementById('eb-preloader-style');
+            if (style) style.remove();
+          }, 400);
+        }, delay);
+      }
     }
   }
 
@@ -157,19 +222,10 @@ const Preloader = (() => {
 })();
 window.Preloader = Preloader;
 
-// Trigger preloader immediately if document body exists and products cache is not present, or wait for DOM parse
-const hasProductsCache = (() => {
-  try {
-    const cache = localStorage.getItem('eb_products_cache');
-    if (cache) {
-      const parsed = JSON.parse(cache);
-      return (parsed && Array.isArray(parsed.products) && parsed.products.length > 0);
-    }
-  } catch (e) {}
-  return false;
-})();
+// Trigger preloader immediately if document body exists and data is not cached, or wait for DOM parse
+const hasCachedData = isDataCachedForPage();
 
-if (!hasProductsCache) {
+if (!hasCachedData) {
   if (document.body) {
     Preloader.init();
   } else {
@@ -178,7 +234,7 @@ if (!hasProductsCache) {
     });
   }
 } else {
-  console.log('[E-Bazaar Preloader] Products cache present. Skipping automatic preloader trigger.');
+  console.log('[E-Bazaar Preloader] Relevant page data present in cache. Skipping automatic preloader trigger.');
 }
 
 const ThemeEngine = (() => {
@@ -193,7 +249,11 @@ const ThemeEngine = (() => {
   }
 
   function toggle() {
+    root.classList.add('theme-transition');
     apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    setTimeout(() => {
+      root.classList.remove('theme-transition');
+    }, 600);
   }
 
   function init() {
@@ -206,7 +266,11 @@ const ThemeEngine = (() => {
     // Cross-tab real-time theme synchronization
     window.addEventListener('storage', (e) => {
       if (e.key === KEY && e.newValue) {
+        root.classList.add('theme-transition');
         apply(e.newValue);
+        setTimeout(() => {
+          root.classList.remove('theme-transition');
+        }, 600);
       }
     });
   }
@@ -4423,13 +4487,24 @@ function initDynamicCategory() {
   let rawCat = urlParams.get('cat') || urlParams.get('category') || 'clothing';
   let catId = rawCat.toLowerCase();
 
-  // Default fallback if category not mapped
-  if (!CATEGORY_MAP[catId]) {
+  const specialCats = ['trending', 'new-arrivals', 'all'];
+
+  // Default fallback if category not mapped and not a special category
+  if (!specialCats.includes(catId) && !CATEGORY_MAP[catId]) {
     const found = Object.keys(CATEGORY_MAP).find(k => k.toLowerCase() === catId);
     catId = found ? found : 'clothing';
   }
 
-  const categoryData = CATEGORY_MAP[catId];
+  let categoryData = CATEGORY_MAP[catId];
+  if (!categoryData) {
+    if (catId === 'trending') {
+      categoryData = { title: 'Trending Products', brands: [] };
+    } else if (catId === 'new-arrivals') {
+      categoryData = { title: 'New Arrivals', brands: [] };
+    } else {
+      categoryData = { title: 'All Products', brands: [] };
+    }
+  }
 
   // Highlight active category in header
   document.querySelectorAll('.mega-item > a').forEach(a => {
@@ -4452,7 +4527,103 @@ function initDynamicCategory() {
   }
 
   // Generate Products
-  window.currentCategoryProducts = generateMockProductsForCategory(catId);
+  const pool = getAllStoreProducts();
+  let categoryProducts = [];
+  if (catId === 'trending') {
+    const trendCats = ['smartphones', 'laptops', 'mens-shirts', 'womens-dresses', 'fragrances', 'electronics', 'gadgets'];
+    categoryProducts = pool.filter(p => trendCats.includes(p.category) || p.badge === 'hot' || p.badge === 'sale' || parseFloat(p.rating) >= 4.7);
+  } else if (catId === 'new-arrivals') {
+    categoryProducts = pool.filter(p => p.badge === 'new' || p.isNew === true);
+  } else {
+    categoryProducts = generateMockProductsForCategory(catId);
+  }
+  
+  const subParam = urlParams.get('sub') || urlParams.get('subcategory');
+  const childBC = document.getElementById('bc-child-cat');
+  const sep2BC = document.getElementById('bc-sep-2');
+  
+  if (subParam) {
+    const subQuery = subParam.toLowerCase().trim();
+    const matchesSub = (p, sub) => {
+      const title = (p.title || p.name || '').toLowerCase();
+      const desc = (p.description || p.desc || '').toLowerCase();
+      const cat = (p.category || '').toLowerCase();
+      
+      const keywords = {
+        'fruits-veg': ['fruit', 'vegetable', 'avocado', 'tomato', 'onion', 'potato', 'apple', 'orange'],
+        'staples-rice': ['rice', 'flour', 'atta', 'dal', 'pulse', 'grain', 'staple', 'wheat'],
+        'oils-vinegars': ['oil', 'vinegar', 'olive oil', 'mustard oil'],
+        'dairy': ['milk', 'cheese', 'paneer', 'butter', 'ghee', 'curd', 'yogurt', 'daaza'],
+        'snacks-bev': ['tea', 'coffee', 'chips', 'cookie', 'biscuit', 'maggi', 'noodle', 'snack', 'beverage'],
+        
+        'smartphones': ['phone', 'smartphone', 'mobile', 'iphone', 'galaxy s', 'galaxy z', 'poco', 'vivo', 'oppo', 'nothing phone'],
+        'tablets': ['tablet', 'ipad', 'pad'],
+        'laptops': ['laptop', 'macbook', 'dell xps', 'spectre', 'thinkpad', 'notebook'],
+        'tvs': ['tv', 'television', 'bravia', 'oled tv', 'led tv'],
+        'audio': ['audio', 'speaker', 'sound', 'transparent speaker', 'sonicglass'],
+        
+        'smartwatches': ['watch', 'smartwatch', 'apple watch', 'galaxy watch', 'pulse'],
+        'earbuds': ['earbuds', 'headphone', 'tws', 'airpods', 'buds', 'wh-1000', 'wf-1000'],
+        'chargers': ['charger', 'adapter', 'charging', 'power bank', 'usb-c'],
+        'audio-speakers': ['speaker', 'jbl', 'stone', 'soundbar'],
+        
+        'ethnic': ['saree', 'ethnic', 'sari', 'kurta', 'sherwani', 'lehenga'],
+        'mens-wear': ['men', 'mens', 'shirt', 'blazer', 't-shirt', 'hoodie', 'joggers', 'trousers', 'jeans'],
+        'womens-wear': ['women', 'womens', 'draped', 'co-ord', 'skirt', 'dress', 'gown', 'trousers', 'saree'],
+        'trousers': ['trousers', 'jeans', 'pant', 'denim', 'joggers', 'trousers', 'leg trousers'],
+        'winter': ['winter', 'coat', 'wool', 'jacket', 'hoodie', 'blazer', 'sweater'],
+        
+        'running': ['running', 'run', 'zoom pegasus', 'pegasus', 'nitro', 'trainers'],
+        'sneakers': ['sneaker', 'sneakers', 'jordan', 'classic leather', 'comet'],
+        'sports-training': ['cleats', 'training', 'predator', 'football shoes'],
+        
+        'skincare': ['skincare', 'cleaner', 'facewash', 'sunscreen', 'serum', 'moisturizer', 'cleanser'],
+        'makeup': ['makeup', 'foundation', 'lipstick', 'matte', 'mascara', 'nail polish', 'palette'],
+        'haircare': ['hair', 'shampoo', 'conditioner', 'hair spa'],
+        
+        'decor': ['decor', 'vase', 'clock', 'wall clock', 'planter', 'decorations'],
+        'kitchenware': ['kitchenware', 'cookware', 'cooker', 'flask', 'glasses', 'thermosteel'],
+        'appliances': ['appliances', 'mixer', 'grinder', 'blender', 'oven'],
+        'garden': ['planter', 'plant', 'garden', 'succulents'],
+        
+        'fitness': ['fitness', 'yoga', 'gym', 'dumbbells', 'mat', 'yoga mat'],
+        'rackets': ['racket', 'racquet', 'net', 'badminton'],
+        'outdoor': ['football', 'cricket', 'ball', 'sports net'],
+        'gym-gear': ['gym bag', 'gear', 'weight', 'gloves'],
+        
+        'gaming': ['controller', 'dualsense', 'gamepad', 'joystick', 'console'],
+        'adapters': ['charger', 'adapter', 'charging', 'usb-c'],
+        'general': ['accessory', 'accessories', 'cable', 'cables']
+      };
+
+      const subWords = keywords[sub] || [sub];
+      return subWords.some(word => title.includes(word) || desc.includes(word) || cat.includes(word));
+    };
+
+    categoryProducts = categoryProducts.filter(p => matchesSub(p, subQuery));
+    
+    if (childBC && sep2BC) {
+      const formattedSubName = subParam
+        .replace(/-/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+      childBC.textContent = formattedSubName;
+      childBC.style.display = 'inline';
+      sep2BC.style.display = 'inline';
+      
+      document.title = `${formattedSubName} - ${categoryData.title} — E-Bazaar`;
+    }
+  } else {
+    if (childBC) childBC.style.display = 'none';
+    if (sep2BC) sep2BC.style.display = 'none';
+  }
+
+  // Shuffle products to show a diverse mix of items rather than repetitive blocks of similar products
+  for (let i = categoryProducts.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [categoryProducts[i], categoryProducts[j]] = [categoryProducts[j], categoryProducts[i]];
+  }
+
+  window.currentCategoryProducts = categoryProducts;
   const products = window.currentCategoryProducts;
 
   // Generate Filter Brands Dynamically from actual category products
@@ -4473,14 +4644,20 @@ function initDynamicCategory() {
     }).join('');
   }
 
-  // Generate Brand Showcase Row
+  // Generate Brand Showcase Row (Only show if no subcategory is selected)
   const showcaseRow = document.getElementById('brand-showcase-row');
-  if (showcaseRow && categoryData && categoryData.brands) {
-    showcaseRow.innerHTML = categoryData.brands.slice(0, 8).map(brand => `
-      <a href="brand-store.html?brand=${brand}&cat=${catId}" class="brand-showcase-card" title="Shop ${brand}">
-        ${getBrandLogoSVG(brand)}
-      </a>
-    `).join('');
+  if (showcaseRow) {
+    if (!subParam && categoryData && categoryData.brands && categoryData.brands.length > 0) {
+      showcaseRow.style.display = 'flex';
+      showcaseRow.innerHTML = categoryData.brands.slice(0, 8).map(brand => `
+        <a href="brand-store.html?brand=${brand}&cat=${catId}" class="brand-showcase-card" title="Shop ${brand}">
+          ${getBrandLogoSVG(brand)}
+        </a>
+      `).join('');
+    } else {
+      showcaseRow.style.display = 'none';
+      showcaseRow.innerHTML = '';
+    }
   }
 
   const grid = document.getElementById('main-cat-grid');
@@ -4508,6 +4685,44 @@ function initCategoryFilters() {
       head.closest('.f-section').classList.toggle('open');
     });
   });
+
+  // Responsive mobile filter drawer toggle
+  const filterToggleBtn = document.querySelector('.filter-toggle-btn');
+  const filterPanel = document.querySelector('.filter-panel');
+  if (filterToggleBtn && filterPanel) {
+    const filterHead = filterPanel.querySelector('.filter-head');
+    if (filterHead && !filterHead.querySelector('.filter-close-btn')) {
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'filter-close-btn';
+      closeBtn.setAttribute('aria-label', 'Close filters');
+      closeBtn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      `;
+      closeBtn.style.cssText = 'cursor:pointer; padding:6px; color:var(--text-muted); display:inline-flex; align-items:center; justify-content:center;';
+      filterHead.appendChild(closeBtn);
+      
+      closeBtn.addEventListener('click', () => {
+        filterPanel.classList.remove('active');
+      });
+    }
+
+    filterToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      filterPanel.classList.add('active');
+    });
+
+    // Close when clicking outside of the filter panel on mobile
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 991 && filterPanel.classList.contains('active')) {
+        if (!filterPanel.contains(e.target) && !filterToggleBtn.contains(e.target)) {
+          filterPanel.classList.remove('active');
+        }
+      }
+    });
+  }
 
   const minInput = document.getElementById('price-min');
   const maxInput = document.getElementById('price-max');
@@ -5093,7 +5308,7 @@ function initBrandStore() {
   }
 
   const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (MASTER_PRODUCTS || []);
-  const normalize = b => (b || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+  const normalize = b => (b || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/gi, '').toLowerCase();
 
   let brandProds = pool.filter(p => normalize(p.brand) === normalize(brand));
 
@@ -5135,14 +5350,14 @@ function populateHomeTracks() {
   const pool = (window.allProducts && window.allProducts.length > 0) ? window.allProducts : (window.MASTER_PRODUCTS || MASTER_PRODUCTS);
 
   const nr = document.getElementById('tr-new');
-  if (nr) nr.innerHTML = [...pool].sort(() => 0.5 - Math.random()).slice(0, 36).map(buildCard).join('');
+  if (nr) nr.innerHTML = [...pool].sort(() => 0.5 - Math.random()).slice(0, 150).map(buildCard).join('');
 
   const tr = document.getElementById('tr-trend');
   if (tr) {
     const trendCats = ['smartphones', 'laptops', 'mens-shirts', 'womens-dresses', 'fragrances'];
     const trendProds = pool.filter(p => trendCats.includes(p.category) || p.category === 'electronics' || p.category === 'gadgets').sort(() => 0.5 - Math.random());
     const otherProds = pool.filter(p => !trendCats.includes(p.category) && p.category !== 'electronics' && p.category !== 'gadgets').sort(() => 0.5 - Math.random());
-    tr.innerHTML = [...trendProds, ...otherProds].slice(0, 36).map(buildCard).join('');
+    tr.innerHTML = [...trendProds, ...otherProds].slice(0, 150).map(buildCard).join('');
   }
 
   ['row1', 'row2', 'row3'].forEach((k, i) => {
@@ -5155,7 +5370,7 @@ function populateHomeTracks() {
       ];
       const prods = pool.filter(p => catMap[i].includes(p.category)).sort(() => 0.5 - Math.random());
       const fb = pool.sort(() => 0.5 - Math.random());
-      el.innerHTML = (prods.length > 0 ? prods : fb).slice(0, 36).map(buildCard).join('');
+      el.innerHTML = (prods.length > 0 ? prods : fb).slice(0, 150).map(buildCard).join('');
     }
   });
 }
@@ -5689,10 +5904,81 @@ window.handleAddToCartClick = function(btn, pStr) {
   }, 1000); // reduced delay to 1 second
 };
 
+function initCategoryLinkInterceptors() {
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (!a) return;
+    
+    let href = a.getAttribute('href');
+    if (!href) return;
+    
+    if (href.startsWith('category.html') || (href.includes('/category.html') && !href.startsWith('http'))) {
+      if (window.location.pathname.includes('category.html')) {
+        e.preventDefault();
+        
+        // Update URL state without page reload
+        window.history.pushState(null, '', href);
+        
+        // Reset category pagination page to 1
+        window.currentPage = 1;
+        
+        // Reset all visual filter states to match a fresh load
+        document.querySelectorAll('.brand-check input, .rating-row input, .discount-row input').forEach(input => {
+          input.checked = false;
+        });
+        
+        const minInput = document.getElementById('price-min');
+        const maxInput = document.getElementById('price-max');
+        if (minInput) minInput.value = minInput.min;
+        if (maxInput) maxInput.value = maxInput.max;
+        
+        const sortSelect = document.querySelector('.sort-select');
+        if (sortSelect) sortSelect.value = 'default';
+        
+        // Reload products dynamically
+        initDynamicCategory();
+        
+        if (typeof window.renderFilteredProducts === 'function') {
+          window.renderFilteredProducts();
+        }
+        if (typeof updateFilterTags === 'function') {
+          updateFilterTags();
+        }
+        
+        // Close mobile hamburger menu just in case they clicked from it
+        const hamburger = document.getElementById('hamburger');
+        const navSub = document.querySelector('.nav-sub');
+        if (hamburger && hamburger.getAttribute('aria-expanded') === 'true') {
+          hamburger.setAttribute('aria-expanded', 'false');
+          if (navSub) navSub.classList.remove('active');
+        }
+        
+        // Scroll window to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  });
+
+  window.addEventListener('popstate', () => {
+    if (window.location.pathname.includes('category.html')) {
+      window.currentPage = 1;
+      initDynamicCategory();
+      if (typeof window.renderFilteredProducts === 'function') {
+        window.renderFilteredProducts();
+      }
+      if (typeof updateFilterTags === 'function') {
+        updateFilterTags();
+      }
+    }
+  });
+}
+
 /* ═══════════════════════════════════════════════════════════════════════
    BOOT
    ═══════════════════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+  initCategoryLinkInterceptors();
+
   // Centralized authentication guards for secure pages
   const isGuardedPage = ['wishlist', 'orders', 'account', 'cart'].includes(document.body.dataset.page) || 
                         window.location.pathname.includes('wishlist.html') || 
@@ -5718,6 +6004,7 @@ document.addEventListener('DOMContentLoaded', () => {
   HeroSlider.init();
   initHamburger();
   initMegaMenu();
+  injectAllCategoriesMegaMenu();
 
   if (isLoggedIn) {
     syncUserDataOnLoad();
@@ -5742,6 +6029,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNewsletter();
   initBTT();
   initHeaderShadow();
+  enhanceFooter();
 
   // Page-specific inits
   if (document.body.dataset.page === 'category') {
@@ -5759,9 +6047,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Smoothly fade out brand preloader once DOM init completes
-  setTimeout(() => {
-    if (typeof Preloader !== 'undefined') Preloader.hide();
-  }, 200);
+  if (typeof Preloader !== 'undefined') Preloader.hide();
 });
 
 
@@ -6144,44 +6430,56 @@ async function syncUserDataOnLoad() {
       if (cartRes.ok) {
         const cartData = await cartRes.json();
         const serverCart = cartData.cart || [];
-        window.ebCart = serverCart.map(normalizeProduct);
-        window.cart = window.ebCart;
-        localStorage.setItem('eb_cart_items', JSON.stringify(window.ebCart));
-        localStorage.setItem('cart', JSON.stringify(window.ebCart));
+        const normalizedServerCart = serverCart.map(normalizeProduct);
         
-        // Update cart badge UI
-        const cartCount = window.ebCart.reduce((sum, item) => sum + (item.qty || 1), 0);
-        window.cartCount = cartCount;
-        document.querySelectorAll('.cart-count-el').forEach(el => el.textContent = cartCount);
-        
-        if (typeof renderCart === 'function') renderCart();
+        if (!areProductListsEqual(window.ebCart || [], normalizedServerCart)) {
+          window.ebCart = normalizedServerCart;
+          window.cart = window.ebCart;
+          localStorage.setItem('eb_cart_items', JSON.stringify(window.ebCart));
+          localStorage.setItem('cart', JSON.stringify(window.ebCart));
+          
+          // Update cart badge UI
+          const cartCount = window.ebCart.reduce((sum, item) => sum + (item.qty || 1), 0);
+          window.cartCount = cartCount;
+          document.querySelectorAll('.cart-count-el').forEach(el => el.textContent = cartCount);
+          
+          if (typeof renderCart === 'function') renderCart();
+        }
       }
 
       if (wishRes.ok) {
         const wishData = await wishRes.json();
         const serverWish = wishData.wishlist || [];
-        window.ebWishlist = serverWish.map(normalizeProduct);
-        window.wishlist = window.ebWishlist;
-        localStorage.setItem('eb_wishlist', JSON.stringify(window.ebWishlist));
+        const normalizedServerWish = serverWish.map(normalizeProduct);
         
-        if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
-        if (typeof initWishlist === 'function' && document.body.dataset.page === 'wishlist') {
-          initWishlist();
+        if (!areProductListsEqual(window.ebWishlist || [], normalizedServerWish)) {
+          window.ebWishlist = normalizedServerWish;
+          window.wishlist = window.ebWishlist;
+          localStorage.setItem('eb_wishlist', JSON.stringify(window.ebWishlist));
+          
+          if (typeof syncWishlistBadge === 'function') syncWishlistBadge();
+          if (typeof initWishlist === 'function' && document.body.dataset.page === 'wishlist') {
+            initWishlist();
+          }
         }
       }
 
       if (bankRes.ok) {
         const bankData = await bankRes.json();
         const serverBanks = bankData.bankAccounts || [];
-        localStorage.setItem('eb_bank_accounts', JSON.stringify(serverBanks));
+        const cachedBanksRaw = localStorage.getItem('eb_bank_accounts');
+        
+        if (JSON.stringify(serverBanks) !== cachedBanksRaw) {
+          localStorage.setItem('eb_bank_accounts', JSON.stringify(serverBanks));
 
-        // Update eb_user to contain server banks
-        let currentUser = JSON.parse(localStorage.getItem('eb_user') || '{}');
-        currentUser.bankAccounts = serverBanks;
-        localStorage.setItem('eb_user', JSON.stringify(currentUser));
+          // Update eb_user to contain server banks
+          let currentUser = JSON.parse(localStorage.getItem('eb_user') || '{}');
+          currentUser.bankAccounts = serverBanks;
+          localStorage.setItem('eb_user', JSON.stringify(currentUser));
 
-        if (typeof renderBankAccounts === 'function') {
-          renderBankAccounts();
+          if (typeof renderBankAccounts === 'function') {
+            renderBankAccounts();
+          }
         }
       }
     } catch (e) {
@@ -6229,4 +6527,429 @@ function initMegaMenu() {
   });
 }
 window.initMegaMenu = initMegaMenu;
+
+function injectAllCategoriesMegaMenu() {
+  const catLinksWrap = document.querySelector('.cat-links-wrap');
+  if (!catLinksWrap) return;
+
+  if (document.querySelector('.all-cats-item')) return;
+
+  const allCatsItem = document.createElement('div');
+  allCatsItem.className = 'mega-item all-cats-item';
+  allCatsItem.innerHTML = `
+    <a href="#" class="all-cats-btn-link" aria-haspopup="true" aria-expanded="false" onclick="return false;">
+      <svg class="menu-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; display: inline-block; vertical-align: middle;">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+      <span style="vertical-align: middle; font-weight: 700;">All Categories</span>
+    </a>
+    <div class="mega-menu-box" role="dialog" aria-label="All Categories Mega Menu">
+      <div class="mega-menu-grid">
+        <!-- Column 1 -->
+        <div class="mega-menu-column">
+          <div class="category-block">
+            <div class="column-header">Groceries</div>
+            <a href="category.html?cat=groceries&sub=fruits-veg">Fruits & Vegetables</a>
+            <a href="category.html?cat=groceries&sub=staples-rice">Staples & Rice</a>
+            <a href="category.html?cat=groceries&sub=oils-vinegars">Oils & Vinegars</a>
+            <a href="category.html?cat=groceries&sub=dairy">Dairy & Cheese</a>
+            <a href="category.html?cat=groceries&sub=snacks-bev">Snacks & Beverages</a>
+          </div>
+        </div>
+        <!-- Column 2 -->
+        <div class="mega-menu-column">
+          <div class="category-block">
+            <div class="column-header">Electronics</div>
+            <a href="category.html?cat=electronics&sub=smartphones">Smartphones</a>
+            <a href="category.html?cat=electronics&sub=tablets">Tablets</a>
+            <a href="category.html?cat=electronics&sub=laptops">Laptops & Computers</a>
+            <a href="category.html?cat=electronics&sub=tvs">Televisions (TVs)</a>
+            <a href="category.html?cat=electronics&sub=audio">Audio Devices</a>
+          </div>
+          <div class="category-block">
+            <div class="column-header">Gadgets</div>
+            <a href="category.html?cat=gadgets&sub=smartwatches">Smartwatches</a>
+            <a href="category.html?cat=gadgets&sub=earbuds">Earbuds & Headphones</a>
+            <a href="category.html?cat=gadgets&sub=chargers">Power Chargers</a>
+            <a href="category.html?cat=gadgets&sub=audio-speakers">Smart Audio</a>
+          </div>
+        </div>
+        <!-- Column 3 -->
+        <div class="mega-menu-column">
+          <div class="category-block">
+            <div class="column-header">Clothing</div>
+            <a href="category.html?cat=clothing&sub=ethnic">Ethnic & Sarees</a>
+            <a href="category.html?cat=clothing&sub=mens-wear">Men's Wear</a>
+            <a href="category.html?cat=clothing&sub=womens-wear">Women's Wear</a>
+            <a href="category.html?cat=clothing&sub=trousers">Trousers & Jeans</a>
+            <a href="category.html?cat=clothing&sub=winter">Winter Wear</a>
+          </div>
+          <div class="category-block">
+            <div class="column-header">Shoes</div>
+            <a href="category.html?cat=shoes&sub=running">Running Shoes</a>
+            <a href="category.html?cat=shoes&sub=sneakers">Casual Sneakers</a>
+            <a href="category.html?cat=shoes&sub=sports-training">Sports & Training</a>
+          </div>
+        </div>
+        <!-- Column 4 -->
+        <div class="mega-menu-column">
+          <div class="category-block">
+            <div class="column-header">Beauty</div>
+            <a href="category.html?cat=beauty&sub=skincare">Skincare & Cleansers</a>
+            <a href="category.html?cat=beauty&sub=makeup">Makeup & Foundation</a>
+            <a href="category.html?cat=beauty&sub=haircare">Haircare & Shampoos</a>
+          </div>
+          <div class="category-block">
+            <div class="column-header">Sports & Fitness</div>
+            <a href="category.html?cat=sports&sub=fitness">Fitness & Yoga Mats</a>
+            <a href="category.html?cat=sports&sub=rackets">Racket Sports & Nets</a>
+            <a href="category.html?cat=sports&sub=outdoor">Outdoor Sports</a>
+            <a href="category.html?cat=sports&sub=gym-gear">Gym Bags & Gear</a>
+          </div>
+        </div>
+        <!-- Column 5 -->
+        <div class="mega-menu-column">
+          <div class="category-block">
+            <div class="column-header">Home & Kitchen</div>
+            <a href="category.html?cat=home-kitchen&sub=decor">Home Decor & Clocks</a>
+            <a href="category.html?cat=home-kitchen&sub=kitchenware">Kitchenware & Flasks</a>
+            <a href="category.html?cat=home-kitchen&sub=appliances">Home Appliances</a>
+            <a href="category.html?cat=home-kitchen&sub=garden">Garden & Planters</a>
+          </div>
+          <div class="category-block">
+            <div class="column-header">Others / Misc</div>
+            <a href="category.html?cat=others&sub=gaming">Gaming Controllers</a>
+            <a href="category.html?cat=others&sub=adapters">Chargers & Adapters</a>
+            <a href="category.html?cat=others&sub=general">General Accessories</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Dynamic JS Hover state togglers to allow explicit closures on action clicks
+  allCatsItem.addEventListener('mouseenter', () => {
+    allCatsItem.classList.add('active');
+  });
+
+  allCatsItem.addEventListener('mouseleave', () => {
+    allCatsItem.classList.remove('active');
+  });
+
+  // Force close dropdown on selection click
+  const links = allCatsItem.querySelectorAll('.mega-menu-box a');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      allCatsItem.classList.remove('active');
+    });
+  });
+
+  const navSubInner = document.querySelector('.nav-sub-inner');
+  if (navSubInner) {
+    navSubInner.insertBefore(allCatsItem, catLinksWrap);
+  } else {
+    catLinksWrap.insertBefore(allCatsItem, catLinksWrap.firstChild);
+  }
+}
+window.injectAllCategoriesMegaMenu = injectAllCategoriesMegaMenu;
+
+function enhanceFooter() {
+  const footerBottom = document.querySelector('.footer-bottom');
+  if (!footerBottom) return;
+
+  // Restore the original footer-bottom content (copyright & payment badges)
+  footerBottom.innerHTML = `
+    <span>&copy; 2026 E-Bazaar Pvt. Ltd. &nbsp;&middot;&nbsp; <a href="#" style="color: var(--text-muted); text-decoration: none;">Terms</a> &nbsp;&middot;&nbsp; <a href="privacy.html" style="color: var(--text-muted); text-decoration: none;">Privacy</a></span>
+    <div class="pay-row" aria-label="Payment methods" style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <div class="pay-chip">VISA</div>
+      <div class="pay-chip">MC</div>
+      <div class="pay-chip">UPI</div>
+      <div class="pay-chip">GPay</div>
+      <div class="pay-chip">COD</div>
+      <div class="pay-chip">EMI</div>
+    </div>
+  `;
+
+  // Create or update the middle link row immediately above the footer bottom border
+  let middleRow = document.querySelector('.footer-middle-links');
+  if (!middleRow) {
+    middleRow = document.createElement('div');
+    middleRow.className = 'footer-middle-links';
+    footerBottom.parentNode.insertBefore(middleRow, footerBottom);
+  }
+
+  middleRow.innerHTML = `
+    <a href="https://github.com/yaadvshubham/E-Bazaar" target="_blank" rel="noopener noreferrer" class="footer-github-btn">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      <span>GitHub Codebase</span>
+    </a>
+
+    <div class="footer-segment-capsule">
+      <a href="about-creator.html?tab=creator" class="segment-btn active">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Creator Profile</span>
+      </a>
+      <a href="about-creator.html?tab=project" class="segment-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+        <span>Project Specifications</span>
+      </a>
+    </div>
+  `;
+
+  // Apply Styles Dynamically
+  if (!document.getElementById('ebazaar-footer-dynamic-style')) {
+    const style = document.createElement('style');
+    style.id = 'ebazaar-footer-dynamic-style';
+    style.textContent = `
+      .footer-middle-links {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+        padding: 24px var(--side-pad) 16px !important;
+        max-width: var(--max-w) !important;
+        margin: 0 auto !important;
+      }
+      .footer-bottom {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+        padding-top: 24px !important;
+        padding-bottom: 24px !important;
+        border-top: 1px solid var(--border) !important;
+        max-width: var(--max-w) !important;
+        margin: 0 auto !important;
+      }
+      .footer-github-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #f4efe9;
+        border: 1px solid rgba(168, 140, 109, 0.15);
+        border-radius: 9999px;
+        padding: 8px 16px;
+        color: #1a1612 !important;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+      .footer-github-btn:hover {
+        background: #1a1612;
+        color: #ffffff !important;
+        border-color: #1a1612;
+        transform: translateY(-1.5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+      .footer-privacy-link:hover {
+        color: var(--accent) !important;
+      }
+      .footer-segment-capsule {
+        display: inline-flex;
+        align-items: center;
+        background: #f4efe9;
+        padding: 4px;
+        border-radius: 9999px;
+        border: 1px solid rgba(168, 140, 109, 0.15);
+        gap: 2px;
+      }
+      .segment-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border-radius: 9999px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #5c544d !important;
+        text-decoration: none;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid transparent;
+      }
+      .segment-btn svg {
+        stroke: currentColor;
+        transition: stroke 0.2s;
+      }
+      .segment-btn.active {
+        background: #ffffff;
+        color: #a88c6d !important;
+        box-shadow: 0 2px 6px rgba(168, 140, 109, 0.15);
+      }
+      .segment-btn:not(.active):hover {
+        color: #1a1612 !important;
+        background: rgba(255, 255, 255, 0.4);
+      }
+      @media (max-width: 768px) {
+        .footer-middle-links {
+          flex-direction: column !important;
+          text-align: center !important;
+          gap: 16px !important;
+          padding-top: 16px !important;
+          padding-bottom: 8px !important;
+        }
+        .footer-bottom {
+          flex-direction: column !important;
+          text-align: center !important;
+          gap: 16px !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // Set active segment based on current URL parameters or filename
+  const segmentBtns = middleRow.querySelectorAll('.segment-btn');
+  const params = new URLSearchParams(window.location.search);
+  const currentTab = params.get('tab');
+  
+  if (window.location.pathname.includes('about-creator.html')) {
+    segmentBtns.forEach(btn => {
+      const tabAttr = new URL(btn.href).searchParams.get('tab');
+      if (tabAttr === currentTab || (!currentTab && tabAttr === 'creator')) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+      
+      // Wire up clicks to switch tabs live if we're already on the creator page!
+      btn.addEventListener('click', (e) => {
+        const tabToSwitch = tabAttr;
+        const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabToSwitch}"]`);
+        if (tabBtn) {
+          e.preventDefault();
+          tabBtn.click();
+          // Update URL silently
+          const newUrl = window.location.pathname + `?tab=${tabToSwitch}`;
+          window.history.pushState({ path: newUrl }, '', newUrl);
+          
+          segmentBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        }
+      });
+    });
+  } else {
+    segmentBtns.forEach(btn => {
+      btn.classList.remove('active');
+    });
+  }
+}
+window.enhanceFooter = enhanceFooter;
+
+// ==========================================
+// ==========================================
+// PROGRESSIVE WEB APP (PWA) INITIALIZATION
+// ==========================================
+(function injectFaviconAndManifest() {
+  const head = document.head || document.getElementsByTagName('head')[0];
+  
+  // Check if favicon is already set, if not inject the high-res master SVG favicon
+  if (!document.querySelector('link[rel="icon"]') && !document.querySelector('link[rel="shortcut icon"]')) {
+    const linkIcon = document.createElement('link');
+    linkIcon.rel = 'icon';
+    linkIcon.type = 'image/svg+xml';
+    linkIcon.href = 'images/logo.svg';
+    head.appendChild(linkIcon);
+  }
+  
+  // Inject iOS touch icon fallback
+  if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+    const linkApple = document.createElement('link');
+    linkApple.rel = 'apple-touch-icon';
+    linkApple.href = 'images/logo.svg';
+    head.appendChild(linkApple);
+  }
+  
+  // Inject PWA manifest link
+  if (!document.querySelector('link[rel="manifest"]')) {
+    const linkManifest = document.createElement('link');
+    linkManifest.rel = 'manifest';
+    linkManifest.href = 'manifest.json';
+    head.appendChild(linkManifest);
+  }
+})();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then((reg) => console.log('[PWA] Service Worker registered with scope:', reg.scope))
+      .catch((err) => console.error('[PWA] Service Worker registration failed:', err));
+  });
+}
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  console.log('[PWA] Install prompt deferred');
+
+  // Inject install option into mobile drawer dynamically
+  initPWAInstallUI();
+  
+  const container = document.getElementById('pwa-install-container');
+  const btn = document.getElementById('pwa-install-btn');
+  
+  if (container && btn) {
+    container.style.display = 'block';
+    
+    btn.addEventListener('click', () => {
+      container.style.display = 'none';
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('[PWA] User accepted the installation');
+        } else {
+          console.log('[PWA] User dismissed the installation');
+        }
+        deferredPrompt = null;
+      });
+    });
+  }
+});
+
+window.addEventListener('appinstalled', (e) => {
+  console.log('[PWA] E-Bazaar successfully installed!');
+  const container = document.getElementById('pwa-install-container');
+  if (container) container.style.display = 'none';
+});
+
+function initPWAInstallUI() {
+  const drawer = document.getElementById('mobile-drawer');
+  if (drawer && !document.getElementById('pwa-install-container')) {
+    const installContainer = document.createElement('div');
+    installContainer.id = 'pwa-install-container';
+    installContainer.style.cssText = 'padding:16px 24px; border-top:1px solid var(--border); margin-top:auto; display:none;';
+    
+    const installBtn = document.createElement('button');
+    installBtn.id = 'pwa-install-btn';
+    installBtn.style.cssText = 'width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; background:var(--accent); color:#fff; border-radius:var(--r-sm); font-size:14px; font-weight:600; cursor:pointer; transition:background var(--ease); border:none;';
+    installBtn.innerHTML = `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      Install E-Bazaar App
+    `;
+    
+    installBtn.addEventListener('mouseover', () => installBtn.style.background = 'var(--accent-dim)');
+    installBtn.addEventListener('mouseout', () => installBtn.style.background = 'var(--accent)');
+    
+    installContainer.appendChild(installBtn);
+    drawer.appendChild(installContainer);
+  }
+}
 

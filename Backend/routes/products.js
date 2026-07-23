@@ -6,8 +6,15 @@ const { Op } = require('sequelize');
 // GET /api/products — list and filter products from database
 router.get('/', async (req, res) => {
   try {
-    const { category, cat, brand, q } = req.query;
+    const { category, cat, brand, q, isDeal, isNew } = req.query;
     const where = {};
+
+    if (isDeal === 'true') {
+      where.isDeal = true;
+    }
+    if (isNew === 'true') {
+      where.isNew = true;
+    }
 
     // Dynamic case-insensitive operator based on database dialect (PostgreSQL vs SQLite)
     const dialect = Product.sequelize.getDialect();

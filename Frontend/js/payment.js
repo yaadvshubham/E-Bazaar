@@ -117,7 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({
                         items: formattedItems,
                         totalAmount: totalAmount,
-                        deliveryAddress: addressText
+                        deliveryAddress: addressText,
+                        shippingType: localStorage.getItem('shipping_type') || 'Standard'
                     })
                 });
 
@@ -209,12 +210,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Step 3: Success Pathway
             // Clear local cart
+            window.ebCart = [];
+            window.cart = [];
             localStorage.setItem('cart', '[]');
             localStorage.setItem('eb_cart_items', '[]');
             localStorage.setItem('eb-cart-items', '[]');
             localStorage.setItem('eb-cart', '0');
             localStorage.removeItem('checkout_total');
             localStorage.removeItem('wallet_applied');
+            localStorage.removeItem('eb_orders_cache');
 
             // Synchronize wallet balance local storage
             if (walletUsed > 0 && user && typeof user.walletBalance === 'number') {

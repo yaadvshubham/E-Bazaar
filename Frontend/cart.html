@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <script>
     (function() {
-      const savedTheme = localStorage.getItem('eb-theme') || 'light';
+      const savedTheme = localStorage.getItem('eb-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', savedTheme);
       document.documentElement.classList.add('no-transitions');
     })();
@@ -659,6 +659,11 @@
       const deliveryOpt = document.querySelector('input[name="delivery_opt"]:checked');
       const deliveryFee = deliveryOpt ? parseInt(deliveryOpt.value) : 0;
       
+      let shippingType = 'Standard';
+      if (deliveryFee === 99) shippingType = 'Express';
+      else if (deliveryFee === 199) shippingType = 'Same Day';
+      localStorage.setItem('shipping_type', shippingType);
+      
       // We will show the MRP sum as the subtotal line, and explicitly list the discount.
       // This is standard e-commerce logic (Flipkart, Amazon India).
       
@@ -840,7 +845,8 @@
             items: formattedItems,
             totalAmount: totalAmt,
             paymentMethod: paymentMethod,
-            deliveryAddress: addressText
+            deliveryAddress: addressText,
+            shippingType: localStorage.getItem('shipping_type') || 'Standard'
           })
         });
 
@@ -855,6 +861,7 @@
           localStorage.setItem('eb-cart', '0');
           localStorage.removeItem('checkout_total');
           localStorage.removeItem('wallet_applied');
+          localStorage.removeItem('eb_orders_cache');
 
           // Update header wallet balance locally if wallet was applied
           if (walletUsed > 0) {

@@ -112,5 +112,5 @@ sequelize.authenticate()
   })
   .catch(err => {
     console.error('[DB] Unable to connect:', err);
-    process.exit(1); // Exit server cleanly on boot failure check
+    process.exit(1); // Exit server cleanly on final boot check
   });

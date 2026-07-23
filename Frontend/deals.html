@@ -448,27 +448,72 @@
   setInterval(updateTimer, 1000);
 
   // Render Deals
-  function renderDeals() {
-    const techDeals = [
-      { id: 'd1', brand: 'Nothing', name: 'Nothing Phone (4a) Pro - 12GB RAM, 256GB', price: '₹54,999', orig: '₹69,999', disc: '21%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' },
-      { id: 'd2', brand: 'MorningBlues', name: 'SonicGlass A1 Transparent Speaker', price: '₹39,999', orig: '₹54,500', disc: '26%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><circle cx="12" cy="14" r="4"/><circle cx="12" cy="6" r="1"/></svg>' },
-      { id: 'd3', brand: 'Lenovo', name: 'ThinkTab X11 Rugged Tablet - 11" 2.5K', price: '₹34,999', orig: '₹42,000', disc: '16%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' },
-      { id: 'd4', brand: 'Realme', name: 'Realme P4 Power - 6000mAh Battery', price: '₹22,999', orig: '₹28,999', disc: '20%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' }
+  async function renderDeals() {
+    let techDeals = [];
+    let fashionDeals = [];
+    let homeDeals = [];
+
+    // Curated high-quality backup products with real Unsplash images
+    const fallbackTechDeals = [
+      { id: 'd1', brand: 'Nothing', name: 'Nothing Phone (2a) Pro - 12GB RAM, 256GB', price: '₹54,999', orig: '₹69,999', disc: '21%', img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80', category: 'electronics' },
+      { id: 'd2', brand: 'MorningBlues', name: 'SonicGlass A1 Transparent Speaker', price: '₹39,999', orig: '₹54,500', disc: '26%', img: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=600&q=80', category: 'gadgets' },
+      { id: 'd3', brand: 'Lenovo', name: 'ThinkTab X11 Rugged Tablet - 11" 2.5K', price: '₹34,999', orig: '₹42,000', disc: '16%', img: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=600&q=80', category: 'electronics' },
+      { id: 'd4', brand: 'Realme', name: 'Realme P4 Power - 6000mAh Battery', price: '₹22,999', orig: '₹28,999', disc: '20%', img: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=600&q=80', category: 'electronics' }
     ];
 
-    const fashionDeals = [
-      { id: 'd5', brand: 'Zara', name: 'Pre-Draped Silk Blend Saree', price: '₹2,499', orig: '₹5,999', disc: '58%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 8v1.5a8 8 0 0 1-5.33 7.5L2 22l6-2a8 8 0 0 0 5.33-7.5V11a8 8 0 0 0 7.05-7.54z"/></svg>' },
-      { id: 'd6', brand: 'H&M', name: 'Eco-conscious Athleisure Co-ord Set', price: '₹1,299', orig: '₹2,999', disc: '56%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 8v1.5a8 8 0 0 1-5.33 7.5L2 22l6-2a8 8 0 0 0 5.33-7.5V11a8 8 0 0 0 7.05-7.54z"/></svg>' },
-      { id: 'd7', brand: 'Levis', name: 'Soft Tailoring Wide Leg Trousers', price: '₹1,899', orig: '₹3,499', disc: '45%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 8v1.5a8 8 0 0 1-5.33 7.5L2 22l6-2a8 8 0 0 0 5.33-7.5V11a8 8 0 0 0 7.05-7.54z"/></svg>' },
-      { id: 'd8', brand: 'Nike', name: 'Air Zoom Pegasus 41', price: '₹6,499', orig: '₹10,999', disc: '40%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M20.38 3.46L16 2a8 8 0 0 1-8 8v1.5a8 8 0 0 1-5.33 7.5L2 22l6-2a8 8 0 0 0 5.33-7.5V11a8 8 0 0 0 7.05-7.54z"/></svg>' }
+    const fallbackFashionDeals = [
+      { id: 'd5', brand: 'Zara', name: 'Pre-Draped Silk Blend Saree', price: '₹2,499', orig: '₹5,999', disc: '58%', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80', category: 'clothing' },
+      { id: 'd6', brand: 'H&M', name: 'Eco-conscious Athleisure Co-ord Set', price: '₹1,299', orig: '₹2,999', disc: '56%', img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80', category: 'clothing' },
+      { id: 'd7', brand: 'Levis', name: 'Soft Tailoring Wide Leg Trousers', price: '₹1,899', orig: '₹3,499', disc: '45%', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=600&q=80', category: 'clothing' },
+      { id: 'd8', brand: 'Nike', name: 'Air Zoom Pegasus 41', price: '₹6,499', orig: '₹10,999', disc: '40%', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80', category: 'shoes' }
     ];
 
-    const homeDeals = [
-      { id: 'd9', brand: 'Vaaree', name: 'Black Spiral Ceramic Vase', price: '₹899', orig: '₹2,499', disc: '64%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M6 2L18 2M8 22L16 22M10 2L8 8C8 12 6 16 6 18C6 20 8 22 10 22M14 2L16 8C16 12 18 16 18 18C18 20 16 22 14 22"/></svg>' },
-      { id: 'd10', brand: 'Pepperfry', name: 'Ribbed Cream Planter (Set of 2)', price: '₹1,199', orig: '₹3,000', disc: '60%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><path d="M8 22h8c2.5 0 3-2 3-5L17 5H7L5 17c0 3 .5 5 3 5zM5 5h14v3H5z"/></svg>' },
-      { id: 'd11', brand: 'Urban Ladder', name: 'Minimalist Metal Wall Clock', price: '₹1,499', orig: '₹3,599', disc: '58%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="12" y1="12" x2="16" y2="14"/></svg>' },
-      { id: 'd12', brand: 'Philips', name: 'Smart Air Purifier Diffuser combo', price: '₹8,999', orig: '₹14,999', disc: '40%', img: '<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>' }
+    const fallbackHomeDeals = [
+      { id: 'd9', brand: 'Vaaree', name: 'Black Spiral Ceramic Vase', price: '₹899', orig: '₹2,499', disc: '64%', img: 'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=600&q=80', category: 'home-kitchen' },
+      { id: 'd10', brand: 'Pepperfry', name: 'Ribbed Cream Planter (Set of 2)', price: '₹1,199', orig: '₹3,000', disc: '60%', img: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=600&q=80', category: 'home-kitchen' },
+      { id: 'd11', brand: 'Urban Ladder', name: 'Minimalist Metal Wall Clock', price: '₹1,499', orig: '₹3,599', disc: '58%', img: 'https://images.unsplash.com/photo-1563861826100-9cb868fdad1c?auto=format&fit=crop&w=600&q=80', category: 'home-kitchen' },
+      { id: 'd12', brand: 'Philips', name: 'Smart Air Purifier Diffuser combo', price: '₹8,999', orig: '₹14,999', disc: '40%', img: 'https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&w=600&q=80', category: 'home-kitchen' }
     ];
+
+    const endpoints = [
+      'http://localhost:5000/api/products?isDeal=true',
+      'http://127.0.0.1:5000/api/products?isDeal=true'
+    ];
+
+    let products = [];
+    for (const url of endpoints) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          const data = await res.json();
+          products = data.products || data;
+          if (products && products.length > 0) break;
+        }
+      } catch (err) {
+        console.warn(`[Deals] Failed fetch for url ${url}`);
+      }
+    }
+
+    if (products && products.length > 0) {
+      const mapped = products.map(p => ({
+        id: `api_${p.id}`,
+        brand: p.brand,
+        name: p.title,
+        price: `₹${Math.round(p.price).toLocaleString('en-IN')}`,
+        orig: `₹${Math.round(p.originalPrice || p.price).toLocaleString('en-IN')}`,
+        disc: p.discount ? p.discount.replace(' OFF', '') : '15%',
+        img: p.imageUrl || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80',
+        category: p.category
+      }));
+
+      techDeals = mapped.filter(p => p.category === 'electronics' || p.category === 'gadgets');
+      fashionDeals = mapped.filter(p => p.category === 'clothing' || p.category === 'shoes');
+      homeDeals = mapped.filter(p => p.category === 'home-kitchen');
+    }
+
+    if (techDeals.length === 0) techDeals = fallbackTechDeals;
+    if (fashionDeals.length === 0) fashionDeals = fallbackFashionDeals;
+    if (homeDeals.length === 0) homeDeals = fallbackHomeDeals;
 
     function generateCards(arr, containerId) {
       const container = document.getElementById(containerId);
@@ -487,18 +532,21 @@
         const inWl = wl.some(w => w.id === p.id);
         const stroke = inWl ? 'none' : 'currentColor';
         const fill = inWl ? '#ef4444' : 'none';
+        const discValue = p.disc.includes('%') ? p.disc : p.disc + '%';
         
         return `
         <article class="cat-card">
           <div class="cat-img-box">
-            <span class="deal-badge">${p.disc} OFF</span>
+            <span class="deal-badge">${discValue} OFF</span>
             <button class="wl-btn ${inWl ? 'active' : ''}" onclick="toggleWishlist(this, '${pStr}')" aria-label="Toggle wishlist">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             </button>
-            ${p.img}
+            <a href="product-detail.html?id=${p.id}" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; text-decoration: none;">
+              <img src="${p.img}" alt="${p.name}" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: var(--r-sm);" />
+            </a>
           </div>
           <div class="cat-brand">${p.brand}</div>
-          <div class="cat-name">${p.name}</div>
+          <a href="product-detail.html?id=${p.id}" class="cat-name" style="text-decoration: none; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.8em; margin-bottom: 8px;">${p.name}</a>
           <div class="cat-prices"><span class="cat-price">${p.price}</span><span class="cat-orig">${p.orig}</span></div>
           <button class="cat-add-btn" onclick="addToCart('${pStr}')">+ Add to Cart</button>
         </article>`;
@@ -510,7 +558,7 @@
     generateCards(homeDeals, 'home-deals-grid');
   }
 
-  // Render immediately since DOM elements are already parsed above this script
+  // Render dynamically
   try {
     renderDeals();
   } catch(e) {

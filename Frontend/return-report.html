@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Return & Refund Report - E-Bazaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --text-main: #2A2421;
+      --text-sub: #555555;
+      --accent: #A88C6D;
+      --border-color: #EBE6DD;
+      --accent-red: #c62828;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-main);
+      background: #f5f5f5;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    .invoice-wrapper {
+      background: var(--bg-white);
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 48px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--text-main);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-accent {
+      color: var(--accent);
+    }
+
+    .invoice-meta {
+      text-align: right;
+    }
+    .invoice-meta h1 {
+      font-size: 24px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent-red);
+      margin-bottom: 4px;
+    }
+    .invoice-meta p {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .box {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .box-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+    .info-label {
+      color: var(--text-sub);
+      font-weight: 500;
+    }
+    .info-val {
+      font-weight: 600;
+      text-align: right;
+      max-width: 60%;
+    }
+    
+    .status-refunded {
+      color: var(--accent-red);
+      font-weight: 700;
+    }
+
+    .table-section {
+      margin-bottom: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      background: #fafafa;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-sub);
+      padding: 12px;
+      border-bottom: 2px solid var(--border-color);
+    }
+    th.text-right, td.text-right {
+      text-align: right;
+    }
+    td {
+      padding: 16px 12px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .item-sku {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .totals {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+    .totals-box {
+      width: 300px;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+    .total-row.grand-total {
+      font-size: 18px;
+      font-weight: 700;
+      background: #fafafa;
+      border-top: 2px solid var(--text-main);
+      border-bottom: 2px solid var(--text-main);
+      padding: 12px;
+      color: var(--accent-red);
+    }
+
+    .footer {
+      margin-top: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    .signature {
+      text-align: center;
+    }
+    .signature-line {
+      width: 150px;
+      border-bottom: 1px solid var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    @media print {
+      body {
+        background: transparent;
+      }
+      .invoice-wrapper {
+        margin: 0;
+        box-shadow: none;
+        padding: 40px;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+    
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--accent-red);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+    .print-btn:hover {
+      background: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn no-print" onclick="window.print()">Print Report / PDF</button>
+
+  <div class="invoice-wrapper">
+    
+    <div class="header">
+      <div class="logo">
+        E-<span class="logo-accent">Bazaar</span>
+      </div>
+      <div class="invoice-meta">
+        <h1>RETURN &amp; REFUND REPORT</h1>
+        <p id="report-id">Credit Note #: RET-2026-908234</p>
+        <p id="report-date">Date: 12 July 2026</p>
+      </div>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="section-grid">
+      <!-- Customer Info -->
+      <div class="box">
+        <div class="box-title">Customer Details</div>
+        <div class="info-row">
+          <span class="info-label">Name</span>
+          <span class="info-val" id="cust-name">Aryan Kumar</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Phone</span>
+          <span class="info-val" id="cust-phone">+91 98765 43210</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Return Address</span>
+          <span class="info-val" id="cust-address">12, Green Park, New Delhi, 110001</span>
+        </div>
+      </div>
+
+      <!-- Refund Info -->
+      <div class="box">
+        <div class="box-title">Refund Details</div>
+        <div class="info-row">
+          <span class="info-label">Resolution</span>
+          <span class="info-val" id="refund-action">Refund to Wallet</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Transaction Reference</span>
+          <span class="info-val" id="refund-txn">REF908123746</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Refund Status</span>
+          <span class="info-val status-refunded" id="refund-status">Credited</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Reason</span>
+          <span class="info-val" id="return-reason">Defective Item</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Return Details Box -->
+    <div class="box" style="margin-bottom: 32px;">
+      <div class="box-title">Logistics &amp; Verification Details</div>
+      <div id="logistics-content">
+        <div class="info-row">
+          <span class="info-label">Pickup Executive</span>
+          <span class="info-val">Rakesh Sharma (Delhivery)</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Verification Status</span>
+          <span class="info-val" style="color:#2e7d32; font-weight:700;">QC PASSED (100% Matching)</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Returned Location</span>
+          <span class="info-val">Fulfillment Center Hub, Ghaziabad</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Policy Match</span>
+          <span class="info-val">Reverse pickup completed within 6h window</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items -->
+    <div class="table-section">
+      <table>
+        <thead>
+          <tr>
+            <th>Returned Item Description</th>
+            <th class="text-right">Qty</th>
+            <th class="text-right">Base Refund</th>
+            <th class="text-right">GST Reversed</th>
+            <th class="text-right">Total Refunded</th>
+          </tr>
+        </thead>
+        <tbody id="invoice-items">
+          <!-- Dynamic Items inserted here -->
+        </tbody>
+      </table>
+      
+      <div class="totals">
+        <div class="totals-box">
+          <div class="total-row">
+            <span class="info-label">Base Refund Sum:</span>
+            <span class="info-val" id="base-sum">₹0.00</span>
+          </div>
+          <div class="total-row">
+            <span class="info-label">GST Reversal:</span>
+            <span class="info-val" id="gst-sum">₹0.00</span>
+          </div>
+          <div class="total-row grand-total">
+            <span>Amount Credited:</span>
+            <span id="grand-sum">₹0.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="company-info">
+        <strong>E-Bazaar Retail Pvt. Ltd.</strong><br>
+        Ghaziabad, Uttar Pradesh, India<br>
+        GSTIN: 09ABCDE1234F1Z5<br>
+        support@e-bazaar.in | 1800-123-4567
+      </div>
+      <div class="signature">
+        <div class="signature-line"></div>
+        Authorized Signatory
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('id');
+    const token = localStorage.getItem('ebazaar_token');
+
+    if (orderId && token) {
+      fetch('http://localhost:5000/api/orders', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('API failed');
+        return res.json();
+      })
+      .then(orders => {
+        const order = orders.find(o => String(o.id) === String(orderId));
+        if (order) {
+          renderReturnReport(order);
+        } else {
+          document.body.innerHTML = '<h2>Order Return Details Not Found</h2>';
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        document.body.innerHTML = '<h2>Failed to fetch return details</h2>';
+      });
+    } else {
+      document.body.innerHTML = '<h2>Authentication required</h2>';
+    }
+
+    function renderReturnReport(order) {
+      document.getElementById('report-id').innerText = `Credit Note #: RET-2026-${order.id}`;
+      
+      let dateToday = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      document.getElementById('report-date').innerText = `Date: ${dateToday}`;
+
+      let details = {};
+      if (order.returnDetails) {
+        try { details = JSON.parse(order.returnDetails); } catch(e){}
+      }
+
+      const user = JSON.parse(localStorage.getItem('eb_user') || '{}');
+      document.getElementById('cust-name').innerText = user.name || 'Customer';
+      
+      let deliveryAddr = order.deliveryAddress || '';
+      if (deliveryAddr.startsWith('{')) {
+        try {
+          const addrObj = JSON.parse(deliveryAddr);
+          deliveryAddr = `${addrObj.fname} ${addrObj.lname}, ${addrObj.line1}, ${addrObj.line2 ? addrObj.line2 + ', ' : ''}${addrObj.city} - ${addrObj.pin}`;
+          document.getElementById('cust-name').innerText = `${addrObj.fname} ${addrObj.lname}`;
+          if (addrObj.phone) document.getElementById('cust-phone').innerText = addrObj.phone;
+        } catch(e){}
+      }
+      document.getElementById('cust-address').innerText = deliveryAddr || 'Delhi';
+
+      document.getElementById('refund-action').innerText = details.action === 'refund-wallet' ? 'Refunded to Wallet' : (details.action === 'replace' ? 'Replacement Dispatched' : 'Refunded to Bank Account');
+      document.getElementById('refund-txn').innerText = `TXN-${order.id}R${Math.floor(100000 + Math.random() * 900000)}`;
+      document.getElementById('return-reason').innerText = details.reason || 'Defective/Damaged';
+
+      // Returned Items
+      const rItems = details.items || [];
+      const itemsTbody = document.getElementById('invoice-items');
+      
+      let overallSubtotal = 0;
+      let overallGST = 0;
+      let overallRefundTotal = 0;
+
+      itemsTbody.innerHTML = rItems.map(item => {
+        const qty = item.qty || 1;
+        const price = parseFloat(item.price) || 0;
+        const total = price * qty;
+        
+        const gstRate = 18;
+        const sub = Math.round((total / (1 + (gstRate / 100))) * 100) / 100;
+        const gst = Math.round((total - sub) * 100) / 100;
+        
+        overallSubtotal += sub;
+        overallGST += gst;
+        overallRefundTotal += total;
+
+        return `
+          <tr>
+            <td>
+              <div class="item-name">${item.title || 'Product'}</div>
+              <div class="item-sku">SKU: EB-RET-PROD-${item.id}</div>
+            </td>
+            <td class="text-right">${qty}</td>
+            <td class="text-right">₹${sub.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            <td class="text-right">₹${gst.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})} (18%)</td>
+            <td class="text-right">₹${total.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('base-sum').innerText = `₹${overallSubtotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('gst-sum').innerText = `₹${overallGST.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('grand-sum').innerText = `₹${overallRefundTotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
+  </script>
+</body>
+</html>

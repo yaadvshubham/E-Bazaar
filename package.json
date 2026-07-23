@@ -1,0 +1,22 @@
+{
+  "name": "e-bazaar",
+  "version": "1.0.0",
+  "description": "E-Bazaar: Your everyday and everything store (Consolidated Repository)",
+  "scripts": {
+    "dev": "npm run dev --prefix Backend",
+    "start": "npm start --prefix Backend",
+    "seed": "npm run seed --prefix Backend",
+    "seed:csv": "npm run seed:csv --prefix Backend",
+    "seed:supabase": "npm run seed:supabase --prefix Backend",
+    "scrape": "npm run scrape --prefix Backend"
+  },
+  "keywords": [
+    "e-commerce",
+    "supabase",
+    "express",
+    "node",
+    "sequelize"
+  ],
+  "author": "Shubham Yadav",
+  "license": "ISC"
+}

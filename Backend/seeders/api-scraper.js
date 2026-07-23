@@ -1,11 +1,11 @@
 const axios = require('axios');
 const dotenv = require('dotenv');
 const path = require('path');
-const Product = require('./models/Product');
-const sequelize = require('./config/database');
+const Product = require('../models/Product');
+const sequelize = require('../config/database');
 
 // Load environment variables from .env
-dotenv.config({ path: path.join(__dirname, '.env') });
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
 const RAPIDAPI_HOST = process.env.RAPIDAPI_HOST || 'real-time-amazon-data.p.rapidapi.com';

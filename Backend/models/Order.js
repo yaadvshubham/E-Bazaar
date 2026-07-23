@@ -50,6 +50,11 @@ const Order = sequelize.define('Order', {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  shippingType: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: 'Standard',
+  },
 }, {
   tableName: 'orders',
   timestamps: true,

@@ -83,6 +83,7 @@ router.post('/', authMiddleware, async (req, res) => {
       deliveryAddress: typeof deliveryAddress === 'object'
         ? JSON.stringify(deliveryAddress)
         : (deliveryAddress || ''),
+      shippingType: req.body.shippingType || 'Standard',
     });
 
     // Create Wallet passbook transaction entry
@@ -149,6 +150,7 @@ router.post('/create', authMiddleware, async (req, res) => {
         ? JSON.stringify(deliveryAddress)
         : (deliveryAddress || ''),
       razorpayOrderId: rzpOrder.id,
+      shippingType: req.body.shippingType || 'Standard',
     });
 
     // Return only the public key — secret never leaves the server
@@ -277,6 +279,92 @@ router.post('/:id/return', authMiddleware, async (req, res) => {
   } catch (err) {
     console.error('[Orders Route] Return error:', err.message);
     return res.status(500).json({ error: 'Failed to process return request: ' + err.message });
+  }
+});
+
+// ── POST /api/orders/:id/deliver — Confirm Delivery Receipt ───────────────────
+router.post('/:id/deliver', authMiddleware, async (req, res) => {
+  try {
+    const order = await Order.findOne({ where: { id: req.params.id, userId: req.user.id } });
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found.' });
+    }
+    order.status = 'Delivered';
+    await order.save();
+    return res.json({ success: true, message: 'Order marked as Delivered.', order });
+  } catch (err) {
+    console.error('[Orders Route] Deliver error:', err.message);
+    return res.status(500).json({ error: 'Failed to confirm delivery.' });
+  }
+});
+
+// ── POST /api/orders/:id/return-pickup — Confirm Return Picked Up ──────────────
+router.post('/:id/return-pickup', authMiddleware, async (req, res) => {
+  try {
+    const order = await Order.findOne({ where: { id: req.params.id, userId: req.user.id } });
+    if (!order) return res.status(404).json({ error: 'Order not found.' });
+    
+    let details = {};
+    if (order.returnDetails) {
+      try { details = JSON.parse(order.returnDetails); } catch(e){}
+    }
+    details.returnStep = 2; // Picked Up
+    details.pickupDate = new Date().toISOString();
+    order.returnDetails = JSON.stringify(details);
+    await order.save();
+    
+    return res.json({ success: true, message: 'Return pickup confirmed.', order });
+  } catch (err) {
+    console.error('[Orders Route] Pickup confirmation error:', err);
+    return res.status(500).json({ error: 'Failed to confirm return pickup.' });
+  }
+});
+
+// ── POST /api/orders/:id/return-complete — Complete Return & Credit Wallet ─────
+router.post('/:id/return-complete', authMiddleware, async (req, res) => {
+  try {
+    const order = await Order.findOne({ where: { id: req.params.id, userId: req.user.id } });
+    if (!order) return res.status(404).json({ error: 'Order not found.' });
+    
+    let details = {};
+    if (order.returnDetails) {
+      try { details = JSON.parse(order.returnDetails); } catch(e){}
+    }
+    
+    // Set step to 4 (Completed)
+    details.returnStep = 4;
+    details.completedDate = new Date().toISOString();
+    order.returnDetails = JSON.stringify(details);
+    
+    // If resolution is wallet refund, add amount to user balance
+    if (details.action === 'refund-wallet' && order.status !== 'Returned') {
+      const User = require('../models/User');
+      const user = await User.findByPk(req.user.id);
+      if (user) {
+        // Calculate refund sum
+        const refundAmount = details.items.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        user.walletBalance = (user.walletBalance || 0) + refundAmount;
+        await user.save();
+        
+        // Add transaction ledger entry
+        const WalletTransaction = require('../models/WalletTransaction');
+        await WalletTransaction.create({
+          userId: user.id,
+          amount: refundAmount,
+          type: 'credit',
+          description: `Refund for Order EB-${order.id}`
+        });
+      }
+    }
+    
+    // Set overall order status to Returned/Refunded
+    order.status = 'Returned';
+    await order.save();
+    
+    return res.json({ success: true, message: 'Return completed successfully.', order });
+  } catch (err) {
+    console.error('[Orders Route] Return completion error:', err);
+    return res.status(500).json({ error: 'Failed to complete return.' });
   }
 });
 

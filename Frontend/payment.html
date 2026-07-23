@@ -9,7 +9,7 @@
 
     <script>
         // Prevent Flash of Light Mode
-        const savedTheme = localStorage.getItem('eb-theme') || 'light';
+        const savedTheme = localStorage.getItem('eb-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 

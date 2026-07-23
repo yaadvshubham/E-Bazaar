@@ -67,6 +67,16 @@ const Product = sequelize.define('Product', {
     allowNull: false,
     defaultValue: 18.0,
   },
+  isDeal: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+  isNew: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 }, {
   tableName: 'products',
   timestamps: true,

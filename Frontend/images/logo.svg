@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 12 58 63" width="512" height="512">
+  <defs>
+    <linearGradient id="bagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A88C6D" />
+      <stop offset="100%" stop-color="#856B4D" />
+    </linearGradient>
+    <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E2CDAF" />
+      <stop offset="100%" stop-color="#FAF5E1" />
+    </linearGradient>
+  </defs>
+  <!-- Background transparent -->
+  <rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)" />
+  <path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round" />
+  <polyline fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50" />
+  <path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62" />
+  <line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30" />
+  <polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38" />
+</svg>

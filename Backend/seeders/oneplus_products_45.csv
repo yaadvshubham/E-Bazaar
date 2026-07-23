@@ -1,0 +1,46 @@
+id,name,category,price_inr,description,display,processor,ram,storage,camera,battery,charging,image
+1,OnePlus 13,Smartphone,69999,Premium flagship with Hasselblad cameras,6.82 AMOLED 120Hz,Snapdragon 8 Elite,12GB,256GB,50MP Triple,6000mAh,100W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-13.jpg
+2,OnePlus 13R,Smartphone,42999,Flagship killer,6.78 AMOLED 120Hz,Snapdragon 8 Gen 3,12GB,256GB,50MP Triple,6000mAh,80W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-13r.jpg
+3,OnePlus 13s,Smartphone,54999,Compact flagship,6.32 AMOLED 120Hz,Snapdragon 8 Elite,12GB,256GB,50MP Dual,5850mAh,80W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-13s.jpg
+4,OnePlus 12,Smartphone,64999,Premium flagship,6.82 AMOLED,Snapdragon 8 Gen 3,12GB,256GB,50MP Triple,5400mAh,100W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-12.jpg
+5,OnePlus 12R,Smartphone,39999,Gaming flagship killer,6.78 AMOLED,Snapdragon 8 Gen 2,8GB,256GB,50MP Triple,5500mAh,100W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-12r.jpg
+6,OnePlus Open,Foldable,119999,Foldable flagship,7.82 Foldable AMOLED,Snapdragon 8 Gen 2,16GB,512GB,48MP Triple,4805mAh,67W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-open.jpg
+7,OnePlus Nord 5,Smartphone,32999,Upper mid-range,6.83 AMOLED,Snapdragon 8s Gen 3,8GB,256GB,50MP Dual,6800mAh,80W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-nord-5.jpg
+8,OnePlus Nord CE5,Smartphone,24999,Affordable 5G,6.77 AMOLED,Dimensity 8350,8GB,256GB,50MP Dual,7100mAh,80W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-nord-ce5.jpg
+9,OnePlus Nord 4,Smartphone,29999,Metal body,6.74 AMOLED,Snapdragon 7+ Gen 3,8GB,256GB,50MP Dual,5500mAh,100W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-nord4.jpg
+10,OnePlus Nord CE4,Smartphone,22999,Reliable daily phone,6.7 AMOLED,Snapdragon 7 Gen 3,8GB,256GB,50MP Dual,5500mAh,100W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-nord-ce4.jpg
+11,OnePlus Nord CE4 Lite,Smartphone,17999,Budget AMOLED,6.67 AMOLED,Snapdragon 695,8GB,128GB,50MP Dual,5110mAh,80W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-nord-ce4-lite.jpg
+12,OnePlus Pad 3,Tablet,39999,Premium tablet,13.2 LCD 144Hz,Snapdragon 8 Elite,12GB,256GB,13MP,12140mAh,80W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-pad-3.jpg
+13,OnePlus Pad 2,Tablet,35999,Android tablet,12.1 LCD,Snapdragon 8 Gen 3,8GB,256GB,13MP,9510mAh,67W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-pad2.jpg
+14,OnePlus Pad Go,Tablet,19999,Entertainment tablet,11.35 LCD,Helio G99,8GB,128GB,8MP,8000mAh,33W,https://fdn2.gsmarena.com/vv/bigpic/oneplus-pad-go.jpg
+15,OnePlus Watch 3,Smartwatch,29999,Wear OS smartwatch,1.5 AMOLED,Snapdragon W5,2GB,32GB,-,631mAh,-,https://fdn2.gsmarena.com/vv/bigpic/oneplus-watch-3.jpg
+16,OnePlus Watch 2,Smartwatch,24999,Premium watch,1.43 AMOLED,Snapdragon W5,2GB,32GB,-,500mAh,-,https://fdn2.gsmarena.com/vv/bigpic/oneplus-watch2.jpg
+17,OnePlus Watch 2R,Smartwatch,17999,Fitness watch,1.43 AMOLED,Snapdragon W5,2GB,32GB,-,500mAh,-,https://fdn2.gsmarena.com/vv/bigpic/oneplus-watch-2r.jpg
+18,OnePlus Buds Pro 3,Earbuds,11999,ANC earbuds,-,-,-,-,Dual Drivers,Battery 43h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/oneplus-buds-pro-3.jpg
+19,OnePlus Buds 4,Earbuds,5999,ANC earbuds,-,-,-,-,Dual Drivers,Battery 45h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/oneplus-buds4.jpg
+20,OnePlus Buds 3,Earbuds,5499,Premium earbuds,-,-,-,-,Dual Drivers,Battery 44h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/oneplus-buds3.jpg
+21,OnePlus Nord Buds 3 Pro,Earbuds,3299,Affordable ANC,-,-,-,-,12.4mm,Battery 44h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/oneplus-nord-buds-3-pro.jpg
+22,OnePlus Nord Buds 3,Earbuds,2299,Budget earbuds,-,-,-,-,12.4mm,Battery 43h,USB-C,https://fdn2.gsmarena.com/vv/bigpic/oneplus-nord-buds-3.jpg
+23,100W SUPERVOOC Charger,Accessory,4999,Official charger,-,-,-,-,-,-,100W,
+24,80W SUPERVOOC Charger,Accessory,3999,Official charger,-,-,-,-,-,-,80W,
+25,50W AIRVOOC Charger,Accessory,5499,Wireless charger,-,-,-,-,-,-,50W,
+26,SUPERVOOC USB-C Cable,Accessory,999,Fast charging cable,-,-,-,-,-,-,USB-C,
+27,Red USB-C Cable,Accessory,1299,Official red cable,-,-,-,-,-,-,USB-C,
+28,Sandstone Case OP13,Case,1499,Protective case,-,-,-,-,-,-,-,
+29,Sandstone Case OP13R,Case,1499,Protective case,-,-,-,-,-,-,-,
+30,Aramid Case OP13,Case,2499,Premium aramid,-,-,-,-,-,-,-,
+31,Magnetic Case OP13,Case,1999,MagSafe style,-,-,-,-,-,-,-,
+32,Screen Protector OP13,Accessory,999,Tempered glass,-,-,-,-,-,-,-,
+33,Screen Protector OP13R,Accessory,899,Tempered glass,-,-,-,-,-,-,-,
+34,Watch Strap Black,Accessory,1999,Silicone strap,-,-,-,-,-,-,-,
+35,Watch Strap Green,Accessory,1999,Silicone strap,-,-,-,-,-,-,-,
+36,Watch Charger,Accessory,1499,Magnetic charger,-,-,-,-,-,-,-,
+37,Buds Silicone Case,Accessory,699,Earbuds case,-,-,-,-,-,-,-,
+38,Buds Foam Tips,Accessory,399,Replacement tips,-,-,-,-,-,-,-,
+39,OnePlus Backpack,Accessory,2999,Official backpack,-,-,-,-,-,-,-,
+40,OnePlus Travel Bag,Accessory,3499,Travel bag,-,-,-,-,-,-,-,
+41,OnePlus Power Bank 10000,Accessory,3499,10000mAh power bank,-,-,-,-,-,10000mAh,33W,
+42,OnePlus Power Bank 20000,Accessory,4999,20000mAh power bank,-,-,-,-,-,20000mAh,45W,
+43,OnePlus Gaming Finger Sleeves,Accessory,499,Gaming accessory,-,-,-,-,-,-,-,
+44,OnePlus Tablet Folio Case,Accessory,2499,Pad protective cover,-,-,-,-,-,-,-,
+45,OnePlus Tablet Stylus,Accessory,4999,Stylus pen,-,-,-,-,-,-,-,

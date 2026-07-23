@@ -375,8 +375,8 @@
     <div class="footer">
       <div class="company-info">
         <strong>E-Bazaar Retail Pvt. Ltd.</strong><br>
-        100 Cyber City, Sector 44, Gurugram, 122003<br>
-        GSTIN: 06ABCDE1234F1Z5<br>
+        Ghaziabad, Uttar Pradesh, India<br>
+        GSTIN: 09ABCDE1234F1Z5<br>
         support@e-bazaar.in | 1800-123-4567
       </div>
       <div class="signature">
@@ -533,26 +533,7 @@
         </div>
       `;
 
-      if (order.status === 'Pending') {
-        deliveryContent.innerHTML = `
-          <div class="info-row">
-            <span class="info-label">Status</span>
-            <span class="info-val status-pending">Order Not Delivered Yet</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Received By</span>
-            <span class="info-val" style="color: #999;">Pending Delivery</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Expected Delivery</span>
-            <span class="info-val">TBD (3-5 Business Days)</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Delivery Time</span>
-            <span class="info-val" style="color: #999;">TBD</span>
-          </div>
-        `;
-      } else {
+      if (order.status === 'Delivered') {
         deliveryContent.innerHTML = `
           <div class="info-row">
             <span class="info-label">Status</span>
@@ -569,6 +550,25 @@
           <div class="info-row">
             <span class="info-label">Delivery Time</span>
             <span class="info-val">02:45 PM</span>
+          </div>
+        `;
+      } else {
+        deliveryContent.innerHTML = `
+          <div class="info-row">
+            <span class="info-label">Status</span>
+            <span class="info-val status-pending">${order.status || 'Confirmed'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Received By</span>
+            <span class="info-val" style="color: #999;">Pending Delivery</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Expected Delivery</span>
+            <span class="info-val">${order.shippingType === 'Same Day' ? 'Same Day (Within 6 hours)' : '3-5 Business Days'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Delivery Time</span>
+            <span class="info-val" style="color: #999;">TBD</span>
           </div>
         `;
       }
