@@ -818,321 +818,306 @@ footer{background:var(--bg-nav);color:var(--text-sub);border-top:1px solid var(-
     padding-bottom: 0 !important;
   }
   
-  /* Double-Row Responsive Mobile Header (Scaling desktop layout) */
+  /* ═══════════════════════════════════════════════════════════════════
+     PREMIUM MOBILE HEADER REDESIGN
+     Two-row app-style layout (like Blinkit / Zepto / Swiggy Instamart)
+     Row 1: Hamburger | Logo+Address | Spacer | Theme | Cart
+     Row 2: Full-width search bar
+     ═══════════════════════════════════════════════════════════════════ */
+
+  /* Re-enable sticky header */
   #site-header {
     position: sticky;
     top: 0;
     z-index: 1000;
+    background: var(--bg-nav);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 8px rgba(42,36,33,.07);
   }
-  
+
+  /* Re-enable mobile bottom nav as the primary nav surface */
+  .mobile-bottom-nav {
+    display: flex !important;
+  }
+  body {
+    padding-bottom: 62px !important;
+  }
+
+  /* ─── NAV TOP: 2-row grid ─── */
   .nav-top {
     display: grid !important;
     grid-template-areas:
-      "hamburger logo address"
-      "search search search"
-      "actions actions actions" !important;
-    grid-template-columns: auto 1fr auto !important;
-    grid-template-rows: auto auto auto !important;
-    gap: 6px 8px !important;
-    padding: 6px 10px !important;
+      "hamburger logo-area . theme-btn cart-btn-wrap"
+      "search-bar search-bar search-bar search-bar search-bar" !important;
+    grid-template-columns: 40px 1fr auto auto auto !important;
+    grid-template-rows: 44px 40px !important;
+    gap: 0 8px !important;
+    padding: 6px 12px 8px !important;
     height: auto !important;
+    align-items: center;
   }
-  
+
+  /* ─── Hamburger ─── */
   .hamburger {
     grid-area: hamburger;
-    align-self: center;
     display: flex !important;
-    width: 26px !important;
-    height: 26px !important;
-    padding: 5px !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+    background: var(--bg-alt) !important;
+    border: 1px solid var(--border) !important;
+    padding: 0 !important;
+    flex-shrink: 0;
   }
-  
+  .hamburger span {
+    width: 16px !important;
+    height: 2px !important;
+  }
+
+  /* ─── Logo + Address area (combined) ─── */
   .nav-logo {
-    grid-area: logo;
-    justify-self: start;
-    align-self: center;
-    margin-left: 0 !important;
+    grid-area: logo-area;
     display: flex !important;
     align-items: center !important;
-    gap: 4px !important;
+    gap: 8px !important;
+    overflow: hidden;
+    text-decoration: none;
   }
-  
-  .nav-logo svg {
+  .nav-logo .logo-svg-mark {
+    width: 30px !important;
+    height: 30px !important;
+    flex-shrink: 0 !important;
+  }
+  .logo-wordmark {
+    font-size: 17px !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.4px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+  .logo-tagline {
+    display: none !important;
+  }
+
+  /* ─── Address widget: shown as a tiny pill below logo ─── */
+  .nav-address {
+    display: none !important; /* hidden; address available in drawer */
+  }
+
+  /* ─── Theme Toggle (icon only, right of logo) ─── */
+  .theme-toggle {
+    grid-area: theme-btn;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    background: none !important;
+    border: none !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+    margin: 0 !important;
+  }
+  .theme-toggle .toggle-track {
+    display: block !important;
+    width: 28px !important;
+    height: 15px !important;
+    margin: 0 !important;
+  }
+  .theme-toggle .toggle-thumb {
+    width: 11px !important;
+    height: 11px !important;
+    top: 2px !important;
+    left: 2px !important;
+  }
+  html[data-theme="dark"] .theme-toggle .toggle-thumb {
+    transform: translateX(13px) !important;
+  }
+  .theme-toggle::after { content: none !important; }
+  .toggle-icon { display: none !important; }
+
+  /* ─── Cart button (icon + badge only) ─── */
+  .nav-actions {
+    grid-area: cart-btn-wrap;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    border-top: none !important;
+  }
+
+  /* Hide all nav-btn items EXCEPT cart on mobile */
+  .nav-actions .nav-btn {
+    display: none !important;
+  }
+  .nav-actions #cart-btn {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    background: none !important;
+    border: none !important;
+    position: relative !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+  }
+  .nav-actions #cart-btn span.cart-badge.cart-count-el {
+    display: grid !important;
+    place-items: center !important;
+    position: absolute !important;
+    top: 0px !important;
+    right: 0px !important;
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 8px !important;
+    border: 1.5px solid var(--bg-nav) !important;
+    border-radius: 50% !important;
+    background: var(--accent) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+  }
+  .nav-actions #cart-btn svg {
     width: 20px !important;
     height: 20px !important;
   }
-  
-  .logo-wordmark {
-    font-size: 14px !important;
+  .nav-actions #cart-btn > span:not(.cart-badge) {
+    display: none !important; /* Hide "Cart" text label */
   }
-  
-  .logo-tagline {
-    display: none !important; /* Hide small tagline text to fit logo */
-  }
-  
-  /* Truncate Deliver-to Address to show only name */
-  .nav-address {
-    grid-area: address;
-    display: flex !important;
-    align-items: center !important;
-    gap: 4px !important;
-    justify-self: end;
-    align-self: center;
-    background: none !important;
-    border: none !important;
-    padding: 0 !important;
-    font-size: 10px !important;
-  }
-  
-  .nav-address svg {
-    width: 12px !important;
-    height: 12px !important;
-  }
-  
-  .addr-info {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-  }
-  
-  .addr-label {
-    font-size: 7px !important;
-    line-height: 1 !important;
-    color: var(--text-muted) !important;
-    letter-spacing: 0.3px !important;
-    margin-bottom: 1px !important;
-  }
-  
-  .addr-value {
-    font-size: 10px !important;
-    font-weight: 700 !important;
-    max-width: 85px !important; /* Truncates address to name only! */
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    display: inline-block !important;
-    text-align: right !important;
-  }
-  
-  /* Search widget with magnifying search-btn */
+
+  /* ─── Search Bar: full-width second row ─── */
   .nav-search {
-    grid-area: search;
+    grid-area: search-bar;
     width: 100% !important;
     display: flex !important;
     position: relative !important;
     margin: 0 !important;
+    max-width: none !important;
   }
-  
   .nav-search input {
-    height: 28px !important;
-    font-size: 11px !important;
-    padding: 0 32px 0 10px !important;
-    border-radius: var(--r-pill) !important;
-  }
-  
-  .search-btn {
-    display: grid !important; /* Restore search button */
-    width: 22px !important;
-    height: 22px !important;
-    border-radius: var(--r-pill) !important;
-    right: 3px !important;
-    top: 3px !important;
-    place-items: center !important;
-  }
-  
-  .search-btn svg {
-    width: 12px !important;
-    height: 12px !important;
-  }
-  
-  /* Actions Row containing: Theme toggle, Account, Orders, Wishlist, Cart */
-  .nav-actions {
-    grid-area: actions;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
     width: 100% !important;
-    gap: 4px !important;
-    padding: 2px 0 0 0 !important;
-    border-top: 1px solid var(--border-light) !important;
+    height: 36px !important;
+    font-size: 13px !important;
+    padding: 0 40px 0 14px !important;
+    border-radius: 10px !important;
+    background: var(--bg-alt) !important;
+    border: 1.5px solid var(--border) !important;
   }
-  
-  /* Uniform design for header actions */
-  .nav-actions .nav-btn {
-    flex: 1 !important;
-    min-width: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 2px !important;
-    padding: 2px 1px !important;
-    font-size: 8px !important;
-    color: var(--text-dim) !important;
-    background: none !important;
-    border: none !important;
-    text-decoration: none !important;
-    text-align: center !important;
+  .nav-search input:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-tint) !important;
+    background: var(--bg-white) !important;
   }
-  
-  .nav-actions .nav-btn svg {
-    width: 14px !important;
-    height: 14px !important;
+  .search-btn {
+    display: grid !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px !important;
+    right: 4px !important;
+    top: 4px !important;
+    transform: none !important;
+    place-items: center !important;
+    position: absolute !important;
   }
-  
-  .nav-actions .nav-btn span {
-    display: inline !important; /* Show labels */
-    font-size: 8px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 100% !important;
-  }
-  
-  /* Cart badge sizing on scaled header */
-  #cart-btn .cart-badge {
-    top: 2px !important;
-    right: 18% !important;
-    width: 12px !important;
-    height: 12px !important;
-    font-size: 7px !important;
-    border: 1px solid var(--bg-nav) !important;
-  }
-  
-  /* Scale Theme toggle switch to match standard text links below */
-  .theme-toggle {
-    flex: 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    padding: 2px 1px !important;
-    gap: 2px !important;
-    background: none !important;
-    border: none !important;
-    margin: 0 !important;
-  }
-  
-  .theme-toggle .toggle-track {
-    display: block !important;
-    width: 24px !important;
+  .search-btn svg {
+    width: 13px !important;
     height: 13px !important;
-    margin-bottom: 2px !important;
-  }
-  
-  .theme-toggle .toggle-thumb {
-    width: 9px !important;
-    height: 9px !important;
-    top: 2px !important;
-    left: 2px !important;
-  }
-  
-  html[data-theme="dark"] .theme-toggle .toggle-thumb {
-    transform: translateX(11px) !important;
-  }
-  
-  /* Text label under the theme toggle */
-  .theme-toggle::after {
-    content: "Theme" !important;
-    font-size: 8px !important;
-    color: var(--text-dim) !important;
-    font-weight: 600 !important;
-    white-space: nowrap !important;
   }
 
-  /* Horizontal Category Strip on Mobile with exact desktop elements */
+  /* ─── Category strip: compact scrollable pill chips ─── */
   .nav-sub {
     display: block !important;
     border-top: 1px solid var(--border) !important;
-    border-bottom: 1px solid var(--border) !important;
-    background: var(--bg-subnav) !important;
+    border-bottom: none !important;
+    background: var(--bg-nav) !important;
     padding: 0 !important;
   }
-  
   .nav-sub-inner {
-    height: 38px !important;
+    height: 36px !important;
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-start !important;
     gap: 6px !important;
-    padding: 0 10px !important;
+    padding: 0 12px !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
     scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
   }
-  
-  .nav-sub-inner::-webkit-scrollbar {
-    display: none !important;
-  }
-  
+  .nav-sub-inner::-webkit-scrollbar { display: none !important; }
   .cat-links-wrap {
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
+    gap: 5px !important;
     overflow: visible !important;
     height: auto !important;
+    flex-shrink: 0 !important;
   }
-  
-  /* All Categories button */
   .all-cats-btn-link {
-    font-size: 10px !important;
-    padding: 4px 8px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 4px 10px !important;
     gap: 4px !important;
     height: auto !important;
+    white-space: nowrap !important;
     color: var(--accent) !important;
-    background: var(--bg-alt) !important;
-    border-radius: var(--r-sm) !important;
+    background: var(--accent-tint) !important;
+    border-radius: var(--r-pill) !important;
     border-bottom: none !important;
+    border: 1px solid rgba(168,140,109,.25) !important;
   }
-  
   .all-cats-btn-link svg {
     width: 10px !important;
     height: 10px !important;
   }
-  
-  .mega-item {
-    height: auto !important;
-  }
-  
+  .mega-item { height: auto !important; }
   .mega-item > a {
-    font-size: 10px !important;
-    padding: 4px 6px !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    padding: 4px 10px !important;
     gap: 2px !important;
     height: auto !important;
-    border: none !important;
-    background: none !important;
+    border: 1px solid var(--border) !important;
+    background: var(--bg-white) !important;
     color: var(--text-sub) !important;
-  }
-  
-  .mega-item > a .chev {
-    display: inline-block !important; /* Restore category chevrons */
-    width: 6px !important;
-    height: 6px !important;
-  }
-  
-  /* Today's Deals, New Arrivals static links */
-  .top-cat-links {
-    display: flex !important; /* Restore static page links */
-    align-items: center !important;
-    gap: 6px !important;
-    margin-left: 2px !important;
-  }
-  
-  .top-cat-link {
-    font-size: 10px !important;
-    padding: 4px 6px !important;
+    border-radius: var(--r-pill) !important;
     white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
   }
-  
+  .mega-item > a:hover, .mega-item > a:focus {
+    background: var(--accent-tint) !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+  }
+  .mega-item > a .chev {
+    display: none !important; /* Chevrons not needed in pill chips */
+  }
+  /* Mega-drop disabled on mobile (navigation via chips goes direct to category page) */
+  .mega-drop {
+    display: none !important;
+  }
   .subnav-divider {
-    display: block !important; /* Restore divider line */
-    height: 14px !important;
-    margin: 0 2px !important;
+    display: block !important;
+    width: 1px !important;
+    height: 16px !important;
     background: var(--border) !important;
+    flex-shrink: 0 !important;
+    margin: 0 3px !important;
   }
-  
   .hot-tag, .new-tag {
-    font-size: 7px !important;
-    padding: 1px 3px !important;
+    font-size: 8px !important;
+    padding: 1px 4px !important;
+    border-radius: 3px !important;
   }
+
+
 
   /* Scaled-down Desktop Footer for Mobile Screen */
   footer .footer-main {

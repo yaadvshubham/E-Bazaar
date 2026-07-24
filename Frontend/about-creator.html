@@ -400,7 +400,7 @@
         </svg>
         Creator Profile
       </button>
-      <button class="tab-btn" data-tab="project" role="tab" aria-selected="false" aria-controls="tab-project">
+      <button class="tab-btn" data-tab="project" id="project-specs" role="tab" aria-selected="false" aria-controls="tab-project">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
@@ -1319,6 +1319,15 @@
         const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabParam}"]`);
         if (targetBtn) {
           targetBtn.click();
+        }
+      }
+
+      // Auto-activate tab from URL hash (#project-specs → project tab)
+      if (window.location.hash === '#project-specs') {
+        const projectBtn = document.querySelector('.tab-btn[data-tab="project"]');
+        if (projectBtn) {
+          projectBtn.click();
+          setTimeout(() => projectBtn.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
         }
       }
     });

@@ -178,7 +178,7 @@
                 <p
                     style="color: var(--text-sub); font-size: 1.05rem; line-height: 1.7; margin-top: 12px; max-width: 550px; margin-left: auto; margin-right: auto; padding: 0 10px;">
                     Aapka order receive ho chuka hai (par delivery nahi hogi, kyunki yeh ek simulated catalog hai!).
-                    Humne payment verify kar li hai. Agar aapko yeh project achha laga, toh right sidebar se support
+                    Humne payment verify kar li hai. Agar aapko yeh project achha laga, toh neeche se creator ko support
                     karna mat bhoolna!
                 </p>
 
@@ -186,9 +186,40 @@
                     id="order-ref-display">
                     Reference ID: --
                 </div>
+
+                <!-- Post-Payment CTA Cards -->
+                <div style="margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 520px; margin-left: auto; margin-right: auto; padding: 0 12px;">
+
+                    <!-- Creator Profile Card -->
+                    <a href="about-creator.html"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 14px; background: linear-gradient(135deg, var(--accent-tint), rgba(168,140,109,.22)); border: 1.5px solid var(--accent); border-radius: 14px; text-decoration: none; color: var(--text); transition: transform 0.2s, box-shadow 0.2s;"
+                        onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(168,140,109,.25)'"
+                        onmouseout="this.style.transform='';this.style.boxShadow=''">
+                        <span style="font-size: 28px; line-height: 1;">👨‍💻</span>
+                        <div>
+                            <div style="font-weight: 800; font-size: 0.9rem; color: var(--accent);">Creator Profile</div>
+                            <div style="font-size: 0.75rem; color: var(--text-sub); margin-top: 3px;">Meet the developer</div>
+                        </div>
+                    </a>
+
+                    <!-- Project Specifications Card -->
+                    <a href="about-creator.html#project-specs"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 14px; background: linear-gradient(135deg, #f0f7ff, #e8f0fe); border: 1.5px solid #4285F4; border-radius: 14px; text-decoration: none; color: var(--text); transition: transform 0.2s, box-shadow 0.2s;"
+                        onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(66,133,244,.2)'"
+                        onmouseout="this.style.transform='';this.style.boxShadow=''">
+                        <span style="font-size: 28px; line-height: 1;">📋</span>
+                        <div>
+                            <div style="font-weight: 800; font-size: 0.9rem; color: #4285F4;">Project Specs</div>
+                            <div style="font-size: 0.75rem; color: var(--text-sub); margin-top: 3px;">Tech stack & features</div>
+                        </div>
+                    </a>
+
+                </div>
+
                 <br>
                 <a href="index.html" class="back-home-btn">Back to Home</a>
             </div>
+
         </div>
 
         <!-- SIDEBAR AREA (Right Column) -->
