@@ -19,28 +19,28 @@ function injectLoader() {
   style.id = 'ebazaar-loader-style';
   style.textContent = `
     #ebazaar-loader-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(250, 248, 245, 0.6);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100000;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      background: rgba(250, 248, 245, 0.7) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      z-index: 999999 !important;
+      transition: opacity 0.3s ease, visibility 0.3s ease !important;
       opacity: 0;
       visibility: hidden;
     }
     html[data-theme="dark"] #ebazaar-loader-overlay {
-      background: rgba(18, 16, 14, 0.6);
+      background: rgba(18, 16, 14, 0.7) !important;
     }
     #ebazaar-loader-overlay.show {
-      opacity: 1;
-      visibility: visible;
+      opacity: 1 !important;
+      visibility: visible !important;
     }
     .loader-content {
       text-align: center;
@@ -180,6 +180,12 @@ function showBrandedLoader() {
   // Only show loader if we are on a page that actually displays catalog products.
   const page = document.body ? document.body.dataset.page : null;
   const path = window.location.pathname;
+
+  // Bypass loader overlay on product details pages to prevent blocking loaded content
+  if (page === 'product-detail' || path.includes('product-detail.html')) {
+    console.log('[E-Bazaar API] Product detail page: bypassing loader overlay to prevent blocking content.');
+    return;
+  }
   
   const needsCatalogProducts = page === 'category' || path.includes('category.html') ||
                                page === 'brand-store' || path.includes('brand-store.html') ||

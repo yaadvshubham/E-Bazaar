@@ -771,6 +771,13 @@ footer{background:var(--bg-nav);color:var(--text-sub);border-top:1px solid var(-
 #toast.show{opacity:1;transform:translateY(0)}
 .toast-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
 
+.desktop-only {
+  display: inline !important;
+}
+.mobile-only {
+  display: none !important;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════════════ */
@@ -792,30 +799,823 @@ footer{background:var(--bg-nav);color:var(--text-sub);border-top:1px solid var(-
   .promo-grid{grid-template-columns:1fr}
 }
 
-@media(max-width:768px){
+@media(max-width:991px){
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: inline !important;
+  }
+  /* Brands and grids */
   .brands-grid{grid-template-columns:repeat(3,1fr)}
   .hamburger{display:flex}
-  .nav-actions .nav-btn:not(#cart-btn){display:none}
-  .theme-toggle{display:none}
-  .nav-sub{display:none}
-  .nav-top{grid-template-columns:auto 1fr auto auto;gap:12px}
+  
+  /* Pinned bottom nav hidden since we keep everything in the header */
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+  body {
+    padding-bottom: 0 !important;
+  }
+  
+  /* Double-Row Responsive Mobile Header (Scaling desktop layout) */
+  #site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .nav-top {
+    display: grid !important;
+    grid-template-areas:
+      "hamburger logo address"
+      "search search search"
+      "actions actions actions" !important;
+    grid-template-columns: auto 1fr auto !important;
+    grid-template-rows: auto auto auto !important;
+    gap: 6px 8px !important;
+    padding: 6px 10px !important;
+    height: auto !important;
+  }
+  
+  .hamburger {
+    grid-area: hamburger;
+    align-self: center;
+    display: flex !important;
+    width: 26px !important;
+    height: 26px !important;
+    padding: 5px !important;
+  }
+  
+  .nav-logo {
+    grid-area: logo;
+    justify-self: start;
+    align-self: center;
+    margin-left: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+  
+  .nav-logo svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .logo-wordmark {
+    font-size: 14px !important;
+  }
+  
+  .logo-tagline {
+    display: none !important; /* Hide small tagline text to fit logo */
+  }
+  
+  /* Truncate Deliver-to Address to show only name */
+  .nav-address {
+    grid-area: address;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    justify-self: end;
+    align-self: center;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 10px !important;
+  }
+  
+  .nav-address svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  
+  .addr-info {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+  }
+  
+  .addr-label {
+    font-size: 7px !important;
+    line-height: 1 !important;
+    color: var(--text-muted) !important;
+    letter-spacing: 0.3px !important;
+    margin-bottom: 1px !important;
+  }
+  
+  .addr-value {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    max-width: 85px !important; /* Truncates address to name only! */
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: inline-block !important;
+    text-align: right !important;
+  }
+  
+  /* Search widget with magnifying search-btn */
+  .nav-search {
+    grid-area: search;
+    width: 100% !important;
+    display: flex !important;
+    position: relative !important;
+    margin: 0 !important;
+  }
+  
+  .nav-search input {
+    height: 28px !important;
+    font-size: 11px !important;
+    padding: 0 32px 0 10px !important;
+    border-radius: var(--r-pill) !important;
+  }
+  
+  .search-btn {
+    display: grid !important; /* Restore search button */
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: var(--r-pill) !important;
+    right: 3px !important;
+    top: 3px !important;
+    place-items: center !important;
+  }
+  
+  .search-btn svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  
+  /* Actions Row containing: Theme toggle, Account, Orders, Wishlist, Cart */
+  .nav-actions {
+    grid-area: actions;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    gap: 4px !important;
+    padding: 2px 0 0 0 !important;
+    border-top: 1px solid var(--border-light) !important;
+  }
+  
+  /* Uniform design for header actions */
+  .nav-actions .nav-btn {
+    flex: 1 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2px !important;
+    padding: 2px 1px !important;
+    font-size: 8px !important;
+    color: var(--text-dim) !important;
+    background: none !important;
+    border: none !important;
+    text-decoration: none !important;
+    text-align: center !important;
+  }
+  
+  .nav-actions .nav-btn svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  .nav-actions .nav-btn span {
+    display: inline !important; /* Show labels */
+    font-size: 8px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+  }
+  
+  /* Cart badge sizing on scaled header */
+  #cart-btn .cart-badge {
+    top: 2px !important;
+    right: 18% !important;
+    width: 12px !important;
+    height: 12px !important;
+    font-size: 7px !important;
+    border: 1px solid var(--bg-nav) !important;
+  }
+  
+  /* Scale Theme toggle switch to match standard text links below */
+  .theme-toggle {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 2px 1px !important;
+    gap: 2px !important;
+    background: none !important;
+    border: none !important;
+    margin: 0 !important;
+  }
+  
+  .theme-toggle .toggle-track {
+    display: block !important;
+    width: 24px !important;
+    height: 13px !important;
+    margin-bottom: 2px !important;
+  }
+  
+  .theme-toggle .toggle-thumb {
+    width: 9px !important;
+    height: 9px !important;
+    top: 2px !important;
+    left: 2px !important;
+  }
+  
+  html[data-theme="dark"] .theme-toggle .toggle-thumb {
+    transform: translateX(11px) !important;
+  }
+  
+  /* Text label under the theme toggle */
+  .theme-toggle::after {
+    content: "Theme" !important;
+    font-size: 8px !important;
+    color: var(--text-dim) !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+  }
 
-  .footer-main{grid-template-columns:1fr 1fr;gap:28px}
-  .hero-slide{height:340px}
-  .hero-h{font-size:32px}
-  .hero-cta{height:44px;padding:0 24px;font-size:14px}
-  .promo-grid{padding-bottom:48px}
-  :root{--side-pad:20px}
+  /* Horizontal Category Strip on Mobile with exact desktop elements */
+  .nav-sub {
+    display: block !important;
+    border-top: 1px solid var(--border) !important;
+    border-bottom: 1px solid var(--border) !important;
+    background: var(--bg-subnav) !important;
+    padding: 0 !important;
+  }
+  
+  .nav-sub-inner {
+    height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 6px !important;
+    padding: 0 10px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+  }
+  
+  .nav-sub-inner::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  .cat-links-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+  
+  /* All Categories button */
+  .all-cats-btn-link {
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+    gap: 4px !important;
+    height: auto !important;
+    color: var(--accent) !important;
+    background: var(--bg-alt) !important;
+    border-radius: var(--r-sm) !important;
+    border-bottom: none !important;
+  }
+  
+  .all-cats-btn-link svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  
+  .mega-item {
+    height: auto !important;
+  }
+  
+  .mega-item > a {
+    font-size: 10px !important;
+    padding: 4px 6px !important;
+    gap: 2px !important;
+    height: auto !important;
+    border: none !important;
+    background: none !important;
+    color: var(--text-sub) !important;
+  }
+  
+  .mega-item > a .chev {
+    display: inline-block !important; /* Restore category chevrons */
+    width: 6px !important;
+    height: 6px !important;
+  }
+  
+  /* Today's Deals, New Arrivals static links */
+  .top-cat-links {
+    display: flex !important; /* Restore static page links */
+    align-items: center !important;
+    gap: 6px !important;
+    margin-left: 2px !important;
+  }
+  
+  .top-cat-link {
+    font-size: 10px !important;
+    padding: 4px 6px !important;
+    white-space: nowrap !important;
+  }
+  
+  .subnav-divider {
+    display: block !important; /* Restore divider line */
+    height: 14px !important;
+    margin: 0 2px !important;
+    background: var(--border) !important;
+  }
+  
+  .hot-tag, .new-tag {
+    font-size: 7px !important;
+    padding: 1px 3px !important;
+  }
+
+  /* Scaled-down Desktop Footer for Mobile Screen */
+  footer .footer-main {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important; /* 3 columns side-by-side! */
+    gap: 20px 8px !important;
+    padding: 24px 12px 20px !important;
+  }
+  
+  footer .f-brand {
+    grid-column: 1 / -1 !important; /* Logo and brand takes full width of row 1 */
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  
+  footer .f-brand p {
+    font-size: 12px !important;
+    max-width: 450px !important;
+    margin: 8px 0 12px 0 !important;
+  }
+  
+  /* Show all the columns! */
+  footer .f-col {
+    display: block !important;
+    grid-column: span 1 !important;
+  }
+  
+  footer .f-col h5 {
+    font-size: 10px !important; /* Smaller header font size */
+    margin-bottom: 8px !important;
+    letter-spacing: 0.5px !important;
+  }
+  
+  /* Hide chevrons from headers since they are not accordions anymore */
+  footer .f-col h5 svg, footer .footer-chevron, footer .accordion-chevron {
+    display: none !important;
+  }
+  
+  footer .f-col ul li {
+    margin-bottom: 5px !important;
+  }
+  
+  footer .f-col ul li a {
+    font-size: 10.5px !important; /* Smaller link font size */
+  }
+  
+  /* Stay in the loop newsletter */
+  footer .f-col:last-child {
+    grid-column: 1 / -1 !important; /* Newsletter takes full width at the bottom */
+    text-align: center !important;
+    border-top: 1px solid var(--border) !important;
+    padding-top: 16px !important;
+    margin-top: 8px !important;
+  }
+  
+  footer .nl-desc {
+    font-size: 12px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  footer .nl-form {
+    max-width: 320px !important;
+    margin: 0 auto !important;
+    gap: 6px !important;
+  }
+  
+  footer .nl-form input {
+    height: 36px !important;
+    font-size: 12px !important;
+    padding: 0 12px !important;
+  }
+  
+  footer .nl-form button {
+    height: 36px !important;
+    font-size: 12px !important;
+    padding: 0 12px !important;
+  }
+  
+  footer .footer-bottom {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+    text-align: center !important;
+    padding: 16px 16px !important;
+    border-top: 1px solid var(--border) !important;
+    font-size: 11px !important;
+  }
+  
+  footer .pay-row {
+    gap: 4px !important;
+  }
+  
+  footer .pay-chip {
+    height: 20px !important;
+    padding: 0 6px !important;
+    font-size: 8px !important;
+  }
+
+
+
+  /* Compact Hero Slider proportions */
+  #hero {
+    margin: 8px 16px !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+  .hero-slide {
+    height: 160px !important; /* Banner aspect ratio */
+  }
+  .hero-content {
+    padding: 0 24px !important;
+  }
+  .hero-eyebrow {
+    font-size: 8px !important;
+    padding: 2px 8px !important;
+    margin-bottom: 8px !important;
+  }
+  .hero-h {
+    font-size: 18px !important;
+    max-width: 200px !important;
+    margin-bottom: 8px !important;
+    line-height: 1.2 !important;
+  }
+  .hero-sub {
+    display: none !important;
+  }
+  .hero-cta {
+    height: 26px !important;
+    padding: 0 12px !important;
+    font-size: 11px !important;
+  }
+  .slider-arrows {
+    display: none !important;
+  }
+  .slider-dots {
+    bottom: 10px !important;
+  }
+  .s-dot {
+    width: 6px !important;
+    height: 6px !important;
+  }
+  .s-dot.active {
+    width: 18px !important;
+  }
+  
+  /* Trust Strip Horizontal Scaling on Mobile */
+  .trust-inner {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 2px !important;
+    padding: 6px 2px !important; /* Compact vertical padding */
+  }
+  
+  .trust-item {
+    flex-direction: column !important; /* Stack icon above text to fit 4 in a row */
+    align-items: center !important;
+    text-align: center !important;
+    padding: 4px 1px !important; /* Tighter item padding */
+    gap: 3px !important; /* Small gap between icon and text */
+    border-right: 1px solid var(--border) !important;
+  }
+  
+  .trust-item:last-child {
+    border-right: none !important;
+  }
+  
+  .trust-icon-wrap {
+    width: auto !important; /* Remove squarish background wrap */
+    height: auto !important;
+    background: none !important;
+    border: none !important;
+    color: var(--accent) !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  .trust-icon-wrap svg {
+    width: 14px !important; /* Ultra-small elegant icons */
+    height: 14px !important;
+  }
+  
+  .trust-text {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1px !important;
+  }
+  
+  .trust-text strong {
+    font-size: 8px !important; /* Ultra-small bold title */
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 76px !important;
+    line-height: 1 !important;
+  }
+  
+  .trust-text span {
+    font-size: 7px !important; /* Tiny subtext */
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 76px !important;
+    line-height: 1 !important;
+    color: var(--text-muted) !important;
+  }
+
+  /* Promo Banners Grid Side-by-Side Horizontal Scaling on Mobile */
+  .promo-grid {
+    grid-template-columns: repeat(2, 1fr) !important; /* Force 2-columns side-by-side */
+    gap: 8px !important;
+    padding: 0 12px 24px !important;
+  }
+  
+  .promo-card {
+    padding: 10px 12px !important; /* Tighter padding to make it rectangular */
+    min-height: 70px !important; /* Compact min-height */
+    border-radius: 6px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  
+  .promo-text h3 {
+    font-size: 12px !important; /* Smaller headings */
+    margin-bottom: 1px !important;
+  }
+  
+  .promo-text p {
+    font-size: 8px !important; /* Tiny desc */
+    margin-bottom: 4px !important;
+    line-height: 1.1 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+  
+  .promo-btn {
+    padding: 2px 6px !important; /* Tiny button */
+    font-size: 7px !important;
+    border-radius: var(--r-pill) !important;
+    margin-top: 2px !important;
+  }
+  
+  .promo-bg-num {
+    font-size: 32px !important; /* Tiny decorative text */
+    right: 8px !important;
+    bottom: -8px !important;
+  }
+  
+  /* Section Spacing & Headings on Mobile */
+  .section {
+    padding: 24px var(--side-pad) !important;
+  }
+  
+  .section-bg-wrap {
+    padding: 24px 0 !important;
+  }
+  
+  .sec-head {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 14px !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  
+  .sec-head > div {
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .sec-title {
+    font-size: 16px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+  }
+  
+  .sec-sub {
+    font-size: 10px !important;
+    margin-top: 2px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+  }
+  
+  .see-all {
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+    gap: 4px !important;
+    border-width: 1px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Discovery Feed on Mobile */
+  #discovery {
+    padding: 24px 0 !important;
+  }
+  
+  .discovery-inner {
+    padding: 0 var(--side-pad) !important;
+  }
+  
+  .discovery-row {
+    margin-bottom: 20px !important;
+  }
+  
+  .row-label {
+    font-size: 10px !important;
+    letter-spacing: 0.8px !important;
+    margin-bottom: 10px !important;
+    padding-bottom: 6px !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  
+  /* Discovery Row Cards Sizing to match compact cards */
+  .discovery-row .p-card {
+    min-width: 130px !important;
+    max-width: 130px !important;
+  }
+  
+  .discovery-row .card-img {
+    height: 110px !important;
+  }
+  
+  /* Compact Product Details on Discovery Cards */
+  .discovery-row .p-card .card-body {
+    padding: 8px !important;
+  }
+  
+  .discovery-row .p-card .card-brand {
+    font-size: 8px !important;
+    margin-bottom: 2px !important;
+    letter-spacing: 0.5px !important;
+  }
+  
+  .discovery-row .p-card .card-name {
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+    margin-bottom: 4px !important;
+    min-height: 2.5em !important;
+    height: 2.5em !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    white-space: normal !important;
+  }
+  
+  .discovery-row .p-card .c-price {
+    font-size: 11px !important;
+  }
+  
+  .discovery-row .p-card .c-orig {
+    font-size: 9px !important;
+  }
+  
+  .discovery-row .p-card .c-disc {
+    font-size: 8px !important;
+  }
+  
+  .discovery-row .p-card .rating-count {
+    font-size: 9px !important;
+  }
+  
+  .discovery-row .p-card .add-btn {
+    margin-top: 8px !important;
+    height: 28px !important;
+    font-size: 9.5px !important;
+    border-radius: 4px !important;
+    padding: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+  
+  .p-card:hover {
+    transform: none !important;
+  }
+  
+  /* Brand Tiles on Mobile */
+  .track {
+    gap: 8px !important;
+  }
+  
+  .track > .brand-tile {
+    flex: 0 0 90px !important;
+  }
+  
+  .brand-tile {
+    padding: 6px 4px !important;
+    gap: 4px !important;
+    border-radius: 8px !important;
+    border-width: 1px !important;
+    height: 60px !important;
+    aspect-ratio: auto !important;
+  }
+  
+  .brand-tile svg {
+    max-width: 44px !important;
+    max-height: 20px !important;
+  }
+  
+  .brand-tile-name {
+    font-size: 9px !important;
+    letter-spacing: 0.5px !important;
+    font-weight: 700 !important;
+    color: var(--text) !important;
+  }
+  
+  .brand-tile:hover {
+    transform: none !important;
+  }
+  
+  /* Product Detail Page Mobile Fixes */
+  .product-page {
+    padding: 12px var(--side-pad) !important;
+  }
+  
+  #product-container {
+    padding: 12px !important;
+    gap: 16px !important;
+  }
+  
+  .product-gallery {
+    min-width: 0 !important; /* Allow image box to scale below 350px viewport */
+    flex: 1 1 100% !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+  
+  .product-info {
+    min-width: 0 !important; /* Allow info box to scale below 350px viewport */
+    flex: 1 1 100% !important;
+    padding: 0 4px !important;
+  }
+  
+  .product-info h1 {
+    font-size: 20px !important; /* Scale down product title size */
+    margin-bottom: 10px !important;
+  }
+  
+  .product-info span[style*="font-size: 32px"] {
+    font-size: 22px !important; /* Scale down price tag */
+  }
+  
+  .product-info p[style*="font-size: 15px"] {
+    font-size: 13px !important; /* Scale down description subtext */
+    line-height: 1.45 !important;
+  }
+  
+  .product-info h3[style*="font-size: 16px"] {
+    font-size: 14px !important;
+    margin-bottom: 6px !important;
+  }
+  
+  .pd-wish-btn, .pd-cart-btn {
+    padding: 10px 14px !important; /* Scale down buttons heights */
+    font-size: 13px !important;
+    border-radius: 8px !important;
+  }
+  
+  :root{--side-pad:16px}
 }
 
 @media(max-width:520px){
   .brands-grid{grid-template-columns:repeat(2,1fr)}
-  .hero-slide{height:280px}
-  .hero-content{padding:0 20px}
-  .trust-inner{grid-template-columns:1fr}
-  .trust-item{border-right:none;border-bottom:1px solid var(--border)}
-
-  .footer-main{grid-template-columns:1fr}
+  .hero-slide{height:140px !important} /* Scale hero slide height down slightly on very small screens */
+  .hero-content{padding:0 16px !important}
+  .hero-h{font-size:15px !important}
   .footer-bottom{flex-direction:column;gap:12px;text-align:center}
   .hero-badge-wrap{display:none}
 }
@@ -978,3 +1778,69 @@ html.theme-transition ::after {
   background: var(--bg-alt);
   padding-left: 10px;
 }
+
+/* Generic Inline Grid Responsiveness Overrides */
+@media (max-width: 768px) {
+  div[style*="display: grid; grid-template-columns: 1fr 1.5fr"],
+  div[style*="display: grid; grid-template-columns: 1fr 1fr"],
+  div[style*="display: grid; grid-template-columns: 1fr 1fr;"],
+  div[style*="display:grid; grid-template-columns: 1fr 1fr;"],
+  div[style*="display: grid; grid-template-columns: 1.5fr 1fr"],
+  div[style*="display: grid; grid-template-columns:1fr 1.5fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  
+  /* Reset child grids padding and alignments on mobile */
+  div[style*="display: grid; grid-template-columns: 1fr 1fr"] > div {
+    width: 100% !important;
+  }
+}
+
+/* Hide redundant copied drawer panel overlays globally */
+.filter-drawer-overlay, .filter-drawer {
+  display: none !important;
+}
+
+/* Mobile Pagination styling overrides to keep on a single line */
+@media (max-width: 768px) {
+  .pagination, .pagination-wrap, #pagination-container, #brand-pagination, #faq-pagination {
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+    justify-content: center !important;
+    padding: 12px 0 !important;
+    width: 100% !important;
+  }
+  .page-btn, .pg-btn, .page-dots, .pagination-wrap span {
+    padding: 0 4px !important;
+    min-width: 24px !important;
+    height: 24px !important;
+    font-size: 10px !important;
+    border-radius: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  /* Active numbers can be bold and 11px */
+  .page-btn.active, .pg-btn.active {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+  }
+  
+  /* Scale down homepage horizontal track cards to fit exactly 2 boxes side-by-side on mobile */
+  .track-wrap::before, .track-wrap::after {
+    width: 12px !important;
+  }
+  .track {
+    gap: 8px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .track > .cat-card {
+    flex: 0 0 145px !important;
+  }
+  .track > .cat-card .cat-img {
+    height: 100px !important;
+  }
+}
+

@@ -1250,11 +1250,11 @@
         animateNumber('stat-users', data.totalUsers);
       } catch (err) {
         console.info('[Creator Page] Running fallback offline stats values.');
-        // Set beautiful mock values immediately if backend server is offline
-        animateNumber('stat-products', 180);
-        animateNumber('stat-tables', 12);
-        animateNumber('stat-apis', 8);
-        animateNumber('stat-users', 450);
+        // Set actual database counts if backend server is offline
+        animateNumber('stat-products', 10142);
+        animateNumber('stat-tables', 7);
+        animateNumber('stat-apis', 3);
+        animateNumber('stat-users', 3);
       }
     }
 

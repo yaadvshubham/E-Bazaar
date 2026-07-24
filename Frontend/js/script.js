@@ -4325,7 +4325,7 @@ function buildCard(p) {
   const wishCls = isWished ? 'cat-wish-btn wished' : 'cat-wish-btn';
   const pStr = encodeURIComponent(JSON.stringify(p)).replace(/'/g, "%27");
   const imgSrc = p.image || p.imageUrl || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&q=80';
-  const salesDisplay = p.sales ? (String(p.sales).includes('bought') ? p.sales : `${p.sales} bought in past month`) : '';
+  const salesDisplay = p.sales ? (String(p.sales).includes('bought') || String(p.sales).includes('sold') ? p.sales : `${p.sales} bought in past month`) : '';
 
   const numPrice = typeof p.price === 'number' ? p.price : (parseFloat(String(p.price || 0).replace(/[^\d.]/g, '')) || 0);
   const numOrig = typeof p.originalPrice === 'number' ? p.originalPrice : (parseFloat(String(p.originalPrice || numPrice).replace(/[^\d.]/g, '')) || numPrice);
@@ -4668,7 +4668,7 @@ function initDynamicCategory() {
   // Update Result Count
   const countEl = document.getElementById('result-count');
   if (countEl) {
-    countEl.innerHTML = `Showing <strong>${products.length} products</strong>`;
+    countEl.innerHTML = `<span class="desktop-only">Showing </span><strong>${products.length}</strong><span class="desktop-only"> products</span><span class="mobile-only">${products.length} Products</span>`;
   }
 
   if (typeof renderFilteredProducts === 'function') {
@@ -4857,7 +4857,7 @@ function initCategoryFilters() {
     if (countEl) {
       const displayStart = visibleProducts.length ? startIndex + 1 : 0;
       const displayEnd = startIndex + visibleProducts.length;
-      countEl.innerHTML = `Showing <strong>${displayStart} - ${displayEnd}</strong> of <strong>${filtered.length}</strong> products`;
+      countEl.innerHTML = `<span class="desktop-only">Showing </span><strong>${displayStart} - ${displayEnd}</strong> of <strong>${filtered.length}</strong><span class="desktop-only"> products</span>`;
     }
 
     renderPaginationControls(totalPages);
@@ -5338,7 +5338,7 @@ function renderBrandPage() {
   grid.innerHTML = paginatedItems.map(buildCard).join('');
 
   if (countEl) {
-    countEl.innerHTML = `Showing <strong>${startIndex + 1} - ${Math.min(endIndex, currentBrandProducts.length)}</strong> of <strong>${currentBrandProducts.length}</strong> products`;
+    countEl.innerHTML = `<span class="desktop-only">Showing </span><strong>${startIndex + 1} - ${Math.min(endIndex, currentBrandProducts.length)}</strong> of <strong>${currentBrandProducts.length}</strong><span class="desktop-only"> products</span>`;
   }
 
   renderBrandPagination();
@@ -5521,6 +5521,32 @@ function initNavActions() {
               text-transform: uppercase;
               letter-spacing: 0.5px;
               color: var(--text-muted, #888);
+            }
+            @media (max-width: 768px) {
+              #user-dropdown-menu {
+                width: 170px !important;
+                top: 50px !important;
+                right: 10px !important;
+                border-radius: 8px !important;
+                padding: 4px 0 !important;
+                box-shadow: 0 6px 15px rgba(0,0,0,0.1) !important;
+              }
+              .dropdown-header {
+                padding: 6px 12px !important;
+                font-size: 10px !important;
+              }
+              .dropdown-item {
+                padding: 8px 12px !important;
+                font-size: 12px !important;
+              }
+              .dropdown-item svg {
+                width: 14px !important;
+                height: 14px !important;
+                margin-right: 6px !important;
+              }
+              .dropdown-divider {
+                margin: 4px 0 !important;
+              }
             }
           `;
           document.head.appendChild(style);
@@ -6952,4 +6978,127 @@ function initPWAInstallUI() {
     drawer.appendChild(installContainer);
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MOBILE UX ENHANCEMENTS — Bottom Navigation & Footer Accordions
+   ═══════════════════════════════════════════════════════════════════════ */
+function initMobileUXEnhancements() {
+  // 1. Inject Bottom Navigation
+  if (!document.querySelector('.mobile-bottom-nav')) {
+    const bottomNav = document.createElement('div');
+    bottomNav.className = 'mobile-bottom-nav';
+    bottomNav.innerHTML = `
+      <a href="index.html" class="mobile-nav-item" id="mb-nav-home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span>Home</span>
+      </a>
+      <button class="mobile-nav-item" id="mb-nav-cats">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <span>Categories</span>
+      </button>
+      <a href="wishlist.html" class="mobile-nav-item" id="mb-nav-wish">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        <span>Wishlist</span>
+      </a>
+      <a href="account.html" class="mobile-nav-item" id="mb-nav-acc">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Account</span>
+      </a>
+      <a href="cart.html" class="mobile-nav-item" id="mb-nav-cart">
+        <div style="position:relative; display:inline-block; line-height:1;">
+          <span class="cart-badge cart-count-el" style="top:-6px; right:-10px; width:16px; height:16px; font-size:9px; border:2px solid var(--bg-nav); background:var(--accent); color:#fff; font-weight:700; border-radius:50%; display:grid; place-items:center; position:absolute;">0</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        </div>
+        <span>Cart</span>
+      </a>
+    `;
+    document.body.appendChild(bottomNav);
+
+    // Bind Categories to hamburger drawer trigger
+    const catsBtn = document.getElementById('mb-nav-cats');
+    if (catsBtn) {
+      catsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const hamburger = document.getElementById('hamburger');
+        if (hamburger) {
+          hamburger.click();
+        }
+      });
+    }
+
+    // Set Active State on Bottom Navigation Items
+    const path = window.location.pathname;
+    if (path.includes('index.html') || path.endsWith('/') || path.endsWith('/index.html') || path === '') {
+      const activeHome = document.getElementById('mb-nav-home');
+      if (activeHome) activeHome.classList.add('active');
+    } else if (path.includes('wishlist.html')) {
+      const activeWish = document.getElementById('mb-nav-wish');
+      if (activeWish) activeWish.classList.add('active');
+    } else if (path.includes('account.html') || path.includes('auth.html')) {
+      const activeAcc = document.getElementById('mb-nav-acc');
+      if (activeAcc) activeAcc.classList.add('active');
+    } else if (path.includes('cart.html')) {
+      const activeCart = document.getElementById('mb-nav-cart');
+      if (activeCart) activeCart.classList.add('active');
+    }
+
+    // Update cart counts globally from localStorage value immediately on mount
+    try {
+      const items = localStorage.getItem('eb_cart_items') || localStorage.getItem('cart');
+      if (items) {
+        const parsed = JSON.parse(items);
+        const count = Array.isArray(parsed) ? parsed.reduce((sum, item) => sum + (item.qty || 1), 0) : 0;
+        document.querySelectorAll('.cart-count-el').forEach(el => el.textContent = count);
+      }
+    } catch(e) {}
+  }
+
+  // 2. Setup Footer Accordions for Mobile View
+  const footerCols = document.querySelectorAll('footer .f-col');
+  footerCols.forEach(col => {
+    const heading = col.querySelector('h5');
+    const linksList = col.querySelector('ul');
+    if (heading && linksList) {
+      // Clean up previous elements if any
+      heading.querySelectorAll('.footer-chevron').forEach(el => el.remove());
+      
+      // Inject chevron arrow icon next to h5
+      const chevron = document.createElement('span');
+      chevron.className = 'footer-chevron';
+      chevron.innerHTML = `
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      `;
+      heading.appendChild(chevron);
+      
+      // Setup styling hooks
+      col.classList.add('mobile-accordion');
+      heading.classList.add('accordion-header');
+      linksList.classList.add('accordion-content');
+      
+      heading.addEventListener('click', () => {
+        if (window.innerWidth > 768) return; // Only run accordion on mobile
+        
+        const isOpen = col.classList.contains('active');
+        // Close all other footer accordions
+        document.querySelectorAll('footer .f-col').forEach(c => c.classList.remove('active'));
+        
+        if (!isOpen) {
+          col.classList.add('active');
+        }
+      });
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initMobileUXEnhancements();
+});
+
+// Run again in case scripts load later or DOM changes
+window.addEventListener('load', () => {
+  initMobileUXEnhancements();
+});
+
 

@@ -26,15 +26,16 @@
     html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
 
     .acc-container { max-width: var(--max-w, 1200px); margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 280px 1fr; gap: 40px; align-items: start; min-height: 70vh; }
-    .acc-sidebar { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; position: sticky; top: 100px; }
-    .acc-user-card { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
-    .acc-avatar-wrap { position: relative; width: 100px; height: 100px; margin-bottom: 16px; border-radius: 50%; border: 4px solid var(--bg); overflow: hidden; background: #e3e8ee; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .acc-sidebar { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 16px; position: sticky; top: 100px; }
+    .acc-user-card { display: flex; flex-direction: row; align-items: center; gap: 14px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+    .acc-avatar-wrap { position: relative; width: 60px; height: 60px; border-radius: 50%; border: 2.5px solid var(--border); overflow: hidden; background: #e3e8ee; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
     .acc-avatar { width: 100%; height: 100%; object-fit: cover; }
-    .acc-avatar-edit { position: absolute; inset: 0; background: rgba(0,0,0,0.5); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease; font-size: 12px; font-weight: 600; gap: 4px; }
+    .acc-avatar-edit { position: absolute; inset: 0; background: rgba(0,0,0,0.5); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease; font-size: 10px; font-weight: 600; gap: 2px; }
     .acc-avatar-wrap:hover .acc-avatar-edit { opacity: 1; }
-    .acc-name { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-    .acc-email { font-size: 13px; color: var(--text-sub); }
-    .acc-wallet-pill { margin-top: 12px; background: rgba(168, 140, 109, 0.12); border: 1px solid rgba(168, 140, 109, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 6px; }
+    .acc-user-info-wrap { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 2px; }
+    .acc-name { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+    .acc-email { font-size: 12px; color: var(--text-sub); }
+    .acc-wallet-pill { margin-top: 4px; background: rgba(168, 140, 109, 0.12); border: 1px solid rgba(168, 140, 109, 0.3); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 4px; }
     .acc-nav { display: flex; flex-direction: column; gap: 6px; }
     .acc-nav-link { padding: 12px 16px; font-size: 14px; font-weight: 600; color: var(--text-sub); border-radius: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 12px; }
     .acc-nav-link:hover { background: var(--bg); color: var(--text); }
@@ -67,10 +68,231 @@
     .addr-btn { background: none; border: 1px solid var(--border); padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 6px; color: var(--text); transition: all 0.2s ease; }
     .addr-btn:hover { background: var(--bg-card); }
 
-    @media(max-width: 960px) {
-      .acc-container { grid-template-columns: 1fr; }
-      .acc-form-grid { grid-template-columns: 1fr; }
-      .acc-sidebar { position: static; }
+    @media(max-width: 991px) {
+      .acc-container {
+        display: grid !important;
+        grid-template-columns: 72px 1fr !important;
+        grid-template-rows: auto auto !important;
+        gap: 12px 8px !important;
+        padding: 12px 6px !important;
+      }
+      
+      .acc-sidebar {
+        display: contents !important;
+      }
+      
+      .acc-user-card {
+        grid-column: 1 / -1 !important;
+        margin-bottom: 0 !important;
+        padding: 8px 4px !important;
+        gap: 12px !important;
+        border-bottom: 1px solid var(--border) !important;
+        padding-bottom: 12px !important;
+      }
+      
+      .acc-avatar-wrap {
+        width: 48px !important;
+        height: 48px !important;
+        border-width: 2px !important;
+      }
+      
+      .acc-name {
+        font-size: 14px !important;
+      }
+      
+      .acc-email {
+        font-size: 11px !important;
+      }
+      
+      .acc-wallet-pill {
+        font-size: 9px !important;
+        padding: 2px 6px !important;
+        margin-top: 1px !important;
+      }
+      
+      .acc-nav {
+        grid-column: 1 !important;
+        grid-row: 2 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+        border-right: 1px solid var(--border) !important;
+        padding-right: 4px !important;
+        background: none !important;
+        box-shadow: none !important;
+      }
+      
+      .acc-nav-link {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 6px 2px !important;
+        gap: 3px !important;
+        border-radius: 6px !important;
+        font-size: 8px !important;
+        min-height: 48px !important;
+        line-height: 1.1 !important;
+      }
+      
+      .acc-nav-link svg {
+        width: 16px !important;
+        height: 16px !important;
+      }
+      
+      .acc-panel {
+        grid-column: 2 !important;
+        grid-row: 2 !important;
+        padding: 12px 10px !important;
+        border-radius: 8px !important;
+        margin: 0 !important;
+      }
+      
+      .panel-header {
+        margin-bottom: 12px !important;
+        padding-bottom: 8px !important;
+      }
+      
+      .panel-title {
+        font-size: 15px !important;
+      }
+      
+      .acc-form-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+      }
+      
+      .form-group label {
+        font-size: 10px !important;
+        margin-bottom: 4px !important;
+      }
+      
+      .form-group input {
+        padding: 8px 10px !important;
+        font-size: 12px !important;
+      }
+      
+      .btn-primary-action {
+        padding: 8px 16px !important;
+        font-size: 12px !important;
+        border-radius: 6px !important;
+        width: 100% !important;
+      }
+      
+      .btn-danger {
+        padding: 8px 16px !important;
+        font-size: 12px !important;
+        border-radius: 6px !important;
+        width: 100% !important;
+        margin-top: 8px !important;
+      }
+      
+      .wallet-card-hero {
+        padding: 14px !important;
+        margin-bottom: 14px !important;
+        border-radius: 8px !important;
+      }
+      
+      .address-card {
+        padding: 10px !important;
+        border-radius: 6px !important;
+      }
+      
+      .addr-text {
+        font-size: 12px !important;
+        margin-bottom: 10px !important;
+      }
+      
+      .addr-btn {
+        padding: 4px 8px !important;
+        font-size: 11px !important;
+      }
+
+      /* Sized down Wallet Hero Card on mobile */
+      .wallet-card-hero #wallet-balance-display {
+        font-size: 24px !important;
+      }
+      .wallet-card-hero div[style*="font-size: 14px"] {
+        font-size: 11px !important;
+      }
+      .wallet-card-hero span[style*="font-size: 11px"] {
+        font-size: 9px !important;
+      }
+      .wallet-card-hero div[style*="width: 44px"] {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+      }
+      .wallet-card-hero div[style*="width: 44px"] svg {
+        width: 16px !important;
+        height: 16px !important;
+      }
+      .wallet-card-hero div[style*="font-size: 13px"] {
+        font-size: 11px !important;
+      }
+
+      /* Sized down E-Bazaar Wallet Add Money & Withdraw sections */
+      #panel-wallet div[style*="padding: 24px"] {
+        padding: 14px !important;
+        border-radius: 8px !important;
+        margin-bottom: 16px !important;
+      }
+      #panel-wallet h3 {
+        font-size: 13px !important;
+        margin-bottom: 10px !important;
+      }
+      #panel-wallet p[style*="font-size: 13px"] {
+        font-size: 11px !important;
+        margin-bottom: 10px !important;
+      }
+      #panel-wallet select {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+        height: 36px !important;
+      }
+      #panel-wallet input[type="number"] {
+        padding: 8px 12px 8px 24px !important;
+        font-size: 13px !important;
+        height: 36px !important;
+      }
+      #panel-wallet span[style*="left: 16px"] {
+        left: 10px !important;
+        top: 8px !important;
+        font-size: 13px !important;
+      }
+      #panel-wallet .addr-btn {
+        padding: 6px 12px !important;
+        font-size: 10px !important;
+        border-radius: 12px !important;
+      }
+      #panel-wallet div[style*="margin-bottom: 20px"] {
+        margin-bottom: 12px !important;
+      }
+      #panel-wallet .btn-primary-action {
+        padding: 8px 16px !important;
+        font-size: 12px !important;
+        width: 100% !important;
+        margin-top: 4px !important;
+        height: 36px !important;
+      }
+      #panel-wallet form {
+        gap: 10px !important;
+      }
+      
+      /* Wallet transactions passbook overrides */
+      .wallet-tx-item {
+        padding: 10px !important;
+        border-radius: 6px !important;
+      }
+      .wallet-tx-title {
+        font-size: 12px !important;
+      }
+      .wallet-tx-desc {
+        font-size: 10px !important;
+      }
+      .wallet-tx-amount {
+        font-size: 12px !important;
+      }
     }
 
     .tx-amt { font-size: 15px; font-weight: 700; }
@@ -201,11 +423,13 @@
             Upload
           </div>
         </div>
-        <div class="acc-name" id="sidebar-name">Loading...</div>
-        <div class="acc-email" id="sidebar-email">please wait...</div>
-        <div class="acc-wallet-pill">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-          Wallet: <span id="sidebar-wallet">₹1,500</span>
+        <div class="acc-user-info-wrap">
+          <div class="acc-name" id="sidebar-name">Loading...</div>
+          <div class="acc-email" id="sidebar-email">please wait...</div>
+          <div class="acc-wallet-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            Wallet: <span id="sidebar-wallet">₹1,500</span>
+          </div>
         </div>
       </div>
       
@@ -580,12 +804,12 @@
     const txs = currentUser.walletTransactions || [];
 
     list.innerHTML = txs.map(t => `
-      <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;">
+      <div class="wallet-tx-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;">
         <div>
-          <div style="font-size: 14px; font-weight: 600; color: var(--text);">${t.title}</div>
-          <div style="font-size: 12px; color: var(--text-sub); margin-top: 4px;">${t.desc} &middot; ${t.date}</div>
+          <div class="wallet-tx-title" style="font-size: 14px; font-weight: 600; color: var(--text);">${t.title}</div>
+          <div class="wallet-tx-desc" style="font-size: 12px; color: var(--text-sub); margin-top: 4px;">${t.desc} &middot; ${t.date}</div>
         </div>
-        <div style="font-size: 14px; font-weight: 700; color: ${t.type === 'credit' ? '#4caf50' : '#c62828'};">
+        <div class="wallet-tx-amount" style="font-size: 14px; font-weight: 700; color: ${t.type === 'credit' ? '#4caf50' : '#c62828'};">
           ${t.amount}
         </div>
       </div>
@@ -678,7 +902,7 @@
         list.innerHTML = '<div class="empty-state">No bank accounts saved yet.</div>';
       } else {
         list.innerHTML = currentUser.bankAccounts.map((b, idx) => `
-          <div class="addr-card">
+          <div class="address-card">
             <h4 style="margin-top:0">${b.bankName}</h4>
             <p style="margin:4px 0; font-size:13px; color:var(--text-sub);"><strong>Holder:</strong> ${b.holderName || 'N/A'}</p>
             <p style="margin:4px 0; font-size:13px; color:var(--text-sub);"><strong>Type:</strong> ${b.accType || 'Savings'}</p>

@@ -259,6 +259,12 @@
   display: flex;
   flex-direction: column;
 }
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
 .sort-bar {
   display: flex;
   align-items: center;
@@ -309,8 +315,111 @@
 }
 
 @media (max-width: 991px) {
+  .cat-page {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    padding: 8px 6px 16px !important;
+  }
+  
+  .cat-right {
+    min-width: 0 !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+  
+  .breadcrumb {
+    padding: 0 6px 0 !important;
+    margin-bottom: 6px !important;
+    font-size: 11px !important;
+    gap: 4px !important;
+  }
+
+  .brand-showcase-row {
+    gap: 6px !important;
+    margin-bottom: 8px !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    overflow-x: visible !important;
+    flex-wrap: nowrap !important;
+  }
+  
+  .brand-showcase-card {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    max-width: 45px !important;
+    height: 32px !important;
+    border-radius: 4px !important;
+    padding: 2px !important;
+  }
+  .brand-showcase-card img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+  }
+
+  .sort-bar {
+    padding: 5px 8px !important;
+    margin-bottom: 8px !important;
+    gap: 6px !important;
+    border-radius: 4px !important;
+  }
+  
+  .result-count {
+    font-size: 9.5px !important;
+    white-space: nowrap !important;
+  }
+  
+  .sort-controls {
+    gap: 4px !important;
+  }
+
+  .sort-label {
+    display: none !important;
+  }
+
   .filter-toggle-btn {
-    display: inline-flex;
+    display: inline-flex !important;
+    padding: 0 !important;
+    width: 28px !important;
+    height: 28px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-radius: 4px !important;
+    flex-shrink: 0 !important;
+  }
+  .filter-toggle-btn span {
+    display: none !important;
+  }
+  .filter-toggle-btn svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  
+  .sort-select {
+    padding: 4px 6px !important;
+    font-size: 10px !important;
+    height: 28px !important;
+    border-radius: 4px !important;
+    max-width: 110px !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .view-toggles {
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+  }
+  .view-btn {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 4px !important;
+  }
+  .view-btn svg {
+    width: 12px !important;
+    height: 12px !important;
   }
   
   /* Filter drawer style for mobile */
@@ -331,20 +440,12 @@
     left: 0;
     visibility: visible;
   }
-}
-
-/* --- Catalog Grid --- */
-.cat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
-}
-
-@media (max-width: 600px) {
+  
   .cat-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 16px;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 4px !important;
+    margin-bottom: 24px !important;
   }
 }
 
@@ -478,6 +579,7 @@
   text-align: center;
   border: 1px solid var(--border);
   transition: background var(--ease), color var(--ease), border-color var(--ease);
+  margin-top: auto;
 }
 .cat-add-btn:hover {
   background: var(--accent);
@@ -539,3 +641,223 @@
   width: auto;
   min-width: 150px;
 }
+
+/* ── Mobile Responsive Overrides ── */
+@media (max-width: 768px) {
+  .cat-grid, .deals-grid, .na-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 4px !important;
+  }
+  
+  /* Compact Desktop-style Product Cards on Mobile Screen (Grid pages only) */
+  .cat-grid .cat-card, .deals-grid .cat-card, .na-grid .cat-card {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 6px !important;
+    padding: 3px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+    box-shadow: none !important;
+    gap: 0 !important;
+  }
+  
+  .cat-grid .cat-img-box, .deals-grid .cat-img-box, .na-grid .cat-img-box {
+    margin-bottom: 4px !important;
+  }
+  
+  .cat-grid .cat-img, .deals-grid .cat-img, .na-grid .cat-img {
+    height: 70px !important;
+    width: 100% !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    aspect-ratio: 1 !important;
+    background: var(--bg-white) !important;
+  }
+  
+  .cat-grid .cat-img img, .deals-grid .cat-img img, .na-grid .cat-img img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important; /* Keep images un-cropped */
+  }
+  
+  .cat-grid .cat-body, .deals-grid .cat-body, .na-grid .cat-body {
+    padding: 2px 0 0 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex-grow: 1 !important;
+  }
+  
+  .cat-grid .cat-brand, .deals-grid .cat-brand, .na-grid .cat-brand {
+    display: block !important; /* Restore brand label */
+    font-size: 7.5px !important;
+    font-weight: 700 !important;
+    color: var(--text-muted) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.2px !important;
+    margin-bottom: 1px !important;
+  }
+  
+  .cat-grid .cat-name, .deals-grid .cat-name, .na-grid .cat-name {
+    font-size: 8.5px !important;
+    font-weight: 600 !important;
+    color: var(--text) !important;
+    line-height: 1.2 !important;
+    margin-bottom: 2px !important;
+    min-height: 2.4em !important;
+    height: 2.4em !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    white-space: normal !important;
+    text-overflow: ellipsis !important;
+  }
+  
+  .cat-grid .cat-prices, .deals-grid .cat-prices, .na-grid .cat-prices {
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 2px !important;
+    margin-bottom: 2px !important;
+    flex-wrap: wrap !important;
+  }
+  
+  .cat-grid .cat-price, .deals-grid .cat-price, .na-grid .cat-price {
+    font-size: 9.5px !important;
+    font-weight: 700 !important;
+  }
+  
+  .cat-grid .cat-orig, .deals-grid .cat-orig, .na-grid .cat-orig {
+    font-size: 7.5px !important;
+    color: var(--text-muted) !important;
+    text-decoration: line-through !important;
+  }
+  
+  .cat-grid .cat-disc, .deals-grid .cat-disc, .na-grid .cat-disc {
+    font-size: 7px !important;
+    font-weight: 700 !important;
+    color: #e57373 !important;
+  }
+  
+  /* Restore the 5 stars rating block layout */
+  .cat-grid .cat-rating, .deals-grid .cat-rating, .na-grid .cat-rating {
+    position: static !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 1px !important;
+    font-size: 7.5px !important;
+    color: var(--text-sub) !important;
+    margin-bottom: 2px !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    width: auto !important;
+  }
+  
+  .cat-grid .cat-stars, .deals-grid .cat-stars, .na-grid .cat-stars {
+    display: flex !important;
+    gap: 0.5px !important;
+    color: #E8A030 !important;
+  }
+  
+  .cat-grid .cat-stars svg, .deals-grid .cat-stars svg, .na-grid .cat-stars svg {
+    width: 6.5px !important;
+    height: 6.5px !important;
+    color: #E8A030 !important;
+    fill: currentColor !important;
+  }
+  
+  .cat-grid .cat-rating::before, .deals-grid .cat-rating::before, .na-grid .cat-rating::before {
+    content: none !important; /* Remove star override */
+  }
+  
+  .cat-grid .cat-reviews, .deals-grid .cat-reviews, .na-grid .cat-reviews {
+    font-size: 7.5px !important;
+    color: var(--text-muted) !important;
+    margin-left: 1px !important;
+  }
+  
+  .cat-grid .cat-transactions, .deals-grid .cat-transactions, .na-grid .cat-transactions {
+    font-size: 7.5px !important;
+    margin-bottom: 3px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.1 !important;
+  }
+  
+  /* Restore "+ Add to Cart" button */
+  .cat-grid .cat-add-btn, .deals-grid .cat-add-btn, .na-grid .cat-add-btn {
+    display: block !important;
+    padding: 3px 2px !important;
+    font-size: 8px !important;
+    font-weight: 600 !important;
+    border-radius: 4px !important;
+    width: 100% !important;
+    background: transparent !important;
+    color: var(--accent) !important;
+    border: 1px solid var(--accent) !important;
+    margin-top: auto !important;
+    transition: all var(--ease) !important;
+  }
+  .cat-grid .cat-add-btn:hover, .deals-grid .cat-add-btn:hover, .na-grid .cat-add-btn:hover {
+    background: var(--accent) !important;
+    color: #fff !important;
+  }
+  
+  /* Reposition and scale down product card badge on mobile */
+  .cat-grid .card-badge, .deals-grid .card-badge, .na-grid .card-badge {
+    top: 4px !important;
+    left: 4px !important;
+    padding: 1.5px 3.5px !important;
+    font-size: 6.5px !important;
+    border-radius: 2px !important;
+    letter-spacing: 0.2px !important;
+  }
+
+  /* Restore & scale down Wishlist Heart positioning */
+  .cat-grid .cat-wish-btn, .deals-grid .cat-wish-btn, .na-grid .cat-wish-btn {
+    position: absolute !important;
+    top: 4px !important;
+    right: 4px !important;
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    background: var(--bg-white) !important;
+    border: 1px solid var(--border) !important;
+    display: grid !important;
+    place-items: center !important;
+    z-index: 2 !important;
+    box-shadow: none !important;
+  }
+  
+  .cat-grid .cat-wish-btn svg, .deals-grid .cat-wish-btn svg, .na-grid .cat-wish-btn svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  /* List view on mobile adjustments */
+  .cat-grid.list-view .cat-card {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 8px !important;
+  }
+  .cat-grid.list-view .cat-img {
+    width: 100px !important;
+    height: 100px !important;
+    flex-shrink: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .cat-grid.list-view .cat-body {
+    padding: 0 !important;
+  }
+  .cat-grid.list-view .cat-add-btn {
+    width: 100% !important;
+    min-width: unset !important;
+  }
+}
+
+

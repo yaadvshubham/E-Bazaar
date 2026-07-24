@@ -814,3 +814,223 @@ html[data-theme="dark"] .render-badge {
   color: var(--text-sub);
   line-height: 1.4;
 }
+
+/* --- Mobile Responsive Optimizations (< 992px) --- */
+@media (max-width: 991px) {
+  .about-hero {
+    padding: 24px 0 12px 0 !important;
+  }
+  
+  .about-hero h1 {
+    font-size: 1.6rem !important;
+  }
+  
+  .about-hero p {
+    font-size: 0.85rem !important;
+    padding: 0 16px !important;
+  }
+  
+  .about-container {
+    padding: 0 12px !important;
+    margin-bottom: 40px !important;
+    gap: 16px !important;
+  }
+  
+  .tabs-nav {
+    gap: 8px !important;
+    margin-bottom: 16px !important;
+    padding: 4px !important;
+  }
+  
+  .tab-btn {
+    padding: 6px 12px !important;
+    font-size: 0.75rem !important;
+    gap: 6px !important;
+  }
+  
+  .tab-btn svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  .creator-card {
+    position: relative !important; /* Disable sticky positioning in single-column vertical stack */
+    top: 0 !important;
+    padding: 18px 14px !important;
+    border-radius: 12px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  .avatar-wrapper {
+    width: 110px !important;
+    height: 130px !important;
+    border-radius: 8px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  .creator-name {
+    font-size: 1.3rem !important;
+  }
+  
+  .creator-title {
+    font-size: 0.68rem !important;
+    margin-bottom: 8px !important;
+    letter-spacing: 0.05em !important;
+  }
+  
+  .creator-bio {
+    font-size: 0.8rem !important;
+    margin-bottom: 12px !important;
+    line-height: 1.4 !important;
+    max-width: 250px !important;
+  }
+  
+  .social-links {
+    gap: 8px !important;
+    margin-bottom: 16px !important;
+  }
+  
+  .social-btn {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+  }
+  
+  .social-btn svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  .contact-info-list {
+    padding-top: 12px !important;
+    gap: 8px !important;
+  }
+  
+  .contact-item {
+    font-size: 0.8rem !important;
+    gap: 8px !important;
+  }
+  
+  .contact-item svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  .info-card {
+    padding: 16px 12px !important;
+    border-radius: 12px !important;
+  }
+  
+  .card-title {
+    font-size: 1.1rem !important;
+    margin-bottom: 12px !important;
+    gap: 6px !important;
+  }
+  
+  .card-title svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .skills-grid {
+    gap: 6px !important;
+  }
+  
+  .skill-pill {
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .cert-list {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  
+  .cert-item {
+    padding: 12px !important;
+    border-radius: 12px !important;
+    gap: 10px !important;
+  }
+  
+  .cert-icon {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 6px !important;
+  }
+  
+  .cert-name {
+    font-size: 0.82rem !important;
+  }
+  
+  .cert-issuer {
+    font-size: 0.72rem !important;
+  }
+  
+  .stats-dashboard {
+    gap: 8px !important;
+    margin-bottom: 16px !important;
+  }
+  
+  .stat-box {
+    padding: 10px 4px !important;
+    border-radius: 8px !important;
+  }
+  
+  .stat-val {
+    font-size: 1.4rem !important;
+  }
+  
+  .stat-lbl {
+    font-size: 0.65rem !important;
+  }
+  
+  .timeline {
+    padding-left: 16px !important;
+    margin-top: 6px !important;
+  }
+  
+  .timeline::before {
+    left: 3px !important;
+  }
+  
+  .timeline-node {
+    margin-bottom: 20px !important;
+  }
+  
+  .timeline-dot {
+    left: -16px !important;
+    width: 10px !important;
+    height: 10px !important;
+    border-width: 2px !important;
+    top: 4px !important;
+  }
+  
+  .timeline-title {
+    font-size: 0.88rem !important;
+  }
+  
+  .timeline-desc {
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
+  }
+  
+  .github-repo-btn {
+    padding: 10px 16px !important;
+    font-size: 0.82rem !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  
+  .api-endpoint {
+    padding: 10px 12px !important;
+    border-radius: 8px !important;
+  }
+  
+  .api-path {
+    font-size: 0.8rem !important;
+  }
+  
+  .api-desc {
+    font-size: 0.75rem !important;
+  }
+}

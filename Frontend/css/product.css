@@ -215,3 +215,72 @@
   color: var(--text);
   font-weight: 500;
 }
+
+/* --- Main Layout Grid --- */
+.product-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  .product-page {
+    padding: 16px var(--side-pad) !important;
+  }
+  
+  .product-container {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  
+  .product-image-main {
+    max-height: 320px;
+  }
+  
+  .product-thumbnails {
+    justify-content: center;
+  }
+  
+  .pd-title {
+    font-size: 24px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  .pd-price-row {
+    margin-bottom: 24px !important;
+    padding-bottom: 16px !important;
+    gap: 12px !important;
+  }
+  
+  .pd-price {
+    font-size: 28px !important;
+  }
+  
+  .size-selector {
+    margin-bottom: 24px !important;
+    gap: 8px !important;
+  }
+  
+  .size-btn {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 13px !important;
+  }
+  
+  .pd-actions {
+    margin-bottom: 30px !important;
+    gap: 12px !important;
+  }
+  
+  .btn-add-cart {
+    height: 48px !important;
+    font-size: 15px !important;
+  }
+  
+  .btn-wishlist {
+    width: 48px !important;
+    height: 48px !important;
+  }
+}
