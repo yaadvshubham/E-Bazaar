@@ -7019,9 +7019,22 @@ function initMobileUXEnhancements() {
     if (catsBtn) {
       catsBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        const drawer = document.getElementById('mobile-drawer');
+        const overlay = document.getElementById('drawer-overlay');
         const hamburger = document.getElementById('hamburger');
-        if (hamburger) {
-          hamburger.click();
+        if (drawer) {
+          const isOpen = drawer.classList.contains('open');
+          if (isOpen) {
+            drawer.classList.remove('open');
+            if (overlay) overlay.classList.remove('open');
+            if (hamburger) hamburger.classList.remove('open');
+            document.body.style.overflow = '';
+          } else {
+            drawer.classList.add('open');
+            if (overlay) overlay.classList.add('open');
+            if (hamburger) hamburger.classList.add('open');
+            document.body.style.overflow = 'hidden';
+          }
         }
       });
     }
