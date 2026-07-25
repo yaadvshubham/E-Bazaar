@@ -13,6 +13,7 @@ require('./models/WalletTransaction');
 require('./models/WishlistItem');
 
 const app = express();
+const frontendDir = path.join(__dirname, '../Frontend');
 const PORT = process.env.PORT || 5000;
 
 // ── Middleware ────────────────────────────────────────────────────────────────
@@ -168,19 +169,20 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error', details: err.message });
 });
 
-// ── DB Sync & Start ───────────────────────────────────────────────────────────
+// ── Start Server & DB Sync ────────────────────────────────────────────────────
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`[Server] E-Bazaar API running on port ${PORT} (http://0.0.0.0:${PORT})`);
+  console.log(`[Server] Health check: http://localhost:${PORT}/api/health`);
+});
+
 sequelize.authenticate()
   .then(() => {
     console.log('[DB] Supabase PostgreSQL connection established.');
     return sequelize.sync({ alter: true });
   })
   .then(() => {
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`[Server] E-Bazaar API running on http://localhost:${PORT} and http://127.0.0.1:${PORT}`);
-      console.log(`[Server] Health check: http://localhost:${PORT}/api/health`);
-    });
+    console.log('[DB] Database synchronized successfully.');
   })
   .catch(err => {
-    console.error('[DB] Unable to connect:', err);
-    process.exit(1); // Exit server cleanly on final boot check
+    console.error('[DB] Unable to connect / sync database:', err.message);
   });
