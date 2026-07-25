@@ -369,15 +369,34 @@ function processCSVFile(filePath) {
           description = `Authentic Calvin Klein luxury designer innerwear / apparel. Features iconic logo waistband, ultra-soft stretch cotton fabric, breathable fit. Inspired by global fashion icons.`;
         }
 
-        // Support native price_inr if present in CSV, otherwise convert standard price
-        let price = parsePriceValue(getValueByKeys(row, ['price_inr']));
+        const MAX_CATEGORY_LIMITS = {
+          groceries: 2499,
+          beauty: 4999,
+          clothing: 9999,
+          shoes: 24999,
+          sports: 19999,
+          'home-kitchen': 34999,
+          gadgets: 39999,
+          electronics: 179999
+        };
+
+        const maxAllowed = MAX_CATEGORY_LIMITS[category] || 25000;
+        let rawPriceStr = getValueByKeys(row, ['price_inr', 'final_price', 'price', 'finalprice', 'Price', 'value']);
+        let currencyStr = getValueByKeys(row, ['currency', 'Currency']);
+        let price = parsePriceValue(rawPriceStr);
+
         if (price > 0) {
-          price = Math.round(price);
-        } else {
-          price = Math.round(parsePriceValue(getValueByKeys(row, ['final_price', 'price', 'finalprice', 'Price', 'value'])) * 83.0);
+          const isUsd = String(currencyStr).toUpperCase() === 'USD' || (price < 1500 && String(rawPriceStr).includes('$'));
+          if (isUsd) {
+            price = Math.round(price * 83.0);
+          }
         }
 
-        if (price <= 0) price = brand === 'Calvin Klein' ? Math.floor(1499 + Math.random() * 2500) : Math.floor(499 + Math.random() * 4000);
+        if (price <= 0 || price > maxAllowed) {
+          const minP = category === 'groceries' ? 99 : category === 'electronics' ? 4999 : 499;
+          const maxP = Math.min(maxAllowed, 14999);
+          price = Math.floor(minP + Math.random() * (maxP - minP));
+        }
 
         let originalPrice = Math.round(price * (1.2 + Math.random() * 0.3));
         const discountPct = Math.round(((originalPrice - price) / originalPrice) * 100);
