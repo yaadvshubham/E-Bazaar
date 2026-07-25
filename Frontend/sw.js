@@ -1,4 +1,4 @@
-const CACHE_NAME = "ebazaar-v2";
+const CACHE_NAME = "ebazaar-v3";
 const ASSETS = [
   "index.html",
   "css/styles.css",
@@ -7,6 +7,8 @@ const ASSETS = [
   "js/api.js",
   "js/auth.js",
   "images/logo.svg",
+  "images/icon-192.png",
+  "images/icon-512.png",
   "manifest.json"
 ];
 

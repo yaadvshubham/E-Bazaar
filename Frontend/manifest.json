@@ -1,8 +1,10 @@
 {
+  "id": "ebazaar-app",
   "name": "E-Bazaar",
-  "short_name": "EBazaar",
+  "short_name": "E-Bazaar",
   "description": "Your everyday and everything luxury store.",
   "start_url": "index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#faf8f5",
@@ -10,16 +12,34 @@
   "categories": ["shopping", "lifestyle"],
   "icons": [
     {
-      "src": "images/logo.svg",
-      "type": "image/svg+xml",
-      "sizes": "any",
+      "src": "images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "images/logo.svg",
-      "type": "image/svg+xml",
-      "sizes": "192x192 512x512",
+      "src": "images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "images/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
