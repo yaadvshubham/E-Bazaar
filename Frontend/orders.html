@@ -21,9 +21,37 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/category.css" />
   <link rel="stylesheet" href="css/orders.css" />
+  <style>
+    /* Logo SVG gradient references */
+    .logo-bag-body {
+      fill: url(#bagGrad)
+    }
+
+    html[data-theme="dark"] .logo-bag-body {
+      fill: url(#bagGradDark)
+    }
+  </style>
 </head>
 
 <body data-page="orders">
+
+  <!-- SVG Gradient Defs -->
+  <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+    <defs>
+      <linearGradient id="bagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#A88C6D" />
+        <stop offset="100%" stop-color="#856B4D" />
+      </linearGradient>
+      <linearGradient id="bagGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#C9B397" />
+        <stop offset="100%" stop-color="#A38C6D" />
+      </linearGradient>
+      <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#E2CDAF" />
+        <stop offset="100%" stop-color="#FAF5E1" />
+      </linearGradient>
+    </defs>
+  </svg>
 
   <header id="site-header" role="banner">
 
@@ -569,10 +597,12 @@
             <line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30" />
             <polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38" />
           </svg>
-          <div class="f-logo">E-<em>Bazaar</em></div>
+          <div class="f-logo-text-group">
+            <div class="f-logo">E-<em>Bazaar</em></div>
+            <div class="f-tagline">Your everyday and everything store.</div>
+          </div>
         </div>
-        <p>Your everyday and everything store. Premium products, unmatched service, delivered with care across India.
-        </p>
+        <p>Premium products, unmatched service, delivered with care across India.</p>
         <div class="f-socials" aria-label="Social media">
           <a href="#" class="soc-btn" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24"
               fill="currentColor">
@@ -1966,8 +1996,8 @@
             if (orderAddr) {
               allAddr.push({ label: 'Original Delivery Address', text: orderAddr });
             }
-            allAddr.push({ label: 'Home Address (Default)', text: 'Aryan Verma, 47, Sector 18, DLF Phase 3, New Delhi, Delhi - 110001' });
-            allAddr.push({ label: 'Work Address', text: 'Aryan Verma, E-Bazaar HQ, Tower B, Cyber City, Gurugram, Haryana - 122002' });
+            allAddr.push({ label: 'Home Address (Default)', text: 'Jaishankar Yadav, 47, Sector 18, DLF Phase 3, New Delhi, Delhi - 110001' });
+            allAddr.push({ label: 'Work Address', text: 'Jaishankar Yadav, E-Bazaar HQ, Tower B, Cyber City, Gurugram, Haryana - 122002' });
 
             const user = JSON.parse(localStorage.getItem('eb_user') || '{}');
             const customAddresses = user.addresses || [];

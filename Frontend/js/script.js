@@ -78,17 +78,15 @@ const Preloader = (() => {
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(250, 248, 245, 0.6);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: #FAF8F5;
         z-index: 100000;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: opacity 0.4s ease, visibility 0.4s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
       }
       html[data-theme="dark"] #eb-preloader {
-        background: rgba(18, 16, 14, 0.6);
+        background: #090D16;
       }
       #eb-preloader.fade-out {
         opacity: 0;
@@ -169,9 +167,6 @@ const Preloader = (() => {
       </div>
     `;
 
-    const savedTheme = localStorage.getItem('eb-theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
     document.body.appendChild(div);
   }
 
@@ -237,20 +232,36 @@ if (!hasCachedData) {
   console.log('[E-Bazaar Preloader] Relevant page data present in cache. Skipping automatic preloader trigger.');
 }
 
+// Always safely dismiss preloader on DOM ready or window load to eliminate blinking
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => Preloader.hide(), 450);
+});
+window.addEventListener('load', () => {
+  Preloader.hide();
+});
+
 const ThemeEngine = (() => {
   const KEY = 'eb-theme';
   const root = document.documentElement;
+  let isInitialized = false;
 
-  function apply(theme) {
-    root.setAttribute('data-theme', theme);
-    localStorage.setItem(KEY, theme);
+  function apply(theme, saveToStorage = true) {
+    const validTheme = (theme === 'dark' || theme === 'light') ? theme : 'light';
+    root.setAttribute('data-theme', validTheme);
+    if (saveToStorage) {
+      try {
+        localStorage.setItem(KEY, validTheme);
+      } catch (e) {}
+    }
     const icon = document.getElementById('theme-icon');
-    if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+    if (icon) icon.textContent = validTheme === 'dark' ? '☀️' : '🌙';
   }
 
   function toggle() {
     root.classList.add('theme-transition');
-    apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    const current = root.getAttribute('data-theme');
+    const nextTheme = current === 'dark' ? 'light' : 'dark';
+    apply(nextTheme, true);
     setTimeout(() => {
       root.classList.remove('theme-transition');
     }, 600);
@@ -258,19 +269,31 @@ const ThemeEngine = (() => {
 
   function init() {
     const saved = localStorage.getItem(KEY);
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    apply(saved || (prefersDark ? 'dark' : 'light'));
-    const btn = document.getElementById('theme-toggle');
-    if (btn) btn.addEventListener('click', toggle);
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = (saved === 'dark' || saved === 'light') ? saved : (prefersDark ? 'dark' : 'light');
+    apply(initialTheme, false);
 
-    // Cross-tab real-time theme synchronization
+    if (isInitialized) return;
+    isInitialized = true;
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('#theme-toggle, .theme-toggle');
+      if (btn) {
+        e.preventDefault();
+        toggle();
+      }
+    });
+
+    // Cross-tab real-time theme synchronization without recursion or third-party iframe interference
     window.addEventListener('storage', (e) => {
-      if (e.key === KEY && e.newValue) {
-        root.classList.add('theme-transition');
-        apply(e.newValue);
-        setTimeout(() => {
-          root.classList.remove('theme-transition');
-        }, 600);
+      if (e.key === KEY && (e.newValue === 'dark' || e.newValue === 'light')) {
+        if (e.newValue !== root.getAttribute('data-theme')) {
+          root.classList.add('theme-transition');
+          apply(e.newValue, false);
+          setTimeout(() => {
+            root.classList.remove('theme-transition');
+          }, 600);
+        }
       }
     });
   }
@@ -363,16 +386,238 @@ const HeroSlider = (() => {
 })();
 
 /* ═══════════════════════════════════════════════════════════════════════
-   HAMBURGER MOBILE NAV
+   HAMBURGER MOBILE NAV & REDESIGNED DRAWER PROFILE
    ═══════════════════════════════════════════════════════════════════════ */
+function renderMobileDrawerProfile() {
+  const drawer = document.getElementById('mobile-drawer');
+  if (!drawer) return;
+
+  // Retrieve user information if available
+  let user = null;
+  try {
+    const u1 = JSON.parse(localStorage.getItem('eb_user') || 'null');
+    const u2 = JSON.parse(localStorage.getItem('ebazaar_user') || 'null');
+    user = Object.assign({}, u1 || {}, u2 || {});
+    if (!user.name && !user.email) user = null;
+  } catch (e) {}
+
+  const isLoggedIn = !!user;
+  const userName = user ? (user.name || user.fullName || user.username || (user.email ? user.email.split('@')[0] : 'Member')) : 'Welcome, Guest';
+  const rawWallet = user ? (user.walletBalance !== undefined ? user.walletBalance : (user.wallet !== undefined ? user.wallet : 1250)) : null;
+  const formattedWallet = rawWallet !== null ? `₹${Number(rawWallet).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}` : '';
+  const userPic = user && (user.profilePic || user.avatar || user.avatarUrl);
+  const avatarUrl = userPic || `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=A88C6D&color=fff&bold=true`;
+
+  const walletDisplay = isLoggedIn 
+    ? `💰 Wallet: <strong>${formattedWallet}</strong>` 
+    : `🔑 <span>Sign In to view Wallet</span>`;
+
+  const walletHref = isLoggedIn ? 'account.html?tab=wallet' : 'auth.html';
+  const profileHref = isLoggedIn ? 'account.html?tab=profile' : 'auth.html';
+
+  drawer.innerHTML = `
+    <div class="drawer-head">
+      <div class="drawer-brand-block">
+        <a href="index.html" class="drawer-logo-brand">E-<em>Bazaar</em></a>
+        <span class="drawer-tagline">Your everyday and everything store.</span>
+      </div>
+      <button class="drawer-close" id="drawer-close" aria-label="Close navigation">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Center Profile & Wallet Card -->
+    <div class="drawer-profile-card">
+      <div class="drawer-avatar-wrap" id="drawer-avatar-trigger" style="cursor: pointer;" title="Click to change profile picture">
+        <img src="${avatarUrl}" alt="${userName}" class="drawer-avatar-img" id="drawer-avatar-img">
+        <div class="drawer-avatar-edit-icon" title="Edit Profile Photo">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <input type="file" id="drawer-avatar-file-input" accept="image/*" style="display: none;">
+      </div>
+      <div class="drawer-user-name">${userName}</div>
+      <a href="${walletHref}" class="drawer-wallet-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h.01"/></svg>
+        <span>${walletDisplay}</span>
+      </a>
+    </div>
+
+    <!-- 5 Account Options IN THE SAME ROW (Compact Row) -->
+    <div class="drawer-quick-grid">
+      <a href="${profileHref}" class="drawer-quick-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile</span>
+      </a>
+      <a href="${isLoggedIn ? 'account.html?tab=wallet' : 'auth.html'}" class="drawer-quick-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h.01"/></svg>
+        <span>Wallet</span>
+      </a>
+      <a href="${isLoggedIn ? 'account.html?tab=addresses' : 'auth.html'}" class="drawer-quick-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>Addresses</span>
+      </a>
+      <a href="${isLoggedIn ? 'account.html?tab=payment' : 'auth.html'}" class="drawer-quick-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <span>Bank</span>
+      </a>
+      <a href="orders.html" class="drawer-quick-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+        <span>Orders</span>
+      </a>
+    </div>
+
+    <!-- Store Directories & Categories Section -->
+    <div class="drawer-cats-header">Store Directories</div>
+    <div class="drawer-cats" style="padding-bottom: 0;">
+      <a href="brand-directory.html" class="drawer-cat highlight-brand-cat">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"><path d="M3 21h18M3 7v14M21 7v14M6 21V11M10 21V11M14 21V11M18 21V11M12 3L2 7h20L12 3z"/></svg>
+          <span style="font-weight: 700; color: var(--accent);">Brand Stores Directory</span>
+        </div>
+        <span class="drawer-cat-icon">›</span>
+      </a>
+    </div>
+
+    <div class="drawer-cats-header" style="border-top: none; padding-top: 8px;">Browse Categories</div>
+    <div class="drawer-cats">
+      <a href="category.html?cat=all" class="drawer-cat highlight-cat"><span>All Products & Categories</span><span class="drawer-cat-icon">›</span></a>
+      <a href="category.html?cat=groceries" class="drawer-cat"><span>Groceries</span><span class="drawer-cat-icon">›</span></a>
+      <a href="category.html?cat=electronics" class="drawer-cat"><span>Electronics</span><span class="drawer-cat-icon">›</span></a>
+      <a href="category.html?cat=gadgets" class="drawer-cat"><span>Gadgets</span><span class="drawer-cat-icon">›</span></a>
+      <a href="category.html?cat=clothing" class="drawer-cat"><span>Clothing</span><span class="drawer-cat-icon">›</span></a>
+      <a href="category.html?cat=shoes" class="drawer-cat"><span>Shoes</span><span class="drawer-cat-icon">›</span></a>
+      <a href="category.html?cat=beauty" class="drawer-cat"><span>Beauty</span><span class="drawer-cat-icon">›</span></a>
+      <a href="category.html?cat=sports" class="drawer-cat"><span>Sports</span><span class="drawer-cat-icon">›</span></a>
+      <a href="category.html?cat=home-kitchen" class="drawer-cat"><span>Home & Kitchen</span><span class="drawer-cat-icon">›</span></a>
+    </div>
+
+    <!-- Footer Action Buttons & Project Specifications -->
+    <div class="drawer-footer-actions">
+      <button class="drawer-app-install-btn" id="drawer-pwa-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Install E-Bazaar App</span>
+      </button>
+      ${isLoggedIn 
+        ? `<button class="drawer-auth-btn" id="drawer-logout-btn">
+             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+             <span>Log Out</span>
+           </button>`
+        : `<a href="auth.html" class="drawer-auth-btn">
+             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+             <span>Sign In / Register</span>
+           </a>`
+      }
+
+      <div class="drawer-project-links">
+        <div class="drawer-project-row">
+          <a href="about-creator.html?tab=creator" class="drawer-project-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>About Creator</span>
+          </a>
+          <a href="about-creator.html?tab=project" class="drawer-project-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>Project Specs</span>
+          </a>
+        </div>
+        <a href="https://github.com/yaadvshubham/E-Bazaar" target="_blank" rel="noopener noreferrer" class="drawer-project-btn github-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          <span>GitHub Codebase</span>
+        </a>
+      </div>
+    </div>
+  `;
+
+  // Profile Photo Upload / Edit Event Handler
+  const avatarTrigger = drawer.querySelector('#drawer-avatar-trigger');
+  const fileInput = drawer.querySelector('#drawer-avatar-file-input');
+  if (avatarTrigger && fileInput) {
+    avatarTrigger.addEventListener('click', () => {
+      if (isLoggedIn) {
+        fileInput.click();
+      } else {
+        window.location.href = 'auth.html';
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const newAvatar = evt.target.result;
+          const imgEl = drawer.querySelector('#drawer-avatar-img');
+          if (imgEl) imgEl.src = newAvatar;
+          
+          if (user) {
+            user.profilePic = newAvatar;
+            user.avatar = newAvatar;
+            user.avatarUrl = newAvatar;
+            localStorage.setItem('ebazaar_user', JSON.stringify(user));
+            localStorage.setItem('eb_user', JSON.stringify(user));
+            const sidebarAvatar = document.getElementById('sidebar-avatar');
+            const sidebarPlaceholder = document.getElementById('sidebar-avatar-placeholder');
+            if (sidebarAvatar) {
+              sidebarAvatar.src = newAvatar;
+              sidebarAvatar.style.display = 'block';
+              if (sidebarPlaceholder) sidebarPlaceholder.style.display = 'none';
+            }
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // Re-bind close button
+  const closeBtn = drawer.querySelector('#drawer-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      drawer.classList.remove('open');
+      const overlay = document.getElementById('drawer-overlay');
+      const btn = document.getElementById('hamburger');
+      if (overlay) overlay.classList.remove('open');
+      if (btn) btn.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  }
+
+  // Re-bind PWA install button if event deferred
+  const pwaBtn = drawer.querySelector('#drawer-pwa-btn');
+  if (pwaBtn) {
+    pwaBtn.addEventListener('click', () => {
+      if (window.deferredPrompt) {
+        window.deferredPrompt.prompt();
+        window.deferredPrompt.userChoice.then(() => { window.deferredPrompt = null; });
+      } else {
+        alert('E-Bazaar web app is already installed or ready in your browser menu!');
+      }
+    });
+  }
+
+  // Re-bind Logout button
+  const logoutBtn = drawer.querySelector('#drawer-logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      ['ebazaar_token', 'ebazaar_user', 'eb_user', 'eb_cart_items', 'cart', 'eb_wishlist', 'eb_bank_accounts', 'checkout_total', 'wallet_applied'].forEach(k => localStorage.removeItem(k));
+      window.location.reload();
+    });
+  }
+}
+window.renderMobileDrawerProfile = renderMobileDrawerProfile;
+
 function initHamburger() {
   const btn = document.getElementById('hamburger');
   const drawer = document.getElementById('mobile-drawer');
   const overlay = document.getElementById('drawer-overlay');
-  const closeBtn = document.getElementById('drawer-close');
-  if (!btn || !drawer) return;
+  if (!drawer) return;
+
+  // Immediately populate mobile drawer on load so header drawer is always uniform
+  renderMobileDrawerProfile();
+
+  if (!btn) return;
 
   function open() {
+    renderMobileDrawerProfile();
     btn.classList.add('open');
     drawer.classList.add('open');
     if (overlay) overlay.classList.add('open');
@@ -389,7 +634,6 @@ function initHamburger() {
 
   btn.addEventListener('click', () => btn.classList.contains('open') ? close() : open());
   if (overlay) overlay.addEventListener('click', close);
-  if (closeBtn) closeBtn.addEventListener('click', close);
 
   // Close on escape
   document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
@@ -424,8 +668,8 @@ const AddressModal = (() => {
         <h3 id="addr-form-title" style="font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--accent, #A88C6D); margin-bottom: 4px;">Add New Address</h3>
         <input type="hidden" id="f-addr-id" value="" />
         <div class="form-row" style="display: flex; gap: 12px;">
-          <div class="form-group" style="flex: 1;"><label for="f-name" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">First Name</label><input type="text" id="f-name" placeholder="Aryan" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
-          <div class="form-group" style="flex: 1;"><label for="f-lname" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Last Name</label><input type="text" id="f-lname" placeholder="Verma" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+          <div class="form-group" style="flex: 1;"><label for="f-name" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">First Name</label><input type="text" id="f-name" placeholder="Jaishankar" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+          <div class="form-group" style="flex: 1;"><label for="f-lname" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Last Name</label><input type="text" id="f-lname" placeholder="Yadav" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
         </div>
         <div class="form-group full"><label for="f-line1" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Address Line 1</label><input type="text" id="f-line1" placeholder="House no., Street, Area" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
         <div class="form-group full"><label for="f-line2" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Address Line 2 (Optional)</label><input type="text" id="f-line2" placeholder="Landmark, Apartment" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
@@ -435,7 +679,7 @@ const AddressModal = (() => {
         </div>
         <div class="form-row" style="display: flex; gap: 12px;">
           <div class="form-group" style="flex: 1;"><label for="f-state" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">State</label><input type="text" id="f-state" placeholder="Delhi" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
-          <div class="form-group" style="flex: 1;"><label for="f-phone" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Mobile</label><input type="tel" id="f-phone" placeholder="9876543210" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
+          <div class="form-group" style="flex: 1;"><label for="f-phone" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Mobile</label><input type="tel" id="f-phone" placeholder="9260841336" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; font-family: inherit; font-size: 13px;"/></div>
         </div>
         <div class="form-group"><label for="f-type" style="font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 4px;">Address Type</label>
           <select id="f-type" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-canvas); color: var(--text-primary); outline: none; cursor: pointer; font-family: inherit; font-size: 13px;">
@@ -6057,7 +6301,7 @@ function initCategoryLinkInterceptors() {
 /* ═══════════════════════════════════════════════════════════════════════
    BOOT
    ═══════════════════════════════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
+function bootEbazaarApp() {
   initCategoryLinkInterceptors();
 
   // Centralized authentication guards for secure pages
@@ -6129,7 +6373,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Smoothly fade out brand preloader once DOM init completes
   if (typeof Preloader !== 'undefined') Preloader.hide();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootEbazaarApp);
+} else {
+  bootEbazaarApp();
+}
 
 
 
@@ -6315,18 +6565,19 @@ window.showToast = function (msg) {
    ═══════════════════════════════════════════════════════════════════════ */
 window.initBrandDirectory = function () {
   const sidebar = document.getElementById('dir-sidebar');
+  const mobileCatBar = document.getElementById('mobile-brand-cats-bar');
   const contentRoot = document.getElementById('dir-content-root');
-  if (!sidebar || !contentRoot) return;
+  if (!contentRoot) return;
 
   const FOLDER_TO_CAT = {
-    'grocery_logo': { title: 'Groceries', slug: 'groceries' },
-    'electronics_logo': { title: 'Electronics', slug: 'electronics' },
-    'gadgets_logo': { title: 'Gadgets', slug: 'gadgets' },
-    'clothing_logo': { title: 'Clothing', slug: 'clothing' },
-    'shoes_logo': { title: 'Shoes', slug: 'shoes' },
-    'beauty_logo': { title: 'Beauty', slug: 'beauty' },
-    'sports_logo': { title: 'Sports', slug: 'sports' },
-    'home & kitchen': { title: 'Home & Kitchen', slug: 'home-kitchen' }
+    'grocery_logo': { title: 'Groceries', slug: 'groceries', icon: '🛒' },
+    'electronics_logo': { title: 'Electronics', slug: 'electronics', icon: '⚡' },
+    'gadgets_logo': { title: 'Gadgets', slug: 'gadgets', icon: '📱' },
+    'clothing_logo': { title: 'Clothing', slug: 'clothing', icon: '👕' },
+    'shoes_logo': { title: 'Shoes', slug: 'shoes', icon: '👟' },
+    'beauty_logo': { title: 'Beauty', slug: 'beauty', icon: '✨' },
+    'sports_logo': { title: 'Sports', slug: 'sports', icon: '⚽' },
+    'home & kitchen': { title: 'Home & Kitchen', slug: 'home-kitchen', icon: '🏠' }
   };
 
   const categories = {};
@@ -6339,30 +6590,48 @@ window.initBrandDirectory = function () {
       const catInfo = FOLDER_TO_CAT[folder];
       if (catInfo) {
         if (!categories[catInfo.slug]) {
-          categories[catInfo.slug] = { title: catInfo.title, slug: catInfo.slug, brands: [] };
+          categories[catInfo.slug] = { title: catInfo.title, slug: catInfo.slug, icon: catInfo.icon, brands: [] };
         }
         categories[catInfo.slug].brands.push({ name: brandName, path: path });
       }
     }
   }
 
-  // Generate HTML
-  let sidebarHTML = '';
+  // Generate HTML for Desktop Sidebar & Mobile Category Chips Bar
+  let sidebarHTML = '<div class="sidebar-title">Brand Categories</div>';
+  let mobileChipHTML = '';
   let contentHTML = '';
 
   for (const cat of Object.values(categories)) {
-    sidebarHTML += `<a href="#${cat.slug}">${cat.title}</a>`;
+    sidebarHTML += `<a href="#${cat.slug}" class="sidebar-cat-link">
+      <span style="display:flex;align-items:center;gap:8px;"><span>${cat.icon}</span><span>${cat.title}</span></span>
+      <span class="cat-link-count">${cat.brands.length}</span>
+    </a>`;
+
+    mobileChipHTML += `<a href="#${cat.slug}" class="mobile-cat-chip">
+      <span>${cat.icon}</span>
+      <span>${cat.title}</span>
+    </a>`;
 
     let gridHTML = '';
     for (const brand of cat.brands) {
-      gridHTML += `<a href="brand-store.html?brand=${brand.name}" class="brand-card">
-        <img src="${brand.path}" alt="${brand.name}">
+      gridHTML += `<a href="brand-store.html?brand=${encodeURIComponent(brand.name)}" class="brand-card" data-brand-name="${brand.name.toLowerCase()}">
+        <div class="brand-card-img-box">
+          <img src="${brand.path}" alt="${brand.name}" loading="lazy">
+        </div>
+        <div class="brand-card-meta">
+          <div class="brand-card-name">${brand.name}</div>
+          <div class="brand-card-tag">Official Store</div>
+        </div>
       </a>`;
     }
 
     contentHTML += `
       <div class="dir-cat-block" id="${cat.slug}">
-        <h2 class="dir-cat-title">${cat.title}</h2>
+        <div class="dir-cat-header">
+          <h2 class="dir-cat-title"><span>${cat.icon}</span> ${cat.title}</h2>
+          <span class="dir-cat-badge">${cat.brands.length} Stores</span>
+        </div>
         <div class="dir-grid">
           ${gridHTML}
         </div>
@@ -6370,18 +6639,46 @@ window.initBrandDirectory = function () {
     `;
   }
 
-  sidebar.innerHTML = sidebarHTML;
+  if (sidebar) sidebar.innerHTML = sidebarHTML;
+  if (mobileCatBar) mobileCatBar.innerHTML = mobileChipHTML;
   contentRoot.innerHTML = contentHTML;
 
-  // Active state for sidebar on scroll
-  const links = sidebar.querySelectorAll('a');
+  // Real-time Brand Search Filter
+  const searchInput = document.getElementById('brand-search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const allCards = contentRoot.querySelectorAll('.brand-card');
+      const allCatBlocks = contentRoot.querySelectorAll('.dir-cat-block');
+
+      allCards.forEach(card => {
+        const bName = card.getAttribute('data-brand-name');
+        if (!q || bName.includes(q)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      allCatBlocks.forEach(block => {
+        const visibleCards = Array.from(block.querySelectorAll('.brand-card')).filter(c => c.style.display !== 'none');
+        if (q && visibleCards.length === 0) {
+          block.style.display = 'none';
+        } else {
+          block.style.display = 'block';
+        }
+      });
+    });
+  }
+
+  // Active state & smooth scroll handler for all category links
+  const allLinks = document.querySelectorAll('.sidebar-cat-link, .mobile-cat-chip');
   const sections = document.querySelectorAll('.dir-cat-block');
 
-  // Manual scroll handler to guarantee correct offset
   const scrollToTarget = (targetId, isSmooth = true) => {
     const targetElement = document.getElementById(targetId);
     if (targetElement) {
-      const headerOffset = 140; // Height of the sticky header
+      const headerOffset = window.innerWidth <= 900 ? 110 : 130;
       const elementPosition = targetElement.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
       window.scrollTo({
@@ -6391,24 +6688,15 @@ window.initBrandDirectory = function () {
     }
   };
 
-  links.forEach(link => {
+  allLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const href = link.getAttribute('href');
       const targetId = href.substring(1);
-
-      // Update URL without native jump
-      if (history.pushState) {
-        history.pushState(null, null, href);
-      } else {
-        window.location.hash = href;
-      }
-
       scrollToTarget(targetId, true);
     });
   });
 
-  // Handle initial page load with a hash
   if (window.location.hash) {
     setTimeout(() => {
       scrollToTarget(window.location.hash.substring(1), false);
@@ -6419,12 +6707,12 @@ window.initBrandDirectory = function () {
     let current = '';
     sections.forEach(sec => {
       const secTop = sec.offsetTop;
-      if (pageYOffset >= secTop - 150) {
+      if (window.pageYOffset >= secTop - 160) {
         current = sec.getAttribute('id');
       }
     });
 
-    links.forEach(link => {
+    allLinks.forEach(link => {
       link.classList.remove('active');
       if (link.getAttribute('href') === `#${current}`) {
         link.classList.add('active');
@@ -7057,136 +7345,21 @@ function initPWAInstallUI() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   MOBILE UX ENHANCEMENTS — Bottom Navigation & Footer Accordions
+   MOBILE UX ENHANCEMENTS & FOOTER CLEANUP
    ═══════════════════════════════════════════════════════════════════════ */
 function initMobileUXEnhancements() {
-  // 1. Inject Bottom Navigation
-  if (!document.querySelector('.mobile-bottom-nav')) {
-    const bottomNav = document.createElement('div');
-    bottomNav.className = 'mobile-bottom-nav';
-    bottomNav.innerHTML = `
-      <a href="index.html" class="mobile-nav-item" id="mb-nav-home">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        <span>Home</span>
-      </a>
-      <button class="mobile-nav-item" id="mb-nav-cats">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        <span>Categories</span>
-      </button>
-      <a href="wishlist.html" class="mobile-nav-item" id="mb-nav-wish">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-        <span>Wishlist</span>
-      </a>
-      <a href="account.html" class="mobile-nav-item" id="mb-nav-acc">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        <span>Account</span>
-      </a>
-      <a href="cart.html" class="mobile-nav-item" id="mb-nav-cart">
-        <div style="position:relative; display:inline-block; line-height:1;">
-          <span class="cart-badge cart-count-el" style="top:-6px; right:-10px; width:16px; height:16px; font-size:9px; border:2px solid var(--bg-nav); background:var(--accent); color:#fff; font-weight:700; border-radius:50%; display:grid; place-items:center; position:absolute;">0</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-        </div>
-        <span>Cart</span>
-      </a>
-    `;
-    document.body.appendChild(bottomNav);
-
-    // Bind Categories to hamburger drawer trigger
-    const catsBtn = document.getElementById('mb-nav-cats');
-    if (catsBtn) {
-      catsBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const drawer = document.getElementById('mobile-drawer');
-        const overlay = document.getElementById('drawer-overlay');
-        const hamburger = document.getElementById('hamburger');
-        if (drawer) {
-          const isOpen = drawer.classList.contains('open');
-          if (isOpen) {
-            drawer.classList.remove('open');
-            if (overlay) overlay.classList.remove('open');
-            if (hamburger) hamburger.classList.remove('open');
-            document.body.style.overflow = '';
-          } else {
-            drawer.classList.add('open');
-            if (overlay) overlay.classList.add('open');
-            if (hamburger) hamburger.classList.add('open');
-            document.body.style.overflow = 'hidden';
-          }
-        }
-      });
-    }
-
-    // Set Active State on Bottom Navigation Items
-    const path = window.location.pathname;
-    if (path.includes('index.html') || path.endsWith('/') || path.endsWith('/index.html') || path === '') {
-      const activeHome = document.getElementById('mb-nav-home');
-      if (activeHome) activeHome.classList.add('active');
-    } else if (path.includes('wishlist.html')) {
-      const activeWish = document.getElementById('mb-nav-wish');
-      if (activeWish) activeWish.classList.add('active');
-    } else if (path.includes('account.html') || path.includes('auth.html')) {
-      const activeAcc = document.getElementById('mb-nav-acc');
-      if (activeAcc) activeAcc.classList.add('active');
-    } else if (path.includes('cart.html')) {
-      const activeCart = document.getElementById('mb-nav-cart');
-      if (activeCart) activeCart.classList.add('active');
-    }
-
-    // Update cart counts globally from localStorage value immediately on mount
-    try {
-      const items = localStorage.getItem('eb_cart_items') || localStorage.getItem('cart');
-      if (items) {
-        const parsed = JSON.parse(items);
-        const count = Array.isArray(parsed) ? parsed.reduce((sum, item) => sum + (item.qty || 1), 0) : 0;
-        document.querySelectorAll('.cart-count-el').forEach(el => el.textContent = count);
-      }
-    } catch(e) {}
+  // Ensure any legacy mobile-bottom-nav or footer chevrons are cleaned up
+  const existingBottomNav = document.querySelector('.mobile-bottom-nav');
+  if (existingBottomNav) {
+    existingBottomNav.remove();
   }
-
-  // 2. Setup Footer Accordions for Mobile View
-  const footerCols = document.querySelectorAll('footer .f-col');
-  footerCols.forEach(col => {
-    const heading = col.querySelector('h5');
-    const linksList = col.querySelector('ul');
-    if (heading && linksList) {
-      // Clean up previous elements if any
-      heading.querySelectorAll('.footer-chevron').forEach(el => el.remove());
-      
-      // Inject chevron arrow icon next to h5
-      const chevron = document.createElement('span');
-      chevron.className = 'footer-chevron';
-      chevron.innerHTML = `
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      `;
-      heading.appendChild(chevron);
-      
-      // Setup styling hooks
-      col.classList.add('mobile-accordion');
-      heading.classList.add('accordion-header');
-      linksList.classList.add('accordion-content');
-      
-      heading.addEventListener('click', () => {
-        if (window.innerWidth > 768) return; // Only run accordion on mobile
-        
-        const isOpen = col.classList.contains('active');
-        // Close all other footer accordions
-        document.querySelectorAll('footer .f-col').forEach(c => c.classList.remove('active'));
-        
-        if (!isOpen) {
-          col.classList.add('active');
-        }
-      });
-    }
-  });
+  document.querySelectorAll('.footer-chevron').forEach(el => el.remove());
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   initMobileUXEnhancements();
 });
 
-// Run again in case scripts load later or DOM changes
 window.addEventListener('load', () => {
   initMobileUXEnhancements();
 });

@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════
    E-BAZAAR — payment.js
-   Full-Stack Secure Checkout and Razorpay Integration
+   Full-Stack Secure Checkout & Razorpay Integration
    ═══════════════════════════════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -82,21 +82,41 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // 3. Razorpay Launch Event
+    // Open Thank You Modal Function
+    function openThankYouModal(orderIdText) {
+        const modal = document.getElementById('thankyou-modal');
+        const refBadge = document.getElementById('thankyou-order-ref');
+        if (refBadge && orderIdText) {
+            refBadge.textContent = orderIdText;
+        }
+        if (modal) {
+            modal.classList.add('show');
+        }
+    }
+
+    // Helper to clear local cart state
+    function clearLocalCart() {
+        window.ebCart = [];
+        window.cart = [];
+        localStorage.setItem('cart', '[]');
+        localStorage.setItem('eb_cart_items', '[]');
+        localStorage.setItem('eb-cart-items', '[]');
+        localStorage.setItem('eb-cart', '0');
+        localStorage.removeItem('checkout_total');
+        localStorage.removeItem('wallet_applied');
+        localStorage.removeItem('eb_orders_cache');
+        if (typeof syncCartBadge === 'function') syncCartBadge();
+    }
+
+    // 3. Razorpay Launch Event Handler
     if (payBtn) {
         payBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             
-            // Set loading state on button
-            setButtonLoading(true);
-
-            // Show premium logo preloader during transaction creation
-            if (typeof Preloader !== 'undefined') {
-                Preloader.init();
-            }
+            setButtonLoading(true, 'Processing Payment...');
+            if (typeof Preloader !== 'undefined') Preloader.init();
 
             try {
-                // Step 1: Create pending order in the backend database
                 const formattedItems = cart.map(item => {
                     const priceNum = parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
                     return {
@@ -128,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(data.error || 'Failed to initialize payment transaction.');
                 }
 
-                // Step 2: Initialize Razorpay Checkout Options
                 const options = {
                     key: data.key_id,
                     amount: data.amount,
@@ -142,21 +161,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         contact: user.phone || ''
                     },
                     theme: {
-                        color: '#A88C6D' // E-Bazaar Accent color token
+                        color: '#A88C6D'
                     },
                     handler: async function (response) {
-                        // Payment succeeds on Razorpay - verify cryptographic signature in backend
-                        if (typeof Preloader !== 'undefined') {
-                            Preloader.init(); // Show loading while verifying cryptographic signature
-                        }
+                        if (typeof Preloader !== 'undefined') Preloader.init();
                         showToast('🔄 Verifying signature... Please wait.');
                         await verifyPayment(response);
                     },
                     modal: {
                         ondismiss: function () {
-                            if (typeof Preloader !== 'undefined') {
-                                Preloader.hide();
-                            }
+                            if (typeof Preloader !== 'undefined') Preloader.hide();
                             showToast('❌ Payment cancelled or closed.');
                             setButtonLoading(false);
                         }
@@ -164,26 +178,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 const rzp = new Razorpay(options);
-                
-                // Hide preloader right before Razorpay opens to avoid overlap
-                if (typeof Preloader !== 'undefined') {
-                    Preloader.hide();
-                }
-
+                if (typeof Preloader !== 'undefined') Preloader.hide();
                 rzp.open();
 
             } catch (err) {
                 console.error('[Payment Error]:', err.message);
-                if (typeof Preloader !== 'undefined') {
-                    Preloader.hide();
-                }
+                if (typeof Preloader !== 'undefined') Preloader.hide();
                 showToast(`❌ Error: ${err.message}`);
                 setButtonLoading(false);
             }
         });
     }
 
-    // 4. Verify Payment Signature
+    // 4. Verify Payment Signature for Razorpay
     async function verifyPayment(rzpResponse) {
         try {
             const walletUsed = parseInt(localStorage.getItem('wallet_applied')) || 0;
@@ -208,57 +215,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.error || 'Payment signature verification failed.');
             }
 
-            // Step 3: Success Pathway
-            // Clear local cart
-            window.ebCart = [];
-            window.cart = [];
-            localStorage.setItem('cart', '[]');
-            localStorage.setItem('eb_cart_items', '[]');
-            localStorage.setItem('eb-cart-items', '[]');
-            localStorage.setItem('eb-cart', '0');
-            localStorage.removeItem('checkout_total');
-            localStorage.removeItem('wallet_applied');
-            localStorage.removeItem('eb_orders_cache');
+            clearLocalCart();
 
-            // Synchronize wallet balance local storage
             if (walletUsed > 0 && user && typeof user.walletBalance === 'number') {
                 user.walletBalance = Math.max(0, user.walletBalance - walletUsed);
                 localStorage.setItem('eb_user', JSON.stringify(user));
                 localStorage.setItem('ebazaar_user', JSON.stringify(user));
             }
 
-            // Trigger cart badge updates if global helper exists
-            if (typeof syncCartBadge === 'function') syncCartBadge();
-
-            // Toggle view panels
             const formBody = document.getElementById('form-body');
             const successBody = document.getElementById('success-body');
             const orderRefEl = document.getElementById('order-ref-display');
 
             if (formBody) formBody.style.display = 'none';
             if (successBody) successBody.style.display = 'block';
-            if (orderRefEl && data.order) {
-                orderRefEl.textContent = `Order ID: EB-${data.order.id} | Ref: ${data.order.razorpayOrderId}`;
-            }
+            
+            const orderIdStr = data.order ? `Order ID: EB-${data.order.id} | Ref: ${data.order.razorpayOrderId}` : `Order ID: EB-${Date.now().toString().slice(-6)}`;
+            if (orderRefEl) orderRefEl.textContent = orderIdStr;
 
             showToast('🎉 Order placed successfully!');
+            openThankYouModal(orderIdStr);
 
-            if (typeof Preloader !== 'undefined') {
-                Preloader.hide();
-            }
+            if (typeof Preloader !== 'undefined') Preloader.hide();
 
         } catch (err) {
             console.error('[Verification Error]:', err.message);
-            if (typeof Preloader !== 'undefined') {
-                Preloader.hide();
-            }
+            if (typeof Preloader !== 'undefined') Preloader.hide();
             showToast(`❌ Verification Failed: ${err.message}`);
             setButtonLoading(false);
         }
     }
 
     // Helper to toggle button states
-    function setButtonLoading(loading) {
+    function setButtonLoading(loading, labelText = 'Processing...') {
         if (!payBtn) return;
         if (loading) {
             payBtn.disabled = true;
@@ -266,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 1s linear infinite;">
                     <circle cx="12" cy="12" r="10" stroke-dasharray="32" />
                 </svg>
-                Processing Payment...
+                <span>${labelText}</span>
             `;
         } else {
             payBtn.disabled = false;
@@ -275,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
-                Pay Securely via Razorpay
+                <span>Pay Securely via Razorpay</span>
             `;
         }
     }

@@ -280,6 +280,25 @@
 
 <!-- ═══════════════════ MAIN ═══════════════════ -->
 <main id="main-content">
+  <!-- Brand Directory Hero & Live Search -->
+  <div class="brand-dir-hero">
+    <div class="brand-dir-hero-inner">
+      <div class="brand-dir-title-wrap">
+        <h1>Official Brand Stores</h1>
+        <p>Explore 50+ official brand storefronts across all categories.</p>
+      </div>
+      <div class="brand-search-box">
+        <svg class="brand-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="brand-search-input" placeholder="Search official brands (e.g. Amul, Apple, Nike)..." aria-label="Search brand stores">
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Mobile Category Bar (Visible on phone view) -->
+  <div class="mobile-brand-cats-bar" id="mobile-brand-cats-bar">
+    <!-- Injected by JS -->
+  </div>
+
   <div class="directory-container">
     <div class="directory-sidebar" id="dir-sidebar">
       <!-- Injected by JS -->
@@ -293,11 +312,14 @@
 <footer role="contentinfo">
   <div class="footer-main">
     <div class="f-brand">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-        <svg width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)"/><path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/><polyline fill="none" stroke="rgba(255,255,255,.90)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/><path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/><line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/><polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/></svg>
-        <div class="f-logo">E-<em>Bazaar</em></div>
+      <div class="f-logo-wrap">
+        <svg class="f-svg-mark" width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)"/><path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/><polyline fill="none" stroke="rgba(255,255,255,.90)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/><path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/><line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/><polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/></svg>
+        <div class="f-logo-text-group">
+          <div class="f-logo">E-<em>Bazaar</em></div>
+          <div class="f-tagline">Your everyday and everything store.</div>
+        </div>
       </div>
-      <p>Your everyday and everything store. Premium products, unmatched service, delivered with care across India.</p>
+      <p>Premium products, unmatched service, delivered with care across India.</p>
       <div class="f-socials" aria-label="Social media">
         <a href="#" class="soc-btn" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
         <a href="#" class="soc-btn" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>

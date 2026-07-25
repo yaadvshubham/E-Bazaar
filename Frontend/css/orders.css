@@ -397,40 +397,179 @@ html[data-theme="dark"] .milestone.active .node-indicator {
   background-color: var(--bg-surface);
 }
 
-/* Media Queries */
+/* Media Queries & Mobile View Optimization */
 @media (max-width: 768px) {
-  .order-split {
-    flex-direction: column;
-    gap: 24px;
+  .orders-wrapper {
+    padding: 20px 12px !important;
   }
   
-  .actions-stack {
-    width: 100%;
-    align-items: flex-start;
+  .page-title {
+    font-size: 22px !important;
+    margin-bottom: 4px !important;
+  }
+  
+  .page-sub {
+    font-size: 13px !important;
+    margin-bottom: 20px !important;
+  }
+  
+  .orders-tabs {
+    display: flex !important;
+    overflow-x: visible !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding-bottom: 4px !important;
+    margin-bottom: 20px !important;
+    border-bottom: 1px solid var(--border-line) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  .orders-tab {
+    flex: 1 !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    padding: 8px 2px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    flex-shrink: 1 !important;
+    letter-spacing: -0.2px !important;
+  }
+  
+  .order-card-wrapper {
+    border-radius: 12px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+  }
+  
+  .order-card-top {
+    padding: 12px 14px !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 10px !important;
   }
   
   .order-info-grid {
-    gap: 20px;
-    flex-wrap: wrap;
+    display: flex !important;
+    gap: 16px !important;
+    flex-wrap: wrap !important;
   }
   
+  .info-label {
+    font-size: 9.5px !important;
+  }
+  
+  .info-val {
+    font-size: 12.5px !important;
+  }
+  
+  .order-status-badge {
+    padding: 4px 10px !important;
+    font-size: 10.5px !important;
+  }
+  
+  .order-card-body {
+    padding: 14px 12px !important;
+  }
+  
+  .order-split {
+    flex-direction: column !important;
+    gap: 16px !important;
+    margin-bottom: 20px !important;
+  }
+  
+  .order-left {
+    gap: 12px !important;
+    align-items: flex-start !important;
+  }
+  
+  .item-img-box {
+    width: 72px !important;
+    height: 72px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .item-title {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 4px !important;
+  }
+  
+  .item-meta {
+    font-size: 12px !important;
+  }
+  
+  .actions-stack {
+    width: 100% !important;
+    min-width: 0 !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+  
+  .btn-primary-outline {
+    padding: 9px 12px !important;
+    font-size: 13px !important;
+    text-align: center !important;
+    border-radius: 8px !important;
+  }
+  
+  .btn-text-link {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    text-align: center !important;
+    background: var(--bg-canvas) !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--border-line) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  .btn-text-link::after {
+    display: none !important;
+  }
+  
+  /* Vertical Connected Timeline for Mobile */
   .timeline-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 32px;
-    padding-left: 20px;
+    padding: 16px 8px 8px 10px !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    align-items: flex-start !important;
   }
   
   .timeline-track {
-    top: 20px;
-    bottom: 20px;
-    left: 35px;
-    width: 2px;
-    height: auto;
+    position: absolute !important;
+    top: 24px !important;
+    bottom: 24px !important;
+    left: 23px !important;
+    width: 3px !important;
+    height: auto !important;
+    background: #e5ded6 !important;
+    border-radius: 2px !important;
   }
   
   .milestone {
-    flex-direction: row;
-    gap: 16px;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 14px !important;
+    text-align: left !important;
+    flex: none !important;
+    width: 100% !important;
+  }
+  
+  .node-indicator {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 11px !important;
+    flex-shrink: 0 !important;
+    z-index: 2 !important;
+  }
+  
+  .node-label {
+    font-size: 12.5px !important;
   }
 }

@@ -33,15 +33,15 @@
 
     /* Print styling */
     @page {
-      size: A4;
-      margin: 0;
+      size: A4 portrait;
+      margin: 8mm 10mm;
     }
 
     .invoice-wrapper {
       background: var(--bg-white);
       max-width: 800px;
-      margin: 40px auto;
-      padding: 48px;
+      margin: 20px auto;
+      padding: 32px 36px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.05);
       position: relative;
     }
@@ -52,13 +52,13 @@
       justify-content: space-between;
       align-items: flex-start;
       border-bottom: 2px solid var(--text-main);
-      padding-bottom: 24px;
-      margin-bottom: 32px;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .logo {
       font-family: 'Playfair Display', serif;
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 700;
       color: var(--text-main);
       display: flex;
@@ -73,14 +73,14 @@
       text-align: right;
     }
     .invoice-meta h1 {
-      font-size: 28px;
-      letter-spacing: 2px;
+      font-size: 24px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .invoice-meta p {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-sub);
     }
 
@@ -88,32 +88,32 @@
     .section-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      margin-bottom: 32px;
+      gap: 16px;
+      margin-bottom: 16px;
     }
 
     .box {
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 16px;
+      padding: 12px 14px;
     }
 
     .box-title {
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: var(--accent);
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       border-bottom: 1px solid var(--border-color);
-      padding-bottom: 8px;
+      padding-bottom: 6px;
     }
 
     .info-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 13px;
+      margin-bottom: 6px;
+      font-size: 12.5px;
     }
     .info-row:last-child {
       margin-bottom: 0;
@@ -139,7 +139,7 @@
 
     /* Product Table */
     .table-section {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
     table {
       width: 100%;
@@ -148,84 +148,118 @@
     th {
       background: #fafafa;
       text-align: left;
-      font-size: 12px;
+      font-size: 11.5px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: var(--text-sub);
-      padding: 12px;
+      padding: 8px 10px;
       border-bottom: 2px solid var(--border-color);
     }
     th.text-right, td.text-right {
       text-align: right;
     }
     td {
-      padding: 16px 12px;
-      font-size: 14px;
+      padding: 10px 10px;
+      font-size: 13px;
       border-bottom: 1px solid var(--border-color);
     }
     .item-name {
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .item-sku {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--text-sub);
     }
 
     .totals {
       display: flex;
       justify-content: flex-end;
-      margin-top: 16px;
+      margin-top: 12px;
     }
     .totals-box {
-      width: 300px;
+      width: 280px;
     }
     .total-row {
       display: flex;
       justify-content: space-between;
-      padding: 8px 12px;
-      font-size: 14px;
+      padding: 6px 10px;
+      font-size: 13px;
     }
     .total-row.grand-total {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       background: #fafafa;
       border-top: 2px solid var(--text-main);
       border-bottom: 2px solid var(--text-main);
-      padding: 12px;
+      padding: 10px;
       color: var(--accent);
     }
 
     /* Footer */
     .footer {
-      margin-top: 64px;
+      margin-top: 24px;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-sub);
     }
     .signature {
       text-align: center;
     }
     .signature-line {
-      width: 150px;
+      width: 140px;
       border-bottom: 1px solid var(--text-main);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     @media print {
-      body {
-        background: transparent;
+      html, body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
       .invoice-wrapper {
-        margin: 0;
-        box-shadow: none;
-        padding: 40px;
+        margin: 0 !important;
+        box-shadow: none !important;
+        padding: 16px 24px !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        border: none !important;
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
       }
-      /* Hide elements not meant for print */
       .no-print {
         display: none !important;
+      }
+      .header {
+        padding-bottom: 12px !important;
+        margin-bottom: 14px !important;
+      }
+      .section-grid {
+        gap: 12px !important;
+        margin-bottom: 14px !important;
+      }
+      .box {
+        padding: 10px 12px !important;
+      }
+      #delivery-box {
+        margin-bottom: 14px !important;
+      }
+      .table-section {
+        margin-bottom: 14px !important;
+      }
+      td {
+        padding: 6px 8px !important;
+      }
+      .totals {
+        margin-top: 8px !important;
+      }
+      .footer {
+        margin-top: 18px !important;
       }
     }
     
@@ -272,7 +306,7 @@
         <div class="box-title">Customer Details</div>
         <div class="info-row">
           <span class="info-label">Name</span>
-          <span class="info-val" id="cust-name">Aryan Kumar</span>
+          <span class="info-val" id="cust-name">Jaishankar Yadav</span>
         </div>
         <div class="info-row">
           <span class="info-label">Gender</span>
@@ -280,7 +314,7 @@
         </div>
         <div class="info-row">
           <span class="info-label">Phone</span>
-          <span class="info-val" id="cust-phone">+91 98765 43210</span>
+          <span class="info-val" id="cust-phone">+91 9260841336</span>
         </div>
         <div class="info-row">
           <span class="info-label">Address</span>
@@ -378,7 +412,7 @@
         <strong>E-Bazaar Retail Pvt. Ltd.</strong><br>
         Ghaziabad, Uttar Pradesh, India<br>
         GSTIN: 09ABCDE1234F1Z5<br>
-        support@e-bazaar.in | 1800-123-4567
+        support@e-bazaar.in | shubhamydv2931@gmail.com | +91 8860841336
       </div>
       <div class="signature">
         <div class="signature-line"></div>
@@ -387,17 +421,31 @@
     </div>
     </div>
 
-    <!-- GST Appendix -->
-    <div style="margin-top: 40px; border-top: 1px dashed var(--border-color); padding-top: 24px; font-size: 11px; color: var(--text-sub);">
-      <strong>Appendix A: E-Bazaar GST Classification Logic</strong><br>
-      As per the Indian Goods and Services Tax (GST) framework and Tax Collection at Source (TCS) norms, GST rates are determined by the product category/HSN code. All prices shown on our website are inclusive of the applicable GST rate below.<br><br>
-      <table style="width: 100%; border-collapse: collapse; margin-top: 8px;">
-        <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 4px;"><strong>Category</strong></td><td style="padding: 4px;"><strong>GST Rate</strong></td></tr>
-        <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 4px;">Apparel & Clothing (Under ₹1000)</td><td style="padding: 4px;">5%</td></tr>
-        <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 4px;">Apparel & Shoes (Above ₹1000)</td><td style="padding: 4px;">12%</td></tr>
-        <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 4px;">Electronics, Gadgets & Beauty</td><td style="padding: 4px;">18%</td></tr>
-        <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 4px;">Essential Groceries & Books</td><td style="padding: 4px;">0% - 5%</td></tr>
-      </table>
+    <!-- GST Appendix (Compact Showcase Design) -->
+    <div class="gst-appendix" style="margin-top: 16px; border-top: 1px dashed var(--border-color); padding-top: 8px; font-size: 9.5px; color: var(--text-sub);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-weight: 700; color: var(--accent); text-transform: uppercase; font-size: 9px; letter-spacing: 0.5px;">Appendix A: GST Classification &amp; TCS Compliance</span>
+        <span style="font-size: 8.5px; color: var(--text-sub);">Prices inclusive of applicable GST</span>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: #fafafa; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 8px; text-align: center;">
+        <div style="border-right: 1px solid var(--border-color); padding-right: 4px;">
+          <div style="font-weight: 700; color: var(--text-main); font-size: 8.5px;">Apparel &lt; ₹1k</div>
+          <div style="color: var(--accent); font-weight: 700; font-size: 9.5px;">5% GST</div>
+        </div>
+        <div style="border-right: 1px solid var(--border-color); padding-right: 4px;">
+          <div style="font-weight: 700; color: var(--text-main); font-size: 8.5px;">Apparel/Shoes &gt; ₹1k</div>
+          <div style="color: var(--accent); font-weight: 700; font-size: 9.5px;">12% GST</div>
+        </div>
+        <div style="border-right: 1px solid var(--border-color); padding-right: 4px;">
+          <div style="font-weight: 700; color: var(--text-main); font-size: 8.5px;">Electronics &amp; Beauty</div>
+          <div style="color: var(--accent); font-weight: 700; font-size: 9.5px;">18% GST</div>
+        </div>
+        <div>
+          <div style="font-weight: 700; color: var(--text-main); font-size: 8.5px;">Groceries &amp; Books</div>
+          <div style="color: var(--accent); font-weight: 700; font-size: 9.5px;">0% - 5% GST</div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -456,7 +504,7 @@
       document.getElementById('invoice-date').innerText = `Date: ${dateStr}`;
 
       const user = JSON.parse(localStorage.getItem('eb_user') || '{}');
-      document.getElementById('cust-name').innerText = user.name || 'Customer';
+      document.getElementById('cust-name').innerText = user.name || 'Jaishankar Yadav';
 
       let deliveryAddr = order.deliveryAddress || 'No address specified';
       if (deliveryAddr.startsWith('{')) {

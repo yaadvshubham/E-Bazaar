@@ -574,7 +574,7 @@
           <button class="btn-primary-action" onclick="AddressModal.open()">+ Add New Address</button>
         </div>
         
-        <div id="acc-address-list">
+        <div id="acc-address-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px;">
         </div>
       </div>
       
@@ -585,7 +585,7 @@
           <button class="btn-primary-action" id="btn-add-bank-modal">+ Add New Bank</button>
         </div>
         
-        <div id="acc-bank-list">
+        <div id="acc-bank-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px;">
         </div>
       </div>
       
@@ -597,11 +597,14 @@
 <footer role="contentinfo">
   <div class="footer-main">
     <div class="f-brand">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-        <svg width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)"/><path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/><polyline fill="none" stroke="rgba(255,255,255,.90)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/><path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/><line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/><polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/></svg>
-        <div class="f-logo">E-<em>Bazaar</em></div>
+      <div class="f-logo-wrap">
+        <svg class="f-svg-mark" width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="12" y="28" width="56" height="44" rx="7" fill="url(#bagGrad)"/><path d="M28 28 C28 16 52 16 52 28" fill="none" stroke="url(#bagGrad)" stroke-width="4.5" stroke-linecap="round"/><polyline fill="none" stroke="rgba(255,255,255,.90)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" points="14,50 26,50 30,40 35,60 40,44 45,54 50,50 66,50"/><path fill="none" stroke="url(#arrowGrad)" stroke-width="2.2" stroke-linecap="round" d="M18 70 Q40 82 64 62"/><line stroke="url(#arrowGrad)" stroke-width="2.5" stroke-linecap="round" x1="47" y1="43" x2="62" y2="30"/><polygon fill="url(#arrowGrad)" points="54,29 63,29 63,38"/></svg>
+        <div class="f-logo-text-group">
+          <div class="f-logo">E-<em>Bazaar</em></div>
+          <div class="f-tagline">Your everyday and everything store.</div>
+        </div>
       </div>
-      <p>Your everyday and everything store. Premium products, unmatched service, delivered with care across India.</p>
+      <p>Premium products, unmatched service, delivered with care across India.</p>
     </div>
     <div class="f-col"><h5>Shop</h5><ul><li><a href="new-arrivals.html">New Arrivals</a></li><li><a href="deals.html">Today's Deals</a></li><li><a href="category.html?cat=electronics">Electronics</a></li><li><a href="category.html?cat=clothing">Fashion</a></li><li><a href="category.html?cat=groceries">Groceries</a></li></ul></div>
     <div class="f-col"><h5>Company</h5><ul><li><a href="about-creator.html">About E-Bazaar</a></li><li><a href="#">Careers</a></li><li><a href="#">Press & Media</a></li><li><a href="#">Sustainability</a></li></ul></div>
@@ -711,8 +714,9 @@
     const withdrawInput = document.getElementById('wallet-withdraw-input');
     if (withdrawInput) withdrawInput.max = withdrawable;
 
-    if (currentUser.profilePic) {
-      document.getElementById('sidebar-avatar').src = currentUser.profilePic;
+    const userPic = currentUser.profilePic || currentUser.avatar || currentUser.avatarUrl;
+    if (userPic) {
+      document.getElementById('sidebar-avatar').src = userPic;
       document.getElementById('sidebar-avatar').style.display = 'block';
       document.getElementById('sidebar-avatar-placeholder').style.display = 'none';
     } else {
@@ -760,7 +764,7 @@
       ];
       localStorage.setItem('eb_user', JSON.stringify(currentUser));
     }
-    
+
     // Populate Profile Form
     document.getElementById('prof-name').value = currentUser.name || '';
     document.getElementById('prof-email').value = currentUser.email || '';
@@ -774,28 +778,74 @@
   }
 
   function renderAddresses() {
-    currentUser = JSON.parse(localStorage.getItem('eb_user') || 'null') || currentUser;
+    currentUser = JSON.parse(localStorage.getItem('eb_user') || localStorage.getItem('ebazaar_user') || 'null') || currentUser;
     const list = document.getElementById('acc-address-list');
     if (!list) return;
 
     let addrs = currentUser.addresses || [];
-    if (addrs.length === 0) {
+    if (!Array.isArray(addrs) || addrs.length === 0) {
       addrs = [
-        { type: 'Home (Default)', line1: '47, Sector 18, DLF Phase 3', line2: 'New Delhi, Delhi — 110001' },
-        { type: 'Work', line1: 'E-Bazaar HQ, Tower B, Cyber City', line2: 'Gurugram, Haryana — 122002' }
+        { type: 'Home (Default)', fname: 'Jaishankar', lname: 'Yadav', line1: '47, Sector 18, DLF Phase 3', line2: '', city: 'New Delhi', state: 'Delhi', pin: '110001', phone: '+91 9260841336' },
+        { type: 'Work', fname: 'Jaishankar', lname: 'Yadav', line1: 'E-Bazaar HQ, Tower B, Cyber City', line2: '', city: 'Gurugram', state: 'Haryana', pin: '122002', phone: '+91 9260841336' }
       ];
     }
     
-    list.innerHTML = addrs.map((a, idx) => `
-      <div class="address-card">
-        <div class="addr-type">${a.type || 'Address'}</div>
-        <div class="addr-text">${a.line1 || ''}<br>${a.line2 || ''}</div>
-        <div class="addr-actions">
-          <button class="addr-btn" onclick="deleteAddress(${idx})">Delete Address</button>
+    list.innerHTML = addrs.map((a, idx) => {
+      const nameStr = (a.fname || a.lname) ? `<strong style="font-size: 0.85rem; color: var(--text); display: block; margin-bottom: 2px;">${a.fname || ''} ${a.lname || ''}</strong>` : '';
+      const line1Str = a.line1 || '';
+      const line2Str = a.line2 ? `, ${a.line2}` : '';
+      
+      let cityStatePin = '';
+      if (a.city || a.state || a.pin || a.pincode) {
+        const c = a.city || '';
+        const s = a.state || '';
+        const p = a.pin || a.pincode || '';
+        cityStatePin = `<br>${c}${c && s ? ', ' : ''}${s}${(c || s) && p ? ' — ' : ''}${p}`;
+      } else if (!line2Str && !a.line1) {
+        cityStatePin = 'No address details provided.';
+      }
+
+      const phoneStr = a.phone ? `<br><span style="font-size: 0.72rem; color: var(--text-muted); display: inline-block; margin-top: 3px;">📱 Mobile: ${a.phone}</span>` : '';
+      
+      const fullAddressHTML = `${nameStr}${line1Str}${line2Str}${cityStatePin}${phoneStr}`;
+      const addrIdStr = a.id ? `'${a.id}'` : idx;
+
+      return `
+        <div class="address-card" style="border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: var(--bg-card); display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-xs);">
+          <div>
+            <div class="addr-type" style="font-weight: 700; color: var(--accent); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px;">${a.type || 'Address'}${a.isDefault ? ' (Default)' : ''}</div>
+            <div class="addr-text" style="line-height: 1.45; font-size: 0.78rem; color: var(--text);">${fullAddressHTML}</div>
+          </div>
+          <div class="addr-actions" style="margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 8px;">
+            <button class="addr-btn" onclick="deleteAddress(${addrIdStr})" style="background: rgba(192, 57, 43, 0.08); border: 1px solid rgba(192, 57, 43, 0.2); border-radius: 6px; padding: 4px 10px; color: #c0392b; font-size: 0.72rem; cursor: pointer; font-weight: 600; transition: all 0.2s;">Delete Address</button>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
+
+  window.deleteAddress = async function(idxOrId) {
+    if (typeof idxOrId === 'string' && window.AddressModal && typeof window.AddressModal.deleteAddress === 'function') {
+      window.AddressModal.deleteAddress(idxOrId);
+      setTimeout(() => { renderAddresses(); }, 600);
+      return;
+    }
+    
+    let user = JSON.parse(localStorage.getItem('eb_user') || 'null') || currentUser;
+    if (user && user.addresses) {
+      const target = user.addresses[idxOrId];
+      if (target && target.id && window.AddressModal && typeof window.AddressModal.deleteAddress === 'function') {
+        window.AddressModal.deleteAddress(target.id);
+        setTimeout(() => { renderAddresses(); }, 600);
+        return;
+      }
+      user.addresses.splice(idxOrId, 1);
+      localStorage.setItem('eb_user', JSON.stringify(user));
+      localStorage.setItem('ebazaar_user', JSON.stringify(user));
+      renderAddresses();
+      if (typeof showToast === 'function') showToast('🗑️ Address deleted.');
+    }
+  };
 
   function renderWalletTransactions() {
     currentUser = JSON.parse(localStorage.getItem('eb_user') || 'null') || currentUser;
@@ -805,12 +855,12 @@
     const txs = currentUser.walletTransactions || [];
 
     list.innerHTML = txs.map(t => `
-      <div class="wallet-tx-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;">
+      <div class="wallet-tx-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;">
         <div>
-          <div class="wallet-tx-title" style="font-size: 14px; font-weight: 600; color: var(--text);">${t.title}</div>
-          <div class="wallet-tx-desc" style="font-size: 12px; color: var(--text-sub); margin-top: 4px;">${t.desc} &middot; ${t.date}</div>
+          <div class="wallet-tx-title" style="font-size: 13px; font-weight: 600; color: var(--text);">${t.title}</div>
+          <div class="wallet-tx-desc" style="font-size: 11px; color: var(--text-sub); margin-top: 2px;">${t.desc} &middot; ${t.date}</div>
         </div>
-        <div class="wallet-tx-amount" style="font-size: 14px; font-weight: 700; color: ${t.type === 'credit' ? '#4caf50' : '#c62828'};">
+        <div class="wallet-tx-amount" style="font-size: 13px; font-weight: 700; color: ${t.type === 'credit' ? '#4caf50' : '#c62828'};">
           ${t.amount}
         </div>
       </div>
@@ -872,27 +922,31 @@
 
   document.getElementById('bank-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
-    currentUser = JSON.parse(localStorage.getItem('eb_user') || 'null') || currentUser;
-    const holderName = document.getElementById('bank-holder-name').value.trim();
-    const bankName = document.getElementById('bank-name').value.trim();
-    const accNo = document.getElementById('bank-acc-no').value.trim();
-    const accType = document.getElementById('bank-acc-type').value;
-    const ifsc = document.getElementById('bank-ifsc').value.trim();
-    
-    if (!currentUser.bankAccounts) currentUser.bankAccounts = [];
-    currentUser.bankAccounts.push({ holderName, bankName, accNo, accType, ifsc });
-    localStorage.setItem('eb_user', JSON.stringify(currentUser));
-    localStorage.setItem('eb_bank_accounts', JSON.stringify(currentUser.bankAccounts));
-    
-    if (typeof syncBankAccountsToDb === 'function') syncBankAccountsToDb();
+    const bankName = document.getElementById('bank-name')?.value;
+    const holderName = document.getElementById('bank-holder-name')?.value;
+    const accNo = document.getElementById('bank-acc-no')?.value;
+    const ifsc = document.getElementById('bank-ifsc')?.value;
+    const accType = document.getElementById('bank-acc-type')?.value;
 
-    BankAccountModal.close();
+    if (!bankName || !accNo || !ifsc) {
+      if (typeof showToast === 'function') showToast('⚠️ Please fill all required bank fields');
+      return;
+    }
+
+    currentUser = JSON.parse(localStorage.getItem('eb_user') || 'null') || currentUser;
+    if (!currentUser.bankAccounts) currentUser.bankAccounts = [];
+
+    currentUser.bankAccounts.push({ bankName, holderName, accNo, ifsc, accType });
+    localStorage.setItem('eb_user', JSON.stringify(currentUser));
+    localStorage.setItem('ebazaar_user', JSON.stringify(currentUser));
+
     renderBankAccounts();
-    if (typeof showToast === 'function') showToast('🏦 Bank Account added!');
+    BankAccountModal.close();
+    if (typeof showToast === 'function') showToast('✅ Bank Account added successfully!');
   });
 
   function renderBankAccounts() {
-    currentUser = JSON.parse(localStorage.getItem('eb_user') || 'null') || currentUser;
+    currentUser = JSON.parse(localStorage.getItem('eb_user') || localStorage.getItem('ebazaar_user') || 'null') || currentUser;
     const list = document.getElementById('acc-bank-list');
     const select = document.getElementById('wallet-withdraw-bank');
     
@@ -900,17 +954,19 @@
     
     if (list) {
       if (currentUser.bankAccounts.length === 0) {
-        list.innerHTML = '<div class="empty-state">No bank accounts saved yet.</div>';
+        list.innerHTML = '<div class="empty-state" style="font-size: 0.8rem; color: var(--text-muted); padding: 14px;">No bank accounts saved yet.</div>';
       } else {
         list.innerHTML = currentUser.bankAccounts.map((b, idx) => `
-          <div class="address-card">
-            <h4 style="margin-top:0">${b.bankName}</h4>
-            <p style="margin:4px 0; font-size:13px; color:var(--text-sub);"><strong>Holder:</strong> ${b.holderName || 'N/A'}</p>
-            <p style="margin:4px 0; font-size:13px; color:var(--text-sub);"><strong>Type:</strong> ${b.accType || 'Savings'}</p>
-            <p style="margin:4px 0; font-size:13px; color:var(--text-sub);"><strong>Account:</strong> •••• ${b.accNo.slice(-4)}</p>
-            <p style="margin:4px 0; font-size:13px; color:var(--text-sub);"><strong>IFSC:</strong> ${b.ifsc}</p>
-            <div style="margin-top:12px;">
-              <button class="btn-danger" style="padding:6px 12px; font-size:12px;" onclick="deleteBankAccount(${idx})">Delete</button>
+          <div class="address-card" style="border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: var(--bg-card); display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-xs);">
+            <div>
+              <h4 style="margin: 0 0 6px 0; font-size: 0.85rem; font-weight: 700; color: var(--text);">${b.bankName}</h4>
+              <p style="margin: 2px 0; font-size: 0.76rem; color: var(--text-sub); line-height: 1.4;"><strong>Holder:</strong> ${b.holderName || 'N/A'}</p>
+              <p style="margin: 2px 0; font-size: 0.76rem; color: var(--text-sub); line-height: 1.4;"><strong>Type:</strong> ${b.accType || 'Savings'}</p>
+              <p style="margin: 2px 0; font-size: 0.76rem; color: var(--text-sub); line-height: 1.4;"><strong>Account:</strong> •••• ${b.accNo ? b.accNo.slice(-4) : '****'}</p>
+              <p style="margin: 2px 0; font-size: 0.76rem; color: var(--text-sub); line-height: 1.4;"><strong>IFSC:</strong> ${b.ifsc || 'N/A'}</p>
+            </div>
+            <div style="margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 8px;">
+              <button class="btn-danger" style="background: rgba(192, 57, 43, 0.08); border: 1px solid rgba(192, 57, 43, 0.2); border-radius: 6px; padding: 4px 10px; color: #c0392b; font-size: 0.72rem; cursor: pointer; font-weight: 600; transition: all 0.2s;" onclick="deleteBankAccount(${idx})">Delete Bank</button>
             </div>
           </div>
         `).join('');
@@ -1162,7 +1218,13 @@
         
         const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
         currentUser.profilePic = dataUrl;
+        currentUser.avatar = dataUrl;
+        currentUser.avatarUrl = dataUrl;
         localStorage.setItem('eb_user', JSON.stringify(currentUser));
+        localStorage.setItem('ebazaar_user', JSON.stringify(currentUser));
+        if (typeof window.renderMobileDrawerProfile === 'function') {
+          window.renderMobileDrawerProfile();
+        }
         
         // Sync avatar with backend if token present
         const token = getAuthToken();
