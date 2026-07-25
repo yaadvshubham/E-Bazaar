@@ -306,7 +306,7 @@
         <div class="box-title">Customer Details</div>
         <div class="info-row">
           <span class="info-label">Name</span>
-          <span class="info-val" id="cust-name">Jaishankar Yadav</span>
+          <span class="info-val" id="cust-name">Jaishankar</span>
         </div>
         <div class="info-row">
           <span class="info-label">Gender</span>
@@ -314,7 +314,7 @@
         </div>
         <div class="info-row">
           <span class="info-label">Phone</span>
-          <span class="info-val" id="cust-phone">+91 9260841336</span>
+          <span class="info-val" id="cust-phone">+91 926XXXXXXX</span>
         </div>
         <div class="info-row">
           <span class="info-label">Address</span>
@@ -504,7 +504,7 @@
       document.getElementById('invoice-date').innerText = `Date: ${dateStr}`;
 
       const user = JSON.parse(localStorage.getItem('eb_user') || '{}');
-      document.getElementById('cust-name').innerText = user.name || 'Jaishankar Yadav';
+      document.getElementById('cust-name').innerText = user.name || 'Jaishankar';
 
       let deliveryAddr = order.deliveryAddress || 'No address specified';
       if (deliveryAddr.startsWith('{')) {

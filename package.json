@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "E-Bazaar: Your everyday and everything store (Consolidated Repository)",
   "scripts": {
-    "dev": "npm run dev --prefix Backend",
-    "start": "npm start --prefix Backend",
+    "dev": "node Backend/utils/cacheBuster.js && npm run dev --prefix Backend",
+    "start": "node Backend/utils/cacheBuster.js && npm run start --prefix Backend",
+    "cache-bust": "node Backend/utils/cacheBuster.js",
     "seed": "npm run seed --prefix Backend",
     "seed:csv": "npm run seed:csv --prefix Backend",
     "seed:supabase": "npm run seed:supabase --prefix Backend",

@@ -19,9 +19,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/category.css"/>
-  <link rel="stylesheet" href="css/auth.css"/>
+  <link rel="stylesheet" href="css/styles.css?v=1784981017473"/>
+  <link rel="stylesheet" href="css/category.css?v=1784981017473"/>
+  <link rel="stylesheet" href="css/auth.css?v=1784981017473"/>
   <style>
     .logo-bag-body{fill:url(#bagGrad)}
     html[data-theme="dark"] .logo-bag-body{fill:url(#bagGradDark)}
@@ -656,8 +656,8 @@
   </div>
 </div>
 
-<script src="js/script.js"></script>
-<script src="js/auth.js"></script>
+<script src="js/script.js?v=1784981017473"></script>
+<script src="js/auth.js?v=1784981017473"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   if (!window.AuthSession || !window.AuthSession.isLoggedIn()) {
@@ -785,8 +785,8 @@
     let addrs = currentUser.addresses || [];
     if (!Array.isArray(addrs) || addrs.length === 0) {
       addrs = [
-        { type: 'Home (Default)', fname: 'Jaishankar', lname: 'Yadav', line1: '47, Sector 18, DLF Phase 3', line2: '', city: 'New Delhi', state: 'Delhi', pin: '110001', phone: '+91 9260841336' },
-        { type: 'Work', fname: 'Jaishankar', lname: 'Yadav', line1: 'E-Bazaar HQ, Tower B, Cyber City', line2: '', city: 'Gurugram', state: 'Haryana', pin: '122002', phone: '+91 9260841336' }
+        { type: 'Home (Default)', fname: 'Jaishankar', lname: '', line1: '47, Sector 18, DLF Phase 3', line2: '', city: 'New Delhi', state: 'Delhi', pin: '110001', phone: '+91 926XXXXXXX' },
+        { type: 'Work', fname: 'Jaishankar', lname: '', line1: 'E-Bazaar HQ, Tower B, Cyber City', line2: '', city: 'Gurugram', state: 'Haryana', pin: '122002', phone: '+91 926XXXXXXX' }
       ];
     }
     

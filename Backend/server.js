@@ -20,12 +20,23 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static frontend files from Frontend directory and current directory (__dirname)
-const frontendDir = fs.existsSync(path.join(__dirname, '../Frontend'))
-  ? path.join(__dirname, '../Frontend')
-  : fs.existsSync(path.join(__dirname, 'Frontend'))
-    ? path.join(__dirname, 'Frontend')
-    : __dirname;
+// Run Cache Buster on Server Startup
+try {
+  const cacheBustHtmlFiles = require('./utils/cacheBuster');
+  cacheBustHtmlFiles();
+} catch (e) {
+  console.error('[CacheBuster] Failed to run on server boot:', e.message);
+}
+
+// Cache-control middleware to prevent HTML shell caching on browsers/mobile
+app.use((req, res, next) => {
+  if (req.path.endsWith('.html') || req.path === '/' || !path.extname(req.path)) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+  next();
+});
 
 app.use(express.static(frontendDir));
 app.use(express.static(__dirname));

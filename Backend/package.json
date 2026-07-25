@@ -4,8 +4,9 @@
   "description": "E-Bazaar REST API Backend",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node utils/cacheBuster.js && node server.js",
+    "dev": "node utils/cacheBuster.js && nodemon server.js",
+    "cache-bust": "node utils/cacheBuster.js",
     "seed": "node seeders/seeder.js",
     "scrape": "node seeders/api-scraper.js",
     "seed:csv": "node seeders/csv-seeder.js",

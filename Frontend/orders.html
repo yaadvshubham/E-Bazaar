@@ -18,9 +18,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/category.css" />
-  <link rel="stylesheet" href="css/orders.css" />
+  <link rel="stylesheet" href="css/styles.css?v=1784981017473" />
+  <link rel="stylesheet" href="css/category.css?v=1784981017473" />
+  <link rel="stylesheet" href="css/orders.css?v=1784981017473" />
   <style>
     /* Logo SVG gradient references */
     .logo-bag-body {
@@ -938,8 +938,8 @@
     </div>
   </div>
 
-  <script src="js/script.js"></script>
-  <script src="js/auth.js"></script>
+  <script src="js/script.js?v=1784981017473"></script>
+  <script src="js/auth.js?v=1784981017473"></script>
   <script>
     if (!window.AuthSession || !window.AuthSession.isLoggedIn()) {
       window.location.href = 'auth.html';
@@ -1996,8 +1996,8 @@
             if (orderAddr) {
               allAddr.push({ label: 'Original Delivery Address', text: orderAddr });
             }
-            allAddr.push({ label: 'Home Address (Default)', text: 'Jaishankar Yadav, 47, Sector 18, DLF Phase 3, New Delhi, Delhi - 110001' });
-            allAddr.push({ label: 'Work Address', text: 'Jaishankar Yadav, E-Bazaar HQ, Tower B, Cyber City, Gurugram, Haryana - 122002' });
+            allAddr.push({ label: 'Home Address (Default)', text: 'Jaishankar, 47, Sector 18, DLF Phase 3, New Delhi, Delhi - 110001' });
+            allAddr.push({ label: 'Work Address', text: 'Jaishankar, E-Bazaar HQ, Tower B, Cyber City, Gurugram, Haryana - 122002' });
 
             const user = JSON.parse(localStorage.getItem('eb_user') || '{}');
             const customAddresses = user.addresses || [];
