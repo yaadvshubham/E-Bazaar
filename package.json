@@ -18,5 +18,8 @@
     "sequelize"
   ],
   "author": "Shubham Yadav",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
 }

@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 const sequelize = require('./config/database');
 
 // Import models to register them with Sequelize
@@ -18,6 +20,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static frontend files from Frontend directory and current directory (__dirname)
+const frontendDir = fs.existsSync(path.join(__dirname, '../Frontend'))
+  ? path.join(__dirname, '../Frontend')
+  : fs.existsSync(path.join(__dirname, 'Frontend'))
+    ? path.join(__dirname, 'Frontend')
+    : __dirname;
+
+app.use(express.static(frontendDir));
+app.use(express.static(__dirname));
+
 // ── Routes ────────────────────────────────────────────────────────────────────
 const productRoutes = require('./routes/products');
 const authRoutes = require('./routes/auth');
@@ -29,6 +41,26 @@ app.use('/api/orders', orderRoutes);
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), message: 'E-Bazaar API is running' });
+});
+
+// Root route - serve index.html or auth.html
+app.get('/', (req, res) => {
+  const indexPath = path.join(frontendDir, 'index.html');
+  const authPath = path.join(frontendDir, 'auth.html');
+  const localIndexPath = path.join(__dirname, 'index.html');
+  const localAuthPath = path.join(__dirname, 'auth.html');
+
+  if (fs.existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  } else if (fs.existsSync(authPath)) {
+    return res.sendFile(authPath);
+  } else if (fs.existsSync(localIndexPath)) {
+    return res.sendFile(localIndexPath);
+  } else if (fs.existsSync(localAuthPath)) {
+    return res.sendFile(localAuthPath);
+  } else {
+    return res.status(200).send('<h1>E-Bazaar API is running</h1>');
+  }
 });
 
 // Debug count route
@@ -85,6 +117,33 @@ app.get('/api/stats', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// Non-API HTML fallback route
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return next();
+  }
+
+  const requestedFile = path.join(frontendDir, req.path);
+  const requestedHtml = requestedFile.endsWith('.html') ? requestedFile : `${requestedFile}.html`;
+
+  if (fs.existsSync(requestedFile) && fs.statSync(requestedFile).isFile()) {
+    return res.sendFile(requestedFile);
+  }
+  if (fs.existsSync(requestedHtml) && fs.statSync(requestedHtml).isFile()) {
+    return res.sendFile(requestedHtml);
+  }
+
+  const indexPath = path.join(frontendDir, 'index.html');
+  const authPath = path.join(frontendDir, 'auth.html');
+
+  if (fs.existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  } else if (fs.existsSync(authPath)) {
+    return res.sendFile(authPath);
+  }
+  next();
 });
 
 // 404 handler

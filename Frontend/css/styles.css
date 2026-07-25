@@ -224,7 +224,7 @@ body{
 .nav-btn:hover{background:var(--bg-alt);color:var(--accent)}
 .nav-btn span{white-space:nowrap}
 .cart-wrap{position:relative}
-.cart-badge{
+.cart-badge, .cart-count-el, .wl-count-el, .orders-count-el, #wishlist-badge-el, #orders-badge-el{
   position:absolute;top:0;right:6px;
   width:18px;height:18px;
   background:var(--accent);color:#FFF;
@@ -232,6 +232,7 @@ body{
   display:grid;place-items:center;
   border:2px solid var(--bg-nav);
   transition:background var(--ease-slow);
+  z-index:2;
 }
 
 /* Dark mode toggle */
@@ -751,284 +752,347 @@ footer{background:var(--bg-nav);color:var(--text-sub);border-top:1px solid var(-
 .f-col ul li a:hover{color:var(--accent)}
 .nl-desc{font-size:14px;color:var(--text-muted);margin-bottom:16px}
 .nl-form{display:flex;gap:8px}
-.nl-form input{flex:1;height:44px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--bg-white);color:var(--text);font-size:14px;padding:0 16px;outline:none;transition:border-color var(--ease);font-family:var(--font)}
-.nl-form input::placeholder{color:var(--text-muted)}
-.nl-form input:focus{border-color:var(--accent)}
-.nl-form button{height:44px;padding:0 20px;border-radius:var(--r-sm);background:var(--text);color:var(--bg);font-size:14px;font-weight:600;transition:background var(--ease);font-family:var(--font);cursor:pointer;border:none}
-.nl-form button:hover{background:var(--accent)}
-.footer-bottom{border-top:1px solid var(--border);padding:24px var(--side-pad);max-width:var(--max-w);margin:0 auto;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--text-muted)}
-.footer-bottom a{color:var(--text-sub);transition:color var(--ease)}
-.footer-bottom a:hover{color:var(--accent)}
-.pay-row{display:flex;gap:8px}
-.pay-chip{height:26px;padding:0 10px;background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;font-size:10px;font-weight:700;color:var(--text-sub);display:flex;align-items:center;letter-spacing:.8px}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   BACK TO TOP + TOAST
-   ═══════════════════════════════════════════════════════════════════════ */
-#btt{position:fixed;bottom:32px;right:32px;width:50px;height:50px;border-radius:50%;background:var(--accent);color:#FFF;border:none;display:grid;place-items:center;box-shadow:var(--shadow-md);cursor:pointer;z-index:800;opacity:0;transform:translateY(16px);transition:opacity var(--ease),transform var(--ease)}
-#btt.show{opacity:1;transform:translateY(0)}
-#toast{position:fixed;bottom:90px;right:32px;background:var(--text);color:var(--bg);font-size:14px;font-weight:500;padding:14px 24px;border-radius:var(--r-md);box-shadow:var(--shadow-xl);z-index:1200;display:flex;align-items:center;gap:12px;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity var(--ease),transform var(--ease);max-width:320px}
-#toast.show{opacity:1;transform:translateY(0)}
-.toast-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
-
-.desktop-only {
-  display: inline !important;
-}
-.mobile-only {
-  display: none !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════════════════════════════════════ */
-@media(max-width:1200px){
-  .brands-grid{grid-template-columns:repeat(4,1fr)}
-
-  .footer-main{grid-template-columns:1fr 1fr 1fr;gap:32px}
-}
-
-@media(max-width:960px){
-  .nav-top{grid-template-columns:auto 1fr auto auto;gap:16px}
-  .nav-address{display:none}
-  .hero-slide{height:400px}
-  .hero-content{padding:0 32px}
-  .hero-badge-wrap{display:none}
-  .slider-arrows{right:32px}
-  .trust-inner{grid-template-columns:1fr 1fr}
-  .trust-item:nth-child(2){border-right:none}
-  .promo-grid{grid-template-columns:1fr}
-}
-
-@media(max-width:991px){
-  .desktop-only {
-    display: none !important;
-  }
-  .mobile-only {
-    display: inline !important;
-  }
-  /* Brands and grids */
-  .brands-grid{grid-template-columns:repeat(3,1fr)}
-  .hamburger{display:flex}
-  
-  /* Pinned bottom nav hidden since we keep everything in the header */
-  .mobile-bottom-nav {
-    display: none !important;
-  }
-  body {
-    padding-bottom: 0 !important;
-  }
-  
-  /* ═══════════════════════════════════════════════════════════════════
-     PREMIUM MOBILE HEADER REDESIGN
-     Two-row app-style layout (like Blinkit / Zepto / Swiggy Instamart)
-     Row 1: Hamburger | Logo+Address | Spacer | Theme | Cart
-     Row 2: Full-width search bar
-     ═══════════════════════════════════════════════════════════════════ */
-
-  /* Re-enable sticky header */
-  #site-header {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: var(--bg-nav);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 1px 8px rgba(42,36,33,.07);
-  }
-
-  /* Re-enable mobile bottom nav as the primary nav surface */
-  .mobile-bottom-nav {
-    display: flex !important;
-  }
-  body {
-    padding-bottom: 62px !important;
-  }
-
-  /* ─── NAV TOP: 2-row grid ─── */
+.nl-form input{flex:1;height:44px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--bg-white);color:var(--text);font-size:14px;padding:0 16px}@media (max-width: 768px) {
+  /* ─── NAV TOP: Mobile Layout (User Requested 2-Row Header Layout) ─── */
   .nav-top {
-    display: grid !important;
-    grid-template-areas:
-      "hamburger logo-area . theme-btn cart-btn-wrap"
-      "search-bar search-bar search-bar search-bar search-bar" !important;
-    grid-template-columns: 40px 1fr auto auto auto !important;
-    grid-template-rows: 44px 40px !important;
-    gap: 0 8px !important;
-    padding: 6px 12px 8px !important;
-    height: auto !important;
-    align-items: center;
-  }
-
-  /* ─── Hamburger ─── */
-  .hamburger {
-    grid-area: hamburger;
     display: flex !important;
-    align-items: center;
-    justify-content: center;
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 10px !important;
-    background: var(--bg-alt) !important;
-    border: 1px solid var(--border) !important;
-    padding: 0 !important;
-    flex-shrink: 0;
-  }
-  .hamburger span {
-    width: 16px !important;
-    height: 2px !important;
+    flex-wrap: wrap !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 6px 10px !important;
+    gap: 6px 0 !important;
+    height: auto !important;
   }
 
-  /* ─── Logo + Address area (combined) ─── */
+  /* Make nav-actions flatten its children into direct flex items of nav-top */
+  .nav-actions {
+    display: contents !important;
+  }
+
+  /* ─── ROW 1: TOP LEFT - Logo & Tagline (Reduced Size) ─── */
   .nav-logo {
-    grid-area: logo-area;
+    order: 1 !important;
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
-    overflow: hidden;
-    text-decoration: none;
+    gap: 6px !important;
+    overflow: visible !important;
+    text-decoration: none !important;
+    margin-right: auto !important;
   }
+
+  .nav-logo > div {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    overflow: visible !important;
+  }
+
   .nav-logo .logo-svg-mark {
-    width: 30px !important;
-    height: 30px !important;
+    width: 26px !important;
+    height: 26px !important;
     flex-shrink: 0 !important;
   }
+
   .logo-wordmark {
-    font-size: 17px !important;
+    font-size: 14.5px !important;
     font-weight: 800 !important;
     letter-spacing: -0.4px !important;
+    line-height: 1.05 !important;
+    white-space: nowrap !important;
+  }
+
+  .logo-tagline {
+    display: block !important;
+    font-size: 7px !important;
+    font-weight: 500 !important;
+    color: var(--text-muted) !important;
+    letter-spacing: 0.1px !important;
+    margin-top: 1px !important;
     line-height: 1 !important;
     white-space: nowrap !important;
   }
-  .logo-tagline {
+
+  /* Hide delivery address on mobile header */
+  .nav-address,
+  #addr-btn {
     display: none !important;
   }
 
-  /* ─── Address widget: shown as a tiny pill below logo ─── */
-  .nav-address {
-    display: none !important; /* hidden; address available in drawer */
-  }
+  /* ─── ROW 1: TOP RIGHT - Dark Mode -> Account -> Main Menu ─── */
 
-  /* ─── Theme Toggle (icon only, right of logo) ─── */
-  .theme-toggle {
-    grid-area: theme-btn;
+  /* 1. Dark Mode Toggle (Top Right) */
+  .theme-toggle,
+  #theme-toggle {
+    order: 2 !important;
     display: flex !important;
-    flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+    background: var(--bg-alt) !important;
+    border: 1px solid var(--border) !important;
     padding: 0 !important;
-    gap: 0 !important;
-    background: none !important;
-    border: none !important;
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 10px !important;
-    margin: 0 !important;
+    margin-left: auto !important;
+    margin-right: 4px !important;
   }
+
   .theme-toggle .toggle-track {
     display: block !important;
-    width: 28px !important;
+    width: 20px !important;
+    height: 11px !important;
+  }
+
+  .theme-toggle .toggle-thumb {
+    width: 7px !important;
+    height: 7px !important;
+    top: 1px !important;
+    left: 1px !important;
+  }
+
+  html[data-theme="dark"] .theme-toggle .toggle-thumb {
+    transform: translateX(9px) !important;
+  }
+
+  .theme-toggle .toggle-icon,
+  .theme-toggle::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  /* 2. Account Button (Top Right) */
+  #acc-btn,
+  #acc-btn.nav-btn,
+  .nav-actions #acc-btn {
+    order: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+    background: var(--bg-alt) !important;
+    border: 1px solid var(--border) !important;
+    padding: 0 !important;
+    margin-right: 4px !important;
+    color: var(--text) !important;
+    flex-shrink: 0 !important;
+    font-size: 0 !important;
+    text-decoration: none !important;
+  }
+  #acc-btn span,
+  .nav-actions #acc-btn span {
+    display: none !important;
+  }
+  #acc-btn svg,
+  .nav-actions #acc-btn svg {
+    width: 15px !important;
     height: 15px !important;
     margin: 0 !important;
   }
-  .theme-toggle .toggle-thumb {
+
+  /* 3. Main Menu / Hamburger (Top Right) */
+  .hamburger,
+  #hamburger {
+    order: 4 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+    background: var(--bg-alt) !important;
+    border: 1px solid var(--border) !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .hamburger span {
+    width: 13px !important;
+    height: 2px !important;
+  }
+  /* ─── FLEX ROW BREAK (Between Row 1 and Row 2) ─── */
+  .nav-top::after {
+    content: "" !important;
+    order: 9 !important;
+    width: 100% !important;
+    flex-basis: 100% !important;
+    height: 0 !important;
+  }
+
+  /* ─── ROW 2: Search Bar -> Orders -> Wishlist -> Cart ─── */
+
+  /* 1. Search Bar (Middle of Row 2) */
+  .nav-search {
+    order: 10 !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    margin: 0 4px 0 0 !important;
+    height: 30px !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  .nav-search input {
+    width: 100% !important;
+    height: 30px !important;
+    font-size: 11px !important;
+    padding: 0 28px 0 10px !important;
+    border-radius: 8px !important;
+    background: var(--bg-alt) !important;
+    border: 1px solid var(--border) !important;
+    outline: none !important;
+  }
+  .nav-search .search-btn {
+    display: grid !important;
+    place-items: center !important;
+    width: 22px !important;
+    height: 22px !important;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    right: 4px !important;
+    border-radius: 50% !important;
+    background: var(--accent) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .nav-search .search-btn svg {
     width: 11px !important;
     height: 11px !important;
-    top: 2px !important;
-    left: 2px !important;
+    stroke-width: 2.5 !important;
   }
-  html[data-theme="dark"] .theme-toggle .toggle-thumb {
-    transform: translateX(13px) !important;
-  }
-  .theme-toggle::after { content: none !important; }
-  .toggle-icon { display: none !important; }
 
-  /* ─── Cart button (icon + badge only) ─── */
-  .nav-actions {
-    grid-area: cart-btn-wrap;
+  /* 2. Orders (Row 2) */
+  #nav-orders,
+  #nav-orders.nav-btn,
+  .nav-actions #nav-orders {
+    order: 11 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 0 !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+    background: var(--bg-alt) !important;
+    border: 1px solid var(--border) !important;
     padding: 0 !important;
-    border-top: none !important;
+    margin-right: 4px !important;
+    color: var(--text) !important;
+    flex-shrink: 0 !important;
+    font-size: 0 !important;
+    text-decoration: none !important;
+    position: relative !important;
   }
-
-  /* Hide all nav-btn items EXCEPT cart on mobile */
-  .nav-actions .nav-btn {
+  #nav-orders span:not(.cart-badge):not(.orders-count-el),
+  .nav-actions #nav-orders span:not(.cart-badge):not(.orders-count-el) {
     display: none !important;
   }
-  .nav-actions #cart-btn {
+  #nav-orders svg,
+  .nav-actions #nav-orders svg {
+    width: 15px !important;
+    height: 15px !important;
+    margin: 0 !important;
+  }
+
+  /* 3. Wishlist (Row 2) */
+  #wl-nav-btn,
+  #wl-nav-btn.nav-btn,
+  .nav-actions #wl-nav-btn {
+    order: 12 !important;
     display: flex !important;
-    flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+    background: var(--bg-alt) !important;
+    border: 1px solid var(--border) !important;
     padding: 0 !important;
-    gap: 0 !important;
-    background: none !important;
-    border: none !important;
+    margin-right: 4px !important;
+    color: var(--text) !important;
+    flex-shrink: 0 !important;
+    font-size: 0 !important;
+    text-decoration: none !important;
     position: relative !important;
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 10px !important;
   }
-  .nav-actions #cart-btn span.cart-badge.cart-count-el {
+  #wl-nav-btn span:not(.cart-badge):not(.wl-count-el),
+  .nav-actions #wl-nav-btn span:not(.cart-badge):not(.wl-count-el) {
+    display: none !important;
+  }
+  #wl-nav-btn svg,
+  .nav-actions #wl-nav-btn svg {
+    width: 15px !important;
+    height: 15px !important;
+    margin: 0 !important;
+  }
+
+  /* 4. Cart (Rightmost in Row 2) */
+  .cart-btn-wrap,
+  #cart-btn,
+  #cart-trigger,
+  .cart-btn,
+  .cart-wrap {
+    order: 13 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+    background: var(--bg-alt) !important;
+    border: 1px solid var(--border) !important;
+    padding: 0 !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    margin-right: 0 !important;
+    font-size: 0 !important;
+    color: transparent !important;
+    text-decoration: none !important;
+  }
+  .cart-btn-wrap span:not(.cart-badge):not(.cart-count-el),
+  #cart-btn span:not(.cart-badge):not(.cart-count-el),
+  #cart-trigger span:not(.cart-badge):not(.cart-count-el),
+  .cart-btn span:not(.cart-badge):not(.cart-count-el),
+  .cart-wrap span:not(.cart-badge):not(.cart-count-el) {
+    display: none !important;
+    visibility: hidden !important;
+    font-size: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+  .cart-btn svg,
+  #cart-btn svg,
+  #cart-trigger svg,
+  .cart-wrap svg {
+    width: 15px !important;
+    height: 15px !important;
+    margin: 0 !important;
+    color: var(--text) !important;
+  }
+  .cart-badge,
+  .cart-count-el,
+  .wl-count-el,
+  .orders-count-el,
+  #wishlist-badge-el,
+  #orders-badge-el {
     display: grid !important;
     place-items: center !important;
     position: absolute !important;
-    top: 0px !important;
-    right: 0px !important;
-    width: 16px !important;
-    height: 16px !important;
-    font-size: 8px !important;
-    border: 1.5px solid var(--bg-nav) !important;
+    top: -3px !important;
+    right: -3px !important;
+    width: 14px !important;
+    height: 14px !important;
+    font-size: 7.5px !important;
+    border: 1px solid var(--bg-canvas) !important;
     border-radius: 50% !important;
     background: var(--accent) !important;
     color: #fff !important;
     font-weight: 700 !important;
-  }
-  .nav-actions #cart-btn svg {
-    width: 20px !important;
-    height: 20px !important;
-  }
-  .nav-actions #cart-btn > span:not(.cart-badge) {
-    display: none !important; /* Hide "Cart" text label */
-  }
-
-  /* ─── Search Bar: full-width second row ─── */
-  .nav-search {
-    grid-area: search-bar;
-    width: 100% !important;
-    display: flex !important;
-    position: relative !important;
-    margin: 0 !important;
-    max-width: none !important;
-  }
-  .nav-search input {
-    width: 100% !important;
-    height: 36px !important;
-    font-size: 13px !important;
-    padding: 0 40px 0 14px !important;
-    border-radius: 10px !important;
-    background: var(--bg-alt) !important;
-    border: 1.5px solid var(--border) !important;
-  }
-  .nav-search input:focus {
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px var(--accent-tint) !important;
-    background: var(--bg-white) !important;
-  }
-  .search-btn {
-    display: grid !important;
-    width: 28px !important;
-    height: 28px !important;
-    border-radius: 8px !important;
-    right: 4px !important;
-    top: 4px !important;
-    transform: none !important;
-    place-items: center !important;
-    position: absolute !important;
-  }
-  .search-btn svg {
-    width: 13px !important;
-    height: 13px !important;
+    z-index: 2 !important;
   }
 
   /* ─── Category strip: compact scrollable pill chips ─── */
@@ -1099,6 +1163,66 @@ footer{background:var(--bg-nav);color:var(--text-sub);border-top:1px solid var(-
   .mega-item > a .chev {
     display: none !important; /* Chevrons not needed in pill chips */
   }
+  /* Mobile All Categories Mega Menu Popup Modal */
+  .all-cats-item .mega-menu-box {
+    position: fixed !important;
+    top: 75px !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: 75vh !important;
+    overflow-y: auto !important;
+    background: var(--bg-white) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25) !important;
+    padding: 16px !important;
+    z-index: 10000 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(-6px) !important;
+    transition: opacity 0.2s ease, transform 0.2s ease !important;
+  }
+
+  .all-cats-item.active .mega-menu-box {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateY(0) !important;
+  }
+
+  .all-cats-item .mega-menu-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: space-between !important;
+    gap: 16px 8px !important;
+  }
+
+  .all-cats-item .mega-menu-column {
+    width: calc(50% - 5px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+
+  .all-cats-item .category-block .column-header {
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    color: var(--accent) !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding-bottom: 4px !important;
+    margin-bottom: 6px !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  .all-cats-item .category-block a {
+    font-size: 11px !important;
+    color: var(--text-sub) !important;
+    padding: 2px 0 !important;
+    display: block !important;
+    line-height: 1.3 !important;
+  }
+
   /* Mega-drop disabled on mobile (navigation via chips goes direct to category page) */
   .mega-drop {
     display: none !important;

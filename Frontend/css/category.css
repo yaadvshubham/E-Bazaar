@@ -443,8 +443,8 @@
   
   .cat-grid {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 4px !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
     margin-bottom: 24px !important;
   }
 }
@@ -646,16 +646,16 @@
 @media (max-width: 768px) {
   .cat-grid, .deals-grid, .na-grid {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 4px !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
   }
   
-  /* Compact Desktop-style Product Cards on Mobile Screen (Grid pages only) */
+  /* Compact Desktop-style Product Cards on Mobile Screen (3 per row) */
   .cat-grid .cat-card, .deals-grid .cat-card, .na-grid .cat-card {
     background: var(--bg-card) !important;
     border: 1px solid var(--border) !important;
-    border-radius: 6px !important;
-    padding: 3px !important;
+    border-radius: 8px !important;
+    padding: 6px !important;
     display: flex !important;
     flex-direction: column !important;
     position: relative !important;
@@ -668,9 +668,9 @@
   }
   
   .cat-grid .cat-img, .deals-grid .cat-img, .na-grid .cat-img {
-    height: 70px !important;
+    height: 95px !important;
     width: 100% !important;
-    border-radius: 4px !important;
+    border-radius: 6px !important;
     overflow: hidden !important;
     position: relative !important;
     aspect-ratio: 1 !important;
@@ -684,30 +684,30 @@
   }
   
   .cat-grid .cat-body, .deals-grid .cat-body, .na-grid .cat-body {
-    padding: 2px 0 0 0 !important;
+    padding: 4px 0 0 0 !important;
     display: flex !important;
     flex-direction: column !important;
     flex-grow: 1 !important;
   }
   
   .cat-grid .cat-brand, .deals-grid .cat-brand, .na-grid .cat-brand {
-    display: block !important; /* Restore brand label */
-    font-size: 7.5px !important;
+    display: block !important;
+    font-size: 8.5px !important;
     font-weight: 700 !important;
     color: var(--text-muted) !important;
     text-transform: uppercase !important;
     letter-spacing: 0.2px !important;
-    margin-bottom: 1px !important;
+    margin-bottom: 2px !important;
   }
   
   .cat-grid .cat-name, .deals-grid .cat-name, .na-grid .cat-name {
-    font-size: 8.5px !important;
+    font-size: 10px !important;
     font-weight: 600 !important;
     color: var(--text) !important;
-    line-height: 1.2 !important;
-    margin-bottom: 2px !important;
-    min-height: 2.4em !important;
-    height: 2.4em !important;
+    line-height: 1.25 !important;
+    margin-bottom: 4px !important;
+    min-height: 2.5em !important;
+    height: 2.5em !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
@@ -719,24 +719,24 @@
   .cat-grid .cat-prices, .deals-grid .cat-prices, .na-grid .cat-prices {
     display: flex !important;
     align-items: baseline !important;
-    gap: 2px !important;
-    margin-bottom: 2px !important;
+    gap: 3px !important;
+    margin-bottom: 3px !important;
     flex-wrap: wrap !important;
   }
   
   .cat-grid .cat-price, .deals-grid .cat-price, .na-grid .cat-price {
-    font-size: 9.5px !important;
+    font-size: 11.5px !important;
     font-weight: 700 !important;
   }
   
   .cat-grid .cat-orig, .deals-grid .cat-orig, .na-grid .cat-orig {
-    font-size: 7.5px !important;
+    font-size: 8.5px !important;
     color: var(--text-muted) !important;
     text-decoration: line-through !important;
   }
   
   .cat-grid .cat-disc, .deals-grid .cat-disc, .na-grid .cat-disc {
-    font-size: 7px !important;
+    font-size: 8px !important;
     font-weight: 700 !important;
     color: #e57373 !important;
   }
@@ -746,10 +746,10 @@
     position: static !important;
     display: flex !important;
     align-items: center !important;
-    gap: 1px !important;
-    font-size: 7.5px !important;
+    gap: 1.5px !important;
+    font-size: 8.5px !important;
     color: var(--text-sub) !important;
-    margin-bottom: 2px !important;
+    margin-bottom: 3px !important;
     background: none !important;
     border: none !important;
     padding: 0 !important;
@@ -763,25 +763,25 @@
   }
   
   .cat-grid .cat-stars svg, .deals-grid .cat-stars svg, .na-grid .cat-stars svg {
-    width: 6.5px !important;
-    height: 6.5px !important;
+    width: 8px !important;
+    height: 8px !important;
     color: #E8A030 !important;
     fill: currentColor !important;
   }
   
   .cat-grid .cat-rating::before, .deals-grid .cat-rating::before, .na-grid .cat-rating::before {
-    content: none !important; /* Remove star override */
+    content: none !important;
   }
   
   .cat-grid .cat-reviews, .deals-grid .cat-reviews, .na-grid .cat-reviews {
-    font-size: 7.5px !important;
+    font-size: 8.5px !important;
     color: var(--text-muted) !important;
-    margin-left: 1px !important;
+    margin-left: 2px !important;
   }
   
   .cat-grid .cat-transactions, .deals-grid .cat-transactions, .na-grid .cat-transactions {
-    font-size: 7.5px !important;
-    margin-bottom: 3px !important;
+    font-size: 8.5px !important;
+    margin-bottom: 4px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
@@ -791,10 +791,10 @@
   /* Restore "+ Add to Cart" button */
   .cat-grid .cat-add-btn, .deals-grid .cat-add-btn, .na-grid .cat-add-btn {
     display: block !important;
-    padding: 3px 2px !important;
-    font-size: 8px !important;
+    padding: 5px 4px !important;
+    font-size: 10px !important;
     font-weight: 600 !important;
-    border-radius: 4px !important;
+    border-radius: 6px !important;
     width: 100% !important;
     background: transparent !important;
     color: var(--accent) !important;
@@ -859,5 +859,53 @@
     min-width: unset !important;
   }
 }
+
+/* Phone View (width <= 520px): Enforce 3-column grid as requested */
+@media (max-width: 520px) {
+  .cat-grid, .deals-grid, .na-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+  }
+  .cat-grid .cat-card, .deals-grid .cat-card, .na-grid .cat-card {
+    padding: 4px !important;
+    border-radius: 6px !important;
+  }
+  .cat-grid .cat-img, .deals-grid .cat-img, .na-grid .cat-img {
+    height: 80px !important;
+  }
+  .cat-grid .cat-brand, .deals-grid .cat-brand, .na-grid .cat-brand {
+    font-size: 8px !important;
+  }
+  .cat-grid .cat-name, .deals-grid .cat-name, .na-grid .cat-name {
+    font-size: 9.5px !important;
+    min-height: 2.5em !important;
+    height: 2.5em !important;
+  }
+  .cat-grid .cat-price, .deals-grid .cat-price, .na-grid .cat-price {
+    font-size: 10.5px !important;
+  }
+  .cat-grid .cat-orig, .deals-grid .cat-orig, .na-grid .cat-orig {
+    font-size: 8px !important;
+  }
+  .cat-grid .cat-disc, .deals-grid .cat-disc, .na-grid .cat-disc {
+    font-size: 7.5px !important;
+  }
+  .cat-grid .cat-add-btn, .deals-grid .cat-add-btn, .na-grid .cat-add-btn {
+    padding: 4px 2px !important;
+    font-size: 9.5px !important;
+    border-radius: 5px !important;
+  }
+  .cat-grid .cat-wish-btn, .deals-grid .cat-wish-btn, .na-grid .cat-wish-btn {
+    width: 22px !important;
+    height: 22px !important;
+    top: 4px !important;
+    right: 4px !important;
+  }
+  .cat-grid .cat-wish-btn svg, .deals-grid .cat-wish-btn svg, .na-grid .cat-wish-btn svg {
+    width: 11px !important;
+    height: 11px !important;
+  }
+}
+
 
 

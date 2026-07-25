@@ -293,6 +293,35 @@
   .na-title { font-size: 48px; font-weight: 800; color: #14532d; margin-bottom: 12px; position: relative; z-index: 1; }
   .na-subtitle { font-size: 18px; color: #166534; font-weight: 500; margin-bottom: 0; position: relative; z-index: 1; }
   
+  @media (max-width: 768px) {
+    .na-hero {
+      padding: 24px 16px;
+      margin: 12px auto;
+      border-radius: var(--r-sm);
+    }
+    .na-title {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+    .na-subtitle {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .na-hero {
+      padding: 20px 12px;
+      margin: 8px auto;
+    }
+    .na-title {
+      font-size: 22px;
+    }
+    .na-subtitle {
+      font-size: 12px;
+    }
+  }
+
   .na-section { max-width: var(--max-w); margin: 0 auto; padding: 40px var(--side-pad); }
   .na-sec-title { font-size: 28px; font-weight: 800; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: var(--text); }
   

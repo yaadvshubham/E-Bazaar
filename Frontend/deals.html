@@ -312,6 +312,63 @@
   .timer-num { font-size: 32px; font-weight: 700; line-height: 1; }
   .timer-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; color: #9ca3af; }
 
+  @media (max-width: 768px) {
+    .deals-hero {
+      padding: 28px 16px;
+      margin: 12px auto;
+      border-radius: var(--r-sm);
+    }
+    .deals-title {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+    .deals-subtitle {
+      font-size: 13px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    .timer-box {
+      gap: 8px;
+    }
+    .timer-segment {
+      padding: 8px 12px;
+      min-width: 56px;
+      border-radius: 6px;
+    }
+    .timer-num {
+      font-size: 20px;
+    }
+    .timer-label {
+      font-size: 9px;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .deals-hero {
+      padding: 20px 12px;
+      margin: 8px auto;
+    }
+    .deals-title {
+      font-size: 22px;
+    }
+    .deals-subtitle {
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+    .timer-segment {
+      padding: 6px 10px;
+      min-width: 48px;
+    }
+    .timer-num {
+      font-size: 18px;
+    }
+    .timer-label {
+      font-size: 8px;
+    }
+  }
+
   .deals-section { max-width: var(--max-w); margin: 0 auto; padding: 40px var(--side-pad); }
   .deals-sec-title { font-size: 28px; font-weight: 800; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
   .deals-sec-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }

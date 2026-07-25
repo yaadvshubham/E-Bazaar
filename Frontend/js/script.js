@@ -4484,15 +4484,15 @@ function initDynamicCategory() {
     return;
   }
 
-  let rawCat = urlParams.get('cat') || urlParams.get('category') || 'clothing';
-  let catId = rawCat.toLowerCase();
+  let rawCat = urlParams.get('cat') || urlParams.get('category');
+  let catId = rawCat ? rawCat.toLowerCase().trim() : 'all';
 
-  const specialCats = ['trending', 'new-arrivals', 'all'];
+  const specialCats = ['trending', 'new-arrivals', 'all', 'all-categories'];
 
   // Default fallback if category not mapped and not a special category
   if (!specialCats.includes(catId) && !CATEGORY_MAP[catId]) {
     const found = Object.keys(CATEGORY_MAP).find(k => k.toLowerCase() === catId);
-    catId = found ? found : 'clothing';
+    catId = found ? found : 'all';
   }
 
   let categoryData = CATEGORY_MAP[catId];
@@ -4534,6 +4534,8 @@ function initDynamicCategory() {
     categoryProducts = pool.filter(p => trendCats.includes(p.category) || p.badge === 'hot' || p.badge === 'sale' || parseFloat(p.rating) >= 4.7);
   } else if (catId === 'new-arrivals') {
     categoryProducts = pool.filter(p => p.badge === 'new' || p.isNew === true);
+  } else if (catId === 'all' || catId === 'all-categories') {
+    categoryProducts = pool;
   } else {
     categoryProducts = generateMockProductsForCategory(catId);
   }
@@ -5201,8 +5203,13 @@ function toggleWishlist(btn, pStrEncoded) {
 window.toggleWishlist = toggleWishlist;
 
 function syncWishlistBadge() {
-  if (window.ebWishlist) ebWishlist = window.ebWishlist;
-  const count = (window.ebWishlist || ebWishlist || []).length;
+  let count = 0;
+  try {
+    const localWl = JSON.parse(localStorage.getItem('eb_wishlist') || '[]');
+    count = (window.ebWishlist && window.ebWishlist.length) ? window.ebWishlist.length : (Array.isArray(ebWishlist) && ebWishlist.length ? ebWishlist.length : localWl.length);
+  } catch (e) {
+    count = (window.ebWishlist || ebWishlist || []).length;
+  }
   document.querySelectorAll('.wl-count-el, #wishlist-badge-el').forEach(el => {
     el.textContent = count;
     el.style.display = count > 0 ? 'grid' : 'none';
@@ -5220,13 +5227,55 @@ function initWishlistBadge() {
       badge.className = 'cart-badge wl-count-el';
       badge.id = 'wishlist-badge-el';
       badge.ariaLive = 'polite';
-      badge.style.display = 'none';
       wlBtn.appendChild(badge);
     }
     syncWishlistBadge();
   }
 }
 window.initWishlistBadge = initWishlistBadge;
+
+function syncOrdersBadge() {
+  let count = 0;
+  try {
+    const cached = JSON.parse(localStorage.getItem('eb_orders_cache') || '[]');
+    if (Array.isArray(cached)) count = cached.length;
+  } catch (e) {
+    count = 0;
+  }
+  document.querySelectorAll('.orders-count-el, #orders-badge-el').forEach(el => {
+    el.textContent = count;
+    el.style.display = count > 0 ? 'grid' : 'none';
+  });
+}
+window.syncOrdersBadge = syncOrdersBadge;
+
+function initOrdersBadge() {
+  const ordersBtn = document.getElementById('nav-orders');
+  if (ordersBtn) {
+    ordersBtn.classList.add('cart-wrap');
+    let badge = document.getElementById('orders-badge-el');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'cart-badge orders-count-el';
+      badge.id = 'orders-badge-el';
+      badge.ariaLive = 'polite';
+      ordersBtn.appendChild(badge);
+    }
+    syncOrdersBadge();
+  }
+}
+window.initOrdersBadge = initOrdersBadge;
+
+// Run badge initializations automatically
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    initWishlistBadge();
+    initOrdersBadge();
+  });
+} else {
+  initWishlistBadge();
+  initOrdersBadge();
+}
 
 // Click Event Delegation for global actions (like logout)
 document.addEventListener('click', (e) => {
@@ -5298,14 +5347,20 @@ function initBrandStore() {
   const titleEl = document.getElementById('brand-title');
   if (titleEl) titleEl.textContent = brand;
 
+  const pillNameEl = document.getElementById('brand-pill-name');
+  if (pillNameEl) pillNameEl.textContent = brand;
+
   const logoEl = document.getElementById('brand-logo-large');
-  if (logoEl) {
-    const safeBrand = brand.toLowerCase();
-    const imgSrc = BRAND_LOGOS[brand] || `images/logos/${safeBrand}.png`;
-    logoEl.innerHTML = `<img src="${imgSrc}" 
-        onerror="this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.com'; this.onerror=function(){this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.coop'; this.onerror=function(){this.onerror=null; this.src='https://ui-avatars.com/api/?name=${brand}&background=0D8ABC&color=fff&size=140&font-size=0.33'};};" 
-          alt="${brand} Logo" style="width:100%; height:100%; object-fit:contain; border-radius:50%; background-color:#ffffff;">`;
-  }
+  const pillLogoEl = document.getElementById('brand-logo-small');
+
+  const safeBrand = brand.toLowerCase();
+  const imgSrc = BRAND_LOGOS[brand] || `images/logos/${safeBrand}.png`;
+  const imgHtml = `<img src="${imgSrc}" 
+      onerror="this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.com'; this.onerror=function(){this.onerror=null; this.src='https://logo.clearbit.com/${safeBrand}.coop'; this.onerror=function(){this.onerror=null; this.src='https://ui-avatars.com/api/?name=${brand}&background=0D8ABC&color=fff&size=140&font-size=0.33'};};" 
+        alt="${brand} Logo" style="width:100%; height:100%; object-fit:contain; border-radius:50%; background-color:#ffffff;">`;
+
+  if (logoEl) logoEl.innerHTML = imgHtml;
+  if (pillLogoEl) pillLogoEl.innerHTML = imgHtml;
 
   const pool = typeof getAllStoreProducts === 'function' ? getAllStoreProducts() : (MASTER_PRODUCTS || []);
   const normalize = b => (b || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/gi, '').toLowerCase();
@@ -6583,6 +6638,13 @@ function injectAllCategoriesMegaMenu() {
             <a href="category.html?cat=groceries&sub=dairy">Dairy & Cheese</a>
             <a href="category.html?cat=groceries&sub=snacks-bev">Snacks & Beverages</a>
           </div>
+          <div class="category-block">
+            <div class="column-header">Health & Pharmacy</div>
+            <a href="category.html?cat=health&sub=personal-care">Personal Care & Hygiene</a>
+            <a href="category.html?cat=health&sub=monitors">Health Monitors & BP</a>
+            <a href="category.html?cat=health&sub=vitamins">Vitamins & Supplements</a>
+            <a href="category.html?cat=health&sub=first-aid">First Aid & Wellness</a>
+          </div>
         </div>
         <!-- Column 2 -->
         <div class="mega-menu-column">
@@ -6655,13 +6717,28 @@ function injectAllCategoriesMegaMenu() {
     </div>
   `;
 
-  // Dynamic JS Hover state togglers to allow explicit closures on action clicks
+  // Dynamic JS Click & Hover state togglers for All Categories mega menu
+  const btnLink = allCatsItem.querySelector('.all-cats-btn-link');
+  if (btnLink) {
+    btnLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      allCatsItem.classList.toggle('active');
+    });
+  }
+
   allCatsItem.addEventListener('mouseenter', () => {
     allCatsItem.classList.add('active');
   });
 
   allCatsItem.addEventListener('mouseleave', () => {
     allCatsItem.classList.remove('active');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!allCatsItem.contains(e.target)) {
+      allCatsItem.classList.remove('active');
+    }
   });
 
   // Force close dropdown on selection click
