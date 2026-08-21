@@ -286,19 +286,19 @@ router.post('/wallet/verify', async (req, res) => {
 
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature, amount } = req.body;
 
-    if (!razorpay_payment_id || !razorpay_order_id) {
-      return res.status(400).json({ error: 'Missing required Razorpay parameters.' });
+    if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
+      return res.status(400).json({ error: 'Missing required Razorpay parameters: razorpay_payment_id, razorpay_order_id, and razorpay_signature are required.' });
     }
 
-    let isSignatureValid = false;
-    if (razorpay_signature) {
-      const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'm2cTmfkpWRIXmSfVOWtGOjTs');
-      hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
-      const generated_signature = hmac.digest('hex');
-      isSignatureValid = (generated_signature === razorpay_signature);
-    } else {
-      isSignatureValid = true;
-    }
+    const secret = process.env.RAZORPAY_KEY_SECRET || 'm2cTmfkpWRIXmSfVOWtGOjTs';
+    const hmac = crypto.createHmac('sha256', secret);
+    hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+    const generated_signature = hmac.digest('hex');
+
+    const isSignatureValid = crypto.timingSafeEqual(
+      Buffer.from(generated_signature, 'hex'),
+      Buffer.from(razorpay_signature, 'hex')
+    );
 
     if (!isSignatureValid) {
       return res.status(400).json({ error: 'Razorpay signature verification failed.' });

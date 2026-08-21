@@ -1,7 +1,19 @@
-/* ═══════════════════════════════════════════════════════════════════════
-   E-BAZAAR — payment.js
-   Full-Stack Secure Checkout & Razorpay Integration
-   ═══════════════════════════════════════════════════════════════════════ */
+function parseItemPrice(val) {
+    if (typeof val === 'number') return val;
+    if (!val) return 0;
+    const cleaned = String(val).replace(/[^0-9.]/g, '');
+    return parseFloat(cleaned) || 0;
+}
+
+function getOrdersApiUrl() {
+    if (typeof window !== 'undefined' && window.API_BASE) {
+        return window.API_BASE + '/orders';
+    }
+    const host = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.port === '5000'))
+        ? 'http://127.0.0.1:5000'
+        : 'https://e-bazaar-kajv.onrender.com';
+    return `${host}/api/orders`;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Initial State Checks
@@ -25,11 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
         cart = [];
     }
 
-    let totalAmount = parseInt(localStorage.getItem('checkout_total')) || 0;
+    let totalAmount = parseFloat(localStorage.getItem('checkout_total')) || 0;
     if (totalAmount <= 0 && cart.length > 0) {
         // Fallback: Calculate total directly from cart items
         totalAmount = cart.reduce((sum, item) => {
-            const priceNum = parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
+            const priceNum = parseItemPrice(item.price);
             return sum + (priceNum * (item.qty || 1));
         }, 0);
     }
@@ -48,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryContainer = document.getElementById('order-summary-items');
     if (summaryContainer && cart.length > 0) {
         summaryContainer.innerHTML = cart.map(item => {
-            const priceNum = parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
+            const priceNum = parseItemPrice(item.price);
             const itemTotal = priceNum * (item.qty || 1);
             const titleText = item.name || item.title || 'Product Item';
             return `
@@ -118,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const formattedItems = cart.map(item => {
-                    const priceNum = parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
+                    const priceNum = parseItemPrice(item.price);
                     return {
                         id: item.id,
                         title: item.name || item.title || 'Product Item',
@@ -128,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                 });
 
-                const response = await fetch('https://e-bazaar-kajv.onrender.com/api/orders/create', {
+                const response = await fetch(`${getOrdersApiUrl()}/create`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -195,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const walletUsed = parseInt(localStorage.getItem('wallet_applied')) || 0;
 
-            const response = await fetch('https://e-bazaar-kajv.onrender.com/api/orders/verify', {
+            const response = await fetch(`${getOrdersApiUrl()}/verify`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

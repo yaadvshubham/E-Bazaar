@@ -3,8 +3,16 @@
    Full-Stack Authentication Engine
    Connects frontend forms to /api/auth/register & /api/auth/login
    ═══════════════════════════════════════════════════════════════════════ */
-
-const AUTH_API = 'https://e-bazaar-kajv.onrender.com/api/auth';
+const getAuthApiUrl = () => {
+  if (typeof window !== 'undefined' && window.API_BASE) {
+    return window.API_BASE + '/auth';
+  }
+  const host = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.port === '5000'))
+    ? 'http://127.0.0.1:5000'
+    : 'https://e-bazaar-kajv.onrender.com';
+  return `${host}/api/auth`;
+};
+const AUTH_API = getAuthApiUrl();
 
 /* ─── Token & Session Helpers ────────────────────────────────────────────── */
 const AuthSession = {
@@ -220,14 +228,7 @@ async function handleLogin(e) {
 
   } catch (err) {
     console.error('[Auth] Login network error:', err);
-    // Graceful offline fallback — try localStorage credential check
-    const saved = JSON.parse(localStorage.getItem('eb_user') || 'null');
-    if (saved && saved.email === email && saved.password === password) {
-      if (typeof showToast === 'function') showToast(`✅ Welcome back, ${saved.name}!`);
-      setTimeout(() => { window.location.href = 'index.html'; }, 800);
-    } else {
-      showAuthError('Could not reach the server. Please check your connection.', 'form-login');
-    }
+    showAuthError('Could not reach the server. Please check your network connection.', 'form-login');
   } finally {
     setButtonLoading(btn, false);
   }

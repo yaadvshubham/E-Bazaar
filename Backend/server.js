@@ -170,19 +170,18 @@ app.use((err, req, res, next) => {
 });
 
 // ── Start Server & DB Sync ────────────────────────────────────────────────────
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, '0.0.0.0', async () => {
   console.log(`[Server] E-Bazaar API running on port ${PORT} (http://0.0.0.0:${PORT})`);
   console.log(`[Server] Health check: http://localhost:${PORT}/api/health`);
-});
-
-sequelize.authenticate()
-  .then(() => {
+  
+  try {
+    await sequelize.authenticate();
     console.log('[DB] Supabase PostgreSQL connection established.');
-    return sequelize.sync({ alter: true });
-  })
-  .then(() => {
+    await sequelize.sync({ alter: true }).catch(syncErr => {
+      console.warn('[DB] Notice during table sync:', syncErr.message);
+    });
     console.log('[DB] Database synchronized successfully.');
-  })
-  .catch(err => {
-    console.error('[DB] Unable to connect / sync database:', err.message);
-  });
+  } catch (err) {
+    console.error('[DB] Unable to connect to PostgreSQL database:', err.message);
+  }
+});

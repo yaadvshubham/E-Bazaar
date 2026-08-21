@@ -5345,6 +5345,39 @@ if (!localStorage.getItem('eb_wishlist')) {
 window.ebWishlist = ebWishlist;
 window.wishlist = ebWishlist;
 
+let syncCartTimeout = null;
+async function syncCartToDb() {
+  const token = window.AuthSession && window.AuthSession.getToken();
+  if (!token) return;
+  if (syncCartTimeout) clearTimeout(syncCartTimeout);
+
+  syncCartTimeout = setTimeout(async () => {
+    try {
+      const apiHost = window.getApiHost ? window.getApiHost() : 'http://127.0.0.1:5000';
+      const cartItems = (window.ebCart || []).map(item => ({
+        id: item.id,
+        title: item.title || item.name || 'Product',
+        price: item.price,
+        qty: item.qty || 1,
+        image: item.image || item.imageUrl || ''
+      }));
+
+      await fetch(`${apiHost}/api/auth/cart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ cart: cartItems })
+      });
+      console.log('[Cart Sync] Cart synced to backend database successfully.');
+    } catch (e) {
+      console.warn('[Cart Sync] Background cart sync failed:', e.message);
+    }
+  }, 400);
+}
+window.syncCartToDb = syncCartToDb;
+
 function syncCartBadge() {
   if (window.ebCart) ebCart = window.ebCart;
   cartCount = ebCart.reduce((sum, item) => sum + (item.qty || 1), 0);

@@ -4,7 +4,20 @@
    Connects to https://e-bazaar-kajv.onrender.com and enriches the frontend with
    live database products with cache-busting and case-insensitive matching.
    ═══════════════════════════════════════════════════════════════════════ */
-var API_BASE = 'https://e-bazaar-kajv.onrender.com/api';
+function getApiHost() {
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    const port = window.location.port;
+    if (host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || port === '5000' || port === '5500' || port === '3000' || port === '8080') {
+      return 'http://127.0.0.1:5000';
+    }
+  }
+  return 'https://e-bazaar-kajv.onrender.com';
+}
+var API_BASE = getApiHost() + '/api';
+window.API_BASE = API_BASE;
+window.getApiHost = getApiHost;
+
 // Global state — backend products are merged into this
 window.allProducts = [];
 window._apiReady = false;
